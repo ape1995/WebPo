@@ -44,7 +44,7 @@
 @if(Gate::check('list sales order'))
 <li class="nav-item {{ Request::is('salesOrders*') ? 'menu-open' : '' }} {{ Request::is('createOrder*') ? 'menu-open' : '' }}">
     <a href="#" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }} {{ Request::is('createOrder*') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-file-alt"></i>
+        <i class="nav-icon fas fa-dollar-sign"></i>
         <p>
         Sales Order
         <i class="right fas fa-angle-left"></i>
@@ -70,4 +70,24 @@
     </ul>
 </li>
 @endif
+
+<li class="nav-item">
+    <a href="#" class="nav-link ">
+        <i class="nav-icon fas fa-book"></i>
+        <p>
+        Report
+        <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
+    <ul class="nav nav-treeview">
+
+            <li class="nav-item">
+                <a href="{{ route('home') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Report Sales Order</p>
+                </a>
+            </li>
+
+    </ul>
+</li>
 

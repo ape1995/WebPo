@@ -62,6 +62,9 @@
                                 $('td:eq(9)', row).addClass("bg-success");
                             }
                         },
+                        "columnDefs": [
+                            { className: "text-nowrap", "targets": "_all" }
+                        ],
                         columns: [
                             { 
                                 data: 'DT_RowIndex',

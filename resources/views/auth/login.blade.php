@@ -1,8 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
-  	<title>Login 04</title>
+  	<title>Yamazaki Indonesia</title>
     <meta charset="utf-8">
+	<link rel="icon" href="{{ asset('assets/images/yamazaki.ico') }}">
+	<meta name="theme-color" content="#c61325"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">

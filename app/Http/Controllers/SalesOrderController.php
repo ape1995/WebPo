@@ -22,6 +22,7 @@ use Flash;
 use Response;
 use Auth;
 use DataTables;
+use PDF;
 
 class SalesOrderController extends AppBaseController
 {
@@ -106,6 +107,10 @@ class SalesOrderController extends AppBaseController
                         $status = 'Draft';
                     } else if ($salesOrder->status == "R"){
                         $status = 'Submitted';
+                    } else if ($salesOrder->status == "C"){
+                        $status = 'Canceled';
+                    } else if ($salesOrder->status == "B"){
+                        $status = 'Rejected';
                     } else {
                         $status = 'Processed';
                     }
@@ -397,10 +402,27 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
-        $salesOrder = SalesOrder::find($id)->delete();
-        $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $id)->delete();
+        $salesOrder = SalesOrder::find($id);
+        $salesOrder['status'] = 'C';
+        $salesOrder->save();
 
         return redirect(route('salesOrders.index'))->with('success', 'Order Canceled Sucessfully.');
+    }
+
+    public function rejectOrder($id)
+    {
+
+        $salesOrder = SalesOrder::find($id);
+
+        if (empty($salesOrder)) {
+            return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
+        }
+
+        $salesOrder = SalesOrder::find($id);
+        $salesOrder['status'] = 'B';
+        $salesOrder->save();
+
+        return redirect(route('salesOrders.index'))->with('success', 'Order Rejected Sucessfully.');
     }
 
     public function resetOrder()
@@ -408,5 +430,22 @@ class SalesOrderController extends AppBaseController
         $carts = Cart::where('customer_id', \Auth::user()->customer_id)->delete();
 
         return redirect(route('createOrder'));
+    }
+
+    public function printPdf($id)
+    {
+
+        $salesOrder = SalesOrder::find($id);
+        $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $id)->get();
+        // dd($salesOrder);
+
+        if (empty($salesOrder)) {
+            return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
+        }
+
+        $pdf = PDF::loadview('sales_orders.print',['salesOrder'=>$salesOrder, 'salesOrderDetails'=>$salesOrderDetails]);
+    	return $pdf->download('Order');
+
+        // return view('sales_orders.print', compact('salesOrder', 'salesOrderDetails'));
     }
 }

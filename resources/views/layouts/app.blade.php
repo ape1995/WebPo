@@ -32,7 +32,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   {{-- Select2 --}}
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" />
   <link rel="stylesheet" type="text/css" href="https://select2.github.io/select2-bootstrap-theme/css/select2-bootstrap.css">
-  
+  @yield('css')
   <style>
     label{
       font-size: 12px !important;

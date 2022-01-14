@@ -61,6 +61,12 @@
                             if ( data.status == "Processed" ) {
                                 $('td:eq(9)', row).addClass("bg-success");
                             }
+                            if ( data.status == "Canceled" ) {
+                                $('td:eq(9)', row).addClass("bg-danger");
+                            }
+                            if ( data.status == "Rejected" ) {
+                                $('td:eq(9)', row).addClass("bg-danger");
+                            }
                         },
                         "columnDefs": [
                             { className: "text-nowrap", "targets": "_all" }

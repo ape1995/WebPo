@@ -14,7 +14,9 @@
         <div class="card">
 
             <div class="card-body">
-
+                {{-- <div class="col-md-12 text-right mb-3">
+                    <span class="text-light bg-info rounded p-1">{{ $salesOrder->status }}</span>
+                </div> --}}
                 <div class="row mb-3">
                     @include('sales_orders.show_fields')
                 </div>
@@ -25,6 +27,7 @@
 
             <div class="card-footer">
                 {{-- {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!} --}}
+                <a href="{{ route('salesOrders.printPdf', [$salesOrder->id]) }}" class="btn btn-outline-danger"><i class="fa fa-file-pdf"></i> Print</a>
                 @if ($salesOrder->status == 'S')
                     @can('edit sales order')
                         <a href="{{ route('salesOrders.edit', [$salesOrder->id]) }}" class="btn btn-success" onclick="return confirm('Edit this order?')">Edit</a>
@@ -39,6 +42,9 @@
                 @if ($salesOrder->status == 'R')
                     @can('process sales order')
                         <a href="{{ route('salesOrders.processOrder', [$salesOrder->id]) }}" class="btn btn-primary"  onclick="return confirm('Process Order?')">Process</a>
+                    @endcan
+                    @can('reject sales order')
+                        <a href="{{ route('salesOrders.rejectOrder', [$salesOrder->id]) }}" class="btn btn-danger"  onclick="return confirm('Reject Order?')">Reject</a>
                     @endcan
                 @endif
             </div>

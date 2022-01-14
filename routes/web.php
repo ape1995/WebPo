@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\SalesOrderDetailController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +23,6 @@ Route::get('/', function () {
     return redirect()->to('home');
 });
 
-// Route::get('/home', function () {
-//     return view('home.index');
-// });
-
 Auth::routes(['verify' => true]);
 //routing admin cms
 Route::group(['middleware' => ['auth']], function(){
@@ -39,6 +36,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('submitOrder/{code}',[SalesOrderController::class,'submitOrder'])->name('salesOrders.submitOrder');
     Route::get('cancelOrder/{code}',[SalesOrderController::class,'cancelOrder'])->name('salesOrders.cancelOrder');
     Route::get('processOrder/{code}',[SalesOrderController::class,'processOrder'])->name('salesOrders.processOrder');
+    Route::get('rejectOrder/{code}',[SalesOrderController::class,'rejectOrder'])->name('salesOrders.rejectOrder');
+    Route::get('printOrder/{code}',[SalesOrderController::class,'printPdf'])->name('salesOrders.printPdf');
     Route::get('resetOrder',[SalesOrderController::class,'resetOrder'])->name('salesOrders.resetOrder');
     Route::get('createOrder', [SalesOrderController::class, 'create'])->name('createOrder');
     Route::resource('salesOrderDetails', SalesOrderDetailController::class);
@@ -46,6 +45,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('carts', CartController::class)->except('create');
     Route::get('dataTableCart',[CartController::class,'getData'])->name('carts.data');
     Route::post('updatePassword', [UserController::class, 'updatePassword'])->name('updatePassword');
+    Route::get('reportSalesOrder', [ReportController::class, 'index'])->name('reportSalesOrder.index');
+    Route::post('reportSalesOrder', [ReportController::class, 'view'])->name('reportSalesOrder.view');
 });
 
 

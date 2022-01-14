@@ -71,22 +71,22 @@
 </li>
 @endif
 
-<li class="nav-item">
-    <a href="#" class="nav-link ">
+<li class="nav-item {{ Request::is('reportSalesOrder*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-book"></i>
         <p>
-        Report
+            Report
         <i class="right fas fa-angle-left"></i>
         </p>
     </a>
     <ul class="nav nav-treeview">
 
-            <li class="nav-item">
-                <a href="{{ route('home') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Report Sales Order</p>
-                </a>
-            </li>
+        <li class="nav-item">
+            <a href="{{ route('reportSalesOrder.index') }}" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Report Sales Order</p>
+            </a>
+        </li>
 
     </ul>
 </li>

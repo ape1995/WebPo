@@ -41,7 +41,7 @@
         <p>Test Imports</p>
     </a>
 </li> --}}
-@if(Gate::check('list sales order'))
+@if(Gate::check('list sales order') || Gate::check('create sales order'))
 <li class="nav-item {{ Request::is('salesOrders*') ? 'menu-open' : '' }} {{ Request::is('createOrder*') ? 'menu-open' : '' }}">
     <a href="#" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }} {{ Request::is('createOrder*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-dollar-sign"></i>
@@ -71,6 +71,7 @@
 </li>
 @endif
 
+@if(Gate::check('view report sales order') || Gate::check('view report sales order detail'))
 <li class="nav-item {{ Request::is('reportSalesOrder*') ? 'menu-open' : '' }}">
     <a href="#" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-book"></i>
@@ -80,14 +81,23 @@
         </p>
     </a>
     <ul class="nav nav-treeview">
-
+        @can('view report sales order')
+            <li class="nav-item">
+                <a href="{{ route('reportSalesOrder.index') }}" class="nav-link {{ Request::is('reportSalesOrder') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Sales Order Rekap</p>
+                </a>
+            </li>
+        @endcan
+        @can('view report sales order detail')
         <li class="nav-item">
-            <a href="{{ route('reportSalesOrder.index') }}" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}">
+            <a href="{{ route('reportSalesOrder.detailIndex') }}" class="nav-link {{ Request::is('reportSalesOrderDetail') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Report Sales Order</p>
+                <p>Sales Order Detail</p>
             </a>
         </li>
-
+        @endcan
     </ul>
 </li>
+@endif
 

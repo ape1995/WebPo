@@ -38,16 +38,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
   </style>
 </head>
-<body class="hold-transition sidebar-mini">
+<body>
 
     <div class="container">
         <div class="card">
 
             <div class="card-body">
-                {{-- <div class="col-md-12 text-right mb-3">
-                    <span class="text-light bg-info rounded p-1">{{ $salesOrder->status }}</span>
-                </div> --}}
-                <div class="row mb-3">
+                <div class="row">
                     <div class="col-md-6">
                         <div class="row">
                             <!-- Order Nbr Field -->
@@ -153,7 +150,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>
                 </div>
 
-                {{-- @include('sales_order_details.table') --}}
+                <div class="table-responsive mt-3">
+                    <table class="table table-sm" id="salesOrderDetails-table">
+                        <thead>
+                        <tr>
+                            <th>Inventory Id</th>
+                            <th>Inventory Name</th>
+                            <th>Qty</th>
+                            <th>Uom</th>
+                            <th>Unit Price</th>
+                            <th>Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($salesOrderDetails as $salesOrderDetail)
+                            <tr>
+                                <td>{{ $salesOrderDetail->inventory_id }}</td>
+                                <td>{{ $salesOrderDetail->inventory_name }}</td>
+                                <td>{{ $salesOrderDetail->qty }}</td>
+                                <td>{{ $salesOrderDetail->uom }}</td>
+                                <td>{{ number_format($salesOrderDetail->unit_price,2,',','.') }}</td>
+                                <td>{{ number_format($salesOrderDetail->amount,2,',','.') }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                
             
             </div>
 

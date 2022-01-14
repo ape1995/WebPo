@@ -170,7 +170,23 @@ class SalesOrderController extends AppBaseController
         
         $input = $request->all();
 
-        $input['order_nbr'] = STR::random(10);
+        $cekOrder = SalesOrder::where('customer_id', $input['customer_id'])->where('delivery_date', $input['delivery_date'])->latest()->first();
+        $thisCustomer = Customer::where('BAccountID', $input['customer_id'])->get()->first();
+
+        if($cekOrder == null){
+            $orderNbr = 'ZMP/20/10/16-01';
+            $orderNbr = $thisCustomer->AcctReferenceNbr.'/'.date('Y/m/d',strtotime($input['delivery_date'])).'-01';
+        } else {
+            $parseNo = explode("-", $cekOrder->order_nbr);
+            dd($parseNo);
+            $newID = $parseNo[1] + 1;
+            $orderNbr = $parseNo[0].'-'.sprintf("%02s", $newID);
+        }
+
+        // dd($orderNbr);
+
+
+        $input['order_nbr'] = $orderNbr;
         $input['order_amount'] = str_replace('.','',$input['order_amount']);
         $input['order_amount'] = str_replace(',','.',$input['order_amount']);
         $input['tax'] = str_replace('.','',$input['tax']);
@@ -372,6 +388,8 @@ class SalesOrderController extends AppBaseController
 
         $salesOrder = SalesOrder::find($id);
         $salesOrder['status'] = 'R';
+        $salesOrder['processed_by'] = \Auth::user()->id;
+        $salesOrder['processed_at'] = Carbon::now()->toDateTimeString();
         $salesOrder->save();
 
         return redirect(route('salesOrders.show', $id))->with('success', 'Order Submitted Sucessfully.');
@@ -388,6 +406,8 @@ class SalesOrderController extends AppBaseController
 
         $salesOrder = SalesOrder::find($id);
         $salesOrder['status'] = 'P';
+        $salesOrder['processed_by'] = \Auth::user()->id;
+        $salesOrder['processed_at'] = Carbon::now()->toDateTimeString();
         $salesOrder->save();
 
         return redirect(route('salesOrders.show', $id))->with('success', 'Order Submitted Sucessfully.');
@@ -404,22 +424,28 @@ class SalesOrderController extends AppBaseController
 
         $salesOrder = SalesOrder::find($id);
         $salesOrder['status'] = 'C';
+        $salesOrder['canceled_by'] = \Auth::user()->id;
+        $salesOrder['canceled_at'] = Carbon::now()->toDateTimeString();
         $salesOrder->save();
 
         return redirect(route('salesOrders.index'))->with('success', 'Order Canceled Sucessfully.');
     }
 
-    public function rejectOrder($id)
+    public function rejectOrder(Request $request)
     {
+        $input = $request->all();
 
-        $salesOrder = SalesOrder::find($id);
+        $salesOrder = SalesOrder::find($input['id_order']);
 
         if (empty($salesOrder)) {
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
-        $salesOrder = SalesOrder::find($id);
+        $salesOrder = SalesOrder::find($input['id_order']);
         $salesOrder['status'] = 'B';
+        $salesOrder['rejected_reason'] = $input['reason'];
+        $salesOrder['rejected_by'] = \Auth::user()->id;
+        $salesOrder['rejected_at'] = Carbon::now()->toDateTimeString();
         $salesOrder->save();
 
         return redirect(route('salesOrders.index'))->with('success', 'Order Rejected Sucessfully.');

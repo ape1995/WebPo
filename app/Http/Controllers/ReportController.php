@@ -41,9 +41,64 @@ class ReportController extends Controller
         $status = $input['status'];
         $customer_id = $input['customer_id'];
 
+        if($customer_id == 'All'){
+            $customerCode = $customer_id ;
+        } else {
+            $customerCode = $salesOrders->customer->AcctCD;
+        }
+
+        $reportName = 'Order Rekap'.' - '.$date1.' sd '.$date2. ' - status : '.$status.' - customer : '.$customerCode;
+
         $customers = Customer::where('Type', 'CU')->get();
 
-        return view('reports.sales_order', compact('customers', 'salesOrders', 'date1', 'date2', 'status', 'customer_id'));
+        return view('reports.sales_order', compact('customers', 'salesOrders', 'date1', 'date2', 'status', 'customer_id', 'reportName'));
+
+    }
+
+    public function detailIndex(){
+
+        $customers = Customer::where('Type', 'CU')->get();
+
+        return view('reports.sales_order_detail', compact('customers'));
+
+    }
+
+    public function detailView(Request $request){
+
+        $input = $request->all();
+
+        // dd($input['date_2']);
+
+        if($input['customer_id'] == 'All'){
+            if($input['status'] == 'All'){
+                $salesOrders = SalesOrder::whereBetween('order_date',[$input['date_1'],$input['date_2']])->get();
+            } else {
+                $salesOrders = SalesOrder::where('status', $input['status'])->whereBetween('order_date',[$input['date_1'],$input['date_2']])->get();
+            }
+        } else {
+            if($input['status'] == 'All'){
+                $salesOrders = SalesOrder::where('customer_id', $input['customer_id'])->whereBetween('order_date',array($input['date_1'],$input['date_2']))->get();
+            } else {
+                $salesOrders = SalesOrder::where('status', $input['status'])->where('customer_id', $input['customer_id'])->whereBetween('order_date',array($input['date_1'],$input['date_2']))->get();
+            }
+        }
+
+        $date1 = $input['date_1'];
+        $date2 = $input['date_2'];
+        $status = $input['status'];
+        $customer_id = $input['customer_id'];
+
+        if($customer_id == 'All'){
+            $customerCode = $customer_id ;
+        } else {
+            $customerCode = $salesOrders->customer->AcctCD;
+        }
+
+        $reportName = 'Order Rekap'.' - '.$date1.' sd '.$date2. ' - status : '.$status.' - customer : '.$customerCode;
+
+        $customers = Customer::where('Type', 'CU')->get();
+
+        return view('reports.sales_order_detail', compact('customers', 'salesOrders', 'date1', 'date2', 'status', 'customer_id', 'reportName'));
 
     }
 }

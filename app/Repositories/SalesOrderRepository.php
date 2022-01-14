@@ -23,11 +23,21 @@ class SalesOrderRepository extends BaseRepository
         'delivery_date',
         'order_qty',
         'order_amount',
-        'order_total',
         'tax',
+        'order_total',
         'description',
+        'status',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'canceled_by',
+        'canceled_at',
+        'submitted_by',
+        'submitted_at',
+        'rejected_by',
+        'rejected_at',
+        'rejected_reason',
+        'processed_by',
+        'processed_at'
     ];
 
     /**

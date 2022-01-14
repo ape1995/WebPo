@@ -12,12 +12,12 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Report Sales Order</h1>
+              <h1 class="m-0">Report Sales Order Detail</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Report</a></li>
-                <li class="breadcrumb-item active">Report Sales Order</li>
+                <li class="breadcrumb-item active">Report Sales Order Detail</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -31,7 +31,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('reportSalesOrder.view') }}" method="post">
+                            <form action="{{ route('reportSalesOrder.detailView') }}" method="post">
                                 @csrf
                                 <h5>Order Date</h5>
                                 <div class="row mb-1">
@@ -118,43 +118,41 @@
                                 <div class="table-responsive">
                                     <table class="table table-hover table-sm" id="sales-order-table">
                                         <thead>
-                                            {{-- <tr class="table-borderless">
-                                                <td>Date:</td>
-                                                <td>{{ $date1 }} s/d {{ $date2 }}</td>
-                                                <td>Customer :</td>
-                                                <td>{{ $customer_id }}</td>
-                                                <td>Status :</td>
-                                                <td>{{ $status }}</td>
-                                            </tr> --}}
                                             <tr>
-                                                <th>No</th>
-                                                <th>Order Date</th>
-                                                <th>Delivery Date</th>
+                                                <th>Order Type</th>
+                                                <th>Branch</th>
                                                 <th>Order Nbr</th>
-                                                <th>Customer Code</th>
+                                                <th>Customer ID</th>
                                                 <th>Customer Name</th>
-                                                <th>Order Qty</th>
-                                                <th>Order Amount</th>
-                                                <th>Tax</th>
-                                                <th>Total</th>
-                                                <th>Status</th>
+                                                <th>Outlet ID</th>
+                                                <th>Outlet Name</th>
+                                                <th>Rit</th>
+                                                <th>Product ID</th>
+                                                <th>Product Name</th>
+                                                <th>Quantity</th>
+                                                <th>Delivery Date</th>
+                                                <th>WAREHOUSE</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($salesOrders as $index => $salesOrder)
-                                                <tr>
-                                                    <td>{{ $index+1 }}</td>
-                                                    <td>{{ $salesOrder->order_date->format('Y-m-d') }}</td>
-                                                    <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
-                                                    <td>{{ $salesOrder->order_nbr }}</td>
-                                                    <td>{{ $salesOrder->customer->AcctCD }}</td>
-                                                    <td>{{ $salesOrder->customer->AcctName }}</td>
-                                                    <td>{{ $salesOrder->order_qty }}</td>
-                                                    <td>{{ $salesOrder->order_amount }}</td>
-                                                    <td>{{ $salesOrder->tax }}</td>
-                                                    <td>{{ $salesOrder->order_total }}</td>
-                                                    <td>{{ $salesOrder->status }}</td>
-                                                </tr>
+                                            @foreach ($salesOrders as $salesOrder)
+                                                @foreach ($salesOrder->detail as $salesOrderDetail)    
+                                                    <tr>
+                                                        <td>AD</td>
+                                                        <td>F01</td>
+                                                        <td>{{ $salesOrder->order_nbr }}</td>
+                                                        <td>{{ $salesOrder->customer->AcctCD }}</td>
+                                                        <td>{{ $salesOrder->customer->AcctName }}</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>{{ $salesOrderDetail->inventory_id }}</td>
+                                                        <td>{{ $salesOrderDetail->inventory_name }}</td>
+                                                        <td>{{ $salesOrderDetail->qty }}</td>
+                                                        <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
+                                                        <td>WH03FG</td>
+                                                    </tr>
+                                                @endforeach
                                             @endforeach
                                         </tbody>
                                     </table>

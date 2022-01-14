@@ -46,7 +46,16 @@ class SalesOrder extends Model
         'description',
         'status',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'canceled_by',
+        'canceled_at',
+        'submitted_by',
+        'submitted_at',
+        'rejected_by',
+        'rejected_at',
+        'rejected_reason',
+        'processed_by',
+        'processed_at'
     ];
 
     /**
@@ -95,5 +104,10 @@ class SalesOrder extends Model
     public function customer()
     {
         return $this->hasOne(Customer::class, 'BAccountID', 'customer_id');
+    }
+
+    public function detail()
+    {
+        return $this->hasMany(SalesOrderDetail::class, 'sales_order_id', 'id');
     }
 }

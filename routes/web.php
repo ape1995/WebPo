@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('submitOrder/{code}',[SalesOrderController::class,'submitOrder'])->name('salesOrders.submitOrder');
     Route::get('cancelOrder/{code}',[SalesOrderController::class,'cancelOrder'])->name('salesOrders.cancelOrder');
     Route::get('processOrder/{code}',[SalesOrderController::class,'processOrder'])->name('salesOrders.processOrder');
-    Route::get('rejectOrder/{code}',[SalesOrderController::class,'rejectOrder'])->name('salesOrders.rejectOrder');
+    Route::post('rejectOrder',[SalesOrderController::class,'rejectOrder'])->name('salesOrders.rejectOrder');
     Route::get('printOrder/{code}',[SalesOrderController::class,'printPdf'])->name('salesOrders.printPdf');
     Route::get('resetOrder',[SalesOrderController::class,'resetOrder'])->name('salesOrders.resetOrder');
     Route::get('createOrder', [SalesOrderController::class, 'create'])->name('createOrder');
@@ -47,6 +47,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('updatePassword', [UserController::class, 'updatePassword'])->name('updatePassword');
     Route::get('reportSalesOrder', [ReportController::class, 'index'])->name('reportSalesOrder.index');
     Route::post('reportSalesOrder', [ReportController::class, 'view'])->name('reportSalesOrder.view');
+    Route::get('reportSalesOrderDetail', [ReportController::class, 'detailIndex'])->name('reportSalesOrder.detailIndex');
+    Route::post('reportSalesOrderDetail', [ReportController::class, 'detailView'])->name('reportSalesOrder.detailView');
 });
 
 

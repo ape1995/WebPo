@@ -72,7 +72,7 @@ class UserController extends Controller
 
         if(\Auth::user()->role == 'Customers'){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
-            $roles = Role::where('name', 'Customers')->get();
+            $roles = Role::where('name', 'like', '%Customers%')->get();
         } else {
             $customers =  Customer::where('Type', 'CU')->orWhere('BAccountID', '3')->get();
             // $customers =  Customer::where('Type', 'CU')->get();

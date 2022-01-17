@@ -3,14 +3,15 @@
         <thead>
         <tr>
             <th></th>
+            <th>Order Type</th>
             <th>Order Nbr</th>
             <th>Customer Name</th>
             <th>Order Date</th>
             <th>Delivery Date</th>
             <th>Order Qty</th>
-            <th>Order Amount</th>
-            <th>Tax</th>
-            <th>Order Total</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>Order Amount</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>Tax</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>Order Total</th>
             <th>Status</th>
             <th></th>
         </tr>

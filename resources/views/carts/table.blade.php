@@ -7,8 +7,8 @@
             <th>Product Name</th>
             <th>Qty</th>
             <th>Uom</th>
-            <th>Unit Price</th>
-            <th>Amount</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>Unit Price</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>Amount</th>
             <th></th>
         </tr>
         </thead>

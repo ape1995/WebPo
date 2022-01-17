@@ -11,6 +11,17 @@
                 </div>
             </div>
         </div>
+        <!-- Order Type Field -->
+        <div class="col-sm-12 mb-1">
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('order_type', 'Order Type:') !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('order_type', $salesOrder->order_type == 'R' ? "Regular" : "Direct Selling", ['class' => 'form-control', 'readonly' => true]) !!}
+                </div>
+            </div>
+        </div>
         <!-- Customer Id Field -->
         <div class="col-sm-12 mb-1">
             <div class="row">
@@ -65,7 +76,7 @@
             </div>
         </div>
         <!-- Order Amount Field -->
-        <div class="col-sm-12 mb-1">
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style="visibility: collapse" @endcan>
             <div class="row">
                 <div class="col-3">
                     {!! Form::label('order_amount', 'Order Amount:') !!}
@@ -76,7 +87,7 @@
             </div>
         </div>
         <!-- Tax Field -->
-        <div class="col-sm-12 mb-1">
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style="visibility: collapse" @endcan>
             <div class="row">
                 <div class="col-3">
                     {!! Form::label('tax', 'Tax:') !!}
@@ -87,7 +98,7 @@
             </div>
         </div>
         <!-- Order Total Field -->
-        <div class="col-sm-12 mb-1">
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style="visibility: collapse" @endcan>
             <div class="row">
                 <div class="col-3">
                     {!! Form::label('order_total', 'Order Total:') !!}

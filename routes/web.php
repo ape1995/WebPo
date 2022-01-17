@@ -49,6 +49,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('reportSalesOrder', [ReportController::class, 'view'])->name('reportSalesOrder.view');
     Route::get('reportSalesOrderDetail', [ReportController::class, 'detailIndex'])->name('reportSalesOrder.detailIndex');
     Route::post('reportSalesOrderDetail', [ReportController::class, 'detailView'])->name('reportSalesOrder.detailView');
+    Route::get('reportRequest1', [ReportController::class, 'report1Index'])->name('reportSalesOrder.report1Index');
+    Route::post('reportRequest1', [ReportController::class, 'report1View'])->name('reportSalesOrder.report1View');
 });
 
 

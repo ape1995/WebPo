@@ -110,10 +110,57 @@
                     </div>
                 </div>
 
+                {{-- Modal edit product --}}
+                {{-- Modal Edit --}}
+                <div class="modal fade" id="ajaxModel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header text-light" style="background-color: #c61325">
+                                <h4 class="modal-title" id="modelHeading"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="cartForm" name="cartForm" class="form-horizontal">
+                                   <input type="hidden" name="product_id" id="product_id">
+                                    <div class="form-group">
+                                        <label for="product" class="col-sm-4 control-label">Product</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="product_name" name="product_name" readonly>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="product_code" name="product_code" readonly>
+                                        </div> 
+                                    </div>
+
+                                    <label class="col-sm-4">Unit Price</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="unit_price_edit" name="unit_price_edit" readonly>
+                                    </div>
+                     
+                                    <label class="col-sm-4 control-label">Quantity</label>
+                                    <div class="col-sm-12">
+                                        <input type="number" class="form-control" id="quantity" name="quantity">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Amount</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="amount_edit" name="amount_edit" readonly>
+                                        </div>
+                                    </div>
+                      
+                                    <div class="col-md-12 text-right">
+                                     <button type="submit" class="btn btn-primary updateBtn" id="updateBtn">Update</button>
+                                    </div>
+                                {{-- </form> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
+                <input type="submit" name="savePageButton" id="savePageButton" class="btn btn-primary" value="Update">
                 <a href="{{ route('salesOrders.show', $salesOrder->id) }}" class="btn btn-default">Cancel</a>
             </div>
 
@@ -121,11 +168,20 @@
 
         </div>
     </div>
+    @php
+        $permissionPrice = '';
+    @endphp
+    @can('hide price sales order')
+        @php
+            $permissionPrice = 'hide price sales order';
+        @endphp
+    @endcan
 @endsection
 
 @section('js')
     <script>
         $(function() {
+            var permissionPrice = "{{ $permissionPrice }}";
             var order_id =  $("#order_id");
             var order_nbr =  $("#order_nbr");
             var customer_id =  $("select#customer_id");
@@ -140,7 +196,7 @@
             var order_amount =  $("#order_amount");
             var tax =  $("#tax");
             var order_total =  $("#order_total");
-            var save =  $("#save");
+            var save =  $("#saveBtn");
             save.attr("disabled", true);
 
             getAllCounter();
@@ -179,6 +235,18 @@
                 }
             });
 
+            $("#quantity").keyup(function() {
+                let unitPrice = $("#unit_price_edit").val().replace('.','').replace(',','.');
+                var totalPrice = unitPrice * $("#quantity").val();
+                $("#amount_edit").val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalPrice));
+
+                if($("#quantity").val() == null || $("#quantity").val() == 0){
+                    save.attr("disabled", true);
+                } else {
+                    save.attr("disabled", false);
+                }
+            });
+
             $('.money').mask("#,##0.00", {reverse: true});
 
             function getAllCounter(){
@@ -194,6 +262,13 @@
                         order_amount.val(response['order_amount']);
                         tax.val(response['tax']);
                         order_total.val(response['order_total']);
+
+                        if(response['order_qty'] == 0){
+                            $("#savePageButton").attr("disabled", true);
+                        } else {
+                            $("#savePageButton").attr("disabled", false);
+                        }
+
                     }
                 });
             }
@@ -217,6 +292,12 @@
                     url:"{{ url('dataTableSalesOrderDetail') }}" + '/' + order_id.val(),
                     type: "GET"
                         
+                },
+                "rowCallback": function( row, data ) {
+                    if(permissionPrice == 'hide price sales order') {
+                        $('td:eq(5)', row).addClass("hide-component");
+                        $('td:eq(6)', row).addClass("hide-component");
+                    }
                 },
                 columns: [
                     { 
@@ -283,6 +364,46 @@
                         console.log('Error:', data);
                         alert('Product Already Listed on Carts');
                         // $('#saveBtn').html('Save Changes');
+                    }
+                });
+            });
+
+            $('body').on('click', '.editProduct', function () {
+                var productId = $(this).data('id');
+                $.get("{{ route('salesOrderDetails.index') }}" +'/' + productId +'/edit', function (data) {
+                    $('#modelHeading').html("Update Product");
+                    $('#ajaxModel').modal('show');
+                    $('#product_name').val(data.inventory_name);
+                    $('#product_id').val(data.id);
+                    $('#product_code').val(data.inventory_id);
+                    $('#unit_price_edit').val(data.unit_price);
+                    $('#amount_edit').val(data.amount);
+                    $('#quantity').val(data.qty);
+                })
+            });
+
+            $('#updateBtn').click(function (e) {
+                e.preventDefault();
+                // $(this).html('Save');
+            
+                $.ajax({
+                    data: {
+                        qty:$('#quantity').val(),
+                        unit_price:$('#unit_price_edit').val(),
+                        amount:$('#amount_edit').val(),
+                        },
+                    url: "{{ route('salesOrderDetails.index') }}" +'/' + $('#product_id').val(),
+                    type: "PATCH",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        $('#ajaxModel').modal('hide');
+                        table.draw();
+                        getAllCounter();
+                    },
+                    error: function (data) {
+                        console.log('Error:', data);
+                        alert('Error Updating data!');
                     }
                 });
             });

@@ -18,6 +18,7 @@ class SalesOrderRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'order_nbr',
+        'order_type',
         'customer_id',
         'order_date',
         'delivery_date',

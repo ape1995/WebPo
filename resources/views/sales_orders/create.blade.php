@@ -59,14 +59,15 @@
                                     <div id="data_show" style="display: none">
                                         <div class="col-sm-12 mb-1">
                                             <div class="row">
-                                                <div class="col-3">
+                                                <div class="col-3" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                                     <input name="inventory_name" id="inventory_name" type="hidden" value="">
                                                     {!! Form::label('unit_price', 'Unit Price:') !!}
                                                 </div>
-                                                <div class="col-4">
-                                                    {!! Form::text('unit_price', null, ['class' => 'form-control', 'readonly' => true ]) !!}
+                                                <div class="col-3" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+                                                    <input type="text" name="unit_price" id="unit_price" class="form-control" readonly>
+                                                    {{-- {!! Form::text('unit_price', null, ['class' => 'form-control', 'readonly' => true ]) !!} --}}
                                                 </div>
-                                                <div class="col-1">
+                                                <div class="col-3">
                                                     {!! Form::label('uom', 'UOM:') !!}
                                                 </div>
                                                 <div class="col-3">
@@ -88,10 +89,10 @@
                                         {{-- Amount Field --}}
                                         <div class="col-sm-12 mb-1">
                                             <div class="row">
-                                                <div class="col-3">
+                                                <div class="col-3" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                                     {!! Form::label('amount', 'Amount:') !!}
                                                 </div>
-                                                <div class="col-6">
+                                                <div class="col-6" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                                     {!! Form::text('amount', null, ['class' => 'form-control', 'readonly', true ]) !!}
                                                 </div>
                                             </div>
@@ -105,10 +106,57 @@
                         {{-- </form> --}}
                     </div>
                 </div>
+
+                {{-- Modal Edit --}}
+                <div class="modal fade" id="ajaxModel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header text-light" style="background-color: #c61325">
+                                <h4 class="modal-title" id="modelHeading"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="cartForm" name="cartForm" class="form-horizontal">
+                                   <input type="hidden" name="product_id" id="product_id">
+                                    <div class="form-group">
+                                        <label for="product" class="col-sm-4 control-label">Product</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="product_name" name="product_name" readonly>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="product_code" name="product_code" readonly>
+                                        </div> 
+                                    </div>
+
+                                    <label class="col-sm-4">Unit Price</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="unit_price_edit" name="unit_price_edit" readonly>
+                                    </div>
+                     
+                                    <label class="col-sm-4 control-label">Quantity</label>
+                                    <div class="col-sm-12">
+                                        <input type="number" class="form-control" id="quantity" name="quantity">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Amount</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="amount_edit" name="amount_edit" readonly>
+                                        </div>
+                                    </div>
+                      
+                                    <div class="col-md-12 text-right">
+                                     <button type="submit" class="btn btn-primary updateBtn" id="updateBtn">Update</button>
+                                    </div>
+                                {{-- </form> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                {{-- {!! Form::submit('Save', ['class' => 'btn btn-primary', 'id' => 'savePageButton']) !!} --}}
+                <input type="submit" name="savePageButton" id="savePageButton" class="btn btn-primary" value="Save">
                 <a href="{{ route('salesOrders.resetOrder') }}" onclick="return confirm('reset this form?')" class="btn btn-default">Reset</a>
             </div>
 
@@ -116,11 +164,20 @@
 
         </div>
     </div>
+    @php
+        $permissionPrice = '';
+    @endphp
+    @can('hide price sales order')
+        @php
+            $permissionPrice = 'hide price sales order';
+        @endphp
+    @endcan
 @endsection
 
 @section('js')
     <script>
         $(function() {
+            var permissionPrice = "{{ $permissionPrice }}";
             var customer_id =  $("select#customer_id");
             var inventory_id =  $("select#inventory_id");
             var inventory_name =  $("#inventory_name");
@@ -133,7 +190,7 @@
             var order_amount =  $("#order_amount");
             var tax =  $("#tax");
             var order_total =  $("#order_total");
-            var save =  $("#save");
+            var save =  $("#saveBtn");
             save.attr("disabled", true);
 
             getAllCounter();
@@ -172,6 +229,18 @@
                 }
             });
 
+            $("#quantity").keyup(function() {
+                let unitPrice = $("#unit_price_edit").val().replace('.','').replace(',','.');
+                var totalPrice = unitPrice * $("#quantity").val();
+                $("#amount_edit").val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalPrice));
+
+                if($("#quantity").val() == null || $("#quantity").val() == 0){
+                    save.attr("disabled", true);
+                } else {
+                    save.attr("disabled", false);
+                }
+            });
+
             $('.money').mask("#,##0.00", {reverse: true});
 
             function getAllCounter(){
@@ -187,6 +256,13 @@
                         order_amount.val(response['order_amount']);
                         tax.val(response['tax']);
                         order_total.val(response['order_total']);
+
+                        // disable save if qty = 0
+                        if(response['order_qty'] == 0){
+                            $("#savePageButton").attr("disabled", true);
+                        } else {
+                            $("#savePageButton").attr("disabled", false);
+                        }
                     }
                 });
             }
@@ -210,6 +286,12 @@
                     url:"{{route('carts.data')}}",
                     type: "GET"
                         
+                },
+                "rowCallback": function( row, data ) {
+                    if(permissionPrice == 'hide price sales order') {
+                        $('td:eq(5)', row).addClass("hide-component");
+                        $('td:eq(6)', row).addClass("hide-component");
+                    }
                 },
                 columns: [
                     { 
@@ -254,17 +336,19 @@
             //     $('#ajaxModel').modal('show');
             // });
 
-            // $('body').on('click', '.editBook', function () {
-            //     var book_id = $(this).data('id');
-            //     $.get("{{ route('carts.index') }}" +'/' + book_id +'/edit', function (data) {
-            //         $('#modelHeading').html("Edit Book");
-            //         $('#saveBtn').val("edit-book");
-            //         $('#ajaxModel').modal('show');
-            //         $('#book_id').val(data.id);
-            //         $('#title').val(data.title);
-            //         $('#author').val(data.author);
-            //     })
-            // });
+            $('body').on('click', '.editBook', function () {
+                var productId = $(this).data('id');
+                $.get("{{ route('carts.index') }}" +'/' + productId +'/edit', function (data) {
+                    $('#modelHeading').html("Update Product");
+                    $('#ajaxModel').modal('show');
+                    $('#product_name').val(data.inventory_name);
+                    $('#product_id').val(data.id);
+                    $('#product_code').val(data.inventory_id);
+                    $('#unit_price_edit').val(data.unit_price);
+                    $('#amount_edit').val(data.amount);
+                    $('#quantity').val(data.qty);
+                })
+            });
 
             $('#saveBtn').click(function (e) {
                 e.preventDefault();
@@ -296,6 +380,32 @@
                         console.log('Error:', data);
                         alert('Product Already Listed on Carts');
                         // $('#saveBtn').html('Save Changes');
+                    }
+                });
+            });
+
+            $('#updateBtn').click(function (e) {
+                e.preventDefault();
+                // $(this).html('Save');
+            
+                $.ajax({
+                    data: {
+                        qty:$('#quantity').val(),
+                        unit_price:$('#unit_price_edit').val(),
+                        amount:$('#amount_edit').val(),
+                        },
+                    url: "{{ route('carts.index') }}" +'/' + $('#product_id').val(),
+                    type: "PATCH",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        $('#ajaxModel').modal('hide');
+                        table.draw();
+                        getAllCounter();
+                    },
+                    error: function (data) {
+                        console.log('Error:', data);
+                        alert('Error Updating data!');
                     }
                 });
             });

@@ -30,7 +30,7 @@
                                 <h4 style="margin-bottom: 5px; margin-top: 5px;">{{ $greeting.', '.Auth::user()->name }}</h4>
                                 <p>It's {{ $date }}</p>
                               </div>
-                              @if (Auth::user()->role == 'Customers')
+                              @if (Auth::user()->role == 'Customers' || Auth::user()->role == 'Staff Customers')
                               <div class="col-md-3">
                                 <h5>Out of stock?</h5>
                                 <a href="{{ route('createOrder') }}" class="btn btn-outline-info btn-block">Order Here</a>
@@ -76,7 +76,7 @@
                               </div>
                               <div class="col-md-8">
                                 <!-- /.row -->
-                                @if (Auth::user()->role == 'Customers')
+                                @if (Auth::user()->role == 'Customers' || Auth::user()->role == 'Staff Customers')
                                   <div class="row">
                                     <div class="col-md-4">
                                       <div class="card">

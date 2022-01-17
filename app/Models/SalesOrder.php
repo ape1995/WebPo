@@ -36,6 +36,7 @@ class SalesOrder extends Model
 
     public $fillable = [
         'order_nbr',
+        'order_type',
         'customer_id',
         'order_date',
         'delivery_date',

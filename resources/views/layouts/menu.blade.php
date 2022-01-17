@@ -71,9 +71,9 @@
 </li>
 @endif
 
-@if(Gate::check('view report sales order') || Gate::check('view report sales order detail'))
-<li class="nav-item {{ Request::is('reportSalesOrder*') ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}">
+@if(Gate::check('view report sales order') || Gate::check('view report sales order detail') || Gate::check('view report request 1'))
+<li class="nav-item {{ Request::is('reportSalesOrder*') ? 'menu-open' : '' }} {{ Request::is('reportRequest1*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}  {{ Request::is('reportRequest1*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-book"></i>
         <p>
             Report
@@ -94,6 +94,14 @@
             <a href="{{ route('reportSalesOrder.detailIndex') }}" class="nav-link {{ Request::is('reportSalesOrderDetail') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Sales Order Detail</p>
+            </a>
+        </li>
+        @endcan
+        @can('view report request 1')
+        <li class="nav-item">
+            <a href="{{ route('reportSalesOrder.report1Index') }}" class="nav-link {{ Request::is('reportRequest1') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Report Request 1</p>
             </a>
         </li>
         @endcan

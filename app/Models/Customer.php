@@ -31,4 +31,9 @@ class Customer extends Model
         return $this->hasOne(Location::class, 'BAccountID', 'BAccountID');
     }
 
+    public function detail()
+    {
+        return $this->hasOne(CustomerDetail::class, 'BAccountID', 'BAccountID');
+    }
+
 }

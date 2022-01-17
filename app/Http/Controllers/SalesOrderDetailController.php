@@ -118,15 +118,16 @@ class SalesOrderDetailController extends AppBaseController
      */
     public function edit($id)
     {
-        $salesOrderDetail = $this->salesOrderDetailRepository->find($id);
+        $salesOrderDetail = SalesOrderDetail::find($id);
+        $response = $salesOrderDetail->all();
+        $response['id'] = $salesOrderDetail->id;
+        $response['inventory_name'] = $salesOrderDetail->inventory_name;
+        $response['inventory_id']= $salesOrderDetail->inventory_id;
+        $response['qty'] = $salesOrderDetail->qty;
+        $response['unit_price'] = number_format($salesOrderDetail->unit_price,2,',','.');
+        $response['amount'] = number_format($salesOrderDetail->amount,2,',','.');
 
-        if (empty($salesOrderDetail)) {
-            Flash::error('Sales Order Detail not found');
-
-            return redirect(route('salesOrderDetails.index'));
-        }
-
-        return view('sales_order_details.edit')->with('salesOrderDetail', $salesOrderDetail);
+        return response()->json($response);
     }
 
     /**
@@ -139,19 +140,15 @@ class SalesOrderDetailController extends AppBaseController
      */
     public function update($id, UpdateSalesOrderDetailRequest $request)
     {
-        $salesOrderDetail = $this->salesOrderDetailRepository->find($id);
+        $data = $request->all();
+        $data['unit_price'] = str_replace('.','',$data['unit_price']);
+        $data['unit_price'] = str_replace(',','.',$data['unit_price']);
+        $data['amount'] = str_replace('.','',$data['amount']);
+        $data['amount'] = str_replace(',','.',$data['amount']);
 
-        if (empty($salesOrderDetail)) {
-            Flash::error('Sales Order Detail not found');
+        $salesOrderDetail = $this->salesOrderDetailRepository->update($data, $id);
 
-            return redirect(route('salesOrderDetails.index'));
-        }
-
-        $salesOrderDetail = $this->salesOrderDetailRepository->update($request->all(), $id);
-
-        Flash::success('Sales Order Detail updated successfully.');
-
-        return redirect(route('salesOrderDetails.index'));
+        return response()->json(['success'=>'Data updated successfully.']);
     }
 
     /**
@@ -186,8 +183,9 @@ class SalesOrderDetailController extends AppBaseController
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-   
-                        $btn = ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook"><i class="fas fa-trash-alt"></i></a>';
+
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editProduct"><i class="fas fa-edit"></i></a>';
+                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook"><i class="fas fa-trash-alt"></i></a>';
 
                         return $btn;
                 })

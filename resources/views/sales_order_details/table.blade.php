@@ -6,8 +6,8 @@
             <th>Inventory Name</th>
             <th>Qty</th>
             <th>Uom</th>
-            <th>Unit Price</th>
-            <th>Amount</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>Unit Price</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>Amount</th>
         </tr>
         </thead>
         <tbody>
@@ -17,8 +17,8 @@
                 <td>{{ $salesOrderDetail->inventory_name }}</td>
                 <td>{{ $salesOrderDetail->qty }}</td>
                 <td>{{ $salesOrderDetail->uom }}</td>
-                <td>{{ number_format($salesOrderDetail->unit_price,2,',','.') }}</td>
-                <td>{{ number_format($salesOrderDetail->amount,2,',','.') }}</td>
+                <td @can('hide price sales order') class="hide-component" @endcan>{{ number_format($salesOrderDetail->unit_price,2,',','.') }}</td>
+                <td @can('hide price sales order') class="hide-component" @endcan>{{ number_format($salesOrderDetail->amount,2,',','.') }}</td>
             </tr>
         @endforeach
         </tbody>

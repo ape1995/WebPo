@@ -37,7 +37,7 @@
 
             <div class="card-footer">
                 {{-- {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!} --}}
-                <a href="{{ route('salesOrders.printPdf', [$salesOrder->id]) }}" class="btn btn-outline-danger"><i class="fa fa-file-pdf"></i> Print</a>
+                <a href="{{ route('salesOrders.printPdf', [$salesOrder->id]) }}" class="btn btn-outline-danger" id="btnPrint"><i class="fa fa-file-pdf"></i> Print</a>
                 @if ($salesOrder->status == 'S')
                     @can('edit sales order')
                         <a href="{{ route('salesOrders.edit', [$salesOrder->id]) }}" class="btn btn-success" onclick="return confirm('Edit this order?')">Edit</a>
@@ -92,3 +92,25 @@
         </div>
     </div>
 @endsection
+
+@push('page_scripts')
+    <script>
+        $(document).ready(function() {
+            $("#btnPrint").click(function() {
+                // disable button
+                $(this).prop("disabled", true);
+                // add spinner to button
+                $(this).html(
+                    '<span class="spinner-border spinner-border-sm" role="status"></span><span class="sr-only">Loading...</span>'
+                );
+
+                setTimeout(function(){
+                    $(this).prop("disabled", false);
+                    $(this).html(
+                        '<i class="fa fa-file-pdf"></i> Print'
+                    );
+                },8000);
+            });
+        });
+    </script>
+@endpush

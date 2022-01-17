@@ -55,10 +55,11 @@ class CartController extends AppBaseController
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-   
-                        $btn = ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook"><i class="fas fa-trash-alt"></i></a>';
 
-                        return $btn;
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook"><i class="fas fa-edit"></i></a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook"><i class="fas fa-trash-alt"></i></a>';
+
+                    return $btn;
                 })
                 ->rawColumns(['action'])
                 ->escapeColumns()
@@ -148,15 +149,16 @@ class CartController extends AppBaseController
      */
     public function edit($id)
     {
-        $cart = $this->cartRepository->find($id);
+        $cart = Cart::find($id);
+        $response = $cart->all();
+        $response['id'] = $cart->id;
+        $response['inventory_name'] = $cart->inventory_name;
+        $response['inventory_id']= $cart->inventory_id;
+        $response['qty'] = $cart->qty;
+        $response['unit_price'] = number_format($cart->unit_price,2,',','.');
+        $response['amount'] = number_format($cart->amount,2,',','.');
 
-        if (empty($cart)) {
-            Flash::error('Cart not found');
-
-            return redirect(route('carts.index'));
-        }
-
-        return view('carts.edit')->with('cart', $cart);
+        return response()->json($response);
     }
 
     /**
@@ -167,21 +169,17 @@ class CartController extends AppBaseController
      *
      * @return Response
      */
-    public function update($id, UpdateCartRequest $request)
+    public function update($id, Request $request)
     {
-        $cart = $this->cartRepository->find($id);
+        $data = $request->all();
+        $data['unit_price'] = str_replace('.','',$data['unit_price']);
+        $data['unit_price'] = str_replace(',','.',$data['unit_price']);
+        $data['amount'] = str_replace('.','',$data['amount']);
+        $data['amount'] = str_replace(',','.',$data['amount']);
 
-        if (empty($cart)) {
-            Flash::error('Cart not found');
+        $cart = $this->cartRepository->update($data, $id);
 
-            return redirect(route('carts.index'));
-        }
-
-        $cart = $this->cartRepository->update($request->all(), $id);
-
-        Flash::success('Cart updated successfully.');
-
-        return redirect(route('carts.index'));
+        return response()->json(['success'=>'Cart updated successfully.']);
     }
 
     /**

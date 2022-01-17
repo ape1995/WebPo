@@ -12,12 +12,12 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Report Sales Order Detail</h1>
+              <h1 class="m-0">Report Request 1</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Report</a></li>
-                <li class="breadcrumb-item active">Report Sales Order Detail</li>
+                <li class="breadcrumb-item active">Report Request 1</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -31,7 +31,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('reportSalesOrder.detailView') }}" method="post">
+                            <form action="{{ route('reportSalesOrder.report1View') }}" method="post">
                                 @csrf
                                 <h5>Order Date</h5>
                                 <div class="row mb-1">
@@ -118,6 +118,7 @@
                                                 <th>Quantity</th>
                                                 <th>Delivery Date</th>
                                                 <th>WAREHOUSE</th>
+                                                <th>Customer Class</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -137,6 +138,7 @@
                                                         <td>{{ $salesOrderDetail->qty }}</td>
                                                         <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
                                                         <td>WH03FG</td>
+                                                        <td>{{ $salesOrder->customer->detail->CustomerClassID }}</td>
                                                     </tr>
                                                 @endforeach
                                             @endforeach

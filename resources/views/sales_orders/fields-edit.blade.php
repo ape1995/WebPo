@@ -12,6 +12,20 @@
                 </div>
             </div>
         </div>
+        <!-- Order Type Field -->
+        <div class="col-sm-12 mb-1">
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('order_type', 'Order Type:') !!}
+                </div>
+                <div class="col-8">
+                    <select name="order_type" id="order_type" class="form-control select2js" required>
+                        <option value="R" {{ $salesOrder->order_type == 'R' ? 'selected' : '' }}>REGULAR</option>
+                        <option value="D" {{ $salesOrder->order_type == 'D' ? 'selected' : '' }}>DIRECT SELLING</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <!-- Customer Id Field -->
         <div class="col-sm-12 mb-1">
             <div class="row">

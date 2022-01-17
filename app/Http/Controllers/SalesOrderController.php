@@ -47,7 +47,7 @@ class SalesOrderController extends AppBaseController
     {
         // $salesOrders = $this->salesOrderRepository->all();
 
-        if(\Auth::user()->role == 'Customers'){
+        if(\Auth::user()->role == 'Customers'  || \Auth::user()->role == 'Staff Customers'){
             $salesOrders = SalesOrder::where('customer_id', \Auth::user()->customer_id)->latest()->get();
         } else {
             $salesOrders = SalesOrder::latest()->get();
@@ -72,6 +72,9 @@ class SalesOrderController extends AppBaseController
             return DataTables::of($datas)
                 ->addColumn('customer', function (SalesOrder $salesOrder) {
                     return $salesOrder->customer->AcctName.' - '.$salesOrder->customer->AcctCD;
+                })
+                ->addColumn('order_type', function (SalesOrder $salesOrder) {
+                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
                 })
                 ->addColumn('created_name', function (SalesOrder $salesOrder) {
                     return $salesOrder->createdBy->name;
@@ -135,7 +138,7 @@ class SalesOrderController extends AppBaseController
     public function create()
     {
         
-        if(\Auth::user()->role == 'Customers'){
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
         } else {
             $customers = Customer::all();
@@ -173,12 +176,12 @@ class SalesOrderController extends AppBaseController
         $cekOrder = SalesOrder::where('customer_id', $input['customer_id'])->where('delivery_date', $input['delivery_date'])->latest()->first();
         $thisCustomer = Customer::where('BAccountID', $input['customer_id'])->get()->first();
 
-        if($cekOrder == null){
+        // dd($cekOrder);
+        if($cekOrder == null || !$cekOrder || $cekOrder->count() == 0){
             $orderNbr = 'ZMP/20/10/16-01';
             $orderNbr = $thisCustomer->AcctReferenceNbr.'/'.date('Y/m/d',strtotime($input['delivery_date'])).'-01';
         } else {
             $parseNo = explode("-", $cekOrder->order_nbr);
-            dd($parseNo);
             $newID = $parseNo[1] + 1;
             $orderNbr = $parseNo[0].'-'.sprintf("%02s", $newID);
         }
@@ -237,7 +240,7 @@ class SalesOrderController extends AppBaseController
 
         $salesOrder = $this->salesOrderRepository->find($id);
 
-        if(\Auth::user()->role == 'Customers'){
+        if(\Auth::user()->role == 'Customers'  || \Auth::user()->role == 'Staff Customers'){
             if($salesOrder->customer_id != \Auth::user()->customer_id){
                 abort(403);
             }
@@ -273,7 +276,7 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'));
         }
 
-        if(\Auth::user()->role == 'Customers'){
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
         } else {
             $customers = Customer::all();
@@ -470,7 +473,7 @@ class SalesOrderController extends AppBaseController
         }
 
         $pdf = PDF::loadview('sales_orders.print',['salesOrder'=>$salesOrder, 'salesOrderDetails'=>$salesOrderDetails]);
-    	return $pdf->download('Order');
+    	return $pdf->download("Order - $salesOrder->order_nbr");
 
         // return view('sales_orders.print', compact('salesOrder', 'salesOrderDetails'));
     }

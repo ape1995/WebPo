@@ -35,12 +35,21 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
+    @php
+        $permissionPrice = '';
+    @endphp
+    @can('hide price sales order')
+        @php
+            $permissionPrice = 'hide price sales order';
+        @endphp
+    @endcan
 @endsection
 
 
 @push('page_scripts')
     <script type="text/javascript">
         $(document).ready(function() { 
+            var permissionPrice = "{{ $permissionPrice }}";
             fetch_data()
             function fetch_data(){                    
                     $('#dataTable').DataTable({
@@ -67,6 +76,11 @@
                             if ( data.status == "Rejected" ) {
                                 $('td:eq(9)', row).addClass("bg-danger");
                             }
+                            if(permissionPrice == 'hide price sales order') {
+                                $('td:eq(6)', row).addClass("hide-component");
+                                $('td:eq(7)', row).addClass("hide-component");
+                                $('td:eq(8)', row).addClass("hide-component");
+                            }
                         },
                         "columnDefs": [
                             { className: "text-nowrap", "targets": "_all" }
@@ -80,8 +94,11 @@
                                 searchable: false   
                             },
                             {
+                                data: 'order_type'                                    
+                            }, 
+                            {
                                 data: 'order_nbr'                                    
-                            },                     
+                            },                
                             {
                                 data: 'customer'      
                             },  

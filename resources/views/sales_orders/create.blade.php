@@ -3,7 +3,7 @@
 @section('content')
     {{-- <section class="content-header"> --}}
         <div class="container-fluid p-1 mx-3">
-            <h5>Create Order</h5>
+            <h5>{{ trans('sales_order.create_order') }}</h5>
         </div>
     {{-- </section> --}}
 
@@ -21,7 +21,7 @@
                     @include('sales_orders.fields')
                 </div>
                 <a class="btn btn-primary text-light mb-2" type="button"  data-toggle="modal" data-target="#modalProduct">
-                    Add Product
+                    {{ trans('sales_order.add_product') }}
                 </a>
 
                 @include('carts.table')
@@ -33,7 +33,7 @@
                             @csrf
                             <div class="modal-content">
                                 <div class="modal-header text-light" style="background-color: #c61325">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">List Product</h5>
+                                    <h5 class="modal-title" id="exampleModalLongTitle">{{ trans('sales_order.list_product') }}</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -43,7 +43,7 @@
                                     <div class="col-sm-12 mb-1">
                                         <div class="row">
                                             <div class="col-3">
-                                                {!! Form::label('inventory_id', 'Product:') !!}
+                                                {!! Form::label('inventory_id', trans('sales_order.product')) !!}
                                             </div>
                                             <div class="col-8">
                                                 <select name="inventory_id" id="inventory_id" class="form-control select2js">
@@ -61,14 +61,14 @@
                                             <div class="row">
                                                 <div class="col-3" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                                     <input name="inventory_name" id="inventory_name" type="hidden" value="">
-                                                    {!! Form::label('unit_price', 'Unit Price:') !!}
+                                                    {!! Form::label('unit_price', trans('sales_order.unit_price')) !!}
                                                 </div>
                                                 <div class="col-3" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                                     <input type="text" name="unit_price" id="unit_price" class="form-control" readonly>
                                                     {{-- {!! Form::text('unit_price', null, ['class' => 'form-control', 'readonly' => true ]) !!} --}}
                                                 </div>
                                                 <div class="col-3">
-                                                    {!! Form::label('uom', 'UOM:') !!}
+                                                    {!! Form::label('uom', trans('sales_order.uom')) !!}
                                                 </div>
                                                 <div class="col-3">
                                                     {!! Form::text('uom', 'PIECE', ['class' => 'form-control', 'readonly' => true ]) !!}
@@ -79,7 +79,7 @@
                                         <div class="col-sm-12 mb-1">
                                             <div class="row">
                                                 <div class="col-3">
-                                                    {!! Form::label('qty', 'Quantity:') !!}
+                                                    {!! Form::label('qty', trans('sales_order.qty')) !!}
                                                 </div>
                                                 <div class="col-3">
                                                     {!! Form::number('qty', NULL, ['class' => 'form-control', 'min' => 1]) !!}
@@ -90,7 +90,7 @@
                                         <div class="col-sm-12 mb-1">
                                             <div class="row">
                                                 <div class="col-3" @can('hide price sales order') style=" visibility: collapse;" @endcan>
-                                                    {!! Form::label('amount', 'Amount:') !!}
+                                                    {!! Form::label('amount', trans('sales_order.amount')) !!}
                                                 </div>
                                                 <div class="col-6" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                                     {!! Form::text('amount', null, ['class' => 'form-control', 'readonly', true ]) !!}
@@ -100,7 +100,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" id="saveBtn" class="btn btn-primary">Add To Cart</button>
+                                    <button type="button" id="saveBtn" class="btn btn-primary">{{ trans('sales_order.btn_add_to_cart') }}</button>
                                 </div>
                             </div>
                         {{-- </form> --}}
@@ -112,13 +112,13 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header text-light" style="background-color: #c61325">
-                                <h4 class="modal-title" id="modelHeading"></h4>
+                                <h4 class="modal-title" id="modelHeading">{{ trans('sales_order.btn_update') }} {{trans('sales_order.product')}} </h4>
                             </div>
                             <div class="modal-body">
                                 <form id="cartForm" name="cartForm" class="form-horizontal">
                                    <input type="hidden" name="product_id" id="product_id">
                                     <div class="form-group">
-                                        <label for="product" class="col-sm-4 control-label">Product</label>
+                                        <label for="product" class="col-sm-4 control-label">{{ trans('sales_order.product') }}</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="product_name" name="product_name" readonly>
                                         </div>
@@ -127,25 +127,25 @@
                                         </div> 
                                     </div>
 
-                                    <label class="col-sm-4">Unit Price</label>
+                                    <label class="col-sm-4">{{ trans('sales_order.unit_price') }}</label>
                                     <div class="col-sm-12">
                                         <input type="text" class="form-control" id="unit_price_edit" name="unit_price_edit" readonly>
                                     </div>
                      
-                                    <label class="col-sm-4 control-label">Quantity</label>
+                                    <label class="col-sm-4 control-label">{{ trans('sales_order.qty') }}</label>
                                     <div class="col-sm-12">
                                         <input type="number" class="form-control" id="quantity" name="quantity">
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">Amount</label>
+                                        <label class="col-sm-4 control-label">{{ trans('sales_order.amount') }}</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="amount_edit" name="amount_edit" readonly>
                                         </div>
                                     </div>
                       
                                     <div class="col-md-12 text-right">
-                                     <button type="submit" class="btn btn-primary updateBtn" id="updateBtn">Update</button>
+                                     <button type="submit" class="btn btn-primary updateBtn" id="updateBtn">{{ trans('sales_order.btn_update') }}</button>
                                     </div>
                                 {{-- </form> --}}
                             </div>
@@ -156,8 +156,8 @@
 
             <div class="card-footer">
                 {{-- {!! Form::submit('Save', ['class' => 'btn btn-primary', 'id' => 'savePageButton']) !!} --}}
-                <input type="submit" name="savePageButton" id="savePageButton" class="btn btn-primary" value="Save">
-                <a href="{{ route('salesOrders.resetOrder') }}" onclick="return confirm('reset this form?')" class="btn btn-default">Reset</a>
+                <input type="submit" name="savePageButton" id="savePageButton" class="btn btn-primary" value="{{ trans('sales_order.btn_save') }}">
+                <a href="{{ route('salesOrders.resetOrder') }}" onclick="return confirm('{{ trans('sales_order.question_reset') }}')" class="btn btn-default">{{ trans('sales_order.btn_reset') }}</a>
             </div>
 
             {!! Form::close() !!}
@@ -339,7 +339,6 @@
             $('body').on('click', '.editBook', function () {
                 var productId = $(this).data('id');
                 $.get("{{ route('carts.index') }}" +'/' + productId +'/edit', function (data) {
-                    $('#modelHeading').html("Update Product");
                     $('#ajaxModel').modal('show');
                     $('#product_name').val(data.inventory_name);
                     $('#product_id').val(data.id);

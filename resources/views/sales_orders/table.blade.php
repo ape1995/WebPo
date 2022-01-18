@@ -3,15 +3,15 @@
         <thead>
         <tr>
             <th></th>
-            <th>Order Type</th>
-            <th>Order Nbr</th>
-            <th>Customer Name</th>
-            <th>Order Date</th>
-            <th>Delivery Date</th>
-            <th>Order Qty</th>
-            <th @can('hide price sales order') class="hide-component" @endcan>Order Amount</th>
-            <th @can('hide price sales order') class="hide-component" @endcan>Tax</th>
-            <th @can('hide price sales order') class="hide-component" @endcan>Order Total</th>
+            <th>{{ trans('sales_order.order_type') }}</th>
+            <th>{{ trans('sales_order.order_nbr') }}</th>
+            <th>{{ trans('sales_order.customer') }}</th>
+            <th>{{ trans('sales_order.order_date') }}</th>
+            <th>{{ trans('sales_order.delivery_date') }}</th>
+            <th>{{ trans('sales_order.qty') }}</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>{{ trans('sales_order.order_amount') }}</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>{{ trans('sales_order.tax') }}</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>{{ trans('sales_order.order_total') }}</th>
             <th>Status</th>
             <th></th>
         </tr>

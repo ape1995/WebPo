@@ -4,7 +4,7 @@
         <div class="col-sm-12 mb-1">
             <div class="row">
                 <div class="col-3">
-                    {!! Form::label('order_nbr', 'Order Nbr:') !!}
+                    {!! Form::label('order_nbr', trans('sales_order.order_nbr')) !!}
                 </div>
                 <div class="col-8">
                     <input type="hidden" name="order_id" id="order_id" value="{{ $salesOrder->id }}">
@@ -16,7 +16,7 @@
         <div class="col-sm-12 mb-1">
             <div class="row">
                 <div class="col-3">
-                    {!! Form::label('order_type', 'Order Type:') !!}
+                    {!! Form::label('order_type', trans('sales_order.order_type')) !!}
                 </div>
                 <div class="col-8">
                     <select name="order_type" id="order_type" class="form-control select2js" required>
@@ -30,7 +30,7 @@
         <div class="col-sm-12 mb-1">
             <div class="row">
                 <div class="col-3">
-                    {!! Form::label('customer_id', 'Customer:') !!}
+                    {!! Form::label('customer_id', trans('sales_order.customer')) !!}
                 </div>
                 <div class="col-8">
                     <select name="customer_id" id="customer_id" class="form-control" readonly>
@@ -45,7 +45,7 @@
         <div class="col-sm-12 mb-1">
             <div class="row">
                 <div class="col-3">
-                    {!! Form::label('order_date', 'Order Date:') !!}
+                    {!! Form::label('order_date', trans('sales_order.order_date')) !!}
                 </div>
                 <div class="col-8">
                     {!! Form::date('order_date', $salesOrder->order_date, ['class' => 'form-control','id'=>'order_date', 'readonly' => true, 'min' => date('Y-m-d')]) !!}
@@ -56,7 +56,7 @@
         <div class="col-sm-12 mb-1">
             <div class="row">
                 <div class="col-3">
-                    {!! Form::label('delivery_date', 'Delivery Date:') !!}
+                    {!! Form::label('delivery_date', trans('sales_order.delivery_date')) !!}
                 </div>
                 <div class="col-8">
                     {!! Form::date('delivery_date', $salesOrder->delivery_date, ['class' => 'form-control','id'=>'delivery_date', 'required' => true, 'min' => date('Y-m-d')]) !!}
@@ -72,7 +72,7 @@
         <div class="col-sm-12 mb-1">
             <div class="row">
                 <div class="col-3">
-                    {!! Form::label('order_qty', 'Order Qty:') !!}
+                    {!! Form::label('order_qty', trans('sales_order.qty')) !!}
                 </div>
                 <div class="col-8">
                     {!! Form::text('order_qty', null, ['class' => 'form-control money', 'readonly' => true ]) !!}
@@ -83,7 +83,7 @@
         <div class="col-sm-12 mb-1">
             <div class="row">
                 <div class="col-3">
-                    {!! Form::label('order_amount', 'Order Amount:') !!}
+                    {!! Form::label('order_amount', trans('sales_order.order_amount')) !!}
                 </div>
                 <div class="col-8">
                     {!! Form::text('order_amount', null, ['class' => 'form-control money', 'readonly' => true]) !!}
@@ -94,7 +94,7 @@
         <div class="col-sm-12 mb-1">
             <div class="row">
                 <div class="col-3">
-                    {!! Form::label('tax', 'Tax:') !!}
+                    {!! Form::label('tax', trans('sales_order.tax')) !!}
                 </div>
                 <div class="col-8">
                     {!! Form::text('tax', null, ['class' => 'form-control money', 'readonly' => true]) !!}
@@ -105,7 +105,7 @@
         <div class="col-sm-12 mb-1">
             <div class="row">
                 <div class="col-3">
-                    {!! Form::label('order_total', 'Order Total:') !!}
+                    {!! Form::label('order_total', trans('sales_order.order_total')) !!}
                 </div>
                 <div class="col-8">
                     {!! Form::text('order_total', null, ['class' => 'form-control money', 'readonly' => true]) !!}
@@ -117,6 +117,6 @@
 
 <!-- Description Field -->
 <div class="col-sm-12">
-    {!! Form::label('description', 'Description:') !!}
+    {!! Form::label('description', trans('sales_order.description')) !!}
     {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 2, 'required' => true ]) !!}
 </div>

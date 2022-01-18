@@ -6,7 +6,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Dashboard</h1>
+              <h1 class="m-0">{{ trans('dashboard.title')}}</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -25,6 +25,15 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
+                          <div class="text-right card-body bg-light p-2 rounded">
+                            {{ trans('dashboard.language')}}
+                            <a href="/lang/en">
+                              <img src="{{ asset('assets/images/flag-en.png') }}" class="img-rounded text-right mx-1" width="25px">
+                            </a>
+                            <a href="/lang/id">
+                              <img src="{{ asset('assets/images/flag-id.png') }}" class="img-rounded text-right mx-1" width="25px">
+                            </a>
+                          </div>
                             <div class="row">
                               <div class="col-md-6">
                                 <h4 style="margin-bottom: 5px; margin-top: 5px;">{{ $greeting.', '.Auth::user()->name }}</h4>
@@ -32,7 +41,7 @@
                               </div>
                               @if (Auth::user()->role == 'Customers' || Auth::user()->role == 'Staff Customers')
                               <div class="col-md-3">
-                                <h5>Out of stock?</h5>
+                                <h5>{{ trans('dashboard.question')}}</h5>
                                 <a href="{{ route('createOrder') }}" class="btn btn-outline-info btn-block">Order Here</a>
                               </div>
                               @endif
@@ -81,7 +90,7 @@
                                     <div class="col-md-4">
                                       <div class="card">
                                         <div class="card-body bg-secondary text-light">
-                                          DRAFT ORDER
+                                          {{ trans('dashboard.draft_order')}}
                                           <h1 class="text-right">{{ $draftOrder->count() }}</h1>
                                         </div>
                                       </div>
@@ -89,7 +98,7 @@
                                     <div class="col-md-4">
                                       <div class="card">
                                         <div class="card-body bg-info">
-                                          SUBMITTED ORDER
+                                          {{ trans('dashboard.submitted_order')}}
                                           <h1 class="text-right">{{ $submittedOrder->count() }}</h1>
                                         </div>
                                       </div>
@@ -97,7 +106,7 @@
                                     <div class="col-md-4">
                                       <div class="card">
                                         <div class="card-body bg-success">
-                                          PROCESSED ORDER
+                                          {{ trans('dashboard.processed_order')}}
                                           <h1 class="text-right">{{ $processedOrder->count() }}</h1>
                                         </div>
                                       </div>
@@ -108,7 +117,7 @@
                                     <div class="col-md-4">
                                       <div class="card">
                                         <div class="card-body bg-warning">
-                                          WAITING TO PROCESS
+                                          {{ trans('dashboard.waiting_process')}}
                                           <h1 class="text-right">{{ $waitingProcess->count() }}</h1>
                                         </div>
                                       </div>
@@ -116,7 +125,7 @@
                                     <div class="col-md-4">
                                       <div class="card">
                                         <div class="card-body bg-success">
-                                          PROCESSED
+                                          {{ trans('dashboard.processed')}}
                                           <h1 class="text-right">{{ $totalProcessed->count() }}</h1>
                                         </div>
                                       </div>

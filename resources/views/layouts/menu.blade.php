@@ -1,7 +1,7 @@
 <li class="nav-item">
     <a href="{{ route('home') }}" class="nav-link {{ Request::is('home*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-tachometer-alt"></i>
-        Dashboard
+        {{ trans('menu.dashboard')}}
     </a>
 </li>
 
@@ -10,7 +10,7 @@
     <a href="#" class="nav-link {{ Request::is('users*') ? 'active' : '' }} {{ Request::is('roles*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-file-alt"></i>
         <p>
-        Data Master
+        {{ trans('menu.master')}}
         <i class="right fas fa-angle-left"></i>
         </p>
     </a>
@@ -19,7 +19,7 @@
             <li class="nav-item">
                 <a href="{{ route('users.index') }}" class="nav-link {{ Request::is('users*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Users</p>
+                    <p>{{ trans('menu.user')}}</p>
                 </a>
             </li>
         @endcan
@@ -27,7 +27,7 @@
             <li class="nav-item">
                 <a href="{{ route('roles.index') }}" class="nav-link {{ Request::is('roles*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Group Permissions</p>
+                    <p>{{ trans('menu.group_permission')}}</p>
                 </a>
             </li>
         @endcan
@@ -46,7 +46,7 @@
     <a href="#" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }} {{ Request::is('createOrder*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-dollar-sign"></i>
         <p>
-        Sales Order
+        {{ trans('menu.sales_order')}}
         <i class="right fas fa-angle-left"></i>
         </p>
     </a>
@@ -55,7 +55,7 @@
             <li class="nav-item">
                 <a href="{{ route('createOrder') }}" class="nav-link {{ Request::is('createOrder*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Create Order</p>
+                    <p>{{ trans('menu.create_order')}}</p>
                 </a>
             </li>
         @endcan
@@ -63,7 +63,7 @@
             <li class="nav-item">
                 <a href="{{ route('salesOrders.index') }}" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>List Order</p>
+                    <p>{{ trans('menu.list_order')}}</p>
                 </a>
             </li>
         @endcan
@@ -76,7 +76,7 @@
     <a href="#" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}  {{ Request::is('reportRequest1*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-book"></i>
         <p>
-            Report
+            {{ trans('menu.report')}}
         <i class="right fas fa-angle-left"></i>
         </p>
     </a>
@@ -85,7 +85,7 @@
             <li class="nav-item">
                 <a href="{{ route('reportSalesOrder.index') }}" class="nav-link {{ Request::is('reportSalesOrder') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Sales Order Rekap</p>
+                    <p>{{ trans('menu.report_rekap')}}</p>
                 </a>
             </li>
         @endcan
@@ -93,7 +93,7 @@
         <li class="nav-item">
             <a href="{{ route('reportSalesOrder.detailIndex') }}" class="nav-link {{ Request::is('reportSalesOrderDetail') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Sales Order Detail</p>
+                <p>{{ trans('menu.report_detail')}}</p>
             </a>
         </li>
         @endcan
@@ -101,7 +101,7 @@
         <li class="nav-item">
             <a href="{{ route('reportSalesOrder.report1Index') }}" class="nav-link {{ Request::is('reportRequest1') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Report Request 1</p>
+                <p>{{ trans('menu.report_1')}}</p>
             </a>
         </li>
         @endcan

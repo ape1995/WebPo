@@ -2,12 +2,12 @@
     <table class="table table-sm" id="salesOrderDetails-table">
         <thead>
         <tr>
-            <th>Inventory Id</th>
-            <th>Inventory Name</th>
-            <th>Qty</th>
-            <th>Uom</th>
-            <th @can('hide price sales order') class="hide-component" @endcan>Unit Price</th>
-            <th @can('hide price sales order') class="hide-component" @endcan>Amount</th>
+            <th>{{ trans('sales_order.product_code') }}</th>
+            <th>{{ trans('sales_order.product_name') }}</th>
+            <th>{{ trans('sales_order.qty') }}</th>
+            <th>{{ trans('sales_order.uom') }}</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>{{ trans('sales_order.unit_price') }}</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>{{ trans('sales_order.amount') }}</th>
         </tr>
         </thead>
         <tbody>

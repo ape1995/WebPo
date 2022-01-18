@@ -1,19 +1,19 @@
 <!-- Name Field -->
 <div class="form-group col-sm-12">
-    {!! Form::label('name', 'Role Name:') !!}
+    {!! Form::label('name', trans('group.name')) !!}
     {!! Form::text('name', null, ['class' => 'form-control']) !!}
 </div>
 
 <div class="col-md-12">
-    {!! Form::label('name', 'Permission:') !!} 
+    {!! Form::label('name', trans('group.permission')) !!} 
 </div>
 
 <div class="col-md-12">
-    <h3>Dashboards</h3>
+    <h3>{{ trans('menu.dashboard') }}</h3>
     <div class="row">
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header bg-danger text-center p-1"><h4>Dashboards</h4></div>
+                <div class="card-header bg-danger text-center p-1"><h4>{{ trans('menu.dashboard') }}</h4></div>
                 <div class="card-body py-1 px-3">
                     <table width="100%">
                         @foreach ($permissions as $permission)
@@ -33,11 +33,11 @@
             </div>
         </div>
     </div>
-    <h3>Data Master</h3>
+    <h3>{{ trans('menu.master') }}</h3>
     <div class="row">
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header bg-danger text-center p-1"><h4>Users</h4></div>
+                <div class="card-header bg-danger text-center p-1"><h4>{{ trans('menu.user') }}</h4></div>
                 <div class="card-body py-1 px-3">
                     <table width="100%">
                         @foreach ($permissions as $permission)
@@ -58,7 +58,7 @@
         </div>
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header bg-danger text-center p-1"><h4>Group Permissions</h4></div>
+                <div class="card-header bg-danger text-center p-1"><h4>{{ trans('menu.group_permission') }}</h4></div>
                 <div class="card-body py-1 px-3">
                     <table width="100%">
                         @foreach ($permissions as $permission)
@@ -82,7 +82,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header bg-danger text-center p-1"><h4>Sales Order</h4></div>
+                <div class="card-header bg-danger text-center p-1"><h4>{{ trans('menu.sales_order') }}</h4></div>
                 <div class="card-body py-1 px-3">
                     <table width="100%">
                         @foreach ($permissions as $permission)
@@ -102,11 +102,11 @@
             </div>
         </div>
     </div>
-    <h3>Reports</h3>
+    <h3>{{ trans('menu.report') }}</h3>
     <div class="row">
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header bg-danger text-center p-1"><h4>Reports</h4></div>
+                <div class="card-header bg-danger text-center p-1"><h4>{{ trans('menu.report') }}</h4></div>
                 <div class="card-body py-1 px-3">
                     <table width="100%">
                         @foreach ($permissions as $permission)

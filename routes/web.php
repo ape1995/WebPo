@@ -7,6 +7,7 @@ use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\SalesOrderDetailController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\LocalizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,11 @@ use App\Http\Controllers\ReportController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+if ( file_exists( app_path( 'Http/Controllers/LocalizationController.php') ) ) 
+{
+  Route::get('lang/{locale}', [LocalizationController::class,'lang']);
+}
 
 Route::get('/', function () {
     return redirect()->to('home');

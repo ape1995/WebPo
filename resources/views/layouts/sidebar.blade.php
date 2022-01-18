@@ -12,7 +12,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-1 pb-1 pl-2 mb-1 d-flex">
         <div class="info">
-          <a class="d-block">Hello, {{ Auth::user()->name }}</a>
+          <a class="d-block">{{ trans('dashboard.hi') }}, {{ Auth::user()->name }}</a>
         </div>
       </div>
 

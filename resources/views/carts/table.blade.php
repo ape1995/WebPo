@@ -2,13 +2,13 @@
     <table class="table" id="dataTable">
         <thead>
         <tr>
-            <th>No</th>
-            <th>Product Code</th>
-            <th>Product Name</th>
-            <th>Qty</th>
-            <th>Uom</th>
-            <th @can('hide price sales order') class="hide-component" @endcan>Unit Price</th>
-            <th @can('hide price sales order') class="hide-component" @endcan>Amount</th>
+            <th>{{ trans('sales_order.no') }}</th>
+            <th>{{ trans('sales_order.product_code') }}</th>
+            <th>{{ trans('sales_order.product_name') }}</th>
+            <th>{{ trans('sales_order.qty') }}</th>
+            <th>{{ trans('sales_order.uom') }}</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>{{ trans('sales_order.unit_price') }}</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>{{ trans('sales_order.amount') }}</th>
             <th></th>
         </tr>
         </thead>

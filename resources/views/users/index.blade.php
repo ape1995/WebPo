@@ -6,7 +6,7 @@
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1 class="m-0">Users</h1>
+            <h1 class="m-0">{{ trans('user.title')}}</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -27,7 +27,7 @@
                         <div class="card-body">
                             @can('create users')
                                 <div class="text-right mb-3">
-                                    <a class="btn btn-outline-primary btn-sm" href="{{ route('users.create') }}">Create</a>
+                                    <a class="btn btn-outline-primary btn-sm" href="{{ route('users.create') }}">{{ trans('user.create')}}</a>
                                 </div>
                             @endcan
                             @include('users.table')

@@ -6,12 +6,12 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Group Permissions</h1>
+              <h1 class="m-0">{{ trans('group.title') }}</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Setting</a></li>
-                <li class="breadcrumb-item active">Group Permissions</li>
+                <li class="breadcrumb-item active">{{ trans('group.title') }}</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -27,7 +27,7 @@
                         <div class="card-body">
                             @can('create group permissions')
                             <div class="text-right mb-3">
-                                <a class="btn btn-outline-primary btn-sm" href="{{ route('roles.create') }}">Create</a>
+                                <a class="btn btn-outline-primary btn-sm" href="{{ route('roles.create') }}">{{ trans('group.create') }}</a>
                             </div>
                             @endcan
                             @include('roles.table')

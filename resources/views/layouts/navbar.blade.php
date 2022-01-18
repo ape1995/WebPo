@@ -14,21 +14,17 @@
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
-      {{-- <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-          <i class="fas fa-th-large"></i>
-        </a>
-      </li> --}}
+
       <li class="nav-item">
         <a class="nav-link" type="button"  data-toggle="modal" data-target="#modalChangePassword">
-          <i class="fas fa-key"></i> Change Password
+          <i class="fas fa-key"></i> {{ trans('dashboard.change_password')}}
         </a>
       </li>
       
 
       <li class="nav-item">
         <a class="nav-link" href="{{ url('/logout') }}" role="button">
-          <i class="fas fa-sign-out-alt"></i> Logout
+          <i class="fas fa-sign-out-alt"></i> {{ trans('dashboard.logout')}}
         </a>
       </li>
     </ul>

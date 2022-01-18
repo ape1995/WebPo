@@ -1,19 +1,19 @@
 <div class="row">
     <div class="col-md-6">
-        {!! Form::label('name', 'Name:') !!}
+        {!! Form::label('name', trans('user.table_name')) !!}
         {!! Form::text('name', null, ['class' => 'form-control', 'required' => true]) !!}
     </div>
     <div class="col-md-6">
-        {!! Form::label('email', 'Email:') !!}
+        {!! Form::label('email', trans('user.table_email')) !!}
         {!! Form::text('email', null, ['class' => 'form-control', 'required' => true]) !!}
     </div>
     <div class="col-md-6">
-        {!! Form::label('password', 'Password:') !!}
+        {!! Form::label('password', trans('user.password')) !!}
         {!! Form::password('password', ['class' => 'form-control']) !!}
-        <small><i class="text-info">*Jika tidak ingin diubah biarkan kosong</i></small>
+        <small><i class="text-info">{{ trans('user.note_password') }}</i></small>
     </div>
     <div class="col-md-6">
-        {!! Form::label('customer_id', 'Customer Name :') !!}
+        {!! Form::label('customer_id', trans('user.table_customer')) !!}
         <select name="customer_id" id="customer_id" class="form-control select2js" required>
             <option value="">Choose</option>
             @foreach ($customers as $customer)
@@ -22,7 +22,7 @@
         </select>
     </div>
     <div class="col-md-6">
-        {!! Form::label('role', 'Group Permission:') !!}
+        {!! Form::label('role', trans('user.table_group')) !!}
         <select name="role" id="role" class="form-control" required>
             <option value="">-Choose-</option>
             @foreach ($roles as $role)
@@ -35,6 +35,6 @@
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
     <hr>
-    {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-    <a href="{{ route('users.index') }}" class="btn btn-default">Cancel</a>
+    {!! Form::submit(trans('user.btn_update'), ['class' => 'btn btn-primary']) !!}
+    <a href="{{ route('users.index') }}" class="btn btn-default">{{ trans('user.btn_cancel') }}</a>
 </div>

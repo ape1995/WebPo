@@ -2,8 +2,8 @@
     <table class="table table-hover table-sm" id="roles-table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th width="20%">Action</th>
+                <th>{{ trans('group.name') }}</th>
+                <th width="20%">{{ trans('group.action') }}</th>
             </tr>
         </thead>
         <tbody>

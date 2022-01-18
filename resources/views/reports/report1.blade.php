@@ -12,12 +12,12 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Report Request 1</h1>
+              <h1 class="m-0">{{ trans('report.title_3') }}</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Report</a></li>
-                <li class="breadcrumb-item active">Report Request 1</li>
+                <li class="breadcrumb-item"><a href="#">{{ trans('menu.report') }}</a></li>
+                <li class="breadcrumb-item active">{{ trans('report.title_3') }}</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -33,10 +33,10 @@
                         <div class="card-body">
                             <form action="{{ route('reportSalesOrder.report1View') }}" method="post">
                                 @csrf
-                                <h5>Order Date</h5>
+                                <h5>{{ trans('report.order_date') }}</h5>
                                 <div class="row mb-1">
                                     <div class="col-md-2">
-                                        <label for="order_date">From</label>
+                                        <label for="order_date">{{ trans('report.from') }}</label>
                                     </div>
                                     <div class="col-md-3">
                                         @if (isset($date1))
@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col-md-2">
-                                        <label for="order_date">To</label>
+                                        <label for="order_date">{{ trans('report.to') }}</label>
                                     </div>
                                     <div class="col-md-3">
                                         @if (isset($date2))
@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col-md-2">
-                                        <label for="order_date">Customer</label>
+                                        <label for="order_date">{{ trans('report.customer') }}</label>
                                     </div>
                                     <div class="col-md-5">
                                         @if (isset($customer_id))
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col-md-2">
-                                        <label for="order_date">Status</label>
+                                        <label for="order_date">{{ trans('report.status') }}</label>
                                     </div>
                                     <div class="col-md-2"> 
                                         <select name="status" id="status" class="form-control select2js" required>

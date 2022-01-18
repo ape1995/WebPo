@@ -6,12 +6,12 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h4 class="m-0">Create Group Permission</h4>
+              <h4 class="m-0">{{ trans('group.create') }} {{ trans('group.title') }}</h4>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('roles.index') }}">Group Permissions</a></li>
-                <li class="breadcrumb-item active">Create</li>
+                <li class="breadcrumb-item"><a href="{{ route('roles.index') }}">{{ trans('group.title') }}</a></li>
+                <li class="breadcrumb-item active">{{ trans('group.create') }}</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->

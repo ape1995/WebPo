@@ -18,6 +18,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     @endif
   </title>
 
+  <link rel="manifest" href="/manifest.json">
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome Icons -->
@@ -112,6 +114,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
     $(".select2js").select2({
         width: null
     })
+</script>
+
+<script>
+  window.onload = () => {
+    'use strict';
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+              .register('/sw.js');
+    }
+  }
+
 </script>
 
 @stack('page_scripts')

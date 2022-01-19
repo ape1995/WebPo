@@ -391,8 +391,8 @@ class SalesOrderController extends AppBaseController
 
         $salesOrder = SalesOrder::find($id);
         $salesOrder['status'] = 'R';
-        $salesOrder['processed_by'] = \Auth::user()->id;
-        $salesOrder['processed_at'] = Carbon::now()->toDateTimeString();
+        $salesOrder['submitted_by'] = \Auth::user()->id;
+        $salesOrder['submitted_at'] = Carbon::now()->toDateTimeString();
         $salesOrder->save();
 
         return redirect(route('salesOrders.show', $id))->with('success', 'Order Submitted Sucessfully.');

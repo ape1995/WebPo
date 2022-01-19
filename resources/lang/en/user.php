@@ -15,5 +15,7 @@ return [
     'btn_cancel' => 'Cancel',
     'btn_update' => 'Update',
     'created_at' => 'Created At',
+    'last_login_at' => 'Last Login At',
+    'last_login_ip' => 'Last Login IP',
 
 ];

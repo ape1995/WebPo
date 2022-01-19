@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
+use Flash;
 
 class LoginController extends Controller
 {
@@ -35,6 +36,16 @@ class LoginController extends Controller
      *
      * @return void
      */
+
+    public function authenticated(Request $request, $user)
+    {
+        if (!$user->status) {
+            Auth::logout();
+            
+            return redirect('/login')->with('error', 'Your Account is inactive');
+        }
+    }
+    
     public function __construct()
     {
         $this->middleware('guest')->except('logout');

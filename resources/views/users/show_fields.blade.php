@@ -30,3 +30,16 @@
     <p>{{ $user->created_at }}</p>
 </div>
 
+<!-- Last Login At Field -->
+<div class="form-group">
+    {!! Form::label('last_login_at', trans('user.last_login_at')) !!}
+    <p>{{ $user->last_login_at }}</p>
+</div>
+
+
+<!-- Last login IP Field -->
+<div class="form-group">
+    {!! Form::label('last_login_ip', trans('user.last_login_ip')) !!}
+    <p>{{ $user->last_login_ip }}</p>
+</div>
+

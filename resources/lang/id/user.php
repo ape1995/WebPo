@@ -15,5 +15,7 @@ return [
     'btn_cancel' => 'Batal',
     'btn_update' => 'Perbarui',
     'created_at' => 'Dibuat pada',
+    'last_login_at' => 'Login terakhir pada',
+    'last_login_ip' => 'Login terakhir IP',
 
 ];

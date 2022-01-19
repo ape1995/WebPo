@@ -28,6 +28,9 @@ class User extends Authenticatable
         'remember_token',
         'created_by',
         'updated_by',
+        'last_login_at',
+        'last_login_ip',
+        'status',
     ];
 
     /**

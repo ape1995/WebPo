@@ -8,7 +8,7 @@
         {!! Form::email('email', null, ['class' => 'form-control', 'required' => true]) !!}
     </div>
     <div class="col-md-6">
-        {!! Form::label('password', trans('user.table_password')) !!}
+        {!! Form::label('password', trans('user.password')) !!}
         {!! Form::password('password', ['class' => 'form-control', 'required' => true]) !!}
     </div>
     <div class="col-md-6">

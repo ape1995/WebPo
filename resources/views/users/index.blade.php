@@ -80,6 +80,9 @@
                                 data: 'customer'      
                             },   
                             {
+                                data: 'status'      
+                            }, 
+                            {
                                 data: 'action',
                                 "className": "text-center",
                                 orderable: false, 

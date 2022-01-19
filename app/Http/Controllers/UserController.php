@@ -49,6 +49,15 @@ class UserController extends Controller
                 ->addColumn('customer', function (User $user) {
                     return $user->customer->AcctName.' - '.$user->customer->AcctCD;
                 })
+                ->editColumn('status', function (User $user) 
+                {
+                    //change over here
+                    if($user->status == 1){
+                        return 'Active';
+                    } else {
+                        return 'Inactive';
+                    }
+                })
                 ->addIndexColumn()
                 ->addColumn('action',function ($data){
                     return view('users.action')->with('user',$data)->render();
@@ -223,6 +232,46 @@ class UserController extends Controller
         $user->delete($id);
 
         return redirect(route('users.index'))->with('success', 'User deleted successfully.');
+    }
+
+    public function inactive($id)
+    {
+        if (!\Auth::user()->can('inactive users')) {
+            abort(403);
+        }
+
+        $user = User::find($id);
+
+        if (empty($user)) {
+            return redirect(route('users.index'))->with('error', 'User not found');
+        }
+
+        // $user->removeRole($user->role);
+        $user = User::find($id);
+        $user['status'] = 0;
+        $user->save();
+
+        return redirect(route('users.index'))->with('success', 'User inactived successfully.');
+    }
+
+    public function active($id)
+    {
+        if (!\Auth::user()->can('inactive users')) {
+            abort(403);
+        }
+
+        $user = User::find($id);
+
+        if (empty($user)) {
+            return redirect(route('users.index'))->with('error', 'User not found');
+        }
+
+        // $user->removeRole($user->role);
+        $user = User::find($id);
+        $user['status'] = 1;
+        $user->save();
+
+        return redirect(route('users.index'))->with('success', 'User actived successfully.');
     }
 
     public function updatePassword(Request $request){

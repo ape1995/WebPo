@@ -23,6 +23,13 @@
 						<div class="img p-3" style="background-image: url('/assets/images/yamazaki-myroti.png')">
 			        </div>
 					<div class="login-wrap p-4 p-md-5">
+						<div class="container my-1">
+							@if ($message = Session::get('error'))
+								<div class="alert alert-danger alert-block">
+									<strong>{{ $message }}</strong>
+								</div>
+							@endif
+						</div>
 			      		<div class="d-flex">
 							<div class="w-100">
 								<h3 class="mb-4">{{ trans('login.title')}}</h3>

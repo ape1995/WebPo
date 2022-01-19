@@ -6,6 +6,7 @@
                 <th>{{ trans('user.table_email')}}</th>
                 <th>{{ trans('user.table_group')}}</th>
                 <th>{{ trans('user.table_customer')}}</th>
+                <th>Status</th>
                 <th>{{ trans('user.table_action')}}</th>
             </tr>
         </thead>

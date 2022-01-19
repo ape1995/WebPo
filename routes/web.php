@@ -35,6 +35,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('users', 'App\Http\Controllers\UserController');
     Route::resource('roles', 'App\Http\Controllers\RoleController');
     Route::get('dataTableUser',[UserController::class,'dataTable'])->name('users.data');
+    Route::get('users-inactive/{code}',[UserController::class,'inactive'])->name('users.inactive');
+    Route::get('users-active/{code}',[UserController::class,'active'])->name('users.active');
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
     Route::resource('salesOrders', SalesOrderController::class)->except('create');

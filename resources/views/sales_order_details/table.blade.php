@@ -15,10 +15,10 @@
             <tr>
                 <td>{{ $salesOrderDetail->inventory_id }}</td>
                 <td>{{ $salesOrderDetail->inventory_name }}</td>
-                <td>{{ $salesOrderDetail->qty }}</td>
+                <td class="money">{{ $salesOrderDetail->qty }}</td>
                 <td>{{ $salesOrderDetail->uom }}</td>
-                <td @can('hide price sales order') class="hide-component" @endcan>{{ number_format($salesOrderDetail->unit_price,2,',','.') }}</td>
-                <td @can('hide price sales order') class="hide-component" @endcan>{{ number_format($salesOrderDetail->amount,2,',','.') }}</td>
+                <td class="money" @can('hide price sales order') class="hide-component" @endcan>{{ number_format($salesOrderDetail->unit_price,2,',','.') }}</td>
+                <td class="money" @can('hide price sales order') class="hide-component" @endcan>{{ number_format($salesOrderDetail->amount,2,',','.') }}</td>
             </tr>
         @endforeach
         </tbody>

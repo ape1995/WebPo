@@ -71,7 +71,7 @@
                     {!! Form::label('order_qty', trans('sales_order.order_qty')) !!}
                 </div>
                 <div class="col-8">
-                    {!! Form::text('order_qty', $salesOrder->order_qty, ['class' => 'form-control', 'readonly' => true ]) !!}
+                    {!! Form::text('order_qty', $salesOrder->order_qty, ['class' => 'form-control money', 'readonly' => true ]) !!}
                 </div>
             </div>
         </div>

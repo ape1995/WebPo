@@ -13,5 +13,6 @@ return [
     'report_rekap' => 'Pesanan Rekapitulasi',
     'report_detail' => 'Pesanan Detil',
     'report_1' => 'Laporan Custom 1',
+    'report_customer' => 'Laporan Pelanggan',
 
 ];

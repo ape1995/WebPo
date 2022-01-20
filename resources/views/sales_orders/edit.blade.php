@@ -85,7 +85,7 @@
                                                     {!! Form::label('qty', trans('sales_order.qty')) !!}
                                                 </div>
                                                 <div class="col-3">
-                                                    {!! Form::number('qty', NULL, ['class' => 'form-control', 'min' => 1]) !!}
+                                                    <input type="number" class="form-control" name="qty" id="qty" min="1" step="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,7 +138,7 @@
                      
                                     <label class="col-sm-4 control-label">{{ trans('sales_order.qty') }}</label>
                                     <div class="col-sm-12">
-                                        <input type="number" class="form-control" id="quantity" name="quantity">
+                                        <input type="number" class="form-control" name="quantity" id="quantity" min="1" step="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
                                     </div>
 
                                     <div class="form-group">
@@ -223,7 +223,7 @@
             });
 
             
-            $("#qty").keyup(function() {
+            $("#qty").on('keyup keydown change click', function() {
                 let eachprice = unit_price.val().replace('.','').replace(',','.');
                 var total = eachprice * qty.val();
                 amount.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(total));
@@ -235,7 +235,7 @@
                 }
             });
 
-            $("#quantity").keyup(function() {
+            $("#quantity").on('keyup keydown change click', function(event) {
                 let unitPrice = $("#unit_price_edit").val().replace('.','').replace(',','.');
                 var totalPrice = unitPrice * $("#quantity").val();
                 $("#amount_edit").val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalPrice));
@@ -298,6 +298,9 @@
                         $('td:eq(5)', row).addClass("hide-component");
                         $('td:eq(6)', row).addClass("hide-component");
                     }
+                    $('td:eq(3)', row).addClass("money");
+                    $('td:eq(5)', row).addClass("money");
+                    $('td:eq(6)', row).addClass("money");
                 },
                 columns: [
                     { 

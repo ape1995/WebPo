@@ -175,18 +175,15 @@ class SalesOrderController extends AppBaseController
 
         $cekOrder = SalesOrder::where('customer_id', $input['customer_id'])->where('delivery_date', $input['delivery_date'])->latest()->first();
         $thisCustomer = Customer::where('BAccountID', $input['customer_id'])->get()->first();
+        // dd($thisCustomer);
 
-        // dd($cekOrder);
         if($cekOrder == null || !$cekOrder || $cekOrder->count() == 0){
-            $orderNbr = 'ZMP/20/10/16-01';
-            $orderNbr = $thisCustomer->AcctReferenceNbr.'/'.date('Y/m/d',strtotime($input['delivery_date'])).'-01';
+            $orderNbr = $thisCustomer->AcctReferenceNbr.date('ymd',strtotime($input['delivery_date'])).'-01-'.$input['order_type'];
         } else {
             $parseNo = explode("-", $cekOrder->order_nbr);
             $newID = $parseNo[1] + 1;
-            $orderNbr = $parseNo[0].'-'.sprintf("%02s", $newID);
+            $orderNbr = $parseNo[0].'-'.sprintf("%02s", $newID).'-'.$input['order_type'];
         }
-
-        // dd($orderNbr);
 
 
         $input['order_nbr'] = $orderNbr;
@@ -302,6 +299,34 @@ class SalesOrderController extends AppBaseController
         $salesOrder = $this->salesOrderRepository->find($id);
 
         $input = $request->all();
+
+        if( $input['order_type'] == $salesOrder->order_type && $input['delivery_date'] == $salesOrder->delivery_date->format('Y-m-d') ){
+            
+            $input['order_nbr'] = $salesOrder->order_nbr;
+
+        } else if ($input['order_type'] != $salesOrder->order_type && $input['delivery_date'] == $salesOrder->delivery_date->format('Y-m-d')){
+
+            $parseNo = explode("-", $input['order_nbr']);
+            $orderNbr = $parseNo[0].'-'.$parseNo[1].'-'.$input['order_type'];
+
+            $input['order_nbr'] = $orderNbr;
+
+        } else {
+
+            $cekOrder = SalesOrder::where('customer_id', $input['customer_id'])->where('delivery_date', $input['delivery_date'])->latest()->first();
+            $thisCustomer = Customer::where('BAccountID', $input['customer_id'])->get()->first();
+
+            if($cekOrder == null || !$cekOrder || $cekOrder->count() == 0){
+                $orderNbr = $thisCustomer->AcctReferenceNbr.date('ymd',strtotime($input['delivery_date'])).'-01-'.$input['order_type'];
+            } else {
+                $parseNo = explode("-", $cekOrder->order_nbr);
+                $newID = $parseNo[1] + 1;
+                $orderNbr = $parseNo[0].'-'.sprintf("%02s", $newID).'-'.$input['order_type'];
+            }
+
+            $input['order_nbr'] = $orderNbr;
+
+        }
 
         $input['order_amount'] = str_replace('.','',$input['order_amount']);
         $input['order_amount'] = str_replace(',','.',$input['order_amount']);
@@ -473,7 +498,7 @@ class SalesOrderController extends AppBaseController
         }
 
         $pdf = PDF::loadview('sales_orders.print',['salesOrder'=>$salesOrder, 'salesOrderDetails'=>$salesOrderDetails]);
-    	return $pdf->download("Order - $salesOrder->order_nbr");
+    	return $pdf->download("Order - $salesOrder->order_nbr.pdf");
 
         // return view('sales_orders.print', compact('salesOrder', 'salesOrderDetails'));
     }

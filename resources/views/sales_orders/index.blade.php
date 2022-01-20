@@ -62,25 +62,28 @@
                         },
                         "rowCallback": function( row, data ) {
                             if ( data.status == "Draft" ) {
-                                $('td:eq(9)', row).addClass("bg-secondary");
+                                $('td:eq(10)', row).addClass("bg-secondary");
                             }
                             if ( data.status == "Submitted" ) {
-                                $('td:eq(9)', row).addClass("bg-info");
+                                $('td:eq(10)', row).addClass("bg-info");
                             }
                             if ( data.status == "Processed" ) {
-                                $('td:eq(9)', row).addClass("bg-success");
+                                $('td:eq(10)', row).addClass("bg-success");
                             }
                             if ( data.status == "Canceled" ) {
-                                $('td:eq(9)', row).addClass("bg-danger");
+                                $('td:eq(10)', row).addClass("bg-danger");
                             }
                             if ( data.status == "Rejected" ) {
-                                $('td:eq(9)', row).addClass("bg-danger");
+                                $('td:eq(10)', row).addClass("bg-danger");
                             }
                             if(permissionPrice == 'hide price sales order') {
-                                $('td:eq(6)', row).addClass("hide-component");
                                 $('td:eq(7)', row).addClass("hide-component");
                                 $('td:eq(8)', row).addClass("hide-component");
+                                $('td:eq(9)', row).addClass("hide-component");
                             }
+                            $('td:eq(7)', row).addClass("money");
+                            $('td:eq(8)', row).addClass("money");
+                            $('td:eq(9)', row).addClass("money");
                         },
                         "columnDefs": [
                             { className: "text-nowrap", "targets": "_all" }

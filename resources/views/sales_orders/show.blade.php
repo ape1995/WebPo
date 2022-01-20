@@ -24,6 +24,14 @@
                         <span class="text-danger rounded p-1">Order Rejected Because : {{ $salesOrder->rejected_reason }}</span>
                     @endif
                 </div>
+                @if ($salesOrder->status == 'P')
+                    <div class="text-right m-2">
+                        <a href="{{ route('salesOrders.printPdf', [$salesOrder->id]) }}" class="btn btn-sm btn-outline-danger" id="btnPrint"><i class="fa fa-file-pdf"></i> {{ trans('sales_order.btn_print') }}</a>
+                        @can('create sales order')
+                            <a href="{{ route('salesOrders.reOrder', [$salesOrder->id]) }}" class="btn btn-sm btn-outline-info" onclick="return confirm('{{ trans('sales_order.question_reorder') }}')"><i class="fas fa-redo-alt"></i> {{ trans('sales_order.reorder') }}</a>
+                        @endcan
+                    </div>
+                @endif
                 {{-- <div class="col-md-12 text-right mb-3">
                     <span class="text-light bg-info rounded p-1">{{ $salesOrder->status }}</span>
                 </div> --}}
@@ -37,7 +45,6 @@
 
             <div class="card-footer">
                 {{-- {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!} --}}
-                <a href="{{ route('salesOrders.printPdf', [$salesOrder->id]) }}" class="btn btn-outline-danger" id="btnPrint"><i class="fa fa-file-pdf"></i> {{ trans('sales_order.btn_print') }}</a>
                 @if ($salesOrder->status == 'S')
                     @can('edit sales order')
                         <a href="{{ route('salesOrders.edit', [$salesOrder->id]) }}" class="btn btn-success" onclick="return confirm('{{ trans('sales_order.question_edit') }}')">{{ trans('sales_order.btn_edit') }}</a>

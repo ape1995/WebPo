@@ -502,4 +502,49 @@ class SalesOrderController extends AppBaseController
 
         // return view('sales_orders.print', compact('salesOrder', 'salesOrderDetails'));
     }
+
+    public function reOrder($id)
+    {
+
+        $salesOrder = SalesOrder::find($id);
+        $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $id)->get();
+        // dd($salesOrderDetails);
+
+        if (empty($salesOrder)) {
+            return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
+        }
+
+        // Delete all cart from this customer
+        Cart::where('customer_id', $salesOrder->customer_id)->delete();
+
+        // define data header
+        $data = [];
+        $data['order_type'] = $salesOrder->order_type;
+        $data['description'] = $salesOrder->description;
+
+        foreach($salesOrderDetails as $detail){
+            // Get data code product and customer
+            $code = $detail->inventory_id;
+            $customer = $salesOrder->customer_id;
+            // Get data price
+            $dataprice = $this->getPrice($code, $customer);
+            $dataprice['unit_price'] = str_replace('.','',$dataprice['unit_price']);
+            $dataprice['unit_price'] = str_replace(',','.',$dataprice['unit_price']);
+            // Resum amount
+            $amount = $dataprice['unit_price'] * $detail->qty;
+            // Store to carts
+            Cart::create([
+                'inventory_id' => $detail->inventory_id,
+                'inventory_name' => $dataprice['inventory_name'],
+                'qty' => $detail->qty,
+                'uom' => $detail->uom,
+                'unit_price' => $dataprice['unit_price'],
+                'amount' => $amount,
+                'customer_id' => $salesOrder->customer_id,
+                'created_by' => \Auth::user()->id,
+            ]);  
+        }
+
+        return redirect()->route('createOrder')->with('success', 'Silahkan sesuaikan tanggal kirim dan kuantitas item!')->with('data', $data);
+    }
 }

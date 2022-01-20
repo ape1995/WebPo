@@ -1,7 +1,7 @@
 <!-- Name Field -->
 <div class="form-group col-sm-12">
     {!! Form::label('name', trans('group.name')) !!}
-    {!! Form::text('name', null, ['class' => 'form-control']) !!}
+    {!! Form::text('name', null, ['class' => 'form-control', 'readonly' => true]) !!}
 </div>
 
 <div class="col-md-12">

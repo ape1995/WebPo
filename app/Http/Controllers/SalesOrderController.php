@@ -141,7 +141,7 @@ class SalesOrderController extends AppBaseController
         if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
         } else {
-            $customers = Customer::all();
+            $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
         }
 
         // dd($customers[1]->location);
@@ -279,7 +279,7 @@ class SalesOrderController extends AppBaseController
         if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
         } else {
-            $customers = Customer::all();
+            $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
         }
 
         // dd($customers[1]->location);

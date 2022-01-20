@@ -8,6 +8,7 @@ use App\Http\Controllers\SalesOrderDetailController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LocalizationController;
+use App\Http\Controllers\SendEmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,5 +63,5 @@ Route::group(['middleware' => ['auth']], function(){
 });
 
 
-
+Route::get('/test_email', [SendEmailController::class, 'send']);
 

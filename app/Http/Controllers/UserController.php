@@ -83,7 +83,7 @@ class UserController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
             $roles = Role::where('name', 'like', '%Customers%')->get();
         } else {
-            $customers =  Customer::where('Type', 'CU')->orWhere('BAccountID', '3')->get();
+            $customers =  Customer::where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
             // $customers =  Customer::where('Type', 'CU')->get();
             $roles = Role::all();
         }
@@ -160,8 +160,7 @@ class UserController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
             $roles = Role::where('name', 'Customers')->get();
         } else {
-            $customers =  Customer::where('Type', 'CU')->orWhere('BAccountID', '3')->get();
-            // $customers =  Customer::where('Type', 'CU')->get();
+            $customers =  Customer::where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
             $roles = Role::all();
         }
 

@@ -13,5 +13,6 @@ return [
     'report_rekap' => 'Order Rekap',
     'report_detail' => 'Order Detail',
     'report_1' => 'Report Custom 1',
+    'report_customer' => 'Report for Customer',
 
 ];

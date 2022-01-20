@@ -8,6 +8,7 @@ use App\Http\Controllers\SalesOrderDetailController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LocalizationController;
+use App\Http\Controllers\SendEmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,8 +60,10 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('reportSalesOrderDetail', [ReportController::class, 'detailView'])->name('reportSalesOrder.detailView');
     Route::get('reportRequest1', [ReportController::class, 'report1Index'])->name('reportSalesOrder.report1Index');
     Route::post('reportRequest1', [ReportController::class, 'report1View'])->name('reportSalesOrder.report1View');
+    Route::get('reportCustomer', [ReportController::class, 'reportCustomerIndex'])->name('reportSalesOrder.reportCustomerIndex');
+    Route::post('reportCustomer', [ReportController::class, 'reportCustomerView'])->name('reportSalesOrder.reportCustomerView');
 });
 
 
-
+Route::get('/test_email', [SendEmailController::class, 'send']);
 

@@ -6,6 +6,7 @@ return [
     'master' => 'Data Master',
     'user' => 'Data User',
     'group_permission' => 'Grup Akses',
+    'mail_setting' => 'Pengaturan Email',
     'sales_order' => 'Pemesanan',
     'create_order' => 'Buat Pesanan',
     'list_order' => 'Daftar Pesanan',

@@ -71,7 +71,7 @@ class SalesOrderController extends AppBaseController
             if(\Auth::user()->role == 'Customers'){
                 $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->latest()->get();
             } else {
-                $datas = SalesOrder::latest()->get();
+                $datas = SalesOrder::query();
             }
 
             return DataTables::of($datas)

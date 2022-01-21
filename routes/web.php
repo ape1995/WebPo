@@ -69,3 +69,6 @@ Route::group(['middleware' => ['auth']], function(){
 
 Route::get('/send_notification', [SendEmailController::class, 'send']);
 
+
+
+Route::resource('mailSettings', App\Http\Controllers\MailSettingController::class);

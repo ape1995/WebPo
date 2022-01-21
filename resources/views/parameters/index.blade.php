@@ -7,12 +7,14 @@
                 <div class="col-sm-6">
                     <h1>{{ trans('parameter.title') }}</h1>
                 </div>
-                {{-- <div class="col-sm-6">
+                @can('create parameter')
+                <div class="col-sm-6">
                     <a class="btn btn-primary float-right"
                        href="{{ route('parameters.create') }}">
                         Add New
                     </a>
-                </div> --}}
+                </div>
+                @endcan
             </div>
         </div>
     </section>

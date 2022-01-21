@@ -21,15 +21,21 @@
                 <td width="120">
                     {!! Form::open(['route' => ['parameters.destroy', $parameter->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
-                        {{-- <a href="{{ route('parameters.show', [$parameter->id]) }}"
+                        @can('create parameter')
+                        <a href="{{ route('parameters.show', [$parameter->id]) }}"
                            class='btn btn-default btn-xs'>
                             <i class="far fa-eye"></i>
-                        </a> --}}
+                        </a>
+                        @endcan
+                        @can('edit parameter')
                         <a href="{{ route('parameters.edit', [$parameter->id]) }}"
                            class='btn btn-default btn-xs'>
                             <i class="far fa-edit"></i>
                         </a>
-                        {{-- {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!} --}}
+                        @endcan
+                        @can('delete parameter')
+                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                        @endcan
                     </div>
                     {!! Form::close() !!}
                 </td>

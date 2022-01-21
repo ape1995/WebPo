@@ -25,7 +25,7 @@ return [
     'product_name' => 'Product Name',
     'btn_save' => 'Save',
     'btn_reset' => 'Reset',
-    'btn_cancel' => 'Cancel',
+    'btn_cancel' => 'Cancel Order',
     'btn_update' => 'Update',
     'btn_view' => 'View Detail',
     'btn_print' => 'Print',
@@ -39,10 +39,13 @@ return [
     'question_edit' => 'Edit this order?',
     'question_cancel' => 'Cancel this order?',
     'question_submit' => 'Submit this order?',
+    'question_submit_2' => 'Submit this order ? \nWarning! You submitting this order more than maximum time, please contact sales admin!',
     'question_process' => 'Proses order?',
     'question_reject' => 'Reject this order?',
+    'question_reorder' => 'are you sure to re-Order?',
     'order' => 'Order',
     'reason' => 'Reason',
     'confirm' => 'Confirm',
+    'reorder' => 'Re-Order',
 
 ];

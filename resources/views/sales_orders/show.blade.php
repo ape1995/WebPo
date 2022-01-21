@@ -24,6 +24,14 @@
                         <span class="text-danger rounded p-1">Order Rejected Because : {{ $salesOrder->rejected_reason }}</span>
                     @endif
                 </div>
+                @if ($salesOrder->status == 'P')
+                    <div class="text-right m-2">
+                        <a href="{{ route('salesOrders.printPdf', [$salesOrder->id]) }}" class="btn btn-sm btn-outline-danger" id="btnPrint"><i class="fa fa-file-pdf"></i> {{ trans('sales_order.btn_print') }}</a>
+                        @can('create sales order')
+                            <a href="{{ route('salesOrders.reOrder', [$salesOrder->id]) }}" class="btn btn-sm btn-outline-info" onclick="return confirm('{{ trans('sales_order.question_reorder') }}')"><i class="fas fa-redo-alt"></i> {{ trans('sales_order.reorder') }}</a>
+                        @endcan
+                    </div>
+                @endif
                 {{-- <div class="col-md-12 text-right mb-3">
                     <span class="text-light bg-info rounded p-1">{{ $salesOrder->status }}</span>
                 </div> --}}
@@ -37,7 +45,6 @@
 
             <div class="card-footer">
                 {{-- {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!} --}}
-                <a href="{{ route('salesOrders.printPdf', [$salesOrder->id]) }}" class="btn btn-outline-danger" id="btnPrint"><i class="fa fa-file-pdf"></i> {{ trans('sales_order.btn_print') }}</a>
                 @if ($salesOrder->status == 'S')
                     @can('edit sales order')
                         <a href="{{ route('salesOrders.edit', [$salesOrder->id]) }}" class="btn btn-success" onclick="return confirm('{{ trans('sales_order.question_edit') }}')">{{ trans('sales_order.btn_edit') }}</a>
@@ -46,7 +53,11 @@
                         <a href="{{ route('salesOrders.cancelOrder', [$salesOrder->id]) }}" class="btn btn-danger" onclick="return confirm('{{ trans('sales_order.question_cancel') }}')">{{ trans('sales_order.btn_cancel') }}</a>
                     @endcan
                     @can('submit sales order')
-                        <a href="{{ route('salesOrders.submitOrder', [$salesOrder->id]) }}" class="btn btn-info" onclick="return confirm('{{ trans('sales_order.question_submit') }}')">{{ trans('sales_order.btn_submit_order') }}</a>
+                        @if ($parameterNow >= $parameter->parameter_hour)
+                            <a href="{{ route('salesOrders.submitOrder', [$salesOrder->id]) }}" class="btn btn-info" onclick="return confirm('{{ trans('sales_order.question_submit_2') }}')">{{ trans('sales_order.btn_submit_order') }}</a>
+                        @else
+                            <a href="{{ route('salesOrders.submitOrder', [$salesOrder->id]) }}" class="btn btn-info" onclick="return confirm('{{ trans('sales_order.question_submit') }}')">{{ trans('sales_order.btn_submit_order') }}</a>
+                        @endif
                     @endcan
                 @endif
                 @if ($salesOrder->status == 'R')
@@ -104,13 +115,18 @@
                     '<span class="spinner-border spinner-border-sm" role="status"></span><span class="sr-only">Loading...</span>'
                 );
 
-                setTimeout(function(){
+                window.setTimeout(function(){
                     $(this).prop("disabled", false);
                     $(this).html(
                         '<i class="fa fa-file-pdf"></i> Print'
                     );
-                },8000);
+                },5000);
             });
+
+            window.setTimeout(function () {
+                window.location.reload();
+            }, 60000);
+
         });
     </script>
 @endpush

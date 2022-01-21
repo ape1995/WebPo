@@ -6,6 +6,8 @@ use App\Http\Requests\CreateSalesOrderRequest;
 use App\Http\Requests\UpdateSalesOrderRequest;
 use App\Repositories\SalesOrderRepository;
 use App\Repositories\SalesOrderDetailRepository;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMailSubmit;
 use App\Models\User;
 use App\Models\Customer;
 use App\Models\Cart;
@@ -13,6 +15,7 @@ use App\Models\Product;
 use App\Models\SalesPrice;
 use App\Models\Location;
 use App\Models\SalesOrder;
+use App\Models\Parameter;
 use App\Models\SalesOrderDetail;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
@@ -246,14 +249,17 @@ class SalesOrderController extends AppBaseController
         $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $id )->get();
         $customers = Customer::where('BAccountID', $salesOrder->customer_id)->get();
 
-        // dd($salesOrderDetail);
+        $parameter = Parameter::where('name','Maximum Time Order')->get()->first();
+        $parameterNow = Carbon::now()->toTimeString();
+
+        // dd($parameter->parameter_hour, $parameterNow);
 
         if (empty($salesOrder)) {
 
             return redirect(route('salesOrders.index'))->with('error', 'Order not found');
         }
 
-        return view('sales_orders.show', compact('salesOrder', 'salesOrderDetails', 'customers'));
+        return view('sales_orders.show', compact('salesOrder', 'salesOrderDetails', 'customers', 'parameter', 'parameterNow'));
     }
 
     /**
@@ -414,11 +420,28 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
+        // Cek Jam Submit
+        $parameter = Parameter::where('name','Maximum Time Order')->get()->first();
+        $parameterNow = Carbon::now()->toTimeString();
+
+        // dd($parameter->parameter_hour, $parameterNow);
+
         $salesOrder = SalesOrder::find($id);
         $salesOrder['status'] = 'R';
         $salesOrder['submitted_by'] = \Auth::user()->id;
         $salesOrder['submitted_at'] = Carbon::now()->toDateTimeString();
         $salesOrder->save();
+
+        if($parameterNow >= $parameter->parameter_hour){
+
+            $email = 'apeganteng@gmail.com';
+            $data = [
+                'title' => 'PENTING! Order masuk melewati jam batas',
+                'name' => $salesOrder->customer->AcctName,
+                'url' => 'https://yamazakimyroti.co.id',
+            ];
+            Mail::to($email)->send(new SendMailSubmit($data));
+        }
 
         return redirect(route('salesOrders.show', $id))->with('success', 'Order Submitted Sucessfully.');
     }
@@ -501,5 +524,50 @@ class SalesOrderController extends AppBaseController
     	return $pdf->download("Order - $salesOrder->order_nbr.pdf");
 
         // return view('sales_orders.print', compact('salesOrder', 'salesOrderDetails'));
+    }
+
+    public function reOrder($id)
+    {
+
+        $salesOrder = SalesOrder::find($id);
+        $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $id)->get();
+        // dd($salesOrderDetails);
+
+        if (empty($salesOrder)) {
+            return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
+        }
+
+        // Delete all cart from this customer
+        Cart::where('customer_id', $salesOrder->customer_id)->delete();
+
+        // define data header
+        $data = [];
+        $data['order_type'] = $salesOrder->order_type;
+        $data['description'] = $salesOrder->description;
+
+        foreach($salesOrderDetails as $detail){
+            // Get data code product and customer
+            $code = $detail->inventory_id;
+            $customer = $salesOrder->customer_id;
+            // Get data price
+            $dataprice = $this->getPrice($code, $customer);
+            $dataprice['unit_price'] = str_replace('.','',$dataprice['unit_price']);
+            $dataprice['unit_price'] = str_replace(',','.',$dataprice['unit_price']);
+            // Resum amount
+            $amount = $dataprice['unit_price'] * $detail->qty;
+            // Store to carts
+            Cart::create([
+                'inventory_id' => $detail->inventory_id,
+                'inventory_name' => $dataprice['inventory_name'],
+                'qty' => $detail->qty,
+                'uom' => $detail->uom,
+                'unit_price' => $dataprice['unit_price'],
+                'amount' => $amount,
+                'customer_id' => $salesOrder->customer_id,
+                'created_by' => \Auth::user()->id,
+            ]);  
+        }
+
+        return redirect()->route('createOrder')->with('success', 'Silahkan sesuaikan tanggal kirim dan kuantitas item!')->with('data', $data);
     }
 }

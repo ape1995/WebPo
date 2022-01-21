@@ -18,10 +18,17 @@
                     {!! Form::label('order_type', trans('sales_order.order_type')) !!}
                 </div>
                 <div class="col-8">
-                    <select name="order_type" id="order_type" class="form-control select2js" required>
-                        <option value="R">REGULAR</option>
-                        <option value="D">DIRECT SELLING</option>
-                    </select>
+                    @if ($data = Session::get('data'))
+                        <select name="order_type" id="order_type" class="form-control select2js" required>
+                            <option value="R" {{ $data['order_type'] == 'R' ? 'selected' : '' }}>REGULAR</option>
+                            <option value="D" {{ $data['order_type'] == 'D' ? 'selected' : '' }}>DIRECT SELLING</option>
+                        </select>
+                    @else
+                        <select name="order_type" id="order_type" class="form-control select2js" required>
+                            <option value="R">REGULAR</option>
+                            <option value="D">DIRECT SELLING</option>
+                        </select>
+                    @endif
                 </div>
             </div>
         </div>
@@ -117,5 +124,9 @@
 <!-- Description Field -->
 <div class="col-sm-12">
     {!! Form::label('description', trans('sales_order.description')) !!}
-    {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 2, 'required' => true ]) !!}
+    @if ($data = Session::get('data'))
+        {!! Form::textarea('description', $data['description'], ['class' => 'form-control', 'rows' => 2, 'required' => true ]) !!}
+    @else     
+        {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 2, 'required' => true ]) !!}
+    @endif
 </div>

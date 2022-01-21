@@ -1,7 +1,7 @@
 <!-- Name Field -->
 <div class="form-group col-sm-12">
     {!! Form::label('name', trans('group.name')) !!}
-    {!! Form::text('name', null, ['class' => 'form-control']) !!}
+    {!! Form::text('name', null, ['class' => 'form-control', 'readonly' => true]) !!}
 </div>
 
 <div class="col-md-12">
@@ -85,6 +85,34 @@
                             @endphp
                             @php
                                 if(stripos($permission->name, 'group permissions') !== FALSE){
+                            @endphp
+                            <tr>
+                                <td width="10%"><input type="checkbox" name="permission[]" id="permission" value="{{ $permission->id }}" {{ $checked }}></td>
+                                <td>{{ $permission->name }}</td>
+                            </tr>
+                            @php
+                                }
+                            @endphp
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-danger text-center p-1"><h5>Parameter</h5></div>
+                <div class="card-body py-1 px-3">
+                    <table width="100%">
+                        @foreach ($permissions as $permission)
+                            @php
+                                if($role->hasPermissionTo($permission->name)){
+                                    $checked = 'checked';
+                                } else {
+                                    $checked = '';
+                                }
+                            @endphp
+                            @php
+                                if(stripos($permission->name, 'parameter') !== FALSE){
                             @endphp
                             <tr>
                                 <td width="10%"><input type="checkbox" name="permission[]" id="permission" value="{{ $permission->id }}" {{ $checked }}></td>

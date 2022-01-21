@@ -11,6 +11,10 @@ class ReportController extends Controller
 {
     public function index(){
 
+        if (!\Auth::user()->can('view report sales order')) {
+            abort(403);
+        }
+
         $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
 
         return view('reports.sales_order', compact('customers'));
@@ -61,6 +65,10 @@ class ReportController extends Controller
     }
 
     public function detailIndex(){
+
+        if (!\Auth::user()->can('view report sales order detail')) {
+            abort(403);
+        }
 
         $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
 
@@ -114,6 +122,10 @@ class ReportController extends Controller
 
     public function report1Index(){
 
+        if (!\Auth::user()->can('view report request 1')) {
+            abort(403);
+        }
+
         $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
 
         return view('reports.report1', compact('customers'));
@@ -165,6 +177,10 @@ class ReportController extends Controller
     }
 
     public function reportCustomerIndex(){
+
+        if (!\Auth::user()->can('view report customer')) {
+            abort(403);
+        }
 
         if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();

@@ -29,6 +29,10 @@ class ParameterController extends AppBaseController
      */
     public function index(Request $request)
     {
+        if (!\Auth::user()->can('browse parameter')) {
+            abort(403);
+        }
+
         $parameters = $this->parameterRepository->all();
 
         return view('parameters.index')
@@ -42,6 +46,10 @@ class ParameterController extends AppBaseController
      */
     public function create()
     {
+        if (!\Auth::user()->can('create parameter')) {
+            abort(403);
+        }
+
         return view('parameters.create');
     }
 
@@ -72,6 +80,10 @@ class ParameterController extends AppBaseController
      */
     public function show($id)
     {
+        if (!\Auth::user()->can('view parameter')) {
+            abort(403);
+        }
+
         $parameter = $this->parameterRepository->find($id);
 
         if (empty($parameter)) {
@@ -92,6 +104,10 @@ class ParameterController extends AppBaseController
      */
     public function edit($id)
     {
+        if (!\Auth::user()->can('edit parameter')) {
+            abort(403);
+        }
+
         $parameter = $this->parameterRepository->find($id);
 
         if (empty($parameter)) {
@@ -139,6 +155,10 @@ class ParameterController extends AppBaseController
      */
     public function destroy($id)
     {
+        if (!\Auth::user()->can('delete parameter')) {
+            abort(403);
+        }
+
         $parameter = $this->parameterRepository->find($id);
 
         if (empty($parameter)) {

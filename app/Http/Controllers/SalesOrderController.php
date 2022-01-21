@@ -48,7 +48,9 @@ class SalesOrderController extends AppBaseController
      */
     public function index(Request $request)
     {
-        // $salesOrders = $this->salesOrderRepository->all();
+        if (!\Auth::user()->can('list sales order')) {
+            abort(403);
+        }
 
         if(\Auth::user()->role == 'Customers'  || \Auth::user()->role == 'Staff Customers'){
             $salesOrders = SalesOrder::where('customer_id', \Auth::user()->customer_id)->latest()->get();
@@ -140,6 +142,10 @@ class SalesOrderController extends AppBaseController
      */
     public function create()
     {
+
+        if (!\Auth::user()->can('create sales order')) {
+            abort(403);
+        }
         
         if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
@@ -271,6 +277,11 @@ class SalesOrderController extends AppBaseController
      */
     public function edit($id)
     {
+
+        if (!\Auth::user()->can('edit sales order')) {
+            abort(403);
+        }
+
         $salesOrder = $this->salesOrderRepository->find($id);
 
         if (empty($salesOrder)) {
@@ -414,6 +425,10 @@ class SalesOrderController extends AppBaseController
     public function submitOrder($id)
     {
 
+        if (!\Auth::user()->can('submit sales order')) {
+            abort(403);
+        }
+
         $salesOrder = SalesOrder::find($id);
 
         if (empty($salesOrder)) {
@@ -449,6 +464,10 @@ class SalesOrderController extends AppBaseController
     public function processOrder($id)
     {
 
+        if (!\Auth::user()->can('process sales order')) {
+            abort(403);
+        }
+
         $salesOrder = SalesOrder::find($id);
 
         if (empty($salesOrder)) {
@@ -467,6 +486,10 @@ class SalesOrderController extends AppBaseController
     public function cancelOrder($id)
     {
 
+        if (!\Auth::user()->can('cancel sales order')) {
+            abort(403);
+        }
+
         $salesOrder = SalesOrder::find($id);
 
         if (empty($salesOrder)) {
@@ -484,6 +507,11 @@ class SalesOrderController extends AppBaseController
 
     public function rejectOrder(Request $request)
     {
+
+        if (!\Auth::user()->can('reject sales order')) {
+            abort(403);
+        }
+
         $input = $request->all();
 
         $salesOrder = SalesOrder::find($input['id_order']);

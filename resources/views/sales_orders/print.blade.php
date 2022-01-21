@@ -48,25 +48,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <td>{!! Form::label('order_nbr', 'Order Nbr') !!}</td>
                     <td>: {!! Form::label('order_nbr', $salesOrder->order_nbr) !!}</td>
                     <td>{!! Form::label('order_qty', 'Order Qty') !!}</td>
-                    <td class="money">: {!! Form::label('order_qty', $salesOrder->order_qty) !!}</td>
+                    <td>: {!! Form::label('order_qty', $salesOrder->order_qty) !!}</td>
                 </tr>
                 <tr>
                     <td>{!! Form::label('customer_id', 'Customer') !!}</td>
                     <td>: {!! Form::label('customer_id', $salesOrder->customer->AcctName .'-'. $salesOrder->customer->AcctCD) !!}</td>
                     <td>{!! Form::label('order_amount', 'Order Amount') !!}</td>
-                    <td class="money">: {!! Form::label('order_amount', number_format($salesOrder->order_amount, 2, ',', '.')) !!}</td>
+                    <td>: {!! Form::label('order_amount', number_format($salesOrder->order_amount, 2, ',', '.')) !!}</td>
                 </tr>
                 <tr>
                     <td>{!! Form::label('order_date', 'Order Date') !!}</td>
                     <td>: {!! Form::label('order_date', $salesOrder->order_date->format('d F Y')) !!}</td>
                     <td>{!! Form::label('tax', 'Tax:') !!}</td>
-                    <td class="money">: {!! Form::label('tax', number_format($salesOrder->tax, 2, ',', '.')) !!}</td>
+                    <td>: {!! Form::label('tax', number_format($salesOrder->tax, 2, ',', '.')) !!}</td>
                 </tr>
                 <tr>
                     <td>{!! Form::label('delivery_date', 'Delivery Date') !!}</td>
                     <td>: {!! Form::label('delivery_date', $salesOrder->delivery_date->format('d F Y')) !!}</td>
                     <td>{!! Form::label('order_total', 'Order Total:') !!}</td>
-                    <td class="money">: {!! Form::label('order_total', number_format($salesOrder->order_total, 2, ',', '.')) !!}</td>
+                    <td>: {!! Form::label('order_total', number_format($salesOrder->order_total, 2, ',', '.')) !!}</td>
                 </tr>
                 <tr>
                     <td>{!! Form::label('description', 'Description') !!}</td>

@@ -35,6 +35,7 @@ Auth::routes(['verify' => true]);
 Route::group(['middleware' => ['auth']], function(){
     Route::resource('users', 'App\Http\Controllers\UserController');
     Route::resource('roles', 'App\Http\Controllers\RoleController');
+    Route::resource('parameters', App\Http\Controllers\ParameterController::class);
     Route::get('dataTableUser',[UserController::class,'dataTable'])->name('users.data');
     Route::get('users-inactive/{code}',[UserController::class,'inactive'])->name('users.inactive');
     Route::get('users-active/{code}',[UserController::class,'active'])->name('users.active');
@@ -66,5 +67,5 @@ Route::group(['middleware' => ['auth']], function(){
 });
 
 
-Route::get('/test_email', [SendEmailController::class, 'send']);
+Route::get('/send_notification', [SendEmailController::class, 'send']);
 

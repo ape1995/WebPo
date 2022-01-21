@@ -53,7 +53,11 @@
                         <a href="{{ route('salesOrders.cancelOrder', [$salesOrder->id]) }}" class="btn btn-danger" onclick="return confirm('{{ trans('sales_order.question_cancel') }}')">{{ trans('sales_order.btn_cancel') }}</a>
                     @endcan
                     @can('submit sales order')
-                        <a href="{{ route('salesOrders.submitOrder', [$salesOrder->id]) }}" class="btn btn-info" onclick="return confirm('{{ trans('sales_order.question_submit') }}')">{{ trans('sales_order.btn_submit_order') }}</a>
+                        @if ($parameterNow >= $parameter->parameter_hour)
+                            <a href="{{ route('salesOrders.submitOrder', [$salesOrder->id]) }}" class="btn btn-info" onclick="return confirm('{{ trans('sales_order.question_submit_2') }}')">{{ trans('sales_order.btn_submit_order') }}</a>
+                        @else
+                            <a href="{{ route('salesOrders.submitOrder', [$salesOrder->id]) }}" class="btn btn-info" onclick="return confirm('{{ trans('sales_order.question_submit') }}')">{{ trans('sales_order.btn_submit_order') }}</a>
+                        @endif
                     @endcan
                 @endif
                 @if ($salesOrder->status == 'R')
@@ -111,13 +115,18 @@
                     '<span class="spinner-border spinner-border-sm" role="status"></span><span class="sr-only">Loading...</span>'
                 );
 
-                setTimeout(function(){
+                window.setTimeout(function(){
                     $(this).prop("disabled", false);
                     $(this).html(
                         '<i class="fa fa-file-pdf"></i> Print'
                     );
-                },8000);
+                },5000);
             });
+
+            window.setTimeout(function () {
+                window.location.reload();
+            }, 60000);
+
         });
     </script>
 @endpush

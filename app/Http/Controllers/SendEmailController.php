@@ -16,22 +16,15 @@ class SendEmailController extends Controller
         $salesOrder = SalesOrder::where('status', 'R')->get();
         $totalUnprocess = $salesOrder->count('id');
 
-        // dd($totalUnprocess);
-        // $data = [
-        //     'title' => 'You forget something to do!',
-        //     'pending' => $totalUnprocess,
-        //     'url' => 'https://yamazakimyroti.co.id',
-        // ];
-
         $email = 'apeganteng@gmail.com';
         $data = [
-            'title' => 'You forget something to do!',
+            'title' => 'Ada order pending! Yuk lihat',
             'pending' => $totalUnprocess,
             'url' => 'https://yamazakimyroti.co.id',
         ];
         Mail::to($email)->send(new SendMail($data));
-        // return 'Berhasil mengirim email!';
+        return 'Berhasil mengirim email!';
 
-        return view('email.email_1', compact('data'));
+        // return view('email.email_1', compact('data'));
     }
 }

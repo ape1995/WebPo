@@ -119,7 +119,7 @@ img.g-img + div {
     <style>
 
 	    .primary{
-	background: #c61325;
+	background: #23b9df;
 }
 .bg_white{
 	background: #ffffff;
@@ -144,7 +144,7 @@ img.g-img + div {
 }
 .btn.btn-primary{
 	border-radius: 5px;
-	background: #c61325;
+	background: #23b9df;
 	color: #ffffff;
 }
 .btn.btn-white{
@@ -182,7 +182,7 @@ body{
 }
 
 a{
-	color: #c61325;
+	color: #23b9df;
 }
 
 table{
@@ -193,7 +193,7 @@ table{
 	margin: 0;
 }
 .logo h1 a{
-	color: #c61325;
+	color: #23b9df;
 	font-size: 24px;
 	font-weight: 700;
 	font-family: 'Lato', sans-serif;
@@ -221,7 +221,7 @@ table{
 }
 .hero .text h2 span{
 	font-weight: 600;
-	color: #c61325;
+	color: #23b9df;
 }
 
 
@@ -252,7 +252,7 @@ table{
 	content: '';
 	width: 100%;
 	height: 2px;
-	background: #c61325;
+	background: #23b9df;
 	margin: 0 auto;
 }
 
@@ -350,8 +350,8 @@ ul.social li{
             		<td align="center">
             			<div class="text" style="padding: 0 2.5em; text-align: center;">
             				<h3>Hi,</h3>
-            				<h4>Ada {{ $data['pending'] }} pesanan menunggu di proses.</h4>
-            				<p><a href="{{ $data['url'] }}" class="btn btn-primary">Lihat disini</a></p>
+            				<h4>{{ $data['name'] }} submit order melebih batas waktu nih. yuk konfirmasi ke pelanggan tersebut.</h4>
+            				<p>lihat datanya <a href="{{ $data['url'] }}" class="btn btn-primary">Disini</a></p>
             			</div>
             		</td>
             	</tr>

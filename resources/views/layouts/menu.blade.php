@@ -6,8 +6,8 @@
 </li>
 
 @if(Gate::check('browse users') || Gate::check('browse group permissions'))
-<li class="nav-item {{ Request::is('users*') ? 'menu-open' : '' }} {{ Request::is('roles*') ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link {{ Request::is('users*') ? 'active' : '' }} {{ Request::is('roles*') ? 'active' : '' }}">
+<li class="nav-item {{ Request::is('users*') ? 'menu-open' : '' }} {{ Request::is('roles*') ? 'menu-open' : '' }} {{ Request::is('parameters*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('users*') ? 'active' : '' }} {{ Request::is('roles*') ? 'active' : '' }} {{ Request::is('parameters*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-file-alt"></i>
         <p>
         {{ trans('menu.master')}}
@@ -31,6 +31,12 @@
                 </a>
             </li>
         @endcan
+        <li class="nav-item">
+            <a href="{{ route('parameters.index') }}" class="nav-link {{ Request::is('parameters*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Parameter</p>
+            </a>
+        </li>
     </ul>
 </li>
 @endif

@@ -39,6 +39,7 @@ return [
     'question_edit' => 'Edit pesanan?',
     'question_cancel' => 'Batalkan pesanan?',
     'question_submit' => 'Submit pesanan?',
+    'question_submit_2' => 'Submit pesanan ? \nPerhatian! Anda melebihi batas waktu order, hubungi admin sales!',
     'question_process' => 'Proses pesanan?',
     'question_reject' => 'Tolak Pesanan?',
     'question_reorder' => 'Order ulang pesanan ini?',

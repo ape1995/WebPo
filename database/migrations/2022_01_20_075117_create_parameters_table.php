@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateParametersTable extends Migration
+{
+
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('parameters', function (Blueprint $table) {
+            $table->id('id');
+            $table->string('name');
+            $table->string('parameter_string')->nullable();
+            $table->date('parameter_date')->nullable();
+            $table->time('parameter_hour')->nullable();
+            $table->float('parameter_number')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('parameters');
+    }
+}

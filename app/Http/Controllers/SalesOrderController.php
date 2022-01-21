@@ -153,11 +153,14 @@ class SalesOrderController extends AppBaseController
             $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
         }
 
-        // dd($customers[1]->location);
+        $date = Carbon::now();
+        $date->addDays(3);
+
+        $minDeliveryDate = $date->toDateString();
 
         $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->get();
 
-        return view('sales_orders.create', compact('customers', 'products'));
+        return view('sales_orders.create', compact('customers', 'products', 'minDeliveryDate'));
     }
 
     /**
@@ -296,11 +299,14 @@ class SalesOrderController extends AppBaseController
             $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
         }
 
-        // dd($customers[1]->location);
+        $date = Carbon::now();
+        $date->addDays(3);
+
+        $minDeliveryDate = $date->toDateString();
 
         $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->get();
 
-        return view('sales_orders.edit', compact('salesOrder', 'customers', 'products'));
+        return view('sales_orders.edit', compact('salesOrder', 'customers', 'products', 'minDeliveryDate'));
     }
 
     /**

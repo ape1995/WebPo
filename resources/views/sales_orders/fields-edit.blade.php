@@ -59,7 +59,7 @@
                     {!! Form::label('delivery_date', trans('sales_order.delivery_date')) !!}
                 </div>
                 <div class="col-8">
-                    {!! Form::date('delivery_date', $salesOrder->delivery_date, ['class' => 'form-control','id'=>'delivery_date', 'required' => true, 'min' => date('Y-m-d')]) !!}
+                    {!! Form::date('delivery_date', $salesOrder->delivery_date, ['class' => 'form-control','id'=>'delivery_date', 'required' => true, 'min' => $minDeliveryDate]) !!}
                 </div>
             </div>
         </div>

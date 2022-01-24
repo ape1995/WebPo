@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('reportRequest1', [ReportController::class, 'report1View'])->name('reportSalesOrder.report1View');
     Route::get('reportCustomer', [ReportController::class, 'reportCustomerIndex'])->name('reportSalesOrder.reportCustomerIndex');
     Route::post('reportCustomer', [ReportController::class, 'reportCustomerView'])->name('reportSalesOrder.reportCustomerView');
+    Route::resource('mailSettings', App\Http\Controllers\MailSettingController::class);
 });
 
 
@@ -71,4 +72,3 @@ Route::get('/send_notification', [SendEmailController::class, 'send']);
 
 
 
-Route::resource('mailSettings', App\Http\Controllers\MailSettingController::class);

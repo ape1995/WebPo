@@ -49,7 +49,7 @@
                                                 <select name="inventory_id" id="inventory_id" class="form-control select2js">
                                                     <option value="">Please Choose</option>
                                                     @foreach ($products as $product)
-                                                        <option value="{{ $product->InventoryCD }}">{{ $product->Descr }} - {{ $product->InventoryCD }}</option>
+                                                        <option value="{{ $product->InventoryCD }}">{{ $product->Descr }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -122,13 +122,10 @@
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="product_name" name="product_name" readonly>
                                         </div>
-                                        <div class="col-sm-12">
-                                            <input type="text" class="form-control" id="product_code" name="product_code" readonly>
-                                        </div> 
                                     </div>
 
-                                    <label class="col-sm-4">{{ trans('sales_order.unit_price') }}</label>
-                                    <div class="col-sm-12">
+                                    <label class="col-sm-4" @can('hide price sales order') style=" visibility: collapse;" @endcan>{{ trans('sales_order.unit_price') }}</label>
+                                    <div class="col-sm-12" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                         <input type="text" class="form-control" id="unit_price_edit" name="unit_price_edit" readonly>
                                     </div>
                      
@@ -137,7 +134,7 @@
                                         <input type="number" class="form-control" name="quantity" id="quantity" min="1" step="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                         <label class="col-sm-4 control-label">{{ trans('sales_order.amount') }}</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="amount_edit" name="amount_edit" readonly>
@@ -275,13 +272,15 @@
             });
 
             var table = $('#dataTable').DataTable({
-                pageLength: 10,
-                lengthChange: true,
+                lengthChange: false,
                 bFilter: true,
                 destroy: true,
+                paging: false,
                 processing: true,
                 serverSide: true,
                 searching: false,
+                ordering: false,
+                bInfo : false,
                 "language": {
                     processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw text-danger"></i><span class="sr-only">Loading...</span> '
                 },
@@ -292,23 +291,19 @@
                 },
                 "rowCallback": function( row, data ) {
                     if(permissionPrice == 'hide price sales order') {
+                        $('td:eq(4)', row).addClass("hide-component");
                         $('td:eq(5)', row).addClass("hide-component");
-                        $('td:eq(6)', row).addClass("hide-component");
                     }
-                    $('td:eq(3)', row).addClass("money");
-                    $('td:eq(6)', row).addClass("money");
-                    $('td:eq(6)', row).addClass("money");
+                    $('td:eq(2)', row).addClass("money");
+                    $('td:eq(4)', row).addClass("money");
+                    $('td:eq(5)', row).addClass("money");
                 },
                 columns: [
                     { 
                         data: 'DT_RowIndex',
                         name: 'DT_Row_Index', 
                         "className": "text-center" ,
-                        orderable: false, 
                         searchable: false   
-                    },
-                    {
-                        data: 'inventory_id',                                    
                     },
                     {
                         data: 'inventory_name'      

@@ -153,7 +153,7 @@ class ReportController extends Controller
         }
         // dd($salesOrders->count() == 0);
         if($salesOrders == null || !$salesOrders || $salesOrders->count() == 0){
-            return redirect()->route('reportSalesOrder.detailIndex')->with('error', 'Data Not Found');
+            return redirect()->route('reportSalesOrder.report1Index')->with('error', 'Data Not Found');
         }
 
         $date1 = $input['date_1'];
@@ -196,7 +196,6 @@ class ReportController extends Controller
 
         $input = $request->all();
 
-        // dd($input['date_2']);
 
         if($input['customer_id'] == 'All'){
             if($input['status'] == 'All'){
@@ -213,7 +212,7 @@ class ReportController extends Controller
         }
 
         if($salesOrders == null || !$salesOrders || $salesOrders->count() == 0){
-            return redirect()->route('reportSalesOrder.index')->with('error', 'Data Not Found');
+            return redirect()->route('reportSalesOrder.reportCustomerIndex')->with('error', 'Data Not Found');
         }
 
         $date1 = $input['date_1'];

@@ -126,13 +126,10 @@
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="product_name" name="product_name" readonly>
                                         </div>
-                                        <div class="col-sm-12">
-                                            <input type="text" class="form-control" id="product_code" name="product_code" readonly>
-                                        </div> 
                                     </div>
 
-                                    <label class="col-sm-4">{{ trans('sales_order.unit_price') }}</label>
-                                    <div class="col-sm-12">
+                                    <label class="col-sm-4" @can('hide price sales order') style=" visibility: collapse;" @endcan>{{ trans('sales_order.unit_price') }}</label>
+                                    <div class="col-sm-12" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                         <input type="text" class="form-control" id="unit_price_edit" name="unit_price_edit" readonly>
                                     </div>
                      
@@ -141,7 +138,7 @@
                                         <input type="number" class="form-control" name="quantity" id="quantity" min="1" step="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                         <label class="col-sm-4 control-label">{{ trans('sales_order.amount') }}</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="amount_edit" name="amount_edit" readonly>
@@ -161,7 +158,7 @@
 
             <div class="card-footer">
                 <input type="submit" name="savePageButton" id="savePageButton" class="btn btn-primary" value="{{ trans('sales_order.btn_update') }}">
-                <a href="{{ route('salesOrders.show', $salesOrder->id) }}" class="btn btn-default">{{ trans('sales_order.btn_cancel') }}</a>
+                <a href="{{ route('salesOrders.show', $salesOrder->id) }}" class="btn btn-default">{{ trans('user.btn_cancel') }}</a>
             </div>
 
             {!! Form::close() !!}
@@ -281,13 +278,15 @@
             });
 
             var table = $('#dataTable').DataTable({
-                pageLength: 10,
-                lengthChange: true,
+                paging: false,
+                lengthChange: false,
                 bFilter: true,
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 searching: false,
+                ordering: false,
+                bInfo : false,
                 "language": {
                     processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw text-danger"></i><span class="sr-only">Loading...</span> '
                 },
@@ -298,12 +297,12 @@
                 },
                 "rowCallback": function( row, data ) {
                     if(permissionPrice == 'hide price sales order') {
+                        $('td:eq(4)', row).addClass("hide-component");
                         $('td:eq(5)', row).addClass("hide-component");
-                        $('td:eq(6)', row).addClass("hide-component");
                     }
-                    $('td:eq(3)', row).addClass("money");
+                    $('td:eq(2)', row).addClass("money");
+                    $('td:eq(4)', row).addClass("money");
                     $('td:eq(5)', row).addClass("money");
-                    $('td:eq(6)', row).addClass("money");
                 },
                 columns: [
                     { 
@@ -312,9 +311,6 @@
                         "className": "text-center" ,
                         orderable: false, 
                         searchable: false   
-                    },
-                    {
-                        data: 'inventory_id',                                    
                     },
                     {
                         data: 'inventory_name'      

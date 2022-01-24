@@ -55,6 +55,7 @@
                     $('#dataTable').DataTable({
                         processing: true,
                         serverSide: true,
+                        ordering: false,
                         "language": {
                             processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw text-danger"></i><span class="sr-only">Loading...</span> '
                         },
@@ -82,7 +83,6 @@
                             if(permissionPrice == 'hide price sales order') {
                                 $('td:eq(7)', row).addClass("hide-component");
                                 $('td:eq(8)', row).addClass("hide-component");
-                                $('td:eq(9)', row).addClass("hide-component");
                             }
                             $('td:eq(7)', row).addClass("money");
                             $('td:eq(8)', row).addClass("money");
@@ -96,8 +96,8 @@
                                 data: 'DT_RowIndex',
                                 name: 'DT_Row_Index', 
                                 "className": "text-center" ,
-                                orderable: false, 
-                                searchable: false   
+                                ordering: false, 
+                                searchable: false    
                             },
                             {
                                 data: 'order_type'                                    

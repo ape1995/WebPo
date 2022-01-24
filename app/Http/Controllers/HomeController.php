@@ -36,14 +36,23 @@ class HomeController extends Controller
             $greeting = 'Evening';
         }
 
-        //tampilkan pesan
+        // tampilkan pesan
         $greeting = 'Good ' . $greeting;
+
+        // get data for dashboard
         $draftOrder = SalesOrder::where('status', 'S')->where('customer_id', Auth::user()->customer_id)->get();
         $submittedOrder = SalesOrder::where('status', 'R')->where('customer_id', Auth::user()->customer_id)->get();
         $processedOrder = SalesOrder::where('status', 'P')->where('customer_id', Auth::user()->customer_id)->get();
         $waitingProcess = SalesOrder::where('status', 'R')->get();
         $totalProcessed = SalesOrder::where('status', 'P')->get();
 
-        return view('home.index', compact('date', 'greeting', 'draftOrder', 'submittedOrder', 'processedOrder', 'waitingProcess', 'totalProcessed'));
+        
+        $target = 500000; // You must get target here
+        $processedOrderThisMonth = SalesOrder::where('status', 'P')->whereMonth('delivery_date', date('m'))->where('customer_id', Auth::user()->customer_id)->get();
+        $sumOrderAmount = $processedOrderThisMonth->sum('order_amount');
+        $percentase = round(($sumOrderAmount * 100)/$target, 2);
+
+
+        return view('home.index', compact('date', 'greeting', 'draftOrder', 'submittedOrder', 'processedOrder', 'waitingProcess', 'totalProcessed', 'target', 'percentase', 'sumOrderAmount'));
     }
 }

@@ -19,14 +19,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class MailSetting extends Model
 {
-    use SoftDeletes;
 
     use HasFactory;
 
     public $table = 'mail_settings';
-    
-
-    protected $dates = ['deleted_at'];
 
 
 

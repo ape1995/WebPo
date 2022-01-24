@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\MailSetting;
+
+
 return [
 
     /*

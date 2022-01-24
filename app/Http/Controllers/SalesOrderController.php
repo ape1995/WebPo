@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateSalesOrderRequest;
 use App\Repositories\SalesOrderRepository;
 use App\Repositories\SalesOrderDetailRepository;
 use Illuminate\Support\Facades\Mail;
+use App\Models\MailSetting;
 use App\Mail\SendMailSubmit;
 use App\Models\User;
 use App\Models\Customer;
@@ -455,13 +456,23 @@ class SalesOrderController extends AppBaseController
 
         if($parameterNow >= $parameter->parameter_hour){
 
-            $email = 'apeganteng@gmail.com';
+            $mailTo = MailSetting::where('type', 'Receiver')->where('sub_type', 'To')->where('status', 1)->pluck('email');
+            $mailCC = MailSetting::where('type', 'Receiver')->where('sub_type', 'CC')->where('status', 1)->pluck('email');
+            $mailBCC = MailSetting::where('type', 'Receiver')->where('sub_type', 'BCC')->where('status', 1)->pluck('email');
+            
+
+            $email = $mailTo;
+            $cc = $mailCC;
+            $bcc = $mailBCC;
+
             $data = [
                 'title' => 'PENTING! Order masuk melewati jam batas',
                 'name' => $salesOrder->customer->AcctName,
                 'url' => 'https://yamazakimyroti.co.id',
             ];
-            Mail::to($email)->send(new SendMailSubmit($data));
+
+            Mail::to($email)->cc($cc)->bcc($bcc)->send(new SendMailSubmit($data));
+
         }
 
         return redirect(route('salesOrders.show', $id))->with('success', 'Order Submitted Sucessfully.');

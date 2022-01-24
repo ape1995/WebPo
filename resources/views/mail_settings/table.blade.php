@@ -19,15 +19,21 @@
                 <td width="120">
                     {!! Form::open(['route' => ['mailSettings.destroy', $mailSetting->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
+                        @can('view mail setting')
                         <a href="{{ route('mailSettings.show', [$mailSetting->id]) }}" title="view"
                            class='btn btn-default btn-xs'>
                             <i class="far fa-eye"></i>
                         </a>
+                        @endcan
+                        @can('edit mail setting')
                         <a href="{{ route('mailSettings.edit', [$mailSetting->id]) }}" title="edit"
                            class='btn btn-default btn-xs'>
                             <i class="far fa-edit"></i>
                         </a>
+                        @endcan
+                        @can('inactive mail setting')
                         {!! Form::button('<i class="fas fa-ban"></i>', ['title' => 'inactive', 'type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                        @endcan
                     </div>
                     {!! Form::close() !!}
                 </td>

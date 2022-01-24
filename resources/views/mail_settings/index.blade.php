@@ -8,10 +8,12 @@
                     <h1>{{ trans('mail.title') }}</h1>
                 </div>
                 <div class="col-sm-6">
+                    @can('create mail setting')
                     <a class="btn btn-primary float-right"
                        href="{{ route('mailSettings.create') }}">
                        {{ trans('mail.create') }}
                     </a>
+                    @endcan
                 </div>
             </div>
         </div>

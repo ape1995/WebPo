@@ -29,7 +29,7 @@ class UserController extends Controller
         if(\Auth::user()->role == 'Customers'){
             $users = User::where('customer_id', \Auth::user()->customer_id)->get();
         } else {
-            $users = User::all();
+            $users = User::query();
         }
         // echo('<h1>Testing Connection To Acumatica DB</h1>');
         // dd($users[3]->customer->AcctName);

@@ -4,7 +4,7 @@ return [
 
     'title' => 'Silahkan Masuk',
     'email' => 'E-Mail',
-    'password' => 'Password',
+    'password' => 'Kata Sandi',
     'button' => 'Masuk',
 
 ];

@@ -6,6 +6,7 @@ return [
     'master' => 'Data Master',
     'user' => 'Users',
     'group_permission' => 'Group Permission',
+    'mail_setting' => 'Mail Setting',
     'sales_order' => 'Sales Order',
     'create_order' => 'Create Order',
     'list_order' => 'List Order',

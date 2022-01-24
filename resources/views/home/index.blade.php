@@ -25,7 +25,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                          <div class="text-right card-body bg-light p-2 rounded">
+                          <div class="text-right card-body p-2 rounded">
                             {{ trans('dashboard.language')}}
                             <a href="/lang/en">
                               <img src="{{ asset('assets/images/flag-en.png') }}" class="img-rounded text-right mx-1" width="25px">
@@ -108,6 +108,19 @@
                                         <div class="card-body bg-success">
                                           {{ trans('dashboard.processed_order')}}
                                           <h1 class="text-right">{{ $processedOrder->count() }}</h1>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                      <div class="card">
+                                        <div class="card-body">
+                                          <h3 class="text-danger">Your Target is IDR {{ number_format($target,0,',','.') }}</h3>
+                                          <div class="progress">
+                                            <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $sumOrderAmount }}" aria-valuemin="0" aria-valuemax="{{ $target }}" style="width: {{ $percentase.'%' }};"><strong>IDR {{ number_format($sumOrderAmount,0,',','.') }}<span class="sr-only">20% Complete</span></div>
+                                          </div>
+                                          @if ($sumOrderAmount >= $target)
+                                            <h5 class="text-danger">Congratulations, you met your target this month</h5>
+                                          @endif
                                         </div>
                                       </div>
                                     </div>

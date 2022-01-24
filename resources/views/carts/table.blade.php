@@ -3,7 +3,7 @@
         <thead>
         <tr>
             <th>{{ trans('sales_order.no') }}</th>
-            <th>{{ trans('sales_order.product_code') }}</th>
+            {{-- <th>{{ trans('sales_order.product_code') }}</th> --}}
             <th>{{ trans('sales_order.product_name') }}</th>
             <th>{{ trans('sales_order.qty') }}</th>
             <th>{{ trans('sales_order.uom') }}</th>

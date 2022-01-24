@@ -42,10 +42,10 @@
                                     {{-- Product --}}
                                     <div class="col-sm-12 mb-1">
                                         <div class="row">
-                                            <div class="col-3">
+                                            {{-- <div class="col-3">
                                                 {!! Form::label('inventory_id', trans('sales_order.product')) !!}
-                                            </div>
-                                            <div class="col-8">
+                                            </div> --}}
+                                            <div class="col-12" style="">
                                                 <select name="inventory_id" id="inventory_id" class="form-control select2js">
                                                     <option value="">Please Choose</option>
                                                     @foreach ($products as $product)
@@ -63,11 +63,11 @@
                                                     <input name="inventory_name" id="inventory_name" type="hidden" value="">
                                                     {!! Form::label('unit_price', trans('sales_order.unit_price')) !!}
                                                 </div>
-                                                <div class="col-3" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+                                                <div class="col-4" @can('hide price sales order') style=" visibility: collapse;" @endcan>
                                                     <input type="text" name="unit_price" id="unit_price" class="form-control" readonly>
                                                     {{-- {!! Form::text('unit_price', null, ['class' => 'form-control', 'readonly' => true ]) !!} --}}
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col-2">
                                                     {!! Form::label('uom', trans('sales_order.uom')) !!}
                                                 </div>
                                                 <div class="col-3">

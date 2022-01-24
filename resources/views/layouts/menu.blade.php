@@ -39,12 +39,14 @@
             </a>
         </li>
         @endcan
+        @can('browse mail setting')
         <li class="nav-item">
             <a href="{{ route('mailSettings.index') }}" class="nav-link {{ Request::is('mailSettings*') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Mail Settings</p>
             </a>
         </li>
+        @endcan
     </ul>
 </li>
 @endif

@@ -54,6 +54,9 @@
                         destroy: true,
                         processing: true,
                         serverSide: true,
+                        "language": {
+                            processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw text-danger"></i><span class="sr-only">Loading...</span> '
+                        },
                         ajax: {
                             url:"{{route('users.data')}}",
                             type: "GET"

@@ -213,7 +213,7 @@
                     method: 'get',
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response);
+                        // console.log(response);
                         $('#data_show').show();
                         unit_price.val(response['unit_price']);
                         inventory_name.val(response['inventory_name']);
@@ -257,7 +257,7 @@
                     method: 'get',
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response);
+                        // console.log(response);
                         order_qty.val(response['order_qty']);
                         order_amount.val(response['order_amount']);
                         tax.val(response['tax']);
@@ -288,6 +288,9 @@
                 processing: true,
                 serverSide: true,
                 searching: false,
+                "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw text-danger"></i><span class="sr-only">Loading...</span> '
+                },
                 ajax: {
                     url:"{{ url('dataTableSalesOrderDetail') }}" + '/' + order_id.val(),
                     type: "GET"
@@ -355,7 +358,7 @@
                     type: "POST",
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
+                        // console.log(data);
                         $('#data_show').hide();
                         qty.val('');
                         amount.val('');
@@ -364,7 +367,7 @@
                         getAllCounter();
                     },
                     error: function (data) {
-                        console.log('Error:', data);
+                        // console.log('Error:', data);
                         alert('Product Already Listed on Carts');
                         // $('#saveBtn').html('Save Changes');
                     }
@@ -398,13 +401,13 @@
                     type: "PATCH",
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
+                        // console.log(data);
                         $('#ajaxModel').modal('hide');
                         table.draw();
                         getAllCounter();
                     },
                     error: function (data) {
-                        console.log('Error:', data);
+                        // console.log('Error:', data);
                         alert('Error Updating data!');
                     }
                 });
@@ -424,7 +427,7 @@
                             getAllCounter();
                         },
                         error: function (data) {
-                            console.log('Error:', data);
+                            // console.log('Error:', data);
                         }
                     });
                 }

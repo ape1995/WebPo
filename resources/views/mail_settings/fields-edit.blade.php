@@ -1,13 +1,19 @@
 <!-- Type Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('type', trans('mail.type')) !!}
-    {!! Form::select('type', ['' => '- Choose -','Receiver' => 'Receiver','Sender' => 'Sender'], null, ['class' => 'form-control', 'readonly' => true]) !!}
+    {!! Form::text('type', null, ['class' => 'form-control', 'readonly' => true]) !!}
+</div>
+
+<!-- Name Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('name', trans('parameter.name')) !!}
+    {!! Form::select('name', ['' => '- Choose -','Daily Notification' => 'Daily Notification', 'Overtime Order' => 'Overtime Order'], null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Sub Type Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('sub_type', trans('mail.sub_type')) !!}
-    {!! Form::select('sub_type', [], null, ['class' => 'form-control' , 'readonly' => true]) !!}
+    {!! Form::text('sub_type', null, ['class' => 'form-control' , 'readonly' => true]) !!}
 </div>
 
 <!-- Email Field -->

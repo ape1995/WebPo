@@ -30,7 +30,7 @@ class MailSettingController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $mailSettings = $this->mailSettingRepository->all();
+        $mailSettings = MailSetting::orderBy('email', 'ASC')->latest()->get();
 
         return view('mail_settings.index')
             ->with('mailSettings', $mailSettings);
@@ -57,23 +57,38 @@ class MailSettingController extends AppBaseController
     {
         $input = $request->all();
 
-        $cekMail = MailSetting::where('email', $input['email'])->get();
+        $cekMail = MailSetting::where('email', $input['email'])->where('name', $input['name'])->get();
 
         if($cekMail->count('id') >= 1){
 
-            return redirect(route('mailSettings.index'))->with('error', 'Email already exist');
+            return redirect()->back()->with('error', 'Email already exist');
 
         } else {
 
-            $cekMail2 = MailSetting::where('status', 1)->where('type', 'Sender')->get();
-            if($cekMail2->count('id') >= 1){
-                return redirect(route('mailSettings.index'))->with('error', 'There is a must, only 1 (one) sender active');
-            } else {
+            if($input['type'] == 'Sender'){
                 
+                $cekMail2 = MailSetting::where('status', 1)->where('type', 'Sender')->get();
+
+                if($cekMail2->count('id') >= 1){
+
+                    return redirect()->back()->with('error', 'There is a must, only 1 (one) sender active');
+                
+                } else {
+                    
+                    $mailSetting = $this->mailSettingRepository->create($input);
+        
+                    return redirect(route('mailSettings.index'))->with('success', 'Email saved successfully.');
+                
+                }
+
+            } else {
+
                 $mailSetting = $this->mailSettingRepository->create($input);
-    
+        
                 return redirect(route('mailSettings.index'))->with('success', 'Email saved successfully.');
+
             }
+
             
         }
 
@@ -166,5 +181,25 @@ class MailSettingController extends AppBaseController
         Flash::success('Email inactived successfully.');
 
         return redirect(route('mailSettings.index'));
+    }
+
+    public function active($id)
+    {
+        if (!\Auth::user()->can('active mail setting')) {
+            abort(403);
+        }
+
+        $mail = MailSetting::find($id);
+
+        if (empty($mail)) {
+            return redirect(route('mailSettings.index'))->with('error', 'Mail not found');
+        }
+
+        // $user->removeRole($user->role);
+        $mail = MailSetting::find($id);
+        $mail['status'] = 1;
+        $mail->save();
+
+        return redirect(route('mailSettings.index'))->with('success', 'Mail actived successfully.');
     }
 }

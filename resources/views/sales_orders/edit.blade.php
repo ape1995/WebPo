@@ -85,7 +85,7 @@
                                                     {!! Form::label('qty', trans('sales_order.qty')) !!}
                                                 </div>
                                                 <div class="col-3">
-                                                    <input type="number" class="form-control" name="qty" id="qty" min="1" step="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                                                    <input type="number" class="form-control" name="qty" id="qty" min="1" step="1" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                                                 </div>
                                             </div>
                                         </div>
@@ -135,7 +135,7 @@
                      
                                     <label class="col-sm-4 control-label">{{ trans('sales_order.qty') }}</label>
                                     <div class="col-sm-12">
-                                        <input type="number" class="form-control" name="quantity" id="quantity" min="1" step="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                                        <input type="number" class="form-control" name="quantity" id="quantity" min="1" step="1"  onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                                     </div>
 
                                     <div class="form-group" @can('hide price sales order') style=" visibility: collapse;" @endcan>

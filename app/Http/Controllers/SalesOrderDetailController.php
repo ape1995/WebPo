@@ -184,8 +184,8 @@ class SalesOrderDetailController extends AppBaseController
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
 
-                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editProduct"><i class="fas fa-edit"></i></a>';
-                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook"><i class="fas fa-trash-alt"></i></a>';
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editProduct" title="Edit"><i class="fas fa-edit"></i></a>';
+                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fas fa-trash-alt"></i></a>';
 
                         return $btn;
                 })
@@ -202,7 +202,7 @@ class SalesOrderDetailController extends AppBaseController
         $data['order_qty'] = $salesOrderDetail->sum('qty');
         $data['order_amount'] = $salesOrderDetail->sum('amount');
         $tax = (10/100) * $data['order_amount'];
-        $total = $data['order_amount'] + $tax;
+        $total = round($data['order_amount'] + $tax);
         $data['order_amount'] = number_format($data['order_amount'],2,',','.');
         $data['tax'] = number_format($tax,2,',','.');
         $data['order_total'] = number_format($total,2,',','.');

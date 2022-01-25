@@ -13,9 +13,9 @@ class SendEmailController extends Controller
 {
     public function send()
     {   
-        $mailTo = MailSetting::where('type', 'Receiver')->where('sub_type', 'To')->where('status', 1)->pluck('email');
-        $mailCC = MailSetting::where('type', 'Receiver')->where('sub_type', 'CC')->where('status', 1)->pluck('email');
-        $mailBCC = MailSetting::where('type', 'Receiver')->where('sub_type', 'BCC')->where('status', 1)->pluck('email');
+        $mailTo = MailSetting::where('name', 'Daily Notification')->where('type', 'Receiver')->where('sub_type', 'To')->where('status', 1)->pluck('email');
+        $mailCC = MailSetting::where('name', 'Daily Notification')->where('type', 'Receiver')->where('sub_type', 'CC')->where('status', 1)->pluck('email');
+        $mailBCC = MailSetting::where('name', 'Daily Notification')->where('type', 'Receiver')->where('sub_type', 'BCC')->where('status', 1)->pluck('email');
         
         $salesOrder = SalesOrder::where('status', 'R')->get();
         $totalUnprocess = $salesOrder->count('id');

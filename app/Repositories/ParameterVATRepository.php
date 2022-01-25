@@ -2,27 +2,25 @@
 
 namespace App\Repositories;
 
-use App\Models\MailSetting;
+use App\Models\ParameterVAT;
 use App\Repositories\BaseRepository;
 
 /**
- * Class MailSettingRepository
+ * Class ParameterVATRepository
  * @package App\Repositories
- * @version January 21, 2022, 2:07 pm WIB
+ * @version January 25, 2022, 2:10 pm WIB
 */
 
-class MailSettingRepository extends BaseRepository
+class ParameterVATRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
         'name',
-        'type',
-        'sub_type',
-        'email',
-        'password',
-        'status'
+        'value',
+        'start_date',
+        'end_date'
     ];
 
     /**
@@ -40,6 +38,6 @@ class MailSettingRepository extends BaseRepository
      **/
     public function model()
     {
-        return MailSetting::class;
+        return ParameterVAT::class;
     }
 }

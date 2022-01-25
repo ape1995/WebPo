@@ -7,32 +7,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * Class MailSetting
+ * Class ParameterVAT
  * @package App\Models
- * @version January 21, 2022, 2:07 pm WIB
+ * @version January 25, 2022, 2:10 pm WIB
  *
- * @property string $type
- * @property string $sub_type
- * @property string $email
- * @property string $password
- * @property boolean $status
+ * @property string $name
+ * @property integer $value
+ * @property string $start_date
+ * @property string $end_date
  */
-class MailSetting extends Model
+class ParameterVAT extends Model
 {
-
     use HasFactory;
 
-    public $table = 'mail_settings';
+    public $table = 'parameter_v_a_ts';
 
 
 
     public $fillable = [
         'name',
-        'type',
-        'sub_type',
-        'email',
-        'password',
-        'status'
+        'value',
+        'start_date',
+        'end_date'
     ];
 
     /**
@@ -42,11 +38,9 @@ class MailSetting extends Model
      */
     protected $casts = [
         'name' => 'string',
-        'type' => 'string',
-        'sub_type' => 'string',
-        'email' => 'string',
-        'password' => 'string',
-        'status' => 'boolean'
+        'value' => 'integer',
+        'start_date' => 'date',
+        'end_date' => 'date'
     ];
 
     /**

@@ -419,9 +419,10 @@ class SalesOrderController extends AppBaseController
         $inventoryID = $inventory->InventoryID;
         $inventoryName = $inventory->Descr;
         $time = Carbon::now();
-        $now = $time->toDateTimeString();
-
-        $salesPrice = SalesPrice::where('CustPriceClassID', $priceClass)->where('InventoryID', $inventoryID)->where('EffectiveDate', "<=", $now)->where('ExpirationDate', NULL)->get()->first();
+        $now = $time->toDateString();
+        // dd($inventoryID);
+        $salesPrice = SalesPrice::whereRaw("CustPriceClassID = '$priceClass' AND InventoryID = '$inventoryID' AND EffectiveDate <= CAST( GETDATE() AS Date ) AND (ExpirationDate IS NULL OR ExpirationDate >= CAST( GETDATE() AS Date ))")->get()->first();
+        // dd($salesPrice);
         $data['unit_price'] = number_format($salesPrice->SalesPrice,2,',','.');
         $data['uom'] = $salesPrice->UOM;
         $data['inventory_name'] = $inventoryName;
@@ -456,9 +457,9 @@ class SalesOrderController extends AppBaseController
 
         if($parameterNow >= $parameter->parameter_hour){
 
-            $mailTo = MailSetting::where('type', 'Receiver')->where('sub_type', 'To')->where('status', 1)->pluck('email');
-            $mailCC = MailSetting::where('type', 'Receiver')->where('sub_type', 'CC')->where('status', 1)->pluck('email');
-            $mailBCC = MailSetting::where('type', 'Receiver')->where('sub_type', 'BCC')->where('status', 1)->pluck('email');
+            $mailTo = MailSetting::where('name', 'Overtime Order')->where('type', 'Receiver')->where('sub_type', 'To')->where('status', 1)->pluck('email');
+            $mailCC = MailSetting::where('name', 'Overtime Order')->where('type', 'Receiver')->where('sub_type', 'CC')->where('status', 1)->pluck('email');
+            $mailBCC = MailSetting::where('name', 'Overtime Order')->where('type', 'Receiver')->where('sub_type', 'BCC')->where('status', 1)->pluck('email');
             
 
             $email = $mailTo;

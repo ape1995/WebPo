@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\MailSettingController;
 use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\SalesOrderDetailController;
 use App\Http\Controllers\CartController;
@@ -35,6 +37,8 @@ Auth::routes(['verify' => true]);
 Route::group(['middleware' => ['auth']], function(){
     Route::resource('users', 'App\Http\Controllers\UserController');
     Route::resource('roles', 'App\Http\Controllers\RoleController');
+    Route::get('roles-inactive/{code}',[RoleController::class,'inactive'])->name('roles.inactive');
+    Route::get('roles-active/{code}',[RoleController::class,'active'])->name('roles.active');
     Route::resource('parameters', App\Http\Controllers\ParameterController::class);
     Route::get('dataTableUser',[UserController::class,'dataTable'])->name('users.data');
     Route::get('users-inactive/{code}',[UserController::class,'inactive'])->name('users.inactive');
@@ -65,6 +69,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('reportCustomer', [ReportController::class, 'reportCustomerIndex'])->name('reportSalesOrder.reportCustomerIndex');
     Route::post('reportCustomer', [ReportController::class, 'reportCustomerView'])->name('reportSalesOrder.reportCustomerView');
     Route::resource('mailSettings', App\Http\Controllers\MailSettingController::class);
+    Route::get('mailSettings-active/{code}',[MailSettingController::class,'active'])->name('mailSettings.active');
 });
 
 
@@ -72,3 +77,6 @@ Route::get('/send_notification', [SendEmailController::class, 'send']);
 
 
 
+
+
+Route::resource('parameterVATs', App\Http\Controllers\ParameterVATController::class);

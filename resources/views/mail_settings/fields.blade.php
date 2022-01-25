@@ -1,7 +1,13 @@
 <!-- Type Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('type', trans('mail.type')) !!}
-    {!! Form::select('type', ['' => '- Choose -','Receiver' => 'Receiver','Sender' => 'Sender'], null, ['class' => 'form-control']) !!}
+    {!! Form::select('type', ['' => '- Choose -','Receiver' => 'Receiver'], null, ['class' => 'form-control']) !!}
+</div>
+
+<!-- Name Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('name', trans('parameter.name')) !!}
+    {!! Form::select('name', ['' => '- Choose -','Daily Notification' => 'Daily Notification', 'Overtime Order' => 'Overtime Order'], null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Sub Type Field -->
@@ -13,7 +19,7 @@
 <!-- Email Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('email', trans('mail.email')) !!}
-    {!! Form::email('email', null, ['class' => 'form-control']) !!}
+    {!! Form::email('email', null, ['class' => 'form-control', 'reaquired' => true]) !!}
 </div>
 
 <!-- Password Field -->
@@ -46,12 +52,14 @@
                         $('#sub_type').append("<option value='To'>To</option>");
                         $('#sub_type').append("<option value='CC'>CC</option>");
                         $('#sub_type').append("<option value='BCC'>BCC</option>");
+                        $("#password").attr('required',false);
                     });
                 } else {
                     console.log(typevalue);
                     $(function () {
                         $('#sub_type').empty();
                         $('#sub_type').append("<option value=''>-</option>");
+                        $("#password").attr('required',true);
                     });
                 }
             });

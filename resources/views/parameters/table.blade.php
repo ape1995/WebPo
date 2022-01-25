@@ -23,19 +23,19 @@
                     <div class='btn-group'>
                         @can('create parameter')
                         <a href="{{ route('parameters.show', [$parameter->id]) }}"
-                           class='btn btn-default btn-xs'>
-                            <i class="far fa-eye"></i>
+                           class='btn btn-outline-dark btn-xs'>
+                            <i class="far fa-eye" title="View"></i>
                         </a>
                         @endcan
                         @can('edit parameter')
                         <a href="{{ route('parameters.edit', [$parameter->id]) }}"
-                           class='btn btn-default btn-xs'>
-                            <i class="far fa-edit"></i>
+                           class='btn btn-outline-dark btn-xs'>
+                            <i class="far fa-edit" title="Edit"></i>
                         </a>
                         @endcan
-                        @can('delete parameter')
-                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
-                        @endcan
+                        {{-- @can('delete parameter')
+                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'title' => 'Delete', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                        @endcan --}}
                     </div>
                     {!! Form::close() !!}
                 </td>

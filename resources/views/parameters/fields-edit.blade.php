@@ -32,6 +32,22 @@
     {!! Form::time('parameter_hour', null, ['class' => 'form-control','id'=>'parameter_hour']) !!}
 </div>
 
+@push('page_scripts')
+    <script type="text/javascript">
+        $(function(){
+            $('#parameter_hour').timepicker({
+                timeFormat: 'HH:mm',
+                interval: 30,
+                startTime: '00:00 AM',
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true,
+                showInputs: false,
+            })
+        });
+    </script>
+@endpush
+
 {{-- <!-- Parameter Number Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('parameter_number', 'Parameter Number:') !!}

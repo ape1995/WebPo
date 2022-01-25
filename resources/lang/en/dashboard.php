@@ -5,6 +5,7 @@ return [
     'title' => 'Dashboard',
     'change_password' => 'Change Password',
     'language' => 'Language',
+    'btn_order_here' => 'Order Here',
     'logout' => 'Logout',
     'question' => 'Out of stock?',
     'draft_order' => 'DRAFT ORDER',

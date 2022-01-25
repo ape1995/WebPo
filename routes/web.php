@@ -77,3 +77,6 @@ Route::get('/send_notification', [SendEmailController::class, 'send']);
 
 
 
+
+
+Route::resource('parameterVATs', App\Http\Controllers\ParameterVATController::class);

@@ -77,7 +77,7 @@ class SalesOrderController extends AppBaseController
 
             return DataTables::of($datas)
                 ->addColumn('customer', function (SalesOrder $salesOrder) {
-                    return $salesOrder->customer->AcctName.' - '.$salesOrder->customer->AcctCD;
+                    return $salesOrder->customer->AcctName;
                 })
                 ->addColumn('order_type', function (SalesOrder $salesOrder) {
                     return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
@@ -88,12 +88,12 @@ class SalesOrderController extends AppBaseController
                 ->editColumn('order_date', function (SalesOrder $salesOrder) 
                 {
                     //change over here
-                    return date('d F Y', strtotime($salesOrder->order_date) );
+                    return date('d M Y', strtotime($salesOrder->order_date) );
                 })
                 ->editColumn('delivery_date', function (SalesOrder $salesOrder) 
                 {
                     //change over here
-                    return date('d F Y', strtotime($salesOrder->delivery_date) );
+                    return date('d M Y', strtotime($salesOrder->delivery_date) );
                 })
                 ->editColumn('order_amount', function (SalesOrder $salesOrder) 
                 {

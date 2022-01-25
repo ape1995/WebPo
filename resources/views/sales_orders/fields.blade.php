@@ -41,7 +41,7 @@
                 <div class="col-8">
                     <select name="customer_id" id="customer_id" class="form-control select2js" required>
                         @foreach ($customers as $customer)
-                            <option value="{{ $customer->BAccountID }}">{{ $customer->AcctName }} - {{ $customer->AcctCD }}</option>
+                            <option value="{{ $customer->BAccountID }}">{{ $customer->AcctName }}</option>
                         @endforeach
                     </select>
                 </div>

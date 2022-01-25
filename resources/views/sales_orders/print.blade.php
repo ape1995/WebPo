@@ -27,6 +27,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     .money{
       text-align: right;
     }
+    table{
+      font-size: 11px !important;
+    }
     .carousel-inner img {
       width: 100%;
       height: 100%;
@@ -46,51 +49,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <table class="table table-borderless table-sm">
                 <tr>
                     <td>{!! Form::label('order_nbr', 'Order Nbr') !!}</td>
-                    <td>: {!! Form::label('order_nbr', $salesOrder->order_nbr) !!}</td>
+                    <td class="font-weight-bold">{!! Form::label('order_nbr', $salesOrder->order_nbr) !!}</td>
                     <td>{!! Form::label('order_qty', 'Order Qty') !!}</td>
-                    <td>: {!! Form::label('order_qty', $salesOrder->order_qty) !!}</td>
+                    <td class="font-weight-bold text-right">{!! Form::label('order_qty', $salesOrder->order_qty) !!}</td>
                 </tr>
                 <tr>
                     <td>{!! Form::label('customer_id', 'Customer') !!}</td>
-                    <td>: {!! Form::label('customer_id', $salesOrder->customer->AcctName .'-'. $salesOrder->customer->AcctCD) !!}</td>
+                    <td class="font-weight-bold">{!! Form::label('customer_id', $salesOrder->customer->AcctName) !!}</td>
                     <td>{!! Form::label('order_amount', 'Order Amount') !!}</td>
-                    <td>: {!! Form::label('order_amount', number_format($salesOrder->order_amount, 2, ',', '.')) !!}</td>
+                    <td class="font-weight-bold text-right">{!! Form::label('order_amount', number_format($salesOrder->order_amount, 2, ',', '.')) !!}</td>
                 </tr>
                 <tr>
                     <td>{!! Form::label('order_date', 'Order Date') !!}</td>
-                    <td>: {!! Form::label('order_date', $salesOrder->order_date->format('d F Y')) !!}</td>
-                    <td>{!! Form::label('tax', 'Tax:') !!}</td>
-                    <td>: {!! Form::label('tax', number_format($salesOrder->tax, 2, ',', '.')) !!}</td>
+                    <td class="font-weight-bold">{!! Form::label('order_date', $salesOrder->order_date->format('d F Y')) !!}</td>
+                    <td>{!! Form::label('tax', 'Tax') !!}</td>
+                    <td class="font-weight-bold text-right">{!! Form::label('tax', number_format($salesOrder->tax, 2, ',', '.')) !!}</td>
                 </tr>
                 <tr>
                     <td>{!! Form::label('delivery_date', 'Delivery Date') !!}</td>
-                    <td>: {!! Form::label('delivery_date', $salesOrder->delivery_date->format('d F Y')) !!}</td>
-                    <td>{!! Form::label('order_total', 'Order Total:') !!}</td>
-                    <td>: {!! Form::label('order_total', number_format($salesOrder->order_total, 2, ',', '.')) !!}</td>
+                    <td class="font-weight-bold">{!! Form::label('delivery_date', $salesOrder->delivery_date->format('d F Y')) !!}</td>
+                    <td>{!! Form::label('order_total', 'Order Total') !!}</td>
+                    <td class="font-weight-bold text-right">{!! Form::label('order_total', number_format($salesOrder->order_total, 2, ',', '.')) !!}</td>
                 </tr>
                 <tr>
                     <td>{!! Form::label('description', 'Description') !!}</td>
-                    <td>: {!! Form::label('description', $salesOrder->description) !!}</td>
+                    <td class="font-weight-bold">{!! Form::label('description', $salesOrder->description) !!}</td>
                     <td>{!! Form::label('order_type', 'Order Type') !!}</td>
-                    <td>: {!! Form::label('description', $salesOrder->order_type == 'R' ? "Regular" : "Direct Selling") !!}</td>
+                    <td class="font-weight-bold">{!! Form::label('description', $salesOrder->order_type == 'R' ? "Regular" : "Direct Selling") !!}</td>
                 </tr>
             </table>
             <hr>
             <table class="table table-sm" id="salesOrderDetails-table">
                 <thead>
                 <tr>
-                    <th>Inventory Id</th>
                     <th>Inventory Name</th>
-                    <th>Qty</th>
+                    <th class="money">Qty</th>
                     <th>Uom</th>
-                    <th>Unit Price</th>
-                    <th>Amount</th>
+                    <th class="money">Unit Price</th>
+                    <th class="money">Amount</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($salesOrderDetails as $salesOrderDetail)
                     <tr>
-                        <td>{{ $salesOrderDetail->inventory_id }}</td>
                         <td>{{ $salesOrderDetail->inventory_name }}</td>
                         <td class="money">{{ $salesOrderDetail->qty }}</td>
                         <td>{{ $salesOrderDetail->uom }}</td>

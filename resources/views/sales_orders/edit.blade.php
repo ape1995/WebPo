@@ -53,7 +53,7 @@
                                                 <select name="inventory_id" id="inventory_id" class="form-control select2js">
                                                     <option value="">Please Choose</option>
                                                     @foreach ($products as $product)
-                                                        <option value="{{ $product->InventoryCD }}">{{ $product->Descr }} - {{ $product->InventoryCD }}</option>
+                                                        <option value="{{ $product->InventoryCD }}">{{ $product->Descr }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

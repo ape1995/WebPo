@@ -82,7 +82,7 @@
                                                     {!! Form::label('qty', trans('sales_order.qty')) !!}
                                                 </div>
                                                 <div class="col-3">
-                                                    <input pattern="\d*" maxlength="4" type="number" class="form-control" name="qty" id="qty" min="1" step="1" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                                    <input pattern="\d*" type="number" class="form-control" name="qty" id="qty" min="1" max="9999" step="1" onforminput="if(this.value.length==4) return false;" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                                                 </div>
                                             </div>
                                         </div>

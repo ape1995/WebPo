@@ -19,17 +19,20 @@ class SendEmailController extends Controller
         
         $salesOrder = SalesOrder::where('status', 'R')->get();
         $totalUnprocess = $salesOrder->count('id');
-
-        $email = $mailTo;
-        $cc = $mailCC;
-        $bcc = $mailBCC;
-        $data = [
-            'title' => 'Ada order pending! Yuk lihat',
-            'pending' => $totalUnprocess,
-            'url' => 'https://yamazakimyroti.co.id',
-        ];
-        Mail::to($email)->cc($cc)->bcc($bcc)->send(new SendMail($data));
-        return 'Berhasil mengirim email!';
+        if($totalUnprocess == 0){
+            return 'Email tidak dikirim karena pending order kosong!';
+        } else {
+            $email = $mailTo;
+            $cc = $mailCC;
+            $bcc = $mailBCC;
+            $data = [
+                'title' => 'Ada order pending! Yuk lihat',
+                'pending' => $totalUnprocess,
+                'url' => 'https://yamazakimyroti.co.id',
+            ];
+            Mail::to($email)->cc($cc)->bcc($bcc)->send(new SendMail($data));
+            return 'Berhasil mengirim email!';
+        }
 
         // return view('email.email_1', compact('data'));
     }

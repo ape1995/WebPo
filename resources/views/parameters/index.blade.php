@@ -7,14 +7,14 @@
                 <div class="col-sm-6">
                     <h1>{{ trans('parameter.title') }}</h1>
                 </div>
-                @can('create parameter')
+                {{-- @can('create parameter')
                 <div class="col-sm-6">
                     <a class="btn btn-primary float-right"
                        href="{{ route('parameters.create') }}">
                         {{ trans('parameter.create') }}
                     </a>
                 </div>
-                @endcan
+                @endcan --}}
             </div>
         </div>
     </section>

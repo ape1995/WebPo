@@ -33,11 +33,11 @@ class MailConfigServiceProvider extends ServiceProvider
             if ($mail) //checking if table is not empty
             {
                 $config = array(
-                    'driver'     => env('MAIL_MAILER'),
-                    'host'       => env('MAIL_HOST'),
-                    'port'       => env('MAIL_PORT'),
-                    'from'       => array('address' => $mail[0]->email, 'name' => env('MAIL_FROM_NAME')),
-                    'encryption' => env('MAIL_ENCRYPTION'),
+                    'driver'     => 'smtp',
+                    'host'       => 'mail.yamazakimyroti.co.id',
+                    'port'       => '587',
+                    'from'       => array('address' => $mail[0]->email, 'name' => 'Yamazaki Indonesia'),
+                    'encryption' => 'tls',
                     'username'   => $mail[0]->email,
                     'password'   => $mail[0]->password,
                     'sendmail'   => '/usr/sbin/sendmail -bs',

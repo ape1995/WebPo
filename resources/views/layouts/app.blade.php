@@ -34,6 +34,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   {{-- Select2 --}}
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" />
   <link rel="stylesheet" type="text/css" href="https://select2.github.io/select2-bootstrap-theme/css/select2-bootstrap.css">
+  {{-- Timepicker --}}
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
   @yield('css')
   <style>
     label{
@@ -108,6 +110,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
 {{-- Masking --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+{{-- time picker --}}
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>  
 
 <script>
     $.fn.select2.defaults.set("theme", "bootstrap");

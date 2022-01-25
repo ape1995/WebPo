@@ -5,6 +5,7 @@ return [
     'title' => 'Menu Utama',
     'change_password' => 'Ubah Sandi',
     'language' => 'Bahasa',
+    'btn_order_here' => 'Pesan Disini',
     'logout' => 'Keluar',
     'question' => 'Stok Hampir Habis?',
     'draft_order' => 'DRAFT PESANAN',

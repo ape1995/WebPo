@@ -17,6 +17,7 @@ class MailSettingRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [
+        'name',
         'type',
         'sub_type',
         'email',

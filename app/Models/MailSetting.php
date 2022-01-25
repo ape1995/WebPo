@@ -27,6 +27,7 @@ class MailSetting extends Model
 
 
     public $fillable = [
+        'name',
         'type',
         'sub_type',
         'email',
@@ -40,6 +41,7 @@ class MailSetting extends Model
      * @var array
      */
     protected $casts = [
+        'name' => 'string',
         'type' => 'string',
         'sub_type' => 'string',
         'email' => 'string',

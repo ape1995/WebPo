@@ -81,11 +81,11 @@ class UserController extends Controller
 
         if(\Auth::user()->role == 'Customers'){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
-            $roles = Role::where('name', 'like', '%Customers%')->get();
+            $roles = Role::where('name', 'like', '%Customers%')->where('status', true)->get();
         } else {
             $customers =  Customer::where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
             // $customers =  Customer::where('Type', 'CU')->get();
-            $roles = Role::all();
+            $roles = Role::where('status', true)->get();
         }
 
         // dd($customers);
@@ -158,10 +158,10 @@ class UserController extends Controller
         
         if(\Auth::user()->role == 'Customers'){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
-            $roles = Role::where('name', 'Customers')->get();
+            $roles = Role::where('name', 'Customers')->where('status', true)->get();
         } else {
             $customers =  Customer::where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
-            $roles = Role::all();
+            $roles = Role::where('status', true)->get();
         }
 
         if (empty($users)) {
@@ -255,7 +255,7 @@ class UserController extends Controller
 
     public function active($id)
     {
-        if (!\Auth::user()->can('inactive users')) {
+        if (!\Auth::user()->can('active users')) {
             abort(403);
         }
 

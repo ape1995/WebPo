@@ -5,7 +5,7 @@
     </div>
     <div class="col-md-6">
         {!! Form::label('email', trans('user.table_email')) !!}
-        {!! Form::text('email', null, ['class' => 'form-control', 'required' => true]) !!}
+        {!! Form::email('email', null, ['class' => 'form-control', 'required' => true]) !!}
     </div>
     <div class="col-md-6">
         {!! Form::label('password', trans('user.password')) !!}

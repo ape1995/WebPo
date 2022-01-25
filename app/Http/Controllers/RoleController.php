@@ -8,6 +8,7 @@ use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\User;
 use Flash;
 use Response;
 use Artisan;
@@ -183,6 +184,50 @@ class RoleController extends Controller
         $role->delete();
 
         return redirect(route('roles.index'))->with('success', 'Role deleted successfully.');
+    }
+
+    public function inactive($id)
+    {
+        if (!\Auth::user()->can('inactive group permissions')) {
+            abort(403);
+        }
+
+        $role = Role::find($id);
+
+        if (empty($role)) {
+            return redirect(route('roles.index'))->with('error', 'Role not found');
+        }
+
+        $cekUser = User::where('role', $role->name)->get()->first();
+
+        if (!empty($cekUser)) {
+            return redirect(route('roles.index'))->with('error', 'Please delete or change the user which has this role');
+        }
+
+        $role = Role::find($id);
+        $role['status'] = false;
+        $role->save();
+
+        return redirect(route('roles.index'))->with('success', 'Group Permission inactived successfully.');
+    }
+
+    public function active($id)
+    {
+        if (!\Auth::user()->can('active group permissions')) {
+            abort(403);
+        }
+
+        $role = Role::find($id);
+
+        if (empty($role)) {
+            return redirect(route('roles.index'))->with('error', 'Role not found');
+        }
+
+        $role = Role::find($id);
+        $role['status'] = true;
+        $role->save();
+
+        return redirect(route('roles.index'))->with('success', 'Role actived successfully.');
     }
 
 }

@@ -27,10 +27,9 @@ class MailConfigServiceProvider extends ServiceProvider
     public function register()
     {
         if (\Schema::hasTable('mail_settings')) {
-            // dd('test');
-            // $mail = MailSetting::where('type', 'Sender')->where('status', 1)->get()->first();
+
             $mail = DB::connection('pgsql')->select('SELECT * FROM mail_settings where type = '."'Sender'".' AND status = true');
-            // dd($mail[0]);
+            
             if ($mail) //checking if table is not empty
             {
                 $config = array(

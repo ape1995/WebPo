@@ -1,5 +1,11 @@
 <!-- Type Field -->
 <div class="col-sm-12">
+    {!! Form::label('name', trans('parameter.name')) !!}
+    <p>{{ $mailSetting->name }}</p>
+</div>
+
+<!-- Type Field -->
+<div class="col-sm-12">
     {!! Form::label('type', trans('mail.type')) !!}
     <p>{{ $mailSetting->type }}</p>
 </div>

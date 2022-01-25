@@ -42,7 +42,7 @@
                               @if (Auth::user()->role == 'Customers' || Auth::user()->role == 'Staff Customers')
                               <div class="col-md-3">
                                 <h5>{{ trans('dashboard.question')}}</h5>
-                                <a href="{{ route('createOrder') }}" class="btn btn-outline-info btn-block">Order Here</a>
+                                <a href="{{ route('createOrder') }}" class="btn btn-outline-info btn-block">{{ trans('dashboard.btn_order_here') }}</a>
                               </div>
                               @endif
                             </div>
@@ -114,9 +114,9 @@
                                     <div class="col-md-12">
                                       <div class="card">
                                         <div class="card-body">
-                                          <h3 class="text-danger">Your Target is IDR {{ number_format($target,0,',','.') }}</h3>
+                                          <h3 class="text-danger">Your Target is IDR {{ number_format($target,2,',','.') }}</h3>
                                           <div class="progress">
-                                            <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $sumOrderAmount }}" aria-valuemin="0" aria-valuemax="{{ $target }}" style="width: {{ $percentase.'%' }};"><strong>IDR {{ number_format($sumOrderAmount,0,',','.') }}<span class="sr-only">20% Complete</span></div>
+                                            <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $sumOrderAmount }}" aria-valuemin="0" aria-valuemax="{{ $target }}" style="width: {{ $percentase.'%' }};"><strong>IDR {{ number_format($sumOrderAmount,2,',','.') }}<span class="sr-only">20% Complete</span></div>
                                           </div>
                                           @if ($sumOrderAmount >= $target)
                                             <h5 class="text-danger">Congratulations, you met your target this month</h5>

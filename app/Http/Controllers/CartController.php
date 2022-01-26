@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCartRequest;
 use App\Repositories\CartRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Cart;
+use App\Models\ParameterVAT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Flash;
@@ -198,15 +199,14 @@ class CartController extends AppBaseController
         return response()->json(['success'=>'Product deleted successfully.']);
     }
 
-    public function getAllCounter($customerCode){
+    public function getAllCounter($customerCode, $date){
 
         $getCounter = Cart::where('customer_id', $customerCode)->get();
-
-        // dd($getCounter->sum('qty'));
-            
+        $parameterVAT = ParameterVAT::whereRaw("start_date <= '$date' AND (end_date is null OR end_date >= '$date') ")->get()->first();
+        // dd($parameterVAT);
         $data['order_qty'] = $getCounter->sum('qty');
         $data['order_amount'] = $getCounter->sum('amount');
-        $tax = (10/100) * $data['order_amount'];
+        $tax = ($parameterVAT->value/100) * $data['order_amount'];
         $total = round($data['order_amount'] + $tax);
         $data['order_amount'] = number_format($data['order_amount'],2,',','.');
         $data['tax'] = number_format($tax,2,',','.');

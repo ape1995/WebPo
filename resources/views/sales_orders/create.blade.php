@@ -20,9 +20,9 @@
                 <div class="row mb-3">
                     @include('sales_orders.fields')
                 </div>
-                <a class="btn btn-primary text-light mb-2" type="button"  data-toggle="modal" data-target="#modalProduct">
+                <button class="btn btn-primary text-light mb-2" id="add_product" type="button"  data-toggle="modal" data-target="#modalProduct">
                     {{ trans('sales_order.add_product') }}
-                </a>
+                </button>
 
                 @include('carts.table')
 
@@ -82,7 +82,7 @@
                                                     {!! Form::label('qty', trans('sales_order.qty')) !!}
                                                 </div>
                                                 <div class="col-3">
-                                                    <input pattern="\d*" type="number" class="form-control" name="qty" id="qty" min="1" max="9999" step="1" onforminput="if(this.value.length==4) return false;" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                                    <input pattern="\d*" type="number" class="form-control" name="qty" id="qty" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                                                 </div>
                                             </div>
                                         </div>
@@ -131,7 +131,7 @@
                      
                                     <label class="col-sm-4 control-label">{{ trans('sales_order.qty') }}</label>
                                     <div class="col-sm-12">
-                                        <input type="number" class="form-control" name="quantity" id="quantity" min="1" step="1" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                        <input pattern="\d*" type="number" class="form-control" name="quantity" id="quantity" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                                     </div>
 
                                     <div class="form-group" @can('hide price sales order') style=" visibility: collapse;" @endcan>
@@ -180,6 +180,8 @@
             var inventory_name =  $("#inventory_name");
             var uom =  $("#uom");
             var qty =  $("#qty");
+            var delivery_date =  $("#delivery_date");
+            var add_product =  $("#add_product");
             var unit_price =  $("#unit_price");
             var amount =  $("#amount");
             var customer_id =  $("#customer_id");
@@ -188,9 +190,20 @@
             var tax =  $("#tax");
             var order_total =  $("#order_total");
             var save =  $("#saveBtn");
-            save.attr("disabled", true);
+            save.prop("disabled", true);
+            add_product.prop("disabled", true);
+            $("#savePageButton").prop("disabled", true);
 
             getAllCounter();
+
+            delivery_date.on('change', function() {
+                if(delivery_date.val() == null || delivery_date.val() == ''){
+                    add_product.prop("disabled", true);
+                } else {
+                    add_product.prop("disabled", false);
+                }
+                getAllCounter();
+            });
 
             inventory_id.on('change', function() {
                 $('#data_show').hide();
@@ -241,7 +254,7 @@
             $('.money').mask("#,##0.00", {reverse: true});
 
             function getAllCounter(){
-                var url = "{{ url('api/getAllCounter') }}" + '/' + customer_id.val();
+                var url = "{{ url('api/getAllCounter') }}" + '/' + customer_id.val() + '/' + delivery_date.val();
                 // send data to your endpoint
                 $.ajax({
                     url: url,
@@ -255,7 +268,7 @@
                         order_total.val(response['order_total']);
 
                         // disable save if qty = 0
-                        if(response['order_qty'] == 0){
+                        if(response['order_qty'] == 0 || response['order_qty'] == null || response['order_qty'] == ''){
                             $("#savePageButton").attr("disabled", true);
                         } else {
                             $("#savePageButton").attr("disabled", false);
@@ -353,7 +366,9 @@
             $('#saveBtn').click(function (e) {
                 e.preventDefault();
                 // $(this).html('Save');
-            
+                if($('#qty').val() > 9999){
+                    return alert('maksimum kuantitas adalah 9999');
+                }
                 $.ajax({
                     data: {
                         inventory_id:$('#inventory_id').val(),
@@ -387,7 +402,9 @@
             $('#updateBtn').click(function (e) {
                 e.preventDefault();
                 // $(this).html('Save');
-            
+                if($('#quantity').val() > 9999){
+                    return alert('maksimum kuantitas adalah 9999');
+                }
                 $.ajax({
                     data: {
                         qty:$('#quantity').val(),

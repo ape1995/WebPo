@@ -54,7 +54,7 @@ class SalesOrderController extends AppBaseController
         }
 
         if(\Auth::user()->role == 'Customers'  || \Auth::user()->role == 'Staff Customers'){
-            $salesOrders = SalesOrder::where('customer_id', \Auth::user()->customer_id)->latest()->get();
+            $salesOrders = SalesOrder::where('customer_id', \Auth::user()->customer_id)->latest();
         } else {
             $salesOrders = SalesOrder::latest()->get();
         }
@@ -65,14 +65,34 @@ class SalesOrderController extends AppBaseController
             ->with('salesOrders', $salesOrders);
     }
 
+    public function filter(Request $request)
+    {
+        if (!\Auth::user()->can('list sales order')) {
+            abort(403);
+        }
+
+        // dd($request);
+
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
+            $salesOrders = SalesOrder::where('customer_id', \Auth::user()->customer_id)->filter()->get();
+        } else {
+            $salesOrders = SalesOrder::filter()->get();
+        }
+
+        // dd($salesOrders);
+
+        return view('sales_orders.filter')
+            ->with('salesOrders', $salesOrders);
+    }
+
     public function dataTable(Request $request)
     {
         if ($request->ajax()) {
 
             if(\Auth::user()->role == 'Customers'){
-                $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->latest()->get();
+                $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->latest();
             } else {
-                $datas = SalesOrder::query();
+                $datas = SalesOrder::query()->whereNotIn('status', ['S'])->latest();
             }
 
             return DataTables::of($datas)
@@ -465,11 +485,12 @@ class SalesOrderController extends AppBaseController
             $email = $mailTo;
             $cc = $mailCC;
             $bcc = $mailBCC;
+            $url = url("/salesOrders/$id");
 
             $data = [
                 'title' => 'PENTING! Order masuk melewati jam batas',
                 'name' => $salesOrder->customer->AcctName,
-                'url' => 'https://yamazakimyroti.co.id',
+                'url' => $url,
             ];
 
             Mail::to($email)->cc($cc)->bcc($bcc)->send(new SendMailSubmit($data));

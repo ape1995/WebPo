@@ -41,9 +41,9 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             if(\Auth::user()->role == 'Customers'){
-                $datas = User::where('customer_id', \Auth::user()->customer_id)->get();
+                $datas = User::where('customer_id', \Auth::user()->customer_id)->latest();
             } else {
-                $datas = User::all();
+                $datas = User::query();
             }
             return DataTables::of($datas)
                 ->addColumn('customer', function (User $user) {

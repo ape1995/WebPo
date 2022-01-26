@@ -47,22 +47,22 @@
                 {{-- {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!} --}}
                 @if ($salesOrder->status == 'S')
                     @can('edit sales order')
-                        <a href="{{ route('salesOrders.edit', [$salesOrder->id]) }}" class="btn btn-success" onclick="return confirm('{{ trans('sales_order.question_edit') }}')">{{ trans('sales_order.btn_edit') }}</a>
+                        <a href="{{ route('salesOrders.edit', [$salesOrder->id]) }}" class="btn btn-success p-1" onclick="return confirm('{{ trans('sales_order.question_edit') }}')">{{ trans('sales_order.btn_edit') }}</a>
                     @endcan
                     @can('cancel sales order')
-                        <a href="{{ route('salesOrders.cancelOrder', [$salesOrder->id]) }}" class="btn btn-danger" onclick="return confirm('{{ trans('sales_order.question_cancel') }}')">{{ trans('sales_order.btn_cancel') }}</a>
+                        <a href="{{ route('salesOrders.cancelOrder', [$salesOrder->id]) }}" class="btn btn-danger p-1" onclick="return confirm('{{ trans('sales_order.question_cancel') }}')">{{ trans('sales_order.btn_cancel') }}</a>
                     @endcan
                     @can('submit sales order')
                         @if ($parameterNow >= $parameter->parameter_hour)
-                            <a href="{{ route('salesOrders.submitOrder', [$salesOrder->id]) }}" class="btn btn-info" onclick="return confirm('{{ trans('sales_order.question_submit_2') }}')">{{ trans('sales_order.btn_submit_order') }}</a>
+                            <a href="{{ route('salesOrders.submitOrder', [$salesOrder->id]) }}" class="btn btn-info p-1" onclick="return confirm('{{ trans('sales_order.question_submit_2') }}')">{{ trans('sales_order.btn_submit_order') }}</a>
                         @else
-                            <a href="{{ route('salesOrders.submitOrder', [$salesOrder->id]) }}" class="btn btn-info" onclick="return confirm('{{ trans('sales_order.question_submit') }}')">{{ trans('sales_order.btn_submit_order') }}</a>
+                            <a href="{{ route('salesOrders.submitOrder', [$salesOrder->id]) }}" class="btn btn-info p-1" onclick="return confirm('{{ trans('sales_order.question_submit') }}')">{{ trans('sales_order.btn_submit_order') }}</a>
                         @endif
                     @endcan
                 @endif
                 @if ($salesOrder->status == 'R')
                     @can('process sales order')
-                        <a href="{{ route('salesOrders.processOrder', [$salesOrder->id]) }}" class="btn btn-primary"  onclick="return confirm('{{ trans('sales_order.question_process') }}')">{{ trans('sales_order.btn_process_order') }}</a>
+                        <a href="{{ route('salesOrders.processOrder', [$salesOrder->id]) }}" class="btn btn-primary p-1"  onclick="return confirm('{{ trans('sales_order.question_process') }}')">{{ trans('sales_order.btn_process_order') }}</a>
                     @endcan
                     @can('reject sales order')
                         <a type="button" class="btn btn-danger text-light" data-toggle="modal" data-target="#modalReject">{{ trans('sales_order.btn_reject_order') }}</a>

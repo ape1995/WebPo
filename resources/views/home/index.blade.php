@@ -144,6 +144,13 @@
                                       </div>
                                     </div>
                                   </div>
+                                  {{-- <div class="row">
+                                    <div class="col-md-12">
+                                      <figure class="highcharts-figure">
+                                          <div id="container"></div>
+                                      </figure>
+                                    </div>
+                                  </div> --}}
                                 @endif
                               </div>
                             </div>
@@ -159,9 +166,50 @@
 
 
 @push('page_scripts')
+  {{-- <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script> --}}
   <script>
     $('.carousel').carousel({
       interval: 4000
-    })
+    });
+
+    // Highcharts.chart('container', {
+    //     chart: {
+    //         type: 'pie',
+    //         options3d: {
+    //             enabled: true,
+    //             alpha: 45
+    //         }
+    //     },
+    //     title: {
+    //         text: 'Most Popular Bread of the month'
+    //     },
+    //     subtitle: {
+    //         text: 'Jan 2022'
+    //     },
+    //     plotOptions: {
+    //         pie: {
+    //             innerSize: 100,
+    //             depth: 45
+    //         }
+    //     },
+    //     series: [{
+    //         name: 'Delivered amount',
+    //         data: [
+    //             ['Bananas', 8],
+    //             ['Kiwi', 3],
+    //             ['Mixed nuts', 1],
+    //             ['Oranges', 6],
+    //             ['Apples', 8],
+    //             ['Pears', 4],
+    //             ['Clementines', 4],
+    //             ['Reddish (bag)', 1],
+    //             ['Grapes (bunch)', 1]
+    //         ]
+    //     }]
+    // });
   </script>
 @endpush  

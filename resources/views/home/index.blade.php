@@ -88,34 +88,40 @@
                                 @if (Auth::user()->role == 'Customers' || Auth::user()->role == 'Staff Customers')
                                   <div class="row">
                                     <div class="col-md-4">
-                                      <div class="card">
-                                        <div class="card-body bg-secondary text-light">
-                                          {{ trans('dashboard.draft_order')}}
-                                          <h1 class="text-right">{{ $draftOrder->count() }}</h1>
+                                      <a href="{{ url('/salesOrders-Filter?status=S&sort=created_at,desc') }}">
+                                        <div class="card">
+                                          <div class="card-body bg-secondary text-light">
+                                            {{ trans('dashboard.draft_order')}}
+                                            <h1 class="text-right">{{ $draftOrder->count() }}</h1>
+                                          </div>
                                         </div>
-                                      </div>
+                                      </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <div class="card">
-                                        <div class="card-body bg-info">
-                                          {{ trans('dashboard.submitted_order')}}
-                                          <h1 class="text-right">{{ $submittedOrder->count() }}</h1>
+                                      <a href="{{ url('/salesOrders-Filter?status=R&sort=created_at,desc') }}">
+                                        <div class="card">
+                                          <div class="card-body bg-info">
+                                            {{ trans('dashboard.submitted_order')}}
+                                            <h1 class="text-right">{{ $submittedOrder->count() }}</h1>
+                                          </div>
                                         </div>
-                                      </div>
+                                      </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <div class="card">
-                                        <div class="card-body bg-success">
-                                          {{ trans('dashboard.processed_order')}}
-                                          <h1 class="text-right">{{ $processedOrder->count() }}</h1>
+                                      <a href="{{ url('/salesOrders-Filter?status=P&sort=created_at,desc') }}">
+                                        <div class="card">
+                                          <div class="card-body bg-success">
+                                            {{ trans('dashboard.processed_order')}}
+                                            <h1 class="text-right">{{ $processedOrder->count() }}</h1>
+                                          </div>
                                         </div>
-                                      </div>
+                                      </a>
                                     </div>
                                     <div class="col-md-12">
                                       <div class="card">
                                         <div class="card-body">
                                           <h3 class="text-danger">Your Target is IDR {{ number_format($target,2,',','.') }}</h3>
-                                          <div class="progress">
+                                          <div class="progress m-3">
                                             <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $sumOrderAmount }}" aria-valuemin="0" aria-valuemax="{{ $target }}" style="width: {{ $percentase.'%' }};"><strong>IDR {{ number_format($sumOrderAmount,2,',','.') }}<span class="sr-only">20% Complete</span></div>
                                           </div>
                                           @if ($sumOrderAmount >= $target)
@@ -128,20 +134,24 @@
                                 @else
                                   <div class="row">
                                     <div class="col-md-4">
-                                      <div class="card">
-                                        <div class="card-body bg-warning">
-                                          {{ trans('dashboard.waiting_process')}}
-                                          <h1 class="text-right">{{ $waitingProcess->count() }}</h1>
+                                      <a href="{{ url('/salesOrders-Filter?status=R&sort=created_at,desc') }}">
+                                        <div class="card">
+                                          <div class="card-body bg-warning">
+                                            {{ trans('dashboard.waiting_process')}}
+                                            <h1 class="text-right">{{ $waitingProcess->count() }}</h1>
+                                          </div>
                                         </div>
-                                      </div>
+                                      </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <div class="card">
-                                        <div class="card-body bg-success">
-                                          {{ trans('dashboard.processed')}}
-                                          <h1 class="text-right">{{ $totalProcessed->count() }}</h1>
+                                      <a href="{{ url('/salesOrders-Filter?status=P&sort=created_at,desc') }}">
+                                        <div class="card">
+                                          <div class="card-body bg-success">
+                                            {{ trans('dashboard.processed')}}
+                                            <h1 class="text-right">{{ $totalProcessed->count() }}</h1>
+                                          </div>
                                         </div>
-                                      </div>
+                                      </a>
                                     </div>
                                   </div>
                                   {{-- <div class="row">

@@ -71,11 +71,17 @@ class SalesOrderController extends AppBaseController
             abort(403);
         }
 
-        dd($request);
+        // dd($request);
+
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
+            $salesOrders = SalesOrder::where('customer_id', \Auth::user()->customer_id)->filter()->get();
+        } else {
+            $salesOrders = SalesOrder::filter()->get();
+        }
 
         // dd($salesOrders);
 
-        return view('sales_orders.index')
+        return view('sales_orders.filter')
             ->with('salesOrders', $salesOrders);
     }
 

@@ -25,10 +25,11 @@ class SendEmailController extends Controller
             $email = $mailTo;
             $cc = $mailCC;
             $bcc = $mailBCC;
+            $url = url("/salesOrders-Filter?status=R&sort=created_at,desc");
             $data = [
                 'title' => 'Ada order pending! Yuk lihat',
                 'pending' => $totalUnprocess,
-                'url' => 'https://yamazakimyroti.co.id',
+                'url' => $url,
             ];
             Mail::to($email)->cc($cc)->bcc($bcc)->send(new SendMail($data));
             return 'Berhasil mengirim email!';

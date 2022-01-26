@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
 /**
  * Class SalesOrder
@@ -23,14 +24,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class SalesOrder extends Model
 {
-    // use SoftDeletes;
-
     use HasFactory;
+    use FilterQueryString;
 
     public $table = 'sales_orders';
     
 
-    // protected $dates = ['deleted_at'];
+    protected $filters = ['status', 'created_by'];
 
 
 

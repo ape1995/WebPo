@@ -92,10 +92,6 @@ return [
             'driver' => 'octane',
         ],
 
-        'none' => [
-            'driver' => 'null',
-        ],
-
     ],
 
     /*

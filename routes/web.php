@@ -36,6 +36,7 @@ Auth::routes(['verify' => true]);
 //routing admin cms
 Route::group(['middleware' => ['auth']], function(){
     Route::resource('users', 'App\Http\Controllers\UserController');
+    Route::post('users-import', [UserController::class,'import'])->name('users.import');
     Route::resource('roles', 'App\Http\Controllers\RoleController');
     Route::get('roles-inactive/{code}',[RoleController::class,'inactive'])->name('roles.inactive');
     Route::get('roles-active/{code}',[RoleController::class,'active'])->name('roles.active');

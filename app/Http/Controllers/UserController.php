@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Customer;
-use DataTables;
+use App\Imports\UsersImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use DataTables;
 use Flash;
 use Auth;
 use Hash;
@@ -25,14 +27,6 @@ class UserController extends Controller
         if (!\Auth::user()->can('browse users')) {
             abort(403);
         }
-
-        // if(\Auth::user()->role == 'Customers'){
-        //     $users = User::where('customer_id', \Auth::user()->customer_id)->get();
-        // } else {
-        //     $users = User::query();
-        // }
-        // echo('<h1>Testing Connection To Acumatica DB</h1>');
-        // dd($users[3]->customer->AcctName);
 
         return view('users.index');
     }
@@ -81,7 +75,7 @@ class UserController extends Controller
 
         if(\Auth::user()->role == 'Customers'){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
-            $roles = Role::where('name', 'like', '%Customers%')->where('status', true)->get();
+            $roles = Role::where('name', 'Staff Customers')->where('status', true)->get();
         } else {
             $customers =  Customer::where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
             // $customers =  Customer::where('Type', 'CU')->get();
@@ -158,7 +152,7 @@ class UserController extends Controller
         
         if(\Auth::user()->role == 'Customers'){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
-            $roles = Role::where('name', 'Customers')->where('status', true)->get();
+            $roles = Role::where('name', 'Staff Customers')->where('status', true)->get();
         } else {
             $customers =  Customer::where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
             $roles = Role::where('status', true)->get();
@@ -294,6 +288,18 @@ class UserController extends Controller
         $user->save();
   
         return back()->with('success', 'Password successfully changed!');
+
+    }
+
+    public function import(Request $request){
+
+        $file = $request->file('file');
+        $namaFile =  $file->getClientOriginalName();
+        $file->move('uploads', $namaFile);
+
+        Excel::import(new UsersImport, public_path('uploads/'.$namaFile));
+        
+        return redirect()->route('users.index');
 
     }
 }

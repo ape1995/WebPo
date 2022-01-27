@@ -92,7 +92,7 @@
                                         <div class="card">
                                           <div class="card-body bg-secondary text-light">
                                             {{ trans('dashboard.draft_order')}}
-                                            <h1 class="text-right">{{ $draftOrder->count() }}</h1>
+                                            <h1 class="text-right">{{ $draftOrder }}</h1>
                                           </div>
                                         </div>
                                       </a>
@@ -102,7 +102,7 @@
                                         <div class="card">
                                           <div class="card-body bg-info">
                                             {{ trans('dashboard.submitted_order')}}
-                                            <h1 class="text-right">{{ $submittedOrder->count() }}</h1>
+                                            <h1 class="text-right">{{ $submittedOrder }}</h1>
                                           </div>
                                         </div>
                                       </a>
@@ -112,7 +112,7 @@
                                         <div class="card">
                                           <div class="card-body bg-success">
                                             {{ trans('dashboard.processed_order')}}
-                                            <h1 class="text-right">{{ $processedOrder->count() }}</h1>
+                                            <h1 class="text-right">{{ $processedOrder }}</h1>
                                           </div>
                                         </div>
                                       </a>
@@ -120,12 +120,12 @@
                                     <div class="col-md-12">
                                       <div class="card">
                                         <div class="card-body">
-                                          <h3 class="text-danger">Your Target is IDR {{ number_format($target,2,',','.') }}</h3>
+                                          <h4>Target this month</h4> <h3 class="text-danger">IDR {{ number_format($sumOrderAmount,2,',','.') }} / IDR {{ number_format($target,2,',','.') }}</h3>
                                           <div class="progress m-3">
-                                            <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $sumOrderAmount }}" aria-valuemin="0" aria-valuemax="{{ $target }}" style="width: {{ $percentase.'%' }};"><strong>IDR {{ number_format($sumOrderAmount,2,',','.') }}<span class="sr-only">20% Complete</span></div>
+                                            <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $sumOrderAmount }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $percentase.'%' }};"><strong>{{ $percentase }} %</strong></div>
                                           </div>
                                           @if ($sumOrderAmount >= $target)
-                                            <h5 class="text-danger">Congratulations, you met your target this month</h5>
+                                            <h5 class="text-success">Congratulations, you achieved target this month</h5>
                                           @endif
                                         </div>
                                       </div>
@@ -138,7 +138,7 @@
                                         <div class="card">
                                           <div class="card-body bg-warning">
                                             {{ trans('dashboard.waiting_process')}}
-                                            <h1 class="text-right">{{ $waitingProcess->count() }}</h1>
+                                            <h1 class="text-right">{{ $waitingProcess }}</h1>
                                           </div>
                                         </div>
                                       </a>
@@ -148,7 +148,7 @@
                                         <div class="card">
                                           <div class="card-body bg-success">
                                             {{ trans('dashboard.processed')}}
-                                            <h1 class="text-right">{{ $totalProcessed->count() }}</h1>
+                                            <h1 class="text-right">{{ $totalProcessed }}</h1>
                                           </div>
                                         </div>
                                       </a>

@@ -40,17 +40,22 @@ class HomeController extends Controller
         $greeting = 'Good ' . $greeting;
 
         // get data for dashboard
-        $draftOrder = SalesOrder::where('status', 'S')->where('customer_id', Auth::user()->customer_id)->get();
-        $submittedOrder = SalesOrder::where('status', 'R')->where('customer_id', Auth::user()->customer_id)->get();
-        $processedOrder = SalesOrder::where('status', 'P')->where('customer_id', Auth::user()->customer_id)->get();
-        $waitingProcess = SalesOrder::where('status', 'R')->get();
-        $totalProcessed = SalesOrder::where('status', 'P')->get();
+        $draftOrder = SalesOrder::where('status', 'S')->where('customer_id', Auth::user()->customer_id)->count('id');
+        $submittedOrder = SalesOrder::where('status', 'R')->where('customer_id', Auth::user()->customer_id)->count('id');
+        $processedOrder = SalesOrder::where('status', 'P')->where('customer_id', Auth::user()->customer_id)->count('id');
+        $waitingProcess = SalesOrder::where('status', 'R')->count('id');
+        $totalProcessed = SalesOrder::where('status', 'P')->count('id');
 
         
         $target = 1000000; // You must get target here
-        $processedOrderThisMonth = SalesOrder::where('status', 'P')->whereMonth('delivery_date', date('m'))->where('customer_id', Auth::user()->customer_id)->get();
-        $sumOrderAmount = $processedOrderThisMonth->sum('order_amount');
+        $processedOrderThisMonth = SalesOrder::where('status', 'P')->whereMonth('delivery_date', date('m'))->where('customer_id', Auth::user()->customer_id)->sum('order_amount');
+        $sumOrderAmount = $processedOrderThisMonth;
         $percentase = round(($sumOrderAmount * 100)/$target, 2);
+        if($percentase > 100){
+            $percentase = 100;
+        } else {
+            $percentase = $percentase;
+        }
 
 
         return view('home.index', compact('date', 'greeting', 'draftOrder', 'submittedOrder', 'processedOrder', 'waitingProcess', 'totalProcessed', 'target', 'percentase', 'sumOrderAmount'));

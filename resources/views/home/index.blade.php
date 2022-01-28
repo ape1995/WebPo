@@ -1,5 +1,14 @@
 @extends('layouts.app')
 
+@section('css')
+  <style>
+    div.first {
+      /*setting alpha = 0.1*/
+      background: rgba(0, 0, 0, 0.2);
+    }
+  </style>
+@endsection
+
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -66,6 +75,10 @@
                                     @foreach ($adds as $index => $add)
                                       <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
                                         <img src="{{ asset('uploads/adds/'.$add->image) }}" alt="{{ $add->name }}" width="100%" height="100%">
+                                        <div class="carousel-caption d-none d-md-block first rounded-lg">
+                                          <h5>{{ $add->name }}</h5>
+                                          <p>{{ $add->description }}</p>
+                                        </div>
                                       </div>
                                     @endforeach
                                   </div>

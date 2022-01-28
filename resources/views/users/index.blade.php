@@ -26,9 +26,11 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row justify-content-between mx-3">
+                                @can('import users')
                                 <div class="mb-3">
                                     <button class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#modalImport">Import</button>
                                 </div>
+                                @endcan
                                 @can('create users')
                                 <div class="mb-3 text-right">
                                     <a class="btn btn-outline-primary btn-sm" href="{{ route('users.create') }}">{{ trans('user.create')}}</a>

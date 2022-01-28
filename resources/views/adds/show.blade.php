@@ -5,11 +5,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Parameter {{ trans('vat.title') }} Details</h1>
+                    <h1>{{ trans('add.title') }} Details</h1>
                 </div>
                 <div class="col-sm-6">
                     <a class="btn btn-default float-right"
-                       href="{{ route('parameterVATs.index') }}">
+                       href="{{ route('adds.index') }}">
                         Back
                     </a>
                 </div>
@@ -21,7 +21,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    @include('parameter_v_a_ts.show_fields')
+                    @include('adds.show_fields')
                 </div>
             </div>
         </div>

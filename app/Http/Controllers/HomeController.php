@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SalesOrder;
+use App\Models\Add;
 use Auth;
 
 class HomeController extends Controller
@@ -40,6 +41,7 @@ class HomeController extends Controller
         $greeting = 'Good ' . $greeting;
 
         // get data for dashboard
+        $adds = Add::all();
         $draftOrder = SalesOrder::where('status', 'S')->where('customer_id', Auth::user()->customer_id)->whereMonth('delivery_date', '=', date('m'))->count('id');
         $submittedOrder = SalesOrder::where('status', 'R')->where('customer_id', Auth::user()->customer_id)->whereMonth('delivery_date', '=', date('m'))->count('id');
         $processedOrder = SalesOrder::where('status', 'P')->where('customer_id', Auth::user()->customer_id)->whereMonth('delivery_date', '=', date('m'))->count('id');
@@ -58,6 +60,6 @@ class HomeController extends Controller
         }
 
 
-        return view('home.index', compact('date', 'greeting', 'draftOrder', 'submittedOrder', 'processedOrder', 'waitingProcess', 'totalProcessed', 'target', 'percentase', 'sumOrderAmount'));
+        return view('home.index', compact('date', 'greeting', 'draftOrder', 'submittedOrder', 'processedOrder', 'waitingProcess', 'totalProcessed', 'target', 'percentase', 'sumOrderAmount', 'adds'));
     }
 }

@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>{{ trans('vat.create') }} Parameter {{ trans('vat.title') }}</h1>
+                    <h1>{{ trans('add.create') }} {{ trans('add.title') }}</h1>
                 </div>
             </div>
         </div>
@@ -17,19 +17,19 @@
 
         <div class="card">
 
-            {!! Form::open(['route' => 'parameterVATs.store']) !!}
+            {!! Form::open(['route' => 'adds.store', 'files' => true]) !!}
 
             <div class="card-body">
 
                 <div class="row">
-                    @include('parameter_v_a_ts.fields')
+                    @include('adds.fields')
                 </div>
 
             </div>
 
             <div class="card-footer">
-                {!! Form::submit(trans('vat.save'), ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('parameterVATs.index') }}" class="btn btn-default">{{ trans('vat.cancel') }}</a>
+                {!! Form::submit(trans('add.save'), ['class' => 'btn btn-primary']) !!}
+                <a href="{{ route('adds.index') }}" class="btn btn-default">{{ trans('add.cancel') }}</a>
             </div>
 
             {!! Form::close() !!}

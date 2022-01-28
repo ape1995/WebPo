@@ -56,22 +56,18 @@
 
                                   <!-- Indicators -->
                                   <ul class="carousel-indicators">
-                                    <li data-target="#demo" data-slide-to="0" class="active"></li>
-                                    <li data-target="#demo" data-slide-to="1"></li>
-                                    <li data-target="#demo" data-slide-to="2"></li>
+                                    @foreach ($adds as $index => $add)
+                                      <li data-target="#demo" data-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}"></li>
+                                    @endforeach
                                   </ul>
                                   
                                   <!-- The slideshow -->
                                   <div class="carousel-inner mb-3">
-                                    <div class="carousel-item active">
-                                      <img src="https://cf.shopee.co.id/file/b9687fa71e25c40acd5e3bc51354c88e" alt="My Roti 1" width="100%" height="100%">
-                                    </div>
-                                    <div class="carousel-item">
-                                      <img src="https://yamazaki.co.id/wp-content/uploads/2020/08/Roti-Isi.jpg" alt="My Roti 2" width="100%" height="100%">
-                                    </div>
-                                    <div class="carousel-item">
-                                      <img src="https://yamazaki.co.id/wp-content/uploads/2020/08/Roti-Tawar.jpg" alt="My Roti 3" width="100%" height="100%">
-                                    </div>
+                                    @foreach ($adds as $index => $add)
+                                      <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                        <img src="{{ asset('uploads/adds/'.$add->image) }}" alt="{{ $add->name }}" width="100%" height="100%">
+                                      </div>
+                                    @endforeach
                                   </div>
                                   
                                   <!-- Left and right controls -->

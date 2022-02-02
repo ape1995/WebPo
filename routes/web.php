@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('submitOrder/{code}',[SalesOrderController::class,'submitOrder'])->name('salesOrders.submitOrder');
     Route::get('cancelOrder/{code}',[SalesOrderController::class,'cancelOrder'])->name('salesOrders.cancelOrder');
     Route::get('processOrder/{code}',[SalesOrderController::class,'processOrder'])->name('salesOrders.processOrder');
+    Route::post('SOuploadAttachments',[SalesOrderController::class,'uploadAttachment'])->name('salesOrders.uploadAttachment');
     Route::post('rejectOrder',[SalesOrderController::class,'rejectOrder'])->name('salesOrders.rejectOrder');
     Route::get('printOrder/{code}',[SalesOrderController::class,'printPdf'])->name('salesOrders.printPdf');
     Route::get('createReOrder/{code}',[SalesOrderController::class,'reOrder'])->name('salesOrders.reOrder');
@@ -72,6 +73,9 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('reportCustomer', [ReportController::class, 'reportCustomerView'])->name('reportSalesOrder.reportCustomerView');
     Route::resource('mailSettings', App\Http\Controllers\MailSettingController::class);
     Route::get('mailSettings-active/{code}',[MailSettingController::class,'active'])->name('mailSettings.active');
+    Route::resource('parameterVATs', App\Http\Controllers\ParameterVATController::class);
+    Route::resource('adds', App\Http\Controllers\AddController::class);
+    Route::resource('attachments', App\Http\Controllers\AttachmentController::class)->except('index', 'create', 'show');
 });
 
 
@@ -80,8 +84,3 @@ Route::get('/send_notification', [SendEmailController::class, 'send']);
 
 
 
-
-Route::resource('parameterVATs', App\Http\Controllers\ParameterVATController::class);
-
-
-Route::resource('adds', App\Http\Controllers\AddController::class);

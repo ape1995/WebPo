@@ -41,6 +41,39 @@
 
                 @include('sales_order_details.table')
 
+                @if ($salesOrder->status == 'R')
+                <div class="card">
+                    <div class="card-body p-1 m-1 text-right">
+                        <a class="btn btn-info text-light m-3" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            {{ trans('sales_order.btn_upload_tf') }}
+                        </a>
+                        <div class="collapse" id="collapseExample">
+                            <form action="{{ route('salesOrders.uploadAttachment') }}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-5 my-2">
+                                        <input type="hidden" name="id_order" value="{{ $salesOrder->id }}">
+                                        <select name="type" id="type" class="form-control" required>
+                                            <option value="">- Type Lampiran -</option>
+                                            <option value="Bukti Transfer">Bukti Transfer</option>
+                                            <option value="PO">PO</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5 my-2">
+                                        <input type="file" name="file" id="file" class="form-control" accept="image/png, image/gif, image/jpeg" required>
+                                    </div>
+                                    <div class="col-md-2 my-2">
+                                        <input type="submit" class="btn btn-primary" value="Upload">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                @include('attachments.table')
+
             </div>
 
             <div class="card-footer">
@@ -67,7 +100,7 @@
                     @can('reject sales order')
                         <a type="button" class="btn btn-danger text-light" data-toggle="modal" data-target="#modalReject">{{ trans('sales_order.btn_reject_order') }}</a>
                         <!-- Modal -->
-                        <div class="modal fade" id="modalReject" tabindex="-1" role="dialog" aria-labelledby="modalChangePassword" aria-hidden="true">
+                        <div class="modal fade" id="modalReject" tabindex="-1" role="dialog" aria-labelledby="modalReject" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <form action="{{ route('salesOrders.rejectOrder') }}" method="post">
                                     @csrf
@@ -100,7 +133,7 @@
                     @can('reject sales order')
                         <a type="button" class="btn btn-danger text-light" data-toggle="modal" data-target="#modalReject">{{ trans('sales_order.btn_reject_order') }}</a>
                         <!-- Modal -->
-                        <div class="modal fade" id="modalReject" tabindex="-1" role="dialog" aria-labelledby="modalChangePassword" aria-hidden="true">
+                        <div class="modal fade" id="modalReject" tabindex="-1" role="dialog" aria-labelledby="modalReject" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <form action="{{ route('salesOrders.rejectOrder') }}" method="post">
                                     @csrf

@@ -126,6 +126,16 @@
                                         </div>
                                       </a>
                                     </div>
+                                    <div class="col-md-4">
+                                      <a href="{{ url('/salesOrders-Filter?status=B&sort=created_at,desc') }}">
+                                        <div class="card">
+                                          <div class="card-body bg-danger">
+                                            {{ trans('dashboard.rejected_order')}}
+                                            <h1 class="text-right">{{ $rejectedOrder }}</h1>
+                                          </div>
+                                        </div>
+                                      </a>
+                                    </div>
                                     <div class="col-md-12">
                                       <div class="card">
                                         <div class="card-body">

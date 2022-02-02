@@ -21,7 +21,7 @@
                     @endif
 
                     @if ($salesOrder->status == 'B')
-                        <span class="text-danger rounded p-1">Order Rejected Because : {{ $salesOrder->rejected_reason }}</span>
+                        <h3 class="text-danger bg-light rounded p-1">Order Rejected : {{ $salesOrder->rejected_reason }}</h3>
                     @endif
                 </div>
                 @if ($salesOrder->status == 'R' || $salesOrder->status == 'P')
@@ -64,6 +64,39 @@
                     @can('process sales order')
                         <a href="{{ route('salesOrders.processOrder', [$salesOrder->id]) }}" class="btn btn-primary p-1"  onclick="return confirm('{{ trans('sales_order.question_process') }}')">{{ trans('sales_order.btn_process_order') }}</a>
                     @endcan
+                    @can('reject sales order')
+                        <a type="button" class="btn btn-danger text-light" data-toggle="modal" data-target="#modalReject">{{ trans('sales_order.btn_reject_order') }}</a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalReject" tabindex="-1" role="dialog" aria-labelledby="modalChangePassword" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <form action="{{ route('salesOrders.rejectOrder') }}" method="post">
+                                    @csrf
+                                    <div class="modal-content">
+                                        <div class="modal-header text-light" style="background-color: #c61325">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">{{ trans('sales_order.question_reject') }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-sm-12 mb-1">
+                                                    {!! Form::label('reason', trans('sales_order.reason')) !!}
+                                                    <input type="hidden" name="id_order" value="{{ $salesOrder->id }}">
+                                                    {!! Form::textarea('reason', null, ['class' => 'form-control', 'required' => true, 'rows' => 2]) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="submit" class="btn btn-primary" value="{{ trans('sales_order.confirm') }}">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    @endcan
+                @endif
+                @if ($salesOrder->status == 'P')
                     @can('reject sales order')
                         <a type="button" class="btn btn-danger text-light" data-toggle="modal" data-target="#modalReject">{{ trans('sales_order.btn_reject_order') }}</a>
                         <!-- Modal -->

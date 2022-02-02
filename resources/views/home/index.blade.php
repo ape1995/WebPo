@@ -66,7 +66,7 @@
                                   <!-- Indicators -->
                                   <ul class="carousel-indicators">
                                     @foreach ($adds as $index => $add)
-                                      <li data-target="#demo" data-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}"></li>
+                                      <li data-target="#demo" data-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}" style="border-radius: 50%; width: 12px; height: 12px;"></li>
                                     @endforeach
                                   </ul>
                                   

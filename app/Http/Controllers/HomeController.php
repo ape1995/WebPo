@@ -48,6 +48,12 @@ class HomeController extends Controller
         $waitingProcess = SalesOrder::where('status', 'R')->whereMonth('delivery_date', '=', date('m'))->count('id');
         $totalProcessed = SalesOrder::where('status', 'P')->whereMonth('delivery_date', '=', date('m'))->count('id');
 
+        $draftOrder = SalesOrder::where('status', 'S')->where('customer_id', Auth::user()->customer_id)->count('id');
+        $submittedOrder = SalesOrder::where('status', 'R')->where('customer_id', Auth::user()->customer_id)->count('id');
+        $processedOrder = SalesOrder::where('status', 'P')->where('customer_id', Auth::user()->customer_id)->count('id');
+        $waitingProcess = SalesOrder::where('status', 'R')->count('id');
+        $totalProcessed = SalesOrder::where('status', 'P')->count('id');
+
         
         $target = 1000000; // You must get target here
         $processedOrderThisMonth = SalesOrder::where('status', 'P')->whereMonth('delivery_date', date('m'))->where('customer_id', Auth::user()->customer_id)->sum('order_amount');

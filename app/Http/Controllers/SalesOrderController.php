@@ -119,6 +119,11 @@ class SalesOrderController extends AppBaseController
                     //change over here
                     return number_format($salesOrder->order_amount, 2, ',', '.');
                 })
+                ->editColumn('order_qty', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_qty, 0, ',', '.');
+                })
                 ->editColumn('tax', function (SalesOrder $salesOrder) 
                 {
                     //change over here

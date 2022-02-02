@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table" id="dataTable">
+    <table class="table table-bordered table-sm" id="dataTable">
         <thead>
         <tr>
             <th>{{ trans('sales_order.no') }}</th>

@@ -78,19 +78,27 @@
                                 $('td:eq(10)', row).addClass("bg-danger");
                             }
                             if ( data.status == "Rejected" ) {
+                                $('td:eq(0)', row).addClass("bg-danger");
+                                $('td:eq(1)', row).addClass("bg-danger");
+                                $('td:eq(2)', row).addClass("bg-danger");
+                                $('td:eq(3)', row).addClass("bg-danger");
+                                $('td:eq(4)', row).addClass("bg-danger");
+                                $('td:eq(5)', row).addClass("bg-danger");
+                                $('td:eq(6)', row).addClass("bg-danger");
+                                $('td:eq(7)', row).addClass("bg-danger");
+                                $('td:eq(8)', row).addClass("bg-danger");
+                                $('td:eq(9)', row).addClass("bg-danger");
                                 $('td:eq(10)', row).addClass("bg-danger");
                             }
                             if(permissionPrice == 'hide price sales order') {
                                 $('td:eq(7)', row).addClass("hide-component");
                                 $('td:eq(8)', row).addClass("hide-component");
                             }
+                            $('td:eq(6)', row).addClass("money");
                             $('td:eq(7)', row).addClass("money");
                             $('td:eq(8)', row).addClass("money");
                             $('td:eq(9)', row).addClass("money");
                         },
-                        "columnDefs": [
-                            { className: "text-nowrap", "targets": "_all" }
-                        ],
                         columns: [
                             { 
                                 data: 'DT_RowIndex',

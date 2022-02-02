@@ -1,5 +1,14 @@
 @extends('layouts.app')
 
+@section('css')
+  <style>
+    div.first {
+      /*setting alpha = 0.1*/
+      background: rgba(0, 0, 0, 0.2);
+    }
+  </style>
+@endsection
+
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -56,22 +65,22 @@
 
                                   <!-- Indicators -->
                                   <ul class="carousel-indicators">
-                                    <li data-target="#demo" data-slide-to="0" class="active"></li>
-                                    <li data-target="#demo" data-slide-to="1"></li>
-                                    <li data-target="#demo" data-slide-to="2"></li>
+                                    @foreach ($adds as $index => $add)
+                                      <li data-target="#demo" data-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}" style="border-radius: 50%; width: 12px; height: 12px;"></li>
+                                    @endforeach
                                   </ul>
                                   
                                   <!-- The slideshow -->
                                   <div class="carousel-inner mb-3">
-                                    <div class="carousel-item active">
-                                      <img src="https://cf.shopee.co.id/file/b9687fa71e25c40acd5e3bc51354c88e" alt="My Roti 1" width="100%" height="100%">
-                                    </div>
-                                    <div class="carousel-item">
-                                      <img src="https://yamazaki.co.id/wp-content/uploads/2020/08/Roti-Isi.jpg" alt="My Roti 2" width="100%" height="100%">
-                                    </div>
-                                    <div class="carousel-item">
-                                      <img src="https://yamazaki.co.id/wp-content/uploads/2020/08/Roti-Tawar.jpg" alt="My Roti 3" width="100%" height="100%">
-                                    </div>
+                                    @foreach ($adds as $index => $add)
+                                      <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                        <img src="{{ asset('uploads/adds/'.$add->image) }}" alt="{{ $add->name }}" width="100%" height="100%">
+                                        <div class="carousel-caption d-none d-md-block first rounded-lg">
+                                          <h5>{{ $add->name }}</h5>
+                                          <p>{{ $add->description }}</p>
+                                        </div>
+                                      </div>
+                                    @endforeach
                                   </div>
                                   
                                   <!-- Left and right controls -->
@@ -92,7 +101,7 @@
                                         <div class="card">
                                           <div class="card-body bg-secondary text-light">
                                             {{ trans('dashboard.draft_order')}}
-                                            <h1 class="text-right">{{ $draftOrder->count() }}</h1>
+                                            <h1 class="text-right">{{ $draftOrder }}</h1>
                                           </div>
                                         </div>
                                       </a>
@@ -102,7 +111,7 @@
                                         <div class="card">
                                           <div class="card-body bg-info">
                                             {{ trans('dashboard.submitted_order')}}
-                                            <h1 class="text-right">{{ $submittedOrder->count() }}</h1>
+                                            <h1 class="text-right">{{ $submittedOrder }}</h1>
                                           </div>
                                         </div>
                                       </a>
@@ -112,7 +121,17 @@
                                         <div class="card">
                                           <div class="card-body bg-success">
                                             {{ trans('dashboard.processed_order')}}
-                                            <h1 class="text-right">{{ $processedOrder->count() }}</h1>
+                                            <h1 class="text-right">{{ $processedOrder }}</h1>
+                                          </div>
+                                        </div>
+                                      </a>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <a href="{{ url('/salesOrders-Filter?status=B&sort=created_at,desc') }}">
+                                        <div class="card">
+                                          <div class="card-body bg-danger">
+                                            {{ trans('dashboard.rejected_order')}}
+                                            <h1 class="text-right">{{ $rejectedOrder }}</h1>
                                           </div>
                                         </div>
                                       </a>
@@ -120,12 +139,12 @@
                                     <div class="col-md-12">
                                       <div class="card">
                                         <div class="card-body">
-                                          <h3 class="text-danger">Your Target is IDR {{ number_format($target,2,',','.') }}</h3>
+                                          <h4>Target this month</h4> <h3 class="text-danger">IDR {{ number_format($sumOrderAmount,2,',','.') }} / IDR {{ number_format($target,2,',','.') }}</h3>
                                           <div class="progress m-3">
-                                            <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $sumOrderAmount }}" aria-valuemin="0" aria-valuemax="{{ $target }}" style="width: {{ $percentase.'%' }};"><strong>IDR {{ number_format($sumOrderAmount,2,',','.') }}<span class="sr-only">20% Complete</span></div>
+                                            <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ $sumOrderAmount }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $percentase.'%' }};"><strong>{{ $percentase }} %</strong></div>
                                           </div>
                                           @if ($sumOrderAmount >= $target)
-                                            <h5 class="text-danger">Congratulations, you met your target this month</h5>
+                                            <h5 class="text-success">Congratulations, you achieved target this month</h5>
                                           @endif
                                         </div>
                                       </div>
@@ -138,7 +157,7 @@
                                         <div class="card">
                                           <div class="card-body bg-warning">
                                             {{ trans('dashboard.waiting_process')}}
-                                            <h1 class="text-right">{{ $waitingProcess->count() }}</h1>
+                                            <h1 class="text-right">{{ $waitingProcess }}</h1>
                                           </div>
                                         </div>
                                       </a>
@@ -148,7 +167,7 @@
                                         <div class="card">
                                           <div class="card-body bg-success">
                                             {{ trans('dashboard.processed')}}
-                                            <h1 class="text-right">{{ $totalProcessed->count() }}</h1>
+                                            <h1 class="text-right">{{ $totalProcessed }}</h1>
                                           </div>
                                         </div>
                                       </a>

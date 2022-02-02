@@ -2,11 +2,11 @@
     <table class="table" id="parameterVATs-table">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Value</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th colspan="3">Action</th>
+            <th>{{ trans('vat.name') }}</th>
+            <th>{{ trans('vat.value') }}</th>
+            <th>{{ trans('vat.start_date') }}</th>
+            <th>{{ trans('vat.end_date') }}</th>
+            <th>{{ trans('vat.action') }}</th>
         </tr>
         </thead>
         <tbody>

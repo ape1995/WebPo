@@ -11,6 +11,7 @@ return [
     'draft_order' => 'DRAFT ORDER',
     'submitted_order' => 'SUBMITTED ORDER',
     'processed_order' => 'PROCESSED ORDER',
+    'rejected_order' => 'REJECTED ORDER',
     'waiting_process' => 'WAITING TO PROCESS',
     'processed' => 'PROCESSED',
     'hi' => 'Hi',

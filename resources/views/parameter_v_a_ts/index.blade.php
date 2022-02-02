@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Parameter VATs</h1>
+                    <h1>Parameter {{ trans('vat.title') }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <a class="btn btn-primary float-right"
                        href="{{ route('parameterVATs.create') }}">
-                        Add New
+                        {{ trans('vat.create') }}
                     </a>
                 </div>
             </div>

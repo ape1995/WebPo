@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>Create Parameter VAT</h1>
+                    <h1>{{ trans('vat.create') }} Parameter {{ trans('vat.title') }}</h1>
                 </div>
             </div>
         </div>
@@ -28,8 +28,8 @@
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('parameterVATs.index') }}" class="btn btn-default">Cancel</a>
+                {!! Form::submit(trans('vat.save'), ['class' => 'btn btn-primary']) !!}
+                <a href="{{ route('parameterVATs.index') }}" class="btn btn-default">{{ trans('vat.cancel') }}</a>
             </div>
 
             {!! Form::close() !!}

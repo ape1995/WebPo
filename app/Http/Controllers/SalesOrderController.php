@@ -18,6 +18,8 @@ use App\Models\Location;
 use App\Models\SalesOrder;
 use App\Models\Parameter;
 use App\Models\SalesOrderDetail;
+use App\Models\Attachment;
+use App\Models\SOOrder;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -118,6 +120,11 @@ class SalesOrderController extends AppBaseController
                 {
                     //change over here
                     return number_format($salesOrder->order_amount, 2, ',', '.');
+                })
+                ->editColumn('order_qty', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_qty, 0, ',', '.');
                 })
                 ->editColumn('tax', function (SalesOrder $salesOrder) 
                 {
@@ -281,6 +288,8 @@ class SalesOrderController extends AppBaseController
         $parameter = Parameter::where('name','Maximum Time Order')->get()->first();
         $parameterNow = Carbon::now()->toTimeString();
 
+        $attachments = Attachment::where('sales_order_id', $id)->get();
+
         // dd($parameter->parameter_hour, $parameterNow);
 
         if (empty($salesOrder)) {
@@ -288,7 +297,7 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'))->with('error', 'Order not found');
         }
 
-        return view('sales_orders.show', compact('salesOrder', 'salesOrderDetails', 'customers', 'parameter', 'parameterNow'));
+        return view('sales_orders.show', compact('salesOrder', 'salesOrderDetails', 'customers', 'parameter', 'parameterNow', 'attachments'));
     }
 
     /**
@@ -558,6 +567,14 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
+        $id = $salesOrder->id;
+
+        $cekSOAcumatica = SOOrder::where('OrderNbr', $salesOrder->order_nbr)->get();
+        // dd($cekSOAcumatica);
+        if ($cekSOAcumatica->count()) {
+            return redirect(route('salesOrders.show', $id))->with('error', 'Before you reject this order. Please delete this SO Data in Acumatica');
+        }
+
         $salesOrder = SalesOrder::find($input['id_order']);
         $salesOrder['status'] = 'B';
         $salesOrder['rejected_reason'] = $input['reason'];
@@ -565,7 +582,7 @@ class SalesOrderController extends AppBaseController
         $salesOrder['rejected_at'] = Carbon::now()->toDateTimeString();
         $salesOrder->save();
 
-        return redirect(route('salesOrders.index'))->with('success', 'Order Rejected Sucessfully.');
+        return redirect(route('salesOrders.show', $id))->with('success', 'Order Rejected Sucessfully.');
     }
 
     public function resetOrder()
@@ -635,5 +652,27 @@ class SalesOrderController extends AppBaseController
         }
 
         return redirect()->route('createOrder')->with('success', 'Silahkan sesuaikan tanggal kirim dan kuantitas item!')->with('data', $data);
+    }
+    
+    public function uploadAttachment(Request $request){
+
+        $request->validate([
+            'file' => 'required|image|mimes:jpeg,png,jpg',
+        ]);
+
+        $x=20;
+        $file = time().'-1.'.$request->file->extension();
+        
+        $img=\Image::make($request->file('file'))->orientate();
+        
+        $img->save(public_path('uploads/attachments/convert_'.$file),$x);
+
+        $input['sales_order_id'] = $request->id_order;
+        $input['type'] = $request->type;
+        $input['image'] = 'convert_'.$file;
+
+        Attachment::create($input);
+
+        return redirect(route('salesOrders.show', $request->id_order));
     }
 }

@@ -43,7 +43,7 @@
         <li class="nav-item">
             <a href="{{ route('parameterVATs.index') }}" class="nav-link {{ Request::is('parameterVATs*') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Parameter VATs</p>
+                <p>Parameter {{ trans('menu.vat') }}</p>
             </a>
         </li>
         @endcan
@@ -51,7 +51,15 @@
         <li class="nav-item">
             <a href="{{ route('mailSettings.index') }}" class="nav-link {{ Request::is('mailSettings*') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Mail Settings</p>
+                <p>{{ trans('menu.mail_setting') }}</p>
+            </a>
+        </li>
+        @endcan
+        @can('browse adds')
+        <li class="nav-item">
+            <a href="{{ route('adds.index') }}" class="nav-link {{ Request::is('adds*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{ trans('menu.adds') }}</p>
             </a>
         </li>
         @endcan
@@ -140,4 +148,3 @@
     </ul>
 </li>
 @endif
-

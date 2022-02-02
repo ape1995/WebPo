@@ -8,6 +8,7 @@ use App\Repositories\SalesOrderDetailRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Models\SalesOrder;
 use App\Models\SalesOrderDetail;
+use App\Models\ParameterVAT;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
@@ -195,13 +196,15 @@ class SalesOrderDetailController extends AppBaseController
         } 
     }
 
-    public function countOrderDetail($code){
+    public function countOrderDetail($code, $date){
 
         $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $code)->get();
+        $parameterVAT = ParameterVAT::whereRaw("start_date <= '$date' AND (end_date is null OR end_date >= '$date') ")->get()->first();
+        
             
         $data['order_qty'] = $salesOrderDetail->sum('qty');
         $data['order_amount'] = $salesOrderDetail->sum('amount');
-        $tax = (10/100) * $data['order_amount'];
+        $tax = ($parameterVAT->value/100) * $data['order_amount'];
         $total = round($data['order_amount'] + $tax);
         $data['order_amount'] = number_format($data['order_amount'],2,',','.');
         $data['tax'] = number_format($tax,2,',','.');

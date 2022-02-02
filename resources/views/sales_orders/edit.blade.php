@@ -197,7 +197,6 @@
             var order_total =  $("#order_total");
             var save =  $("#saveBtn");
             save.prop("disabled", true);
-            add_product.prop("disabled", true);
             $("#savePageButton").attr("disabled", true);
 
             getAllCounter();
@@ -260,7 +259,7 @@
             $('.money').mask("#,##0.00", {reverse: true});
 
             function getAllCounter(){
-                var url = "{{ url('api/getAllCounter') }}" + '/' + customer_id.val() + '/' + delivery_date.val();
+                var url = "{{ url('api/countOrderDetail') }}" + '/' + order_id.val() + '/' + delivery_date.val();
                 // send data to your endpoint
                 $.ajax({
                     url: url,

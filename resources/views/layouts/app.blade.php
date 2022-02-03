@@ -56,6 +56,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     .hide-component {
       display: none;
     }
+    .table {
+      font-size: 14px !important;
+    }
+    .card {
+      font-size: 14px !important;
+    }
   </style>
 </head>
 <body class="hold-transition sidebar-mini">

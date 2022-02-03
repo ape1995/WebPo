@@ -226,6 +226,8 @@ class SalesOrderController extends AppBaseController
 
 
         $input['order_nbr'] = $orderNbr;
+        $input['order_qty'] = str_replace('.','',$input['order_qty']);
+        $input['order_qty'] = str_replace(',','.',$input['order_qty']);
         $input['order_amount'] = str_replace('.','',$input['order_amount']);
         $input['order_amount'] = str_replace(',','.',$input['order_amount']);
         $input['tax'] = str_replace('.','',$input['tax']);
@@ -380,6 +382,8 @@ class SalesOrderController extends AppBaseController
 
         }
 
+        $input['order_qty'] = str_replace('.','',$input['order_qty']);
+        $input['order_qty'] = str_replace(',','.',$input['order_qty']);
         $input['order_amount'] = str_replace('.','',$input['order_amount']);
         $input['order_amount'] = str_replace(',','.',$input['order_amount']);
         $input['tax'] = str_replace('.','',$input['tax']);

@@ -13,7 +13,7 @@
         @foreach($salesOrderDetails as $salesOrderDetail)
             <tr>
                 <td>{{ $salesOrderDetail->inventory_name }}</td>
-                <td>{{ $salesOrderDetail->qty }}</td>
+                <td>{{ number_format($salesOrderDetail->qty,0,',','.') }}</td>
                 <td>{{ $salesOrderDetail->uom }}</td>
                 <td class="money" @can('hide price sales order') style="display:none" @endcan>{{ number_format($salesOrderDetail->unit_price,2,',','.') }}</td>
                 <td class="money" @can('hide price sales order') style="display:none" @endcan>{{ number_format($salesOrderDetail->amount,2,',','.') }}</td>

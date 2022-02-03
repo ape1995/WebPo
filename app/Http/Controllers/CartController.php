@@ -46,6 +46,10 @@ class CartController extends AppBaseController
         if ($request->ajax()) {
             $datas = Cart::where('customer_id', \Auth::user()->customer_id)->get();
             return DataTables::of($datas)
+                ->editColumn('qty', function (Cart $cart) 
+                {
+                    return number_format($cart->qty, 0, ',', '.');
+                })
                 ->editColumn('unit_price', function (Cart $cart) 
                 {
                     return number_format($cart->unit_price, 2, ',', '.');
@@ -92,6 +96,7 @@ class CartController extends AppBaseController
         // Check sudah ada dalam cart
         $cekCart = Cart::where('inventory_id', $data['inventory_id'])->where('customer_id', \Auth::user()->customer_id)->get()->first();
 
+        $data['qty'] = str_replace('.','',$data['qty']);
         $data['unit_price'] = str_replace('.','',$data['unit_price']);
         $data['unit_price'] = str_replace(',','.',$data['unit_price']);
         $data['amount'] = str_replace('.','',$data['amount']);
@@ -208,6 +213,7 @@ class CartController extends AppBaseController
         $data['order_amount'] = $getCounter->sum('amount');
         $tax = ($parameterVAT->value/100) * $data['order_amount'];
         $total = round($data['order_amount'] + $tax);
+        $data['order_qty'] = number_format($data['order_qty'],0,',','.');
         $data['order_amount'] = number_format($data['order_amount'],2,',','.');
         $data['tax'] = number_format($tax,2,',','.');
         $data['order_total'] = number_format($total,2,',','.');

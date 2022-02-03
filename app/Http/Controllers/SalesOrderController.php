@@ -571,7 +571,7 @@ class SalesOrderController extends AppBaseController
 
         $cekSOAcumatica = SOOrder::where('OrderNbr', $salesOrder->order_nbr)->get();
         // dd($cekSOAcumatica);
-        if ($cekSOAcumatica->count()) {
+        if ($cekSOAcumatica->count() >= 1) {
             return redirect(route('salesOrders.show', $id))->with('error', 'Before you reject this order. Please delete this SO Data in Acumatica');
         }
 

@@ -157,7 +157,6 @@
             },
             rowCallback: function( row, data ) {
                 $('td:eq(4)', row).addClass("money");
-                $('td:eq(5)', row).addClass("money");
                 $('td:eq(6)', row).addClass("money");
                 $('td:eq(7)', row).addClass("money");
             },
@@ -188,7 +187,7 @@
                     data: 'OrderQty'                                    
                 }, 
                 {
-                    data: 'OrderQty'                                    
+                    data: 'Adjustment'                                    
                 }, 
                 {
                     data: 'ShippedQty'                                    

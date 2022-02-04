@@ -136,6 +136,10 @@ class EstimasiController extends Controller
                     return date('d M Y', strtotime($estimasi->ShippedDate) );
                 })
                 ->addIndexColumn()
+                ->addColumn('Adjustment',function ($data){
+                    return view('estimasi.adjustment')->with('estimasi',$data)->render();
+                })
+                ->rawColumns(['Adjustment'])
                 ->escapeColumns()
                 ->toJson();
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SalesOrder;
+use App\Models\CustomerTarget;
 use App\Models\Add;
 use Auth;
 
@@ -54,10 +55,16 @@ class HomeController extends Controller
         $rejectedOrder = SalesOrder::where('status', 'B')->where('customer_id', Auth::user()->customer_id)->count('id');
         $waitingProcess = SalesOrder::where('status', 'R')->count('id');
         $totalProcessed = SalesOrder::where('status', 'P')->count('id');
+        $rejectedOrderAdmin = SalesOrder::where('status', 'B')->count('id');
 
         
-        $target = 1000000; // You must get target here
-        $processedOrderThisMonth = SalesOrder::where('status', 'P')->whereMonth('delivery_date', date('m'))->where('customer_id', Auth::user()->customer_id)->sum('order_amount');
+        $target = CustomerTarget::where('CustomerID', Auth::user()->customer_id)->where('Year', date('Y'))->pluck(date('F'))->first(); // You must get target here
+        // dd($target);
+        if($target == null){
+            $target = 1;
+        }
+        
+        $processedOrderThisMonth = SalesOrder::where('status', 'P')->whereMonth('delivery_date', date('m'))->where('customer_id', Auth::user()->customer_id)->sum('order_total');
         $sumOrderAmount = $processedOrderThisMonth;
         $percentase = round(($sumOrderAmount * 100)/$target, 2);
         if($percentase > 100){
@@ -67,6 +74,9 @@ class HomeController extends Controller
         }
 
 
-        return view('home.index', compact('date', 'greeting', 'draftOrder', 'submittedOrder', 'processedOrder', 'waitingProcess', 'totalProcessed', 'target', 'percentase', 'sumOrderAmount', 'adds', 'rejectedOrder'));
+        return view('home.index', compact('date', 'greeting', 
+        'draftOrder', 'submittedOrder', 'processedOrder', 'waitingProcess', 
+        'totalProcessed', 'target', 'percentase', 'sumOrderAmount', 'adds', 
+        'rejectedOrder', 'rejectedOrderAdmin'));
     }
 }

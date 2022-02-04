@@ -148,3 +148,10 @@
     </ul>
 </li>
 @endif
+
+{{-- <li class="nav-item">
+    <a href="{{ route('estimasi.index') }}" class="nav-link {{ Request::is('estimasi*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-tachometer-alt"></i>
+        Estimasi
+    </a>
+</li> --}}

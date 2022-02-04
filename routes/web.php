@@ -11,6 +11,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\SendEmailController;
+use App\Http\Controllers\EstimasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('parameterVATs', App\Http\Controllers\ParameterVATController::class);
     Route::resource('adds', App\Http\Controllers\AddController::class);
     Route::resource('attachments', App\Http\Controllers\AttachmentController::class)->except('index', 'create', 'show');
+    Route::resource('estimasi', EstimasiController::class);
+    Route::post('dataTableEstimasi',[EstimasiController::class,'dataTable'])->name('estimasi.data');
 });
 
 

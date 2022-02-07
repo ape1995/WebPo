@@ -213,6 +213,34 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-danger text-center p-1"><h5>Estimasi</h5></div>
+                <div class="card-body py-1 px-3">
+                    <table width="100%">
+                        @foreach ($permissions as $permission)
+                            @php
+                                if($role->hasPermissionTo($permission->name)){
+                                    $checked = 'checked';
+                                } else {
+                                    $checked = '';
+                                }
+                            @endphp
+                            @php
+                                if(stripos($permission->name, 'estimasi') !== FALSE){
+                            @endphp
+                            <tr>
+                                <td width="10%"><input type="checkbox" name="permission[]" id="permission" value="{{ $permission->id }}" {{ $checked }}></td>
+                                <td>{{ $permission->name }}</td>
+                            </tr>
+                            @php
+                                }
+                            @endphp
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
     <h3>{{ trans('menu.report') }}</h3>
     <div class="row">

@@ -16,6 +16,10 @@ class EstimasiController extends Controller
      */
     public function index(Request $request)
     {
+        if (!\Auth::user()->can('browse estimasi')) {
+            abort(403);
+        }
+
         $customers =  Customer::where('Type', 'CU')->where('Status', 'A')->get();
         
         // $outlets =  SOOutlet::select('OutletID', 'OutletName')->groupBy('OutletID', 'OutletName')->get();

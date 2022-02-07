@@ -42,7 +42,7 @@
                 @include('sales_order_details.table')
 
                 @if ($salesOrder->status == 'R')
-                <div class="card">
+                <div class="card" @can('hide price sales order') style="visibility: collapse" @endcan>
                     <div class="card-body p-1 m-1 text-right">
                         <a class="btn btn-info text-light m-3" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                             {{ trans('sales_order.btn_upload_tf') }}
@@ -95,10 +95,10 @@
                 @endif
                 @if ($salesOrder->status == 'R')
                     @can('process sales order')
-                        <a href="{{ route('salesOrders.processOrder', [$salesOrder->id]) }}" class="btn btn-primary p-1"  onclick="return confirm('{{ trans('sales_order.question_process') }}')">{{ trans('sales_order.btn_process_order') }}</a>
+                        <a href="{{ route('salesOrders.processOrder', [$salesOrder->id]) }}" class="btn btn-primary btn-sm"  onclick="return confirm('{{ trans('sales_order.question_process') }}')">{{ trans('sales_order.btn_process_order') }}</a>
                     @endcan
                     @can('reject sales order')
-                        <a type="button" class="btn btn-danger text-light" data-toggle="modal" data-target="#modalReject">{{ trans('sales_order.btn_reject_order') }}</a>
+                        <a type="button" class="btn btn-danger btn-sm text-light" data-toggle="modal" data-target="#modalReject">{{ trans('sales_order.btn_reject_order') }}</a>
                         <!-- Modal -->
                         <div class="modal fade" id="modalReject" tabindex="-1" role="dialog" aria-labelledby="modalReject" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -131,7 +131,7 @@
                 @endif
                 @if ($salesOrder->status == 'P')
                     @can('reject sales order')
-                        <a type="button" class="btn btn-danger text-light" data-toggle="modal" data-target="#modalReject">{{ trans('sales_order.btn_reject_order') }}</a>
+                        <a type="button" class="btn btn-danger btn-xs text-light" data-toggle="modal" data-target="#modalReject">{{ trans('sales_order.btn_reject_order') }}</a>
                         <!-- Modal -->
                         <div class="modal fade" id="modalReject" tabindex="-1" role="dialog" aria-labelledby="modalReject" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -191,7 +191,7 @@
 
             window.setTimeout(function () {
                 window.location.reload();
-            }, 60000);
+            }, 80000);
 
         });
     </script>

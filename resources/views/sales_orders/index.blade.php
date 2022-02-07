@@ -93,6 +93,7 @@
                             if(permissionPrice == 'hide price sales order') {
                                 $('td:eq(7)', row).addClass("hide-component");
                                 $('td:eq(8)', row).addClass("hide-component");
+                                $('td:eq(9)', row).addClass("hide-component");
                             }
                             $('td:eq(6)', row).addClass("money");
                             $('td:eq(7)', row).addClass("money");

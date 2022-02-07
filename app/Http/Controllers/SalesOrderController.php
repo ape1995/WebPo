@@ -90,10 +90,10 @@ class SalesOrderController extends AppBaseController
     {
         if ($request->ajax()) {
 
-            if(\Auth::user()->role == 'Customers'){
-                $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->latest();
+            if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
+                $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
             } else {
-                $datas = SalesOrder::query()->whereNotIn('status', ['S'])->latest();
+                $datas = SalesOrder::query()->whereNotIn('status', ['S'])->orderBy('id', 'desc');
             }
 
             return DataTables::of($datas)

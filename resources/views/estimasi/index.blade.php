@@ -63,11 +63,9 @@
                       <th>Product Name</th>
                       <th>Order Qty</th>
                       <th>Adjustment</th>
-                      <th>After Adjustment</th>
                     </tr>
                   </thead>
                   <tbody>
-
                   </tbody>
                 </table>
               </div>
@@ -188,9 +186,6 @@
                 }, 
                 {
                     data: 'Adjustment'                                    
-                }, 
-                {
-                    data: 'ShippedQty'                                    
                 }, 
               ]
             });

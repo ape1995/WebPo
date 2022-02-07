@@ -34,7 +34,7 @@ class UserController extends Controller
     public function dataTable(Request $request)
     {
         if ($request->ajax()) {
-            if(\Auth::user()->role == 'Customers'){
+            if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
                 $datas = User::where('customer_id', \Auth::user()->customer_id)->latest();
             } else {
                 $datas = User::query();

@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive" @can('hide price sales order') style="visibility: collapse" @endcan>
     <table class="table table-hover text-center" id="attachments-table">
         {{-- <thead>
         <tr>

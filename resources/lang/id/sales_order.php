@@ -48,7 +48,7 @@ return [
     'question_reorder' => 'Order ulang pesanan ini?',
     'order' => 'Pesanan',
     'reason' => 'Alasan ditolak',
-    'confirm' => 'Konrifmasi',
+    'confirm' => 'Konfirmasi',
     'reorder' => 'Order Ulang',
 
 ];

@@ -97,7 +97,7 @@
                                 @if (Auth::user()->role == 'Customers' || Auth::user()->role == 'Staff Customers')
                                   <div class="row">
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=S&sort=created_at,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter?status=S&sort=id,desc') }}">
                                         <div class="card">
                                           <div class="card-body bg-secondary text-light">
                                             {{ trans('dashboard.draft_order')}}
@@ -107,7 +107,7 @@
                                       </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=R&sort=created_at,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter?status=R&sort=id,desc') }}">
                                         <div class="card">
                                           <div class="card-body bg-info">
                                             {{ trans('dashboard.submitted_order')}}
@@ -136,6 +136,7 @@
                                         </div>
                                       </a>
                                     </div>
+                                    @if (Auth::user()->role == 'Customers')
                                     <div class="col-md-12">
                                       <div class="card">
                                         <div class="card-body">
@@ -149,11 +150,12 @@
                                         </div>
                                       </div>
                                     </div>
+                                    @endif
                                   </div>
                                 @else
                                   <div class="row">
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=R&sort=created_at,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter?status=R&sort=id,desc') }}">
                                         <div class="card">
                                           <div class="card-body bg-warning">
                                             {{ trans('dashboard.waiting_process')}}
@@ -163,7 +165,7 @@
                                       </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=P&sort=created_at,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter?status=P&sort=id,desc') }}">
                                         <div class="card">
                                           <div class="card-body bg-success">
                                             {{ trans('dashboard.processed')}}
@@ -173,7 +175,7 @@
                                       </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=B&sort=created_at,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter?status=B&sort=id,desc') }}">
                                         <div class="card">
                                           <div class="card-body bg-danger">
                                             {{ trans('dashboard.rejected_order')}}

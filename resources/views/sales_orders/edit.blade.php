@@ -378,7 +378,7 @@
                     },
                     error: function (data) {
                         // console.log('Error:', data);
-                        alert('Product Already Listed on Carts');
+                        alert('Produk sudah ada dalam list');
                         // $('#saveBtn').html('Save Changes');
                     }
                 });

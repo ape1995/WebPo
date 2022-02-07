@@ -98,7 +98,7 @@
             </div>
         </div>
         <!-- Order Total Field -->
-        <div class="col-sm-12 mb-1">
+        <div class="col-sm-12 mb-1"  @can('hide price sales order') style="visibility: collapse" @endcan>
             <div class="row">
                 <div class="col-3">
                     {!! Form::label('order_total', trans('sales_order.order_total')) !!}

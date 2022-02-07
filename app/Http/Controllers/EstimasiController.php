@@ -121,7 +121,7 @@ class EstimasiController extends Controller
         if ($request->ajax()) {
 
             $datas = Estimasi::where('CustomerID', $request->customer)->where('OutletID', $request->outlet)->where('ShippedDate', '=', $request->date);
-
+            $number = 0;
             
             return DataTables::of($datas)
                 ->editColumn('OrderQty', function (Estimasi $estimasi) 
@@ -140,8 +140,10 @@ class EstimasiController extends Controller
                     return date('d M Y', strtotime($estimasi->ShippedDate) );
                 })
                 ->addIndexColumn()
-                ->addColumn('Adjustment',function ($data){
-                    return view('estimasi.adjustment')->with('estimasi',$data)->render();
+                ->addColumn('Adjustment',function (Estimasi $estimasi){
+                    // $number++;
+
+                    return view('estimasi.adjustment')->with('estimasi', $estimasi)->render();
                 })
                 ->rawColumns(['Adjustment'])
                 ->escapeColumns()

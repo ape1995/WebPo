@@ -11,7 +11,7 @@
             <th>{{ trans('sales_order.qty') }}</th>
             <th @can('hide price sales order') class="hide-component" @endcan>{{ trans('sales_order.order_amount') }}</th>
             <th @can('hide price sales order') class="hide-component" @endcan>{{ trans('sales_order.tax') }}</th>
-            <th>{{ trans('sales_order.order_total') }}</th>
+            <th @can('hide price sales order') class="hide-component" @endcan>{{ trans('sales_order.order_total') }}</th>
             <th>Status</th>
             <th></th>
         </tr>

@@ -11,7 +11,7 @@
             <th>{{ trans('sales_order.qty') }}</th>
             <th @can('hide price sales order') class="hide-component text-nowrap" @endcan>{{ trans('sales_order.order_amount') }}</th>
             <th @can('hide price sales order') class="hide-component text-nowrap" @endcan>{{ trans('sales_order.tax') }}</th>
-            <th>{{ trans('sales_order.order_total') }}</th>
+            <th @can('hide price sales order') class="hide-component text-nowrap" @endcan>{{ trans('sales_order.order_total') }}</th>
             <th>Status</th>
             <th></th>
         </tr>
@@ -39,9 +39,9 @@
                     <td>{{ $salesOrder->order_date->format('d M Y') }}</td>
                     <td>{{ $salesOrder->delivery_date->format('d M Y') }}</td>
                     <td>{{ $salesOrder->order_qty }}</td>
-                    <td>{{ number_format($salesOrder->order_amount,2,',','.') }}</td>
-                    <td>{{ number_format($salesOrder->tax,2,',','.') }}</td>
-                    <td>{{ number_format($salesOrder->order_total,2,',','.') }}</td>
+                    <td @can('hide price sales order') class="hide-component text-nowrap" @endcan>{{ number_format($salesOrder->order_amount,2,',','.') }}</td>
+                    <td @can('hide price sales order') class="hide-component text-nowrap" @endcan>{{ number_format($salesOrder->tax,2,',','.') }}</td>
+                    <td @can('hide price sales order') class="hide-component text-nowrap" @endcan>{{ number_format($salesOrder->order_total,2,',','.') }}</td>
                     <td>{{ $status }}</td>
                     <td>@include('sales_orders.action')</td>
                 </tr>

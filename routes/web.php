@@ -78,6 +78,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('adds', App\Http\Controllers\AddController::class);
     Route::resource('attachments', App\Http\Controllers\AttachmentController::class)->except('index', 'create', 'show');
     Route::resource('estimasi', EstimasiController::class);
+    Route::post('estimasi-updateData', [EstimasiController::class,'updateData'])->name('estimasi.updateData');
     Route::post('dataTableEstimasi',[EstimasiController::class,'dataTable'])->name('estimasi.data');
 });
 

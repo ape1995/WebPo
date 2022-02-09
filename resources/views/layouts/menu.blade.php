@@ -103,9 +103,9 @@
 </li>
 @endif
 
-@if(Gate::check('view report sales order') || Gate::check('view report sales order detail') || Gate::check('view report request 1') || Gate::check('view report customer'))
-<li class="nav-item {{ Request::is('reportSalesOrder*') ? 'menu-open' : '' }} {{ Request::is('reportRequest1*') ? 'menu-open' : '' }} {{ Request::is('reportCustomer*') ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}  {{ Request::is('reportRequest1*') ? 'active' : '' }}  {{ Request::is('reportCustomer*') ? 'active' : '' }}">
+@if(Gate::check('view report sales order') || Gate::check('view report sales order detail') || Gate::check('view report request 1') || Gate::check('view report customer')  || Gate::check('view report balance'))
+<li class="nav-item {{ Request::is('reportSalesOrder*') ? 'menu-open' : '' }} {{ Request::is('reportRequest1*') ? 'menu-open' : '' }} {{ Request::is('reportCustomer*') ? 'menu-open' : '' }} {{ Request::is('reportBalance*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}  {{ Request::is('reportRequest1*') ? 'active' : '' }}  {{ Request::is('reportCustomer*') ? 'active' : '' }} {{ Request::is('reportBalance*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-book"></i>
         <p>
             {{ trans('menu.report')}}
@@ -142,6 +142,14 @@
             <a href="{{ route('reportSalesOrder.reportCustomerIndex') }}" class="nav-link {{ Request::is('reportCustomer') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>{{ trans('menu.report_customer')}}</p>
+            </a>
+        </li>
+        @endcan
+        @can('view report balance')
+        <li class="nav-item">
+            <a href="{{ route('reportSalesOrder.reportBalanceIndex') }}" class="nav-link {{ Request::is('reportBalance') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{ trans('menu.report_balance')}}</p>
             </a>
         </li>
         @endcan

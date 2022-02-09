@@ -215,11 +215,3 @@
         }
     </style>
 @endsection
-
-@push('page_scripts')
-  <script>
-    $('.carousel').carousel({
-      interval: 4000
-    })
-  </script>
-@endpush  

@@ -72,6 +72,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('reportRequest1', [ReportController::class, 'report1View'])->name('reportSalesOrder.report1View');
     Route::get('reportCustomer', [ReportController::class, 'reportCustomerIndex'])->name('reportSalesOrder.reportCustomerIndex');
     Route::post('reportCustomer', [ReportController::class, 'reportCustomerView'])->name('reportSalesOrder.reportCustomerView');
+    Route::get('reportBalance', [ReportController::class, 'reportBalanceIndex'])->name('reportSalesOrder.reportBalanceIndex');
+    Route::post('reportBalance', [ReportController::class, 'reportBalanceView'])->name('reportSalesOrder.reportBalanceView');
     Route::resource('mailSettings', App\Http\Controllers\MailSettingController::class);
     Route::get('mailSettings-active/{code}',[MailSettingController::class,'active'])->name('mailSettings.active');
     Route::resource('parameterVATs', App\Http\Controllers\ParameterVATController::class);

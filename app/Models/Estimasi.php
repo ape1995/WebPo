@@ -9,7 +9,7 @@ class Estimasi extends Model
 {
     protected $connection = 'sqlsrv';
     protected $table = 'xkidSODetail';
-    
+    public $timestamps = false;
     use HasFactory;
 
     protected $fillable = [

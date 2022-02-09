@@ -251,7 +251,7 @@ class ReportController extends Controller
         if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
         } else {
-            $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
+            $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->get();
         }
 
         return view('reports.balance', compact('customers'));
@@ -276,7 +276,7 @@ class ReportController extends Controller
         if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
         } else {
-            $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
+            $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->get();
         }
 
         $customer = Customer::where('AcctCD', $customer_id)->get()->first();

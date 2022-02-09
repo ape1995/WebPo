@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\SalesOrder;
+use App\Models\PrePaymentH;
+use App\Models\PrePaymentD;
+use App\Exports\ReportBalanceExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Auth;
 
 class ReportController extends Controller
@@ -235,6 +239,63 @@ class ReportController extends Controller
         }
 
         return view('reports.customer', compact('customers', 'salesOrders', 'date1', 'date2', 'status', 'customer_id', 'reportName'));
+
+    }
+
+    public function reportBalanceIndex(){
+
+        if (!\Auth::user()->can('view report balance')) {
+            abort(403);
+        }
+
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
+            $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
+        } else {
+            $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
+        }
+
+        return view('reports.balance', compact('customers'));
+
+    }
+
+    public function reportBalanceView(Request $request){
+
+        $input = $request->all();
+
+        $customer_id = $input['customer_id'];
+        
+        if($input['customer_id'] == 'All'){
+
+            $prePayments = PrePaymentH::orderBy('CustomerCD', 'ASC')->orderBy('PrePaymentRefNbr', 'ASC')->get();
+
+        } else {
+
+            $prePayments = PrePaymentH::where('CustomerCD', $customer_id)->orderBy('PrePaymentRefNbr', 'ASC')->get();
+        }
+
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
+            $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
+        } else {
+            $customers = Customer::where('Type', 'CU')->where('Status', 'A')->get();
+        }
+
+        $customer = Customer::where('AcctCD', $customer_id)->get()->first();
+
+        
+        $customerCode = $customer->AcctCD;
+        $customerName = $customer->AcctName;
+        $totalAdjust = 0;
+        foreach($prePayments as $header){
+            $totalAdjust+=$header->detail->sum('TotalPayment'); 
+        }
+        $totalPayment = $prePayments->sum('TransferAmount');
+        $balance = $totalPayment - $totalAdjust;
+
+        if(isset($request->view)){
+            return view('reports.balance', compact('customers', 'customer_id', 'prePayments', 'customerCode', 'customerName', 'balance'));
+        }
+        
+        return Excel::download(new ReportBalanceExport($prePayments, $customerCode, $customerName, $balance), "Report Balance.xlsx");
 
     }
 }

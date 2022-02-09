@@ -152,4 +152,15 @@ class EstimasiController extends Controller
         } 
     }
 
+    public function updateData(Request $request){
+        
+        $input = $request->all();
+
+        Estimasi::where('OrderNbr', $request->sales_order_no)->where('InventoryID', $request->inventory_id)->update(['ShippedQty' => $request->adjustment]);
+
+        return response()->json([
+            'message' => 'Saved',
+        ]);
+    }
+
 }

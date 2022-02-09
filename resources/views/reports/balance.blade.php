@@ -12,7 +12,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">{{ trans('report.title_1') }}</h1>
+              <h1 class="m-0">{{ trans('report.title_5') }}</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -31,7 +31,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('reportSalesOrder.reportBalanceView') }}" method="post">
+                            <form id="formReport" action="{{ route('reportSalesOrder.reportBalanceView') }}" method="post">
                                 @csrf
                                 <div class="row mb-1">
                                     <div class="col-md-2">
@@ -56,9 +56,10 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <input type="submit" name="view" class="btn btn-primary col-2" id="view" value="View">
-                                        <input type="submit" name="export" class="btn btn-success col-2" id="export" value="Export">
+                                    <div class="col-md-8">
+                                        <input type="submit" name="view" class="btn btn-primary col-md-2" id="view" value="View">
+                                        <input type="submit" name="export" class="btn btn-success col-md-2" id="export" value="Export">
+                                        <div id="loading" class="spinner-border"></div>
                                     </div>
                                 </div>
                             </form>
@@ -79,13 +80,13 @@
                                             <thead>
                                                 <tr class="bg-info">
                                                     <th class="text-nowrap">PrePaymentRefNbr</th>
-                                                    <th class="text-nowrap">CustomerCD</th>
-                                                    <th class="text-nowrap">CustomerName</th>
+                                                    {{-- <th class="text-nowrap">CustomerCD</th> --}}
+                                                    {{-- <th class="text-nowrap">CustomerName</th> --}}
                                                     <th class="text-nowrap">TransferAmount</th>
                                                     <th class="text-nowrap">TransferDate</th>
-                                                    <th class="text-nowrap">FinPeriodID</th>
+                                                    {{-- <th class="text-nowrap">FinPeriodID</th> --}}
                                                     <th class="text-nowrap">Descr</th>
-                                                    <th class="text-nowrap">Currency</th>
+                                                    {{-- <th class="text-nowrap">Currency</th> --}}
                                                     <th class="text-nowrap">Total Used</th>
                                                     <th class="text-nowrap">Balance</th>
                                                 </tr>
@@ -93,13 +94,13 @@
                                             <tbody>
                                                 <tr class="bg-light">
                                                     <td class="text-nowrap">{{ $header->PrePaymentRefNbr }}</td>
-                                                    <td class="text-nowrap">{{ $header->CustomerCD }}</td>
-                                                    <td class="text-nowrap">{{ $header->CustomerName }}</td>
+                                                    {{-- <td class="text-nowrap">{{ $header->CustomerCD }}</td> --}}
+                                                    {{-- <td class="text-nowrap">{{ $header->CustomerName }}</td> --}}
                                                     <td class="text-nowrap money">{{ number_format($header->TransferAmount,2,',','.') }}</td>
                                                     <td class="text-nowrap">{{ date('Y-m-d', strtotime($header->TransferDate)) }}</td>
-                                                    <td class="text-nowrap">{{ $header->FinPeriodID }}</td>
+                                                    {{-- <td class="text-nowrap">{{ $header->FinPeriodID }}</td> --}}
                                                     <td class="text-nowrap">{{ $header->Descr }}</td>
-                                                    <td class="text-nowrap">{{ $header->Currency }}</td>
+                                                    {{-- <td class="text-nowrap">{{ $header->Currency }}</td> --}}
                                                     <td class="text-nowrap">{{ number_format($header->detail->sum('TotalPayment'),2,',','.') }}</td>
                                                     <td class="text-nowrap">{{ number_format($header->TransferAmount - $header->detail->sum('TotalPayment'),2,',','.') }}</td>
                                                 </tr>
@@ -138,31 +139,36 @@
 
 @push('page_scripts')
     <script type="text/javascript">
-        // $("#view").on('click', function(){
+        $('#loading').hide();
+        $(document).on('submit','form#formReport',function(){
+            // console.log('test');
+            $('#loading').show();
+            setTimeout(function() {
+                $('#loading').hide();
+            }, 60000);
+        });
+        
+        // $('#view').button();
+        // $('#view').click(function(){
         //     if($('#customer_id').val() == '' || $('#customer_id').val() == null){
-        //         console.log('Return');
+                
+        //         // console.log('test');
+        //         // $('form#formReport').submit();
+        //         return null;
         //     } else {
-        //         $("#view").prop('value', 'Loading...');
-        //         $("#view").prop('disabled', true);
-        //         setTimeout(function() { 
-        //             $("#view").prop('value', 'View');
-        //             $("#view").prop('disabled', false);
-        //         }, 3000);
-        //     }
-        // })
 
-        // $("#export").on('click', function(){
-        //     if($('#customer_id').val() == '' || $('#customer_id').val() == null){
-        //         console.log('Return');
-        //     } else {
-        //         $("#export").prop('value', 'Loading...');
-        //         $("#export").prop('disabled', true);
-        //         setTimeout(function() { 
-        //             $("#export").prop('value', 'Export');
-        //             $("#export").prop('disabled', false);
-        //         }, 3000);
+        //         $('#view').prop("value", "Loading...");
+        //         $("#view").prop('disabled', true);
+        //         // $('form#formReport').submit();     
+        //         /* perform processing then reset button when done */
+        //         setTimeout(function() {
+        //             $('#view').prop("value", "View");
+        //             $("#view").prop('disabled', false);
+        //         }, 5000);
         //     }
-        // })
+        // });
+
+
 
         $(".select2jsCustom").select2({
             placeholder: "- Choose Outlet -",

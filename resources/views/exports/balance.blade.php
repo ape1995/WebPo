@@ -14,7 +14,7 @@
     <tr></tr>
     @foreach ($prePayments as $header)
         <thead>
-            <tr class="bg-info">
+            <tr style="background-color: cadetblue">
                 <th class="text-nowrap">PrePaymentRefNbr</th>
                 {{-- <th class="text-nowrap">CustomerCD</th> --}}
                 {{-- <th class="text-nowrap">CustomerName</th> --}}
@@ -28,7 +28,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-light">
+            <tr style="background-color: lightgrey">
                 <td class="text-nowrap">{{ $header->PrePaymentRefNbr }}</td>
                 {{-- <td class="text-nowrap">{{ $header->CustomerCD }}</td> --}}
                 {{-- <td class="text-nowrap">{{ $header->CustomerName }}</td> --}}
@@ -37,10 +37,10 @@
                 {{-- <td class="text-nowrap">{{ $header->FinPeriodID }}</td> --}}
                 <td class="text-nowrap">{{ $header->Descr }}</td>
                 {{-- <td class="text-nowrap">{{ $header->Currency }}</td> --}}
-                <td class="text-nowrap">{{ number_format($header->detail->sum('TotalPayment'),2,'.','') }}</td>
-                <td class="text-nowrap">{{ number_format($header->TransferAmount - $header->detail->sum('TotalPayment'),2,'.','') }}</td>
+                <td class="text-nowrap money">{{ number_format($header->detail->sum('TotalPayment'),2,'.','') }}</td>
+                <td class="text-nowrap money">{{ number_format($header->TransferAmount - $header->detail->sum('TotalPayment'),2,'.','') }}</td>
             </tr>
-            <tr class="bg-warning">
+            <tr style="background-color: yellow">
                 <th class="text-nowrap">OrderNbr</th>
                 <th class="text-nowrap">OrderDate</th>
                 <th class="text-nowrap">OrderTotal</th>
@@ -49,7 +49,7 @@
                 <th class="text-nowrap">TotalPayment</th>
             </tr>
             @foreach ($header->detail as $detail)  
-                <tr>
+                <tr  style="background-color: white">
                     <td class="text-nowrap">{{ $detail->OrderNbr }}</td>
                     <td class="text-nowrap">{{ date('Y-m-d', strtotime($detail->OrderDate)) }}</td>
                     <td class="text-nowrap money">{{ number_format($detail->OrderTotal,2,'.','') }}</td>

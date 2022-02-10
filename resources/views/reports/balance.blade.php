@@ -76,7 +76,7 @@
                                 
                                 <div class="table-responsive">
                                     @foreach ($prePayments as $header)
-                                        <table class="table table-stripped table-sm" id="sales-order-table">
+                                        <table class="table table-bordered table-sm" id="sales-order-table">
                                             <thead>
                                                 <tr class="bg-info">
                                                     <th class="text-nowrap">PrePaymentRefNbr</th>
@@ -101,8 +101,8 @@
                                                     {{-- <td class="text-nowrap">{{ $header->FinPeriodID }}</td> --}}
                                                     <td class="text-nowrap">{{ $header->Descr }}</td>
                                                     {{-- <td class="text-nowrap">{{ $header->Currency }}</td> --}}
-                                                    <td class="text-nowrap">{{ number_format($header->detail->sum('TotalPayment'),2,',','.') }}</td>
-                                                    <td class="text-nowrap">{{ number_format($header->TransferAmount - $header->detail->sum('TotalPayment'),2,',','.') }}</td>
+                                                    <td class="text-nowrap money">{{ number_format($header->detail->sum('TotalPayment'),2,',','.') }}</td>
+                                                    <td class="text-nowrap money">{{ number_format($header->TransferAmount - $header->detail->sum('TotalPayment'),2,',','.') }}</td>
                                                 </tr>
                                                 <tr class="bg-warning">
                                                     <th class="text-nowrap">OrderNbr</th>
@@ -113,7 +113,7 @@
                                                     <th class="text-nowrap">TotalPayment</th>
                                                 </tr>
                                                 @foreach ($header->detail as $detail)  
-                                                    <tr>
+                                                    <tr class="bg-white">
                                                         <td class="text-nowrap">{{ $detail->OrderNbr }}</td>
                                                         <td class="text-nowrap">{{ date('Y-m-d', strtotime($detail->OrderDate)) }}</td>
                                                         <td class="text-nowrap money">{{ number_format($detail->OrderTotal,2,',','.') }}</td>
@@ -140,33 +140,18 @@
 @push('page_scripts')
     <script type="text/javascript">
         $('#loading').hide();
+
         $(document).on('submit','form#formReport',function(){
             // console.log('test');
             $('#loading').show();
             setTimeout(function() {
                 $('#loading').hide();
-            }, 60000);
+            }, 30000);
         });
-        
-        // $('#view').button();
-        // $('#view').click(function(){
-        //     if($('#customer_id').val() == '' || $('#customer_id').val() == null){
-                
-        //         // console.log('test');
-        //         // $('form#formReport').submit();
-        //         return null;
-        //     } else {
 
-        //         $('#view').prop("value", "Loading...");
-        //         $("#view").prop('disabled', true);
-        //         // $('form#formReport').submit();     
-        //         /* perform processing then reset button when done */
-        //         setTimeout(function() {
-        //             $('#view').prop("value", "View");
-        //             $("#view").prop('disabled', false);
-        //         }, 5000);
-        //     }
-        // });
+        $(window).on('load', function () {
+            $('#loading').hide();
+        }) 
 
 
 

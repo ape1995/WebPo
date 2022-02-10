@@ -7,8 +7,8 @@
         <input type="hidden" name="inventory_id" id="inventory_id_{{ $sort }}" value="{{ $estimasi->InventoryID }}">
         <input type="hidden" name="sales_order_no" id="sales_order_no_{{ $sort }}" value="{{ $estimasi->OrderNbr }}">
         <input type="hidden" name="order_qty" id="order_qty_{{ $sort }}" value="{{ number_format($estimasi->OrderQty, 0) }}">
-        <input type="number" name="adjustment" id="adjustment_{{ $sort }}" class="form-control col-md-4 m-1" required>
-        <input type="text" name="after_adjustment" id="after_adjustment_{{ $sort }}" class="form-control col-md-4 m-1" placeholder="After Adjustment" readonly>
+        <input type="number" name="adjustment" id="adjustment_{{ $sort }}" class="form-control col-md-4 m-1" value="{{ $estimasi->AdjQty == null ? '' : number_format($estimasi->AdjQty, 0) }}" required>
+        <input type="text" name="after_adjustment" id="after_adjustment_{{ $sort }}" class="form-control col-md-4 m-1" value="{{ $estimasi->FinalQty == null ? '' : number_format($estimasi->FinalQty, 0) }}" placeholder="After Adjustment" readonly>
     </div>
     <script type="text/javascript">
         var sort = "<?php echo $sort; ?>";

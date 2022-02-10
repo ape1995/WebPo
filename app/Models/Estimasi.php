@@ -40,7 +40,9 @@ class Estimasi extends Model
         'ShipmentNbr',
         'InvoiceFileName',
         'ConfirmSeqNbr',
-        'ConfirmDocNbr'
+        'ConfirmDocNbr',
+        'AdjQty',
+        'FinalQty',
     ];
 
     public function product()

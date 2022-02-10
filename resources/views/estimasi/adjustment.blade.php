@@ -9,11 +9,15 @@
         <input type="hidden" name="order_qty" id="order_qty_{{ $sort }}" value="{{ number_format($estimasi->OrderQty, 0) }}">
         <input type="number" name="adjustment" id="adjustment_{{ $sort }}" class="form-control col-md-4 m-1" value="{{ $estimasi->AdjQty == null ? '' : number_format($estimasi->AdjQty, 0) }}" required>
         <input type="text" name="after_adjustment" id="after_adjustment_{{ $sort }}" class="form-control col-md-4 m-1" value="{{ $estimasi->FinalQty == null ? '' : number_format($estimasi->FinalQty, 0) }}" placeholder="After Adjustment" readonly>
+        <span class="badge badge-pill badge-success" id="message_{{ $sort }}" style="display: none"></span>
     </div>
     <script type="text/javascript">
         var sort = "<?php echo $sort; ?>";
-        
         $( "#adjustment_"+sort ).change(function() {
+            $('#message_'+"{{ $sort }}").css('display', 'block');
+            $('#message_'+"{{ $sort }}").removeClass("badge badge-pill badge-success");
+            $('#message_'+"{{ $sort }}").addClass("badge badge-pill badge-secondary");
+            $('#message_'+"{{ $sort }}").html('Loading...');
             $('#after_adjustment_'+"<?php echo $sort; ?>").val(parseInt($('#order_qty_'+"<?php echo $sort; ?>").val()) + parseInt($('#adjustment_'+"<?php echo $sort; ?>").val()));
             data = {
                 sales_order_no:$('#sales_order_no_'+"{{ $sort }}").val(),
@@ -35,9 +39,9 @@
                 dataType: 'JSON',
                 success:function(data)
                 {
-                    console.log(data)
-                    // $('#message_'+i).css('display', 'block');
-                    // $('#message_'+i).html(data.success);
+                    $('#message_'+"{{ $sort }}").removeClass("badge badge-pill badge-secondary");
+                    $('#message_'+"{{ $sort }}").addClass("badge badge-pill badge-success");
+                    $('#message_'+"{{ $sort }}").html(data.message);
                 }
             });
         });

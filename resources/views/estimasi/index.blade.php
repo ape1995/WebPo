@@ -129,7 +129,7 @@
         if(date.val() == null || date.val() == ''){
           console.log('waiting');
         } else {
-          console.log(date.val());
+          // console.log(date.val());
           fetch_data();
         }
       });

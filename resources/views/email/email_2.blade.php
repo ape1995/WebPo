@@ -350,7 +350,7 @@ ul.social li{
             		<td align="center">
             			<div class="text" style="padding: 0 2.5em; text-align: center;">
             				<h3>Hi,</h3>
-            				<h4>{{ $data['name'] }} submit order melebih batas waktu nih. yuk konfirmasi ke pelanggan tersebut.</h4>
+            				<h4>{{ $data['name'] }} submit order melebih batas waktu nih. Silahkan lakukan konfirmasi ke pelanggan tersebut.</h4>
             				<p>lihat datanya <a href="{{ $data['url'] }}" class="btn btn-primary">Disini</a></p>
             			</div>
             		</td>

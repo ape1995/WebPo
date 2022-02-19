@@ -34,6 +34,7 @@ return [
     'type' => 'Type',
     'btn_cancel_order' => 'Cancel Order',
     'btn_upload_tf' => 'Upload Attachments',
+    'btn_upload_product' => 'Upload Products',
     'btn_submit_order' => 'Submit Order',
     'btn_process_order' => 'Process Order',
     'btn_reject_order' => 'Reject Order',

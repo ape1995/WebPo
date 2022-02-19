@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateSalesOrderRequest;
 use App\Repositories\SalesOrderRepository;
 use App\Repositories\SalesOrderDetailRepository;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductImport;
 use App\Models\MailSetting;
 use App\Mail\SendMailSubmit;
 use App\Models\User;
@@ -443,17 +445,14 @@ class SalesOrderController extends AppBaseController
         return $product;
     }
 
-    public function getPrice($code, $customer){
+    public function getPrice($code, $customer, $date){
         // dd($code, $customer);
 
         $priceClass = $this->getCPriceClass($customer);
         $inventory = $this->getInventoryID($code);
         $inventoryID = $inventory->InventoryID;
         $inventoryName = $inventory->Descr;
-        $time = Carbon::now();
-        $now = $time->toDateString();
-        // dd($inventoryID);
-        $salesPrice = SalesPrice::whereRaw("CustPriceClassID = '$priceClass' AND InventoryID = '$inventoryID' AND EffectiveDate <= CAST( GETDATE() AS Date ) AND (ExpirationDate IS NULL OR ExpirationDate >= CAST( GETDATE() AS Date ))")->get()->first();
+        $salesPrice = SalesPrice::whereRaw("CustPriceClassID = '$priceClass' AND InventoryID = '$inventoryID' AND EffectiveDate <= '$date' AND (ExpirationDate IS NULL OR ExpirationDate >= '$date')")->get()->first();
         // dd($salesPrice);
         $data['unit_price'] = number_format($salesPrice->SalesPrice,2,',','.');
         $data['uom'] = $salesPrice->UOM;
@@ -678,5 +677,20 @@ class SalesOrderController extends AppBaseController
         Attachment::create($input);
 
         return redirect(route('salesOrders.show', $request->id_order));
+    }
+
+    public function importProduct(Request $request){
+
+        // dd($request->all());
+        $file = $request->file('file');
+        $namaFile =  $file->getClientOriginalName();
+        $file->move('uploads/product', $namaFile);
+
+        Excel::import(new ProductImport($request->date_file), public_path('uploads/product/'.$namaFile));
+        
+        return response()->json([
+            'success' => 'Data Imported Successfully',
+        ]);
+
     }
 }

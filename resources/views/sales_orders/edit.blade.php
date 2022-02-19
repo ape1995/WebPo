@@ -215,7 +215,7 @@
                 qty.val('');
                 amount.val('');
                 let inventoryCode = inventory_id.val().replace(/^\s+|\s+$/gm,'');
-                var url = "{{ url('api/get-inventory-data') }}" + '/' + inventoryCode + '/' + customer_id.val();
+                var url = "{{ url('api/get-inventory-data') }}" + '/' + inventoryCode + '/' + customer_id.val() + '/' + delivery_date.val();
                 // send data to your endpoint
                 $.ajax({
                     url: url,

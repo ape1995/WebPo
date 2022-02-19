@@ -77,7 +77,7 @@ class UserController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
             $roles = Role::where('name', 'Staff Customers')->where('status', true)->get();
         } else {
-            $customers =  Customer::where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
+            $customers =  Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
             // $customers =  Customer::where('Type', 'CU')->get();
             $roles = Role::where('status', true)->get();
         }
@@ -154,7 +154,7 @@ class UserController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
             $roles = Role::where('name', 'Staff Customers')->where('status', true)->get();
         } else {
-            $customers =  Customer::where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
+            $customers =  Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
             $roles = Role::where('status', true)->get();
         }
 
@@ -194,6 +194,7 @@ class UserController extends Controller
         $user->update($request->all());
 
         $user->assignRole($request->role);
+        $user->syncRoles($request->role);
 
         Artisan::call('cache:forget spatie.permission.cache');
         Artisan::call('cache:clear');

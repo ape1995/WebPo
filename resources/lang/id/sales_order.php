@@ -27,6 +27,7 @@ return [
     'btn_reset' => 'Atur Ulang',
     'btn_cancel' => 'Batalkan Pesanan',
     'btn_upload_tf' => 'Masukan Lampiran',
+    'btn_upload_product' => 'Unggah Produk',
     'btn_update' => 'Perbaharui',
     'btn_view' => 'Lihat Detil',
     'btn_print' => 'Cetak PDF',

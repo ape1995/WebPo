@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('get-inventory-data/{code}/{customer}',[App\Http\Controllers\SalesOrderController::class, 'getPrice']);
+Route::get('get-inventory-data/{code}/{customer}/{date}',[App\Http\Controllers\SalesOrderController::class, 'getPrice']);
 Route::get('getAllCounter/{customer}/{date}',[App\Http\Controllers\CartController::class, 'getAllCounter']);
 Route::get('countOrderDetail/{code}/{date}',[App\Http\Controllers\SalesOrderDetailController::class, 'countOrderDetail']);
 Route::get('get-outlet-data/{code}', [App\Http\Controllers\EstimasiController::class, 'getOutletData']);

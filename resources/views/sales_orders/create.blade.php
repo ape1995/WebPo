@@ -24,6 +24,27 @@
                     {{ trans('sales_order.add_product') }}
                 </button>
 
+                <button class="btn btn-success text-light mb-2" id="btn_upload_product" type="button"  data-toggle="modal" data-target="#modalUpload">
+                    {{ trans('sales_order.btn_upload_product') }}
+                </button>
+                   
+                {{-- <a class="btn btn-success mb-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    {{ trans('sales_order.btn_upload_product') }}
+                </a>
+                <div class="collapse" id="collapseExample">
+                    <form method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-5 my-2">
+                                <input type="file" name="file" id="file" class="form-control" accept=".xlsx, .xls" required>
+                            </div>
+                            <div class="col-md-2 my-2">
+                                <input type="submit" class="btn btn-primary" value="Upload">
+                            </div>
+                        </div>
+                    </form>
+                </div> --}}
+
                 @include('carts.table')
 
                 <!-- Modal -->
@@ -159,6 +180,34 @@
 
             {!! Form::close() !!}
 
+            <!-- Modal -->
+            <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="modalUpload" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <form id="mupload_product" action="javascript:void(0)" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">{{ trans('sales_order.btn_upload_product') }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-md-12 my-2">
+                                    <input type="date" id="date_file" name="date_file" style="visibility: collapse">
+                                    <input type="file" name="file" id="file" class="form-control" accept=".xlsx, .xls" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="col-md-4 m-3">
+                                    <input type="submit" id="upload_product" class="btn btn-success" value="{{ trans('sales_order.btn_upload_product') }}">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     @php
@@ -190,17 +239,50 @@
             var tax =  $("#tax");
             var order_total =  $("#order_total");
             var save =  $("#saveBtn");
+            var btn_upload_product =  $("#btn_upload_product");
+            // var mupload_product =  $("#mupload_product");
+            btn_upload_product.prop("disabled", true);
             save.prop("disabled", true);
             add_product.prop("disabled", true);
             $("#savePageButton").prop("disabled", true);
 
             getAllCounter();
 
+            $('#mupload_product').on('submit', function(){
+                    $('#upload_product').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Uploading...').attr('disabled', true);
+                    var url = "{{ route('salesOrders.importProduct') }}";
+                    var data = new FormData(this);
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $.ajax({
+                        url: url,
+                        method: "POST",
+                        data: data,
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success:function(data)
+                        {
+                            $('#modalUpload').modal('hide');
+                            table.draw();
+                            getAllCounter();
+                        }
+                    })
+                });
+
             delivery_date.on('change', function() {
                 if(delivery_date.val() == null || delivery_date.val() == ''){
                     add_product.prop("disabled", true);
                 } else {
+                    $('#date_file').val(delivery_date.val())
                     add_product.prop("disabled", false);
+                    btn_upload_product.prop("disabled", false);
                 }
                 getAllCounter();
             });
@@ -210,7 +292,7 @@
                 qty.val('');
                 amount.val('');
                 let inventoryCode = inventory_id.val().replace(/^\s+|\s+$/gm,'');
-                var url = "{{ url('api/get-inventory-data') }}" + '/' + inventoryCode + '/' + customer_id.val();
+                var url = "{{ url('api/get-inventory-data') }}" + '/' + inventoryCode + '/' + customer_id.val() + '/' + delivery_date.val();
                 // send data to your endpoint
                 $.ajax({
                     url: url,

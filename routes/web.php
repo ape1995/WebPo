@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('cancelOrder/{code}',[SalesOrderController::class,'cancelOrder'])->name('salesOrders.cancelOrder');
     Route::get('processOrder/{code}',[SalesOrderController::class,'processOrder'])->name('salesOrders.processOrder');
     Route::post('SOuploadAttachments',[SalesOrderController::class,'uploadAttachment'])->name('salesOrders.uploadAttachment');
+    Route::post('SOimportProduct',[SalesOrderController::class,'importProduct'])->name('salesOrders.importProduct');
     Route::post('rejectOrder',[SalesOrderController::class,'rejectOrder'])->name('salesOrders.rejectOrder');
     Route::get('printOrder/{code}',[SalesOrderController::class,'printPdf'])->name('salesOrders.printPdf');
     Route::get('createReOrder/{code}',[SalesOrderController::class,'reOrder'])->name('salesOrders.reOrder');

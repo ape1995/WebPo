@@ -194,6 +194,7 @@ class UserController extends Controller
         $user->update($request->all());
 
         $user->assignRole($request->role);
+        $user->syncRoles($request->role);
 
         Artisan::call('cache:forget spatie.permission.cache');
         Artisan::call('cache:clear');

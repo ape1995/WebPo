@@ -249,32 +249,38 @@
             getAllCounter();
 
             $('#mupload_product').on('submit', function(){
-                    $('#upload_product').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Uploading...').attr('disabled', true);
-                    var url = "{{ route('salesOrders.importProduct') }}";
-                    var data = new FormData(this);
+                $('#upload_product').attr('disabled', true);
+                var url = "{{ route('salesOrders.importProduct') }}";
+                var data = new FormData(this);
 
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
-                    $.ajax({
-                        url: url,
-                        method: "POST",
-                        data: data,
-                        dataType: 'JSON',
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        success:function(data)
-                        {
-                            $('#modalUpload').modal('hide');
-                            table.draw();
-                            getAllCounter();
-                        }
-                    })
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
                 });
+
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: data,
+                    dataType: 'JSON',
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success:function(data)
+                    {
+                        $('#upload_product').attr('disabled', false);
+                        $('#modalUpload').modal('hide');
+                        table.draw();
+                        getAllCounter();
+                    },
+                    error:function(data)
+                    {
+                        $('#upload_product').attr('disabled', false);
+                        alert('Ada Produk yang tidak sesuai, mohon cek kembali');
+                    }
+                })
+            });
 
             delivery_date.on('change', function() {
                 if(delivery_date.val() == null || delivery_date.val() == ''){
@@ -474,9 +480,7 @@
                         getAllCounter();
                     },
                     error: function (data) {
-                        // console.log('Error:', data);
                         alert('Produk sudah ada dalam list');
-                        // $('#saveBtn').html('Save Changes');
                     }
                 });
             });

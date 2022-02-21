@@ -14,6 +14,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Hash;
 use Flash;
+use Response;
 
 class ProductImport implements ToCollection, WithHeadingRow
 {
@@ -43,24 +44,23 @@ class ProductImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
 
-        foreach ($rows as $index => $row) 
-        { 
+        // foreach ($rows as $index => $row) 
+        // { 
             
-            $kode_produk = $row['kode_produk'];
+        //     $kode_produk = $row['kode_produk'];
+            
 
-            // Cek Double Produk
+        //     // Cek ID Product Exist
+        //     // $cek_produk = Product::where('InventoryCD', $kode_produk)->get()->first();
 
-            // Cek ID Product Exist
+        //     // if($cek_produk == null || $cek_produk == '' || $cek_produk == 0){
+        //     //     return Response::json(['error'=>'Product already listed on carts.']);
+        //     // }
 
 
-            // Cek Price Product
-
-
-        }
+        // }
 
         foreach ($rows as $row) {
-
-            // cek email existing
             
             $customer = \Auth::user()->customer_id;
 
@@ -69,17 +69,18 @@ class ProductImport implements ToCollection, WithHeadingRow
             $inventoryID = $inventory->InventoryID;
             $salesPrice = SalesPrice::whereRaw("CustPriceClassID = '$priceClass' AND InventoryID = '$inventoryID' AND EffectiveDate <= '$this->date' AND (ExpirationDate IS NULL OR ExpirationDate >= '$this->date')")->get()->first();
             
-
-            Cart::create([
-                'inventory_id' => $inventory->InventoryCD,
-                'inventory_name' => $inventory->Descr,
-                'qty' => $row['quantity'],
-                'uom' => $salesPrice->UOM,
-                'unit_price' => $salesPrice->SalesPrice,
-                'amount' => $salesPrice->SalesPrice * $row['quantity'],
-                'customer_id' => $customer,
-                'created_by' => \Auth::user()->id,
-            ]); 
+            if($row['quantity'] > 0 || $row['quantity'] != null){
+                Cart::create([
+                    'inventory_id' => $inventory->InventoryCD,
+                    'inventory_name' => $inventory->Descr,
+                    'qty' => $row['quantity'],
+                    'uom' => $salesPrice->UOM,
+                    'unit_price' => $salesPrice->SalesPrice,
+                    'amount' => $salesPrice->SalesPrice * $row['quantity'],
+                    'customer_id' => $customer,
+                    'created_by' => \Auth::user()->id,
+                ]); 
+            }
         }
 
     }

@@ -63,6 +63,12 @@
             </a>
         </li>
         @endcan
+        <li class="nav-item">
+            <a href="{{ route('dFormImportProduct') }}" class="nav-link {{ Request::is('dFormImportProduct*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{ trans('menu.dformatimport') }}</p>
+            </a>
+        </li>
     </ul>
 </li>
 @endif

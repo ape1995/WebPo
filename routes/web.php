@@ -12,6 +12,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\EstimasiController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('estimasi', EstimasiController::class);
     Route::post('estimasi-updateData', [EstimasiController::class,'updateData'])->name('estimasi.updateData');
     Route::post('dataTableEstimasi',[EstimasiController::class,'dataTable'])->name('estimasi.data');
+    Route::get('dFormImportProduct', [ProductController::class, 'downloadFormat'])->name('dFormImportProduct');
 });
 
 

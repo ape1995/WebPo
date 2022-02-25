@@ -23,10 +23,12 @@
                            class='btn btn-default btn-xs'>
                             <i class="far fa-eye"></i>
                         </a> --}}
+                        @can('edit tax')
                         <a href="{{ route('parameterVATs.edit', [$parameterVAT->id]) }}"
                            class='btn btn-default btn-xs'>
                             <i class="far fa-edit"></i>
                         </a>
+                        @endcan
                         {{-- {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!} --}}
                     </div>
                     {!! Form::close() !!}

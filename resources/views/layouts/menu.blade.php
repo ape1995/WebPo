@@ -5,7 +5,7 @@
     </a>
 </li>
 
-@if(Gate::check('browse users') || Gate::check('browse group permissions') || Gate::check('browse parameter')  || Gate::check('browse adds'))
+@if(Gate::check('browse users') || Gate::check('browse group permissions') || Gate::check('browse parameter')  || Gate::check('browse adds')  || Gate::check('browse tax'))
 <li class="nav-item {{ Request::is('users*') ? 'menu-open' : '' }} {{ Request::is('roles*') ? 'menu-open' : '' }} {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }}">
     <a href="#" class="nav-link {{ Request::is('users*') ? 'active' : '' }} {{ Request::is('roles*') ? 'active' : '' }} {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-file-alt"></i>
@@ -39,7 +39,7 @@
             </a>
         </li>
         @endcan
-        @can('browse parameter')
+        @can('browse tax')
         <li class="nav-item">
             <a href="{{ route('parameterVATs.index') }}" class="nav-link {{ Request::is('parameterVATs*') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>

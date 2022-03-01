@@ -36,4 +36,9 @@ class Customer extends Model
         return $this->hasOne(CustomerDetail::class, 'BAccountID', 'BAccountID');
     }
 
+    public function outlet()
+    {
+        return $this->hasOne(SOOutlet::class, 'CustomerID', 'BAccountID')->where('UsrIsActive', true);
+    }
+
 }

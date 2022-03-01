@@ -117,6 +117,7 @@
                                                 <th>Product Name</th>
                                                 <th>Quantity</th>
                                                 <th>Delivery Date</th>
+                                                <th>Group</th>
                                                 <th>WAREHOUSE</th>
                                             </tr>
                                         </thead>
@@ -129,13 +130,14 @@
                                                         <td>{{ $salesOrder->order_nbr }}</td>
                                                         <td>{{ $salesOrder->customer->AcctCD }}</td>
                                                         <td>{{ $salesOrder->customer->AcctName }}</td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <td>{{ $salesOrder->customer->outlet->OutletID }}</td>
+                                                        <td>{{ $salesOrder->customer->outlet->OutletName }}</td>
+                                                        <td>{{ $salesOrder->customer->outlet->RitID }}</td>
                                                         <td>{{ $salesOrderDetail->inventory_id }}</td>
                                                         <td>{{ $salesOrderDetail->inventory_name }}</td>
                                                         <td>{{ $salesOrderDetail->qty }}</td>
                                                         <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
+                                                        <td>{{ $salesOrder->customer->outlet->UsrRitNbr }}</td>
                                                         <td>WH03FG</td>
                                                     </tr>
                                                 @endforeach

@@ -38,7 +38,7 @@ class Customer extends Model
 
     public function outlet()
     {
-        return $this->hasOne(SOOutlet::class, 'CustomerID', 'BAccountID')->where('UsrIsActive', true);
+        return $this->hasOne(SOOutlet::class, 'CustomerID', 'BAccountID')->where('UsrIsActive', true)->orderBy('CreatedDateTime', 'DESC');
     }
 
 }

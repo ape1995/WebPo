@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\SalesOrder;
 use App\Models\PrePaymentH;
 use App\Models\PrePaymentD;
+use App\Models\SOOrder;
 use App\Exports\ReportBalanceExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth;
@@ -84,19 +85,19 @@ class ReportController extends Controller
 
         $input = $request->all();
 
-        // dd($input['date_2']);
+        $soOrder = SOOrder::select('OrderNbr')->whereYear('RequestDate', date('Y', strtotime($input['date_2'])))->whereMonth('RequestDate', date('m', strtotime($input['date_2'])))->pluck('OrderNbr')->toArray();
 
         if($input['customer_id'] == 'All'){
             if($input['status'] == 'All'){
-                $salesOrders = SalesOrder::whereBetween('delivery_date',[$input['date_1'],$input['date_2']])->get();
+                $salesOrders = SalesOrder::whereBetween('delivery_date',[$input['date_1'],$input['date_2']])->whereNotIn('order_nbr', $soOrder)->get();
             } else {
-                $salesOrders = SalesOrder::where('status', $input['status'])->whereBetween('delivery_date',[$input['date_1'],$input['date_2']])->get();
+                $salesOrders = SalesOrder::where('status', $input['status'])->whereBetween('delivery_date',[$input['date_1'],$input['date_2']])->whereNotIn('order_nbr', $soOrder)->get();
             }
         } else {
             if($input['status'] == 'All'){
-                $salesOrders = SalesOrder::where('customer_id', $input['customer_id'])->whereBetween('delivery_date',array($input['date_1'],$input['date_2']))->get();
+                $salesOrders = SalesOrder::where('customer_id', $input['customer_id'])->whereBetween('delivery_date',array($input['date_1'],$input['date_2']))->whereNotIn('order_nbr', $soOrder)->get();
             } else {
-                $salesOrders = SalesOrder::where('status', $input['status'])->where('customer_id', $input['customer_id'])->whereBetween('delivery_date',array($input['date_1'],$input['date_2']))->get();
+                $salesOrders = SalesOrder::where('status', $input['status'])->where('customer_id', $input['customer_id'])->whereBetween('delivery_date',array($input['date_1'],$input['date_2']))->whereNotIn('order_nbr', $soOrder)->get();
             }
         }
         // dd($salesOrders->count() == 0);

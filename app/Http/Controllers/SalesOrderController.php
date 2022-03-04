@@ -95,7 +95,7 @@ class SalesOrderController extends AppBaseController
             if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
                 $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
             } else {
-                $datas = SalesOrder::join('users', 'posts.user_id', '=', 'users.id')->select('*', DB::raw("'BAccount.AcctName' as customer_name"))->whereNotIn('status', ['S'])->orderBy('id', 'desc');
+                $datas = SalesOrder::whereNotIn('status', ['S'])->orderBy('id', 'desc');
             }
 
             return DataTables::of($datas)

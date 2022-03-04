@@ -70,7 +70,6 @@ class SalesOrder extends Model
         'order_date' => 'date',
         'delivery_date' => 'date',
         'order_qty' => 'integer',
-        'tax' => 'integer',
         'description' => 'string',
         'status' => 'string',
         'created_by' => 'string',
@@ -88,7 +87,6 @@ class SalesOrder extends Model
         'order_date' => 'required',
         'delivery_date' => 'required',
         'order_qty' => 'order_amount integer number',
-        'tax' => 'order_total integer number'
     ];
 
 

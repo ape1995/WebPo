@@ -187,7 +187,7 @@ class SalesOrderController extends AppBaseController
 
         $minDeliveryDate = $date->toDateString();
 
-        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->get();
+        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereNotIn('InventoryCD', ['FG001011','FG007001','FG008004','FG008005','FG009001', 'FG010005', 'FG011004', 'FG001008', 'FG002013', 'FG008001', 'FG008002', 'FG007009', 'FG002021'])->orderBy('InventoryCD', 'ASC')->get();
 
         return view('sales_orders.create', compact('customers', 'products', 'minDeliveryDate'));
     }
@@ -337,7 +337,7 @@ class SalesOrderController extends AppBaseController
 
         $minDeliveryDate = $date->toDateString();
 
-        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->get();
+        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereNotIn('InventoryCD', ['FG001011','FG007001','FG008004','FG008005','FG009001', 'FG010005', 'FG011004', 'FG001008', 'FG002013', 'FG008001', 'FG008002', 'FG007009', 'FG002021'])->orderBy('InventoryCD', 'ASC')->get();
 
         return view('sales_orders.edit', compact('salesOrder', 'customers', 'products', 'minDeliveryDate'));
     }

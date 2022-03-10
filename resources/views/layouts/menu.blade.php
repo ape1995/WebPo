@@ -178,4 +178,27 @@
         Estimasi
     </a>
 </li>
-@endcan
+@endcan<li class="nav-item">
+    <a href="{{ route('customerProducts.index') }}"
+       class="nav-link {{ Request::is('customerProducts*') ? 'active' : '' }}">
+        <p>Customer Products</p>
+    </a>
+</li>
+
+
+<li class="nav-item">
+    <a href="{{ route('customerMinOrders.index') }}"
+       class="nav-link {{ Request::is('customerMinOrders*') ? 'active' : '' }}">
+        <p>Customer Min Orders</p>
+    </a>
+</li>
+
+
+{{-- <li class="nav-item">
+    <a href="{{ route('customerMinOrderHists.index') }}"
+       class="nav-link {{ Request::is('customerMinOrderHists*') ? 'active' : '' }}">
+        <p>Customer Min Order Hists</p>
+    </a>
+</li> --}}
+
+

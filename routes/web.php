@@ -13,6 +13,9 @@ use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\EstimasiController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CustomerProductController;
+use App\Http\Controllers\CustomerMinOrderController;
+use App\Http\Controllers\CustomerMinOrderHistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,11 +89,12 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('estimasi-updateData', [EstimasiController::class,'updateData'])->name('estimasi.updateData');
     Route::post('dataTableEstimasi',[EstimasiController::class,'dataTable'])->name('estimasi.data');
     Route::get('dFormImportProduct', [ProductController::class, 'downloadFormat'])->name('dFormImportProduct');
+    Route::resource('customerProducts', CustomerProductController::class)->except('edit');
+    Route::get('customerProducts-create-bulk',  [CustomerProductController::class, 'createBulk'])->name('customerProducts.createBulk');
+    Route::post('customerProducts-store-bulk',  [CustomerProductController::class, 'storeBulk'])->name('customerProducts.storeBulk');
+    Route::resource('customerMinOrders', CustomerMinOrderController::class)->except('edit');
+    Route::resource('customerMinOrderHists', CustomerMinOrderHistController::class);
 });
 
 
 Route::get('/send_notification', [SendEmailController::class, 'send']);
-
-
-
-

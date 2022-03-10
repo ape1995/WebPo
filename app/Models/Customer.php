@@ -41,4 +41,9 @@ class Customer extends Model
         return $this->hasOne(SOOutlet::class, 'CustomerID', 'BAccountID')->where('UsrIsActive', true)->orderBy('CreatedDateTime', 'DESC');
     }
 
+    public function customer2()
+    {
+        return $this->hasOne(Customer2::class, 'BAccountID', 'BAccountID');
+    }
+
 }

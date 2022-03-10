@@ -9,8 +9,8 @@
     @foreach ($products as $product)
         <tbody>
             <tr style="background-color: lightgrey">
-                <td class="text-nowrap">{{ $product->InventoryCD }}</td>
-                <td class="text-nowrap">{{ $product->Descr }}</td>
+                <td class="text-nowrap">{{ $product->inventory_code }}</td>
+                <td class="text-nowrap">{{ $product->product->Descr }}</td>
                 <td class="text-nowrap">0</td>
             </tr>
         </tbody>

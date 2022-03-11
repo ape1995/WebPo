@@ -23,7 +23,7 @@ class ReportController extends Controller
         }
 
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         
 
         return view('reports.sales_order', compact('customers'));
@@ -68,7 +68,7 @@ class ReportController extends Controller
         $reportName = 'Order Rekap'.' - '.$date1.' sd '.$date2. ' - status : '.$status.' - customer : '.$customerCode;
 
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
       
         return view('reports.sales_order', compact('customers', 'salesOrders', 'date1', 'date2', 'status', 'customer_id', 'reportName'));
 
@@ -81,7 +81,7 @@ class ReportController extends Controller
         }
 
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         
         return view('reports.sales_order_detail', compact('customers'));
 
@@ -126,7 +126,7 @@ class ReportController extends Controller
         $reportName = 'Order Detail'.' - '.$date1.' sd '.$date2. ' - status : '.$status.' - customer : '.$customerCode;
 
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         
         return view('reports.sales_order_detail', compact('customers', 'salesOrders', 'date1', 'date2', 'status', 'customer_id', 'reportName'));
 
@@ -139,7 +139,7 @@ class ReportController extends Controller
         }
 
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         
         return view('reports.report1', compact('customers'));
 
@@ -184,7 +184,7 @@ class ReportController extends Controller
         $reportName = 'Order Detail F Request'.' - '.$date1.' sd '.$date2. ' - status : '.$status.' - customer : '.$customerCode;
 
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         
         return view('reports.report1', compact('customers', 'salesOrders', 'date1', 'date2', 'status', 'customer_id', 'reportName'));
 
@@ -200,7 +200,7 @@ class ReportController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
         } else {
             $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-            $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+            $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         }
 
         return view('reports.customer', compact('customers'));
@@ -247,7 +247,7 @@ class ReportController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
         } else {
             $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-            $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+            $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
        }
 
         return view('reports.customer', compact('customers', 'salesOrders', 'date1', 'date2', 'status', 'customer_id', 'reportName'));
@@ -264,7 +264,7 @@ class ReportController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
         } else {
             $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-            $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+            $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         }
 
         return view('reports.balance', compact('customers'));
@@ -290,7 +290,7 @@ class ReportController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
         } else {
             $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-            $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+            $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         }
 
         $customer = Customer::where('AcctCD', $customer_id)->get()->first();

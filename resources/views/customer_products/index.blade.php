@@ -8,14 +8,18 @@
                     <h1>Customer Products</h1>
                 </div>
                 <div class="col-sm-6 mx-auto">
-                    <a class="btn btn-primary float-right ml-3"
-                       href="{{ route('customerProducts.create') }}">
-                        Add New
-                    </a>
-                    <a class="btn btn-info float-right"
-                       href="{{ route('customerProducts.createBulk') }}">
-                        Bulk Action
-                    </a>
+                    @can('create customer products')
+                        <a class="btn btn-primary float-right ml-3"
+                        href="{{ route('customerProducts.create') }}">
+                            Add New
+                        </a>
+                    @endcan
+                    @can('bulk customer products')
+                        <a class="btn btn-info float-right"
+                        href="{{ route('customerProducts.createBulk') }}">
+                            Bulk Action
+                        </a>
+                    @endcan
                 </div>
             </div>
         </div>

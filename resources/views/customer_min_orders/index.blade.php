@@ -8,10 +8,12 @@
                     <h1>Customer Min Orders</h1>
                 </div>
                 <div class="col-sm-6">
+                    @can('create min orders')
                     <a class="btn btn-primary float-right"
                        href="{{ route('customerMinOrders.create') }}">
                         Add New
                     </a>
+                    @endcan
                 </div>
             </div>
         </div>

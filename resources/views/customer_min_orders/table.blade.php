@@ -17,10 +17,12 @@
                 <td>
                     {!! Form::open(['route' => ['customerMinOrders.destroy', $customerMinOrder->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
+                        @can('view min orders')
                         <a href="{{ route('customerMinOrders.show', [$customerMinOrder->id]) }}"
                            class='btn btn-default btn-xs'>
                             <i class="far fa-eye"></i>
                         </a>
+                        @endcan
                         {{-- <a href="{{ route('customerMinOrders.edit', [$customerMinOrder->id]) }}"
                            class='btn btn-default btn-xs'>
                             <i class="far fa-edit"></i>

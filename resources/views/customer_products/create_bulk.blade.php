@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>Create Bulk Customer Product</h1>
+                    <h1>Bulk Action Customer Product</h1>
                 </div>
             </div>
         </div>
@@ -47,8 +47,8 @@
             </div>
 
             <div class="card-footer">
-                <input type="submit" class="btn btn-success" name="add_item" value="Add Item">
-                <input type="submit" class="btn btn-danger" name="delete_item" value="Delete Item">
+                <input type="submit" class="btn btn-success" name="add_item" value="Add Item" onclick="return confirm('Are You Sure to Create?')">
+                <input type="submit" class="btn btn-danger" name="delete_item" value="Delete Item" onclick="return confirm('Are You Sure to Delete?')">
             </div>
 
             {!! Form::close() !!}

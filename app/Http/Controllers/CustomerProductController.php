@@ -110,7 +110,9 @@ class CustomerProductController extends AppBaseController
             foreach($customersByClasses as $customer){
                 // dd($customer);
                 $product = CustomerProduct::where('customer_code', $customer->AcctCD)->where('inventory_code', $input['inventory_code'])->get()->first();
-                $product->delete();
+                if($product != null){
+                    $product->delete();
+                }
             }
 
             Flash::success('Customer Product Bulk deleted successfully.');

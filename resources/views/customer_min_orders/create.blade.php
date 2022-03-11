@@ -20,6 +20,8 @@
             {!! Form::open(['route' => 'customerMinOrders.store']) !!}
 
             <div class="card-body">
+                <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
+                
 
                 <div class="row">
                     @include('customer_min_orders.fields')
@@ -29,7 +31,7 @@
 
             <div class="card-footer">
                 {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('customerMinOrders.index') }}" class="btn btn-default">Cancel</a>
+                {{-- <a href="{{ route('customerMinOrders.index') }}" class="btn btn-default">Cancel</a> --}}
             </div>
 
             {!! Form::close() !!}

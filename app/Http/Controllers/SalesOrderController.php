@@ -23,6 +23,7 @@ use App\Models\Parameter;
 use App\Models\SalesOrderDetail;
 use App\Models\Attachment;
 use App\Models\SOOrder;
+use App\Models\CustomerMinOrder;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -213,9 +214,20 @@ class SalesOrderController extends AppBaseController
             'tax' => 'required',
             'order_total' => 'required',
         ]);
+
+        $customerMinOrder = CustomerMinOrder::where('customer_code', \Auth::user()->customer->AcctCD)->get()->first();
         
         $input = $request->all();
 
+        // Removing Mask
+        $orderTotal = $input['order_total'];
+        $orderTotal = str_replace('.','',$orderTotal);
+        $orderTotal = (int)str_replace(',','.',$orderTotal);
+
+        if($orderTotal < $customerMinOrder->minimum_order){
+            return redirect()->route('createOrder')->withInput()->with('error', "Tidak Mencapai Minimum Order.");
+        }
+        
         $cekOrder = SalesOrder::where('customer_id', $input['customer_id'])->where('delivery_date', $input['delivery_date'])->latest()->first();
         $thisCustomer = Customer::where('BAccountID', $input['customer_id'])->get()->first();
         // dd($thisCustomer);
@@ -359,6 +371,19 @@ class SalesOrderController extends AppBaseController
         $salesOrder = $this->salesOrderRepository->find($id);
 
         $input = $request->all();
+
+        $customerMinOrder = CustomerMinOrder::where('customer_code', \Auth::user()->customer->AcctCD)->get()->first();
+        
+        $input = $request->all();
+
+        // Removing Mask
+        $orderTotal = $input['order_total'];
+        $orderTotal = str_replace('.','',$orderTotal);
+        $orderTotal = (int)str_replace(',','.',$orderTotal);
+
+        if($orderTotal < $customerMinOrder->minimum_order){
+            return redirect()->route('salesOrders.edit', $id)->withInput()->with('error', "Tidak Mencapai Minimum Order.");
+        }
 
         if( $input['order_type'] == $salesOrder->order_type && $input['delivery_date'] == $salesOrder->delivery_date->format('Y-m-d') ){
             

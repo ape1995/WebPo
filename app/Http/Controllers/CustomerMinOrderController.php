@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCustomerMinOrderRequest;
 use App\Repositories\CustomerMinOrderRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Customer;
+use App\Models\User;
 use App\Models\CustomerMinOrder;
 use App\Models\CustomerMinOrderHist;
 use Illuminate\Http\Request;
@@ -45,8 +46,9 @@ class CustomerMinOrderController extends AppBaseController
      */
     public function create()
     {
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->get();
-
+        $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+        
         return view('customer_min_orders.create', compact('customers'));
     }
 

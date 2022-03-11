@@ -6,8 +6,8 @@
 </li>
 
 @if(Gate::check('browse users') || Gate::check('browse group permissions') || Gate::check('browse parameter')  || Gate::check('browse adds')  || Gate::check('browse tax'))
-<li class="nav-item {{ Request::is('users*') ? 'menu-open' : '' }} {{ Request::is('roles*') ? 'menu-open' : '' }} {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link {{ Request::is('users*') ? 'active' : '' }} {{ Request::is('roles*') ? 'active' : '' }} {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }}">
+<li class="nav-item {{ Request::is('users*') ? 'menu-open' : '' }} {{ Request::is('roles*') ? 'menu-open' : '' }} {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }} {{ Request::is('customerProducts*') ? 'menu-open' : '' }} {{ Request::is('customerMinOrders*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('users*') ? 'active' : '' }} {{ Request::is('roles*') ? 'active' : '' }} {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }} {{ Request::is('customerProducts*') ? 'active' : '' }} {{ Request::is('customerMinOrders*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-file-alt"></i>
         <p>
         {{ trans('menu.master')}}
@@ -65,16 +65,16 @@
         @endcan
         {{-- @can('browse customer products') --}}
         <li class="nav-item">
-            <a href="{{ route('customerProducts.index') }}"
-               class="nav-link {{ Request::is('customerProducts*') ? 'active' : '' }}">
+            <a href="{{ route('customerProducts.index') }}" class="nav-link {{ Request::is('customerProducts*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
                 <p>Customer Products</p>
             </a>
         </li>
         {{-- @endcan --}}
         {{-- @can('browse min orders') --}}
         <li class="nav-item">
-            <a href="{{ route('customerMinOrders.index') }}"
-                class="nav-link {{ Request::is('customerMinOrders*') ? 'active' : '' }}">
+            <a href="{{ route('customerMinOrders.index') }}" class="nav-link {{ Request::is('customerMinOrders*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
                 <p>Customer Min Orders</p>
             </a>
         </li>

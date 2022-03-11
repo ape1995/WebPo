@@ -14,7 +14,7 @@
                     </a>
                     <a class="btn btn-info float-right"
                        href="{{ route('customerProducts.createBulk') }}">
-                        Bulk Input
+                        Bulk Action
                     </a>
                 </div>
             </div>

@@ -37,7 +37,7 @@ class CustomerProductController extends AppBaseController
         $customerProducts = $this->customerProductRepository->all();
         
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         
         return view('customer_products.index', compact('customerProducts', 'customers'));
     }
@@ -50,7 +50,7 @@ class CustomerProductController extends AppBaseController
     public function create()
     {
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->orderBy('InventoryCD', 'ASC')->get();
 
         return view('customer_products.create', compact('customers', 'products'));

@@ -47,7 +47,7 @@ class CustomerMinOrderController extends AppBaseController
     public function create()
     {
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('customer_id', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         
         return view('customer_min_orders.create', compact('customers'));
     }

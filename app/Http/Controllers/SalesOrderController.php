@@ -13,6 +13,7 @@ use App\Models\MailSetting;
 use App\Mail\SendMailSubmit;
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\CustomerProduct;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\SalesPrice;
@@ -188,7 +189,8 @@ class SalesOrderController extends AppBaseController
 
         $minDeliveryDate = $date->toDateString();
 
-        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereNotIn('InventoryCD', ['FG001011','FG007001','FG008004','FG008005','FG009001', 'FG010005', 'FG011004', 'FG001008', 'FG002013', 'FG008001', 'FG008002', 'FG007009', 'FG002021'])->orderBy('InventoryCD', 'ASC')->get();
+        $customerProducts = CustomerProduct::select('inventory_code')->where('customer_code',  \Auth::user()->customer->AcctCD)->get()->pluck('inventory_code');
+        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereIn('InventoryCD', $customerProducts)->orderBy('InventoryCD', 'ASC')->get();
 
         return view('sales_orders.create', compact('customers', 'products', 'minDeliveryDate'));
     }
@@ -343,7 +345,9 @@ class SalesOrderController extends AppBaseController
 
         $minDeliveryDate = $date->toDateString();
 
-        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereNotIn('InventoryCD', ['FG001011','FG007001','FG008004','FG008005','FG009001', 'FG010005', 'FG011004', 'FG001008', 'FG002013', 'FG008001', 'FG008002', 'FG007009', 'FG002021'])->orderBy('InventoryCD', 'ASC')->get();
+        $customerProducts = CustomerProduct::select('inventory_code')->where('customer_code',  \Auth::user()->customer->AcctCD)->get()->pluck('inventory_code');
+        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereIn('InventoryCD', $customerProducts)->orderBy('InventoryCD', 'ASC')->get();
+
 
         return view('sales_orders.edit', compact('salesOrder', 'customers', 'products', 'minDeliveryDate'));
     }
@@ -692,11 +696,20 @@ class SalesOrderController extends AppBaseController
         $namaFile =  $file->getClientOriginalName();
         $file->move('uploads/product', $namaFile);
 
-        Excel::import(new ProductImport($request->date_file), public_path('uploads/product/'.$namaFile));
+        $import = Excel::import(new ProductImport($request->date_file), public_path('uploads/product/'.$namaFile));
         
-        return response()->json([
-            'success' => 'Data Imported Successfully',
-        ]);
+        $carts = Cart::where('customer_id', \Auth::user()->customer_id)->get()->first();
+
+        if($carts == null){
+            return response()->json([
+                'error' => 'You have not accesiable for some products',
+            ], 404);
+        } else {
+            return response()->json([
+                'success' => 'Data Imported Successfully',
+            ]);
+        }
+        
 
     }
 }

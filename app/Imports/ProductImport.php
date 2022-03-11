@@ -6,12 +6,14 @@ use App\Models\Cart;
 use App\Models\Customer;
 use App\Models\Location;
 use App\Models\Product;
+use App\Models\CustomerProduct;
 use App\Models\SalesPrice;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Http\Request;
 use Hash;
 use Flash;
 use Response;
@@ -44,21 +46,22 @@ class ProductImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
 
-        // foreach ($rows as $index => $row) 
-        // { 
+        foreach ($rows as $index => $row) 
+        { 
             
-        //     $kode_produk = $row['kode_produk'];
+            $kode_produk = $row['kode_produk'];
             
 
-        //     // Cek ID Product Exist
-        //     // $cek_produk = Product::where('InventoryCD', $kode_produk)->get()->first();
+            // Cek ID Product Exist for this customer
+            $cek_produk = CustomerProduct::where('customer_code',  \Auth::user()->customer->AcctCD)->where('inventory_code', $kode_produk)->get()->first();
+            $errors = [];
+            if($cek_produk == null){
+                $errors[] = 'error';
+                return $errors;
+            }
 
-        //     // if($cek_produk == null || $cek_produk == '' || $cek_produk == 0){
-        //     //     return Response::json(['error'=>'Product already listed on carts.']);
-        //     // }
 
-
-        // }
+        }
 
         foreach ($rows as $row) {
             

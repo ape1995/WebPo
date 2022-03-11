@@ -1,7 +1,7 @@
 <div class="table-responsive">
     <table class="table" id="customerProducts-table">
         <thead>
-        <tr>
+        <tr class="bg-info">
             <th>Customer</th>
             <th>Inventory Code</th>
             <th>Customer Class</th>

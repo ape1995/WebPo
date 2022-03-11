@@ -63,12 +63,29 @@
             </a>
         </li>
         @endcan
+        {{-- @can('browse customer products') --}}
+        <li class="nav-item">
+            <a href="{{ route('customerProducts.index') }}"
+               class="nav-link {{ Request::is('customerProducts*') ? 'active' : '' }}">
+                <p>Customer Products</p>
+            </a>
+        </li>
+        {{-- @endcan --}}
+        {{-- @can('browse min orders') --}}
+        <li class="nav-item">
+            <a href="{{ route('customerMinOrders.index') }}"
+                class="nav-link {{ Request::is('customerMinOrders*') ? 'active' : '' }}">
+                <p>Customer Min Orders</p>
+            </a>
+        </li>
+        {{-- @endcan --}}
         <li class="nav-item">
             <a href="{{ route('dFormImportProduct') }}" class="nav-link {{ Request::is('dFormImportProduct*') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>{{ trans('menu.dformatimport') }}</p>
             </a>
         </li>
+        
     </ul>
 </li>
 @endif
@@ -178,27 +195,5 @@
         Estimasi
     </a>
 </li>
-@endcan<li class="nav-item">
-    <a href="{{ route('customerProducts.index') }}"
-       class="nav-link {{ Request::is('customerProducts*') ? 'active' : '' }}">
-        <p>Customer Products</p>
-    </a>
-</li>
-
-
-<li class="nav-item">
-    <a href="{{ route('customerMinOrders.index') }}"
-       class="nav-link {{ Request::is('customerMinOrders*') ? 'active' : '' }}">
-        <p>Customer Min Orders</p>
-    </a>
-</li>
-
-
-{{-- <li class="nav-item">
-    <a href="{{ route('customerMinOrderHists.index') }}"
-       class="nav-link {{ Request::is('customerMinOrderHists*') ? 'active' : '' }}">
-        <p>Customer Min Order Hists</p>
-    </a>
-</li> --}}
-
+@endcan
 

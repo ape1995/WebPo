@@ -83,7 +83,17 @@ class SalesOrderDetailController extends AppBaseController
                         'unit_price' => $data['unit_price'],
                         'amount' => $data['amount'],
                         'created_by' => \Auth::user()->id,
-                    ]);    
+                    ]); 
+             
+            $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $request->sales_order_id)->get();
+        
+            $salesOrder = SalesOrder::find($request->sales_order_id);
+            $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+            $salesOrder['order_qty'] = $salesOrderDetail->sum('qty');
+            $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
+            $salesOrder['tax'] = ($parameterVAT->value/100) * $salesOrder['order_amount'];
+            $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
+            $salesOrder->save();
        
             return response()->json(['success'=>'Products added successfully.']);
 
@@ -164,7 +174,20 @@ class SalesOrderDetailController extends AppBaseController
      */
     public function destroy($id)
     {
-        SalesOrderDetail::find($id)->delete();
+        $salesOrderDelete = SalesOrderDetail::find($id);
+        $salesOrderID = $salesOrderDelete->sales_order_id;
+        $salesOrderDelete->delete();
+        
+        $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $salesOrderID)->get();
+        
+        $salesOrder = SalesOrder::find($salesOrderID);
+        $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+        $salesOrder['order_qty'] = $salesOrderDetail->sum('qty');
+        $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
+        $salesOrder['tax'] = ($parameterVAT->value/100) * $salesOrder['order_amount'];
+        $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
+        $salesOrder->save();
+
      
         return response()->json(['success'=>'Product deleted successfully.']);
     }
@@ -210,7 +233,7 @@ class SalesOrderDetailController extends AppBaseController
         $data['order_qty'] = $salesOrderDetail->sum('qty');
         $data['order_amount'] = $salesOrderDetail->sum('amount');
         $tax = ($parameterVAT->value/100) * $data['order_amount'];
-        $total = round($data['order_amount'] + $tax);
+        $total = $data['order_amount'] + $tax;
         $data['order_qty'] = number_format($data['order_qty'],0,',','.');
         $data['order_amount'] = number_format($data['order_amount'],2,',','.');
         $data['tax'] = number_format($tax,2,',','.');

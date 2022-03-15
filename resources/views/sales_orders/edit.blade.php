@@ -158,7 +158,7 @@
 
             <div class="card-footer">
                 <input type="submit" name="savePageButton" id="savePageButton" class="btn btn-primary" value="{{ trans('sales_order.btn_update') }}">
-                <a href="{{ route('salesOrders.show', $salesOrder->id) }}" class="btn btn-default">{{ trans('user.btn_cancel') }}</a>
+                {{-- <a href="{{ route('salesOrders.show', $salesOrder->id) }}" class="btn btn-default">{{ trans('user.btn_cancel') }}</a> --}}
             </div>
 
             {!! Form::close() !!}
@@ -266,7 +266,7 @@
                     method: 'get',
                     dataType: 'json',
                     success: function(response) {
-                        // console.log(response);
+                        console.log(response);
                         order_qty.val(response['order_qty']);
                         order_amount.val(response['order_amount']);
                         tax.val(response['tax']);

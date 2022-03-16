@@ -19,6 +19,10 @@
 
             {!! Form::model($salesOrder, ['route' => ['salesOrders.update', $salesOrder->id], 'method' => 'patch']) !!}
 
+            <div class="card-header">
+                <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
+            </div>
+
             <div class="card-body">
                 <div class="row mb-3">
                     @include('sales_orders.fields-edit')
@@ -156,10 +160,9 @@
 
             </div>
 
-            <div class="card-footer">
-                <input type="submit" name="savePageButton" id="savePageButton" class="btn btn-primary" value="{{ trans('sales_order.btn_update') }}">
-                {{-- <a href="{{ route('salesOrders.show', $salesOrder->id) }}" class="btn btn-default">{{ trans('user.btn_cancel') }}</a> --}}
-            </div>
+            {{-- <div class="card-footer">
+                <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
+            </div> --}}
 
             {!! Form::close() !!}
 

@@ -160,6 +160,21 @@ class SalesOrderDetailController extends AppBaseController
 
         $salesOrderDetail = $this->salesOrderDetailRepository->update($data, $id);
 
+        $salesOrderDetailData = SalesOrderDetail::find($id);
+
+        $salesOrderID = $salesOrderDetailData->sales_order_id;
+
+        $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $salesOrderID)->get();
+        
+        $salesOrder = SalesOrder::find($salesOrderID);
+        $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+        $salesOrder['order_qty'] = $salesOrderDetails->sum('qty');
+        $salesOrder['order_amount'] = $salesOrderDetails->sum('amount');
+        $salesOrder['tax'] = ($parameterVAT->value/100) * $salesOrder['order_amount'];
+        $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
+        $salesOrder->save();
+
+
         return response()->json(['success'=>'Data updated successfully.']);
     }
 

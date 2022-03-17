@@ -361,6 +361,15 @@
                         } else {
                             $("#savePageButton").attr("disabled", false);
                         }
+
+                        if($("#delivery_date").val() == null){
+                            btn_upload_product.prop("disabled", true);
+                            add_product.prop("disabled", true);
+                        } else {
+                            btn_upload_product.prop("disabled", false);
+                            add_product.prop("disabled", false);
+                        }
+                        
                     }
                 });
             }

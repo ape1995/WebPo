@@ -20,6 +20,8 @@
             {!! Form::open(['route' => 'customerProducts.storeBulk']) !!}
 
             <div class="card-body">
+                <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
+                
 
                 <div class="m-1">
                     <div class="form-group col-sm-6">

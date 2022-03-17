@@ -160,9 +160,16 @@
 
             </div>
 
+<<<<<<< HEAD
             {{-- <div class="card-footer">
                 <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
             </div> --}}
+=======
+            <div class="card-footer">
+                <input type="submit" name="savePageButton" id="savePageButton" class="btn btn-primary" value="{{ trans('sales_order.btn_update') }}">
+                {{-- <a href="{{ route('salesOrders.show', $salesOrder->id) }}" class="btn btn-default">{{ trans('user.btn_cancel') }}</a> --}}
+            </div>
+>>>>>>> b5b2b17 (integration with sales order minimum order customer)
 
             {!! Form::close() !!}
 

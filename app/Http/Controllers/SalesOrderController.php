@@ -224,8 +224,12 @@ class SalesOrderController extends AppBaseController
         $orderTotal = str_replace('.','',$orderTotal);
         $orderTotal = (int)str_replace(',','.',$orderTotal);
 
-        if($orderTotal < $customerMinOrder->minimum_order){
-            return redirect()->route('createOrder')->withInput()->with('error', "Tidak Mencapai Minimum Order.");
+        // dd($customerMinOrder);
+
+        if($customerMinOrder != null){
+            if($orderTotal < $customerMinOrder->minimum_order){
+                return redirect()->route('createOrder')->withInput()->with('error', "Tidak Mencapai Minimum Order.");
+            }
         }
         
         $cekOrder = SalesOrder::where('customer_id', $input['customer_id'])->where('delivery_date', $input['delivery_date'])->latest()->first();
@@ -381,8 +385,12 @@ class SalesOrderController extends AppBaseController
         $orderTotal = str_replace('.','',$orderTotal);
         $orderTotal = (int)str_replace(',','.',$orderTotal);
 
-        if($orderTotal < $customerMinOrder->minimum_order){
-            return redirect()->route('salesOrders.edit', $id)->withInput()->with('error', "Tidak Mencapai Minimum Order.");
+        dd($customerMinOrder);
+
+        if($customerMinOrder != null){
+            if($orderTotal < $customerMinOrder->minimum_order){
+                return redirect()->route('salesOrders.edit', $id)->withInput()->with('error', "Tidak Mencapai Minimum Order.");
+            }
         }
 
         if( $input['order_type'] == $salesOrder->order_type && $input['delivery_date'] == $salesOrder->delivery_date->format('Y-m-d') ){

@@ -8,6 +8,7 @@ use App\Models\SalesOrder;
 use App\Models\PrePaymentH;
 use App\Models\PrePaymentD;
 use App\Models\SOOrder;
+use App\Models\CustomerBalance;
 use App\Exports\ReportBalanceExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth;
@@ -297,6 +298,18 @@ class ReportController extends Controller
         }
         
         return Excel::download(new ReportBalanceExport($prePayments, $customerCode, $customerName, $balance), "Report Balance.xlsx");
+
+    }
+
+    public function rekapBalances(){
+
+        if (!\Auth::user()->can('view report balance rekap')) {
+            abort(403);
+        }
+
+        $customerBalances = CustomerBalance::all();
+
+        return view('reports.balance_rekap', compact('customerBalances'));
 
     }
 }

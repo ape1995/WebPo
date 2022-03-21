@@ -18,6 +18,7 @@ return [
     'report_1' => 'Laporan Custom 1',
     'report_customer' => 'Laporan Pelanggan',
     'report_balance' => 'Laporan Saldo',
+    'report_balance_rekap' => 'Laporan Rekap Saldo',
     'dformatimport' => 'Unduh Format Unggah Produk',
 
 ];

@@ -47,9 +47,9 @@
                                             <tr class="bg-light">
                                                 <td class="text-nowrap">{{ $balance->CustomerCD }}</td>
                                                 <td class="text-nowrap">{{ $balance->CustomerName }}</td>
-                                                <td class="text-nowrap">{{ $balance->TransferAmount }}</td>
-                                                <td class="text-nowrap">{{ $balance->Payment }}</td>
-                                                <td class="text-nowrap">{{ $balance->Balance }}</td>
+                                                <td class="text-nowrap money">{{ number_format($balance->TransferAmount, 2, ',', '.') }}</td>
+                                                <td class="text-nowrap money">{{ number_format($balance->Payment, 2, ',', '.') }}</td>
+                                                <td class="text-nowrap money">{{ number_format($balance->Balance, 2, ',', '.') }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

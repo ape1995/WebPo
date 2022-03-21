@@ -35,11 +35,11 @@
                                 <table class="table table-bordered table-sm" id="rekap-balance-table">
                                     <thead>
                                         <tr class="bg-info">
-                                            <th class="text-nowrap">PrePaymentRefNbr</th>
-                                            <th class="text-nowrap">PrePaymentRefNbr</th>
-                                            <th class="text-nowrap">PrePaymentRefNbr</th>
-                                            <th class="text-nowrap">PrePaymentRefNbr</th>
-                                            <th class="text-nowrap">PrePaymentRefNbr</th>
+                                            <th class="text-nowrap">Customer Code</th>
+                                            <th class="text-nowrap">Customer Name</th>
+                                            <th class="text-nowrap">Transfer Amount</th>
+                                            <th class="text-nowrap">Payment</th>
+                                            <th class="text-nowrap">Balance</th>
                                         </tr>
                                     </thead>
                                     <tbody>

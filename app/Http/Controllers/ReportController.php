@@ -268,11 +268,11 @@ class ReportController extends Controller
         
         if($input['customer_id'] == 'All'){
 
-            $prePayments = PrePaymentH::orderBy('CustomerCD', 'ASC')->orderBy('PrePaymentRefNbr', 'ASC')->get();
+            $prePayments = PrePaymentH::orderBy('CustomerCD', 'ASC')->orderBy('TransferDate', 'DESC')->get();
 
         } else {
 
-            $prePayments = PrePaymentH::where('CustomerCD', $customer_id)->orderBy('PrePaymentRefNbr', 'ASC')->get();
+            $prePayments = PrePaymentH::where('CustomerCD', $customer_id)->orderBy('TransferDate', 'DESC')->get();
         }
 
         if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
@@ -286,12 +286,14 @@ class ReportController extends Controller
         
         $customerCode = $customer->AcctCD;
         $customerName = $customer->AcctName;
-        $totalAdjust = 0;
-        foreach($prePayments as $header){
-            $totalAdjust+=$header->detail->sum('TotalPayment'); 
-        }
-        $totalPayment = $prePayments->sum('TransferAmount');
-        $balance = $totalPayment - $totalAdjust;
+        // $totalAdjust = 0;
+        // foreach($prePayments as $header){
+        //     $totalAdjust+=$header->detail->sum('TotalPayment'); 
+        // }
+        // $totalPayment = $prePayments->sum('TransferAmount');
+        // $balance = $totalPayment - $totalAdjust;
+        $balance = CustomerBalance::where('CustomerCD', $customerCode)->get()->first();
+        // dd($balance);
 
         if(isset($request->view)){
             return view('reports.balance', compact('customers', 'customer_id', 'prePayments', 'customerCode', 'customerName', 'balance'));

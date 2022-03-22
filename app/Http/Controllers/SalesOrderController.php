@@ -19,6 +19,7 @@ use App\Models\SalesPrice;
 use App\Models\Location;
 use App\Models\SalesOrder;
 use App\Models\Parameter;
+use App\Models\ParameterVAT;
 use App\Models\SalesOrderDetail;
 use App\Models\Attachment;
 use App\Models\SOOrder;
@@ -228,19 +229,18 @@ class SalesOrderController extends AppBaseController
 
 
         $input['order_nbr'] = $orderNbr;
-        $input['order_qty'] = str_replace('.','',$input['order_qty']);
-        $input['order_qty'] = str_replace(',','.',$input['order_qty']);
-        $input['order_amount'] = str_replace('.','',$input['order_amount']);
-        $input['order_amount'] = str_replace(',','.',$input['order_amount']);
-        $input['tax'] = str_replace('.','',$input['tax']);
-        $input['tax'] = str_replace(',','.',$input['tax']);
-        $input['order_total'] = str_replace('.','',$input['order_total']);
-        $input['order_total'] = str_replace(',','.',$input['order_total']);
         $input['created_by'] = \Auth::user()->id;
         $input['status'] = 'S';
+        $deliveryDate = $input['delivery_date'];
 
         $carts = Cart::where('customer_id', $input['customer_id'])->get();
         // dd($carts);
+        $parameterVAT = ParameterVAT::whereRaw("start_date <= '$deliveryDate' AND (end_date is null OR end_date >= '$deliveryDate') ")->get()->first();
+
+        $input['order_qty'] = $carts->sum('qty');
+        $input['order_amount'] = $carts->sum('amount');
+        $input['tax'] = ($parameterVAT->value/100) *$input['order_amount'];
+        $input['order_total'] = $input['order_amount'] + $input['tax'];
 
 
         // Store To Sales Order DB
@@ -319,6 +319,12 @@ class SalesOrderController extends AppBaseController
         }
 
         $salesOrder = $this->salesOrderRepository->find($id);
+
+        if ($salesOrder->status == 'R' || $salesOrder->status == 'P') {
+            // Flash::error('Cannot edit this order');
+
+            return redirect(route('salesOrders.index'))->with('error', 'Cannot edit this order');
+        }
 
         if (empty($salesOrder)) {
             Flash::error('Order not found');

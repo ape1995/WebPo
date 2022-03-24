@@ -286,7 +286,7 @@ class SalesOrderController extends AppBaseController
             }
         }
 
-        $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $id )->get();
+        $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $id )->orderBy('inventory_id', 'ASC')->get();
         $customers = Customer::where('BAccountID', $salesOrder->customer_id)->get();
 
         $parameter = Parameter::where('name','Maximum Time Order')->get()->first();
@@ -605,7 +605,7 @@ class SalesOrderController extends AppBaseController
     {
 
         $salesOrder = SalesOrder::find($id);
-        $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $id)->get();
+        $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $id)->orderBy('inventory_id', 'ASC')->get();
         // dd($salesOrder);
 
         if (empty($salesOrder)) {

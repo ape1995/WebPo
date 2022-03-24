@@ -44,7 +44,7 @@ class CartController extends AppBaseController
     public function getData(Request $request)
     {
         if ($request->ajax()) {
-            $datas = Cart::where('customer_id', \Auth::user()->customer_id)->get();
+            $datas = Cart::where('customer_id', \Auth::user()->customer_id)->orderBy('inventory_id', 'ASC')->get();
             return DataTables::of($datas)
                 ->editColumn('qty', function (Cart $cart) 
                 {

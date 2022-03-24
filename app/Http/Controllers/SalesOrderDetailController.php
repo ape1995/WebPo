@@ -211,7 +211,7 @@ class SalesOrderDetailController extends AppBaseController
     {
         
         if ($request->ajax()) {
-            $datas = SalesOrderDetail::where('sales_order_id', $code)->get();
+            $datas = SalesOrderDetail::where('sales_order_id', $code)->orderBy('inventory_id', 'ASC')->get();
             return DataTables::of($datas)
                 ->editColumn('qty', function (SalesOrderDetail $data) 
                 {

@@ -8,6 +8,7 @@ use App\Models\SalesOrder;
 use App\Models\PrePaymentH;
 use App\Models\PrePaymentD;
 use App\Models\SOOrder;
+use App\Models\CustomerBalance;
 use App\Exports\ReportBalanceExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth;
@@ -267,11 +268,11 @@ class ReportController extends Controller
         
         if($input['customer_id'] == 'All'){
 
-            $prePayments = PrePaymentH::orderBy('CustomerCD', 'ASC')->orderBy('PrePaymentRefNbr', 'ASC')->get();
+            $prePayments = PrePaymentH::orderBy('CustomerCD', 'ASC')->orderBy('TransferDate', 'DESC')->get();
 
         } else {
 
-            $prePayments = PrePaymentH::where('CustomerCD', $customer_id)->orderBy('PrePaymentRefNbr', 'ASC')->get();
+            $prePayments = PrePaymentH::where('CustomerCD', $customer_id)->orderBy('TransferDate', 'DESC')->get();
         }
 
         if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
@@ -285,18 +286,32 @@ class ReportController extends Controller
         
         $customerCode = $customer->AcctCD;
         $customerName = $customer->AcctName;
-        $totalAdjust = 0;
-        foreach($prePayments as $header){
-            $totalAdjust+=$header->detail->sum('TotalPayment'); 
-        }
-        $totalPayment = $prePayments->sum('TransferAmount');
-        $balance = $totalPayment - $totalAdjust;
+        // $totalAdjust = 0;
+        // foreach($prePayments as $header){
+        //     $totalAdjust+=$header->detail->sum('TotalPayment'); 
+        // }
+        // $totalPayment = $prePayments->sum('TransferAmount');
+        // $balance = $totalPayment - $totalAdjust;
+        $balance = CustomerBalance::where('CustomerCD', $customerCode)->get()->first();
+        // dd($balance);
 
         if(isset($request->view)){
             return view('reports.balance', compact('customers', 'customer_id', 'prePayments', 'customerCode', 'customerName', 'balance'));
         }
         
         return Excel::download(new ReportBalanceExport($prePayments, $customerCode, $customerName, $balance), "Report Balance.xlsx");
+
+    }
+
+    public function rekapBalances(){
+
+        if (!\Auth::user()->can('view report balance rekap')) {
+            abort(403);
+        }
+
+        $customerBalances = CustomerBalance::all();
+
+        return view('reports.balance_rekap', compact('customerBalances'));
 
     }
 }

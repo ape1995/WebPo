@@ -70,7 +70,7 @@
                             <div class="card-header bg-info">
                                 Customer Code : {{ $customerCode }}<br>
                                 Customer Name : {{ $customerName }}<br>
-                                Balance : {{ number_format($balance,2,',','.') }}
+                                Balance : {{ number_format($balance->Balance,2,',','.') }}
                             </div>
                             <div class="card-body">
                                 

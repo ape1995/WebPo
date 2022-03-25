@@ -160,9 +160,10 @@
 
             </div>
 
-            {{-- <div class="card-footer">
-                <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
-            </div> --}}
+            <div class="card-footer">
+                {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
+                {{-- <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a> --}}
+            </div>
 
             {!! Form::close() !!}
 

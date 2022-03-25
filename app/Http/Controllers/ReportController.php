@@ -311,7 +311,9 @@ class ReportController extends Controller
 
         $customerBalances = CustomerBalance::all();
 
-        return view('reports.balance_rekap', compact('customerBalances'));
+        $reportName = "Report Recap Balance All Customer";
+
+        return view('reports.balance_rekap', compact('customerBalances', 'reportName'));
 
     }
 }

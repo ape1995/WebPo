@@ -98,3 +98,6 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 Route::get('/send_notification', [SendEmailController::class, 'send']);
+
+
+Route::resource('categoryMinOrders', App\Http\Controllers\CategoryMinOrderController::class);

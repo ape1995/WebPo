@@ -74,7 +74,7 @@ class ProductImport implements ToCollection, WithHeadingRow
             
             if($row['quantity'] > 0 || $row['quantity'] != null){
                 Cart::create([
-                    'inventory_id' => $inventory->InventoryCD,
+                    'inventory_id' => $row['kode_produk'],
                     'inventory_name' => $inventory->Descr,
                     'qty' => $row['quantity'],
                     'uom' => $salesPrice->UOM,

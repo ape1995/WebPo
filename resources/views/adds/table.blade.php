@@ -1,7 +1,7 @@
 <div class="table-responsive">
-    <table class="table" id="adds-table">
+    <table class="table table-hover" id="adds-table">
         <thead>
-        <tr>
+        <tr class="bg-info">
             <th>{{ trans('add.name') }}</th>
             <th>{{ trans('add.image') }}</th>
             <th>{{ trans('add.desc') }}</th>

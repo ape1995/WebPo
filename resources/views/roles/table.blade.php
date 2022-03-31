@@ -1,7 +1,7 @@
 <div class="table-responsive">
     <table class="table table-hover table-sm" id="roles-table">
         <thead>
-            <tr>
+            <tr class="bg-info">
                 <th>{{ trans('group.name') }}</th>
                 <th>Status</th>
                 <th width="20%">{{ trans('group.action') }}</th>

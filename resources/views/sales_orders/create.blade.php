@@ -471,7 +471,7 @@
                     type: "POST",
                     dataType: 'json',
                     success: function (data) {
-                        // console.log(data);
+                        console.log(data);
                         $('#data_show').hide();
                         qty.val('');
                         amount.val('');
@@ -480,6 +480,7 @@
                         getAllCounter();
                     },
                     error: function (data) {
+                        console.log(data);
                         alert('Produk sudah ada dalam list');
                     }
                 });

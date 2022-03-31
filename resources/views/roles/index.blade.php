@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body p-3">
                             @can('create group permissions')
                             <div class="text-right mb-3">
                                 <a class="btn btn-outline-primary btn-sm" href="{{ route('roles.create') }}">{{ trans('group.create') }}</a>

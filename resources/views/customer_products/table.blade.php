@@ -12,8 +12,8 @@
         <tbody>
         @foreach($customerProducts as $customerProduct)
             <tr>
-                <td>{{ $customerProduct->customer->AcctName }} - {{ $customerProduct->customer_code }}</td>
-                <td>{{ $customerProduct->inventory_code }}</td>
+                <td>{{ $customerProduct->customer_code }} - {{ $customerProduct->customer->AcctName }}</td>
+                <td>{{ $customerProduct->inventory_code }} - {{ $customerProduct->product->Descr }}</td>
                 <td>{{ $customerProduct->customer_class }}</td>
                 <td>{{ $customerProduct->created_at->format('Y-m-d') }}</td>
                 <td>

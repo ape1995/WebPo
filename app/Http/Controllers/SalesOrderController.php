@@ -14,6 +14,8 @@ use App\Mail\SendMailSubmit;
 use App\Models\User;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
+use App\Models\CategoryMinOrder;
+use App\Models\CustomerMinOrder;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\SalesPrice;
@@ -236,6 +238,10 @@ class SalesOrderController extends AppBaseController
         $deliveryDate = $input['delivery_date'];
 
         $carts = Cart::where('customer_id', $input['customer_id'])->get();
+
+        if($carts == null){
+            return redirect(route('SalesOrders.create'))->with('error', 'Keranjang anda kosong');
+        }
         // dd($carts);
         $parameterVAT = ParameterVAT::whereRaw("start_date <= '$deliveryDate' AND (end_date is null OR end_date >= '$deliveryDate') ")->get()->first();
 
@@ -484,7 +490,42 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
-        // Cek Jam Submit
+        // Get data minimum order for this customer
+        $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$salesOrder->customer->AcctCD."'")->get()->first();
+        
+        // Jika ada datanya Validasi data order dengan minimum order per customer
+        if($customerMinOrder !== null){
+
+            if($salesOrder->order_total >= $customerMinOrder->minimum_order){
+                return $this->processSubmit($id);
+            } else {
+                return redirect(route('salesOrders.show', $id))->with("error", "Tidak mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order));
+            }
+
+        } else {
+            // Get Minimum Order Category 
+            $thisCustomer = Customer::where('BAccountID', $salesOrder->customer_id)->get()->first();
+            $parseCustomer = explode('(',$thisCustomer->AcctName);
+            $customerCategory = substr($parseCustomer[1], 0, 2);
+            
+            // Minimum order category customer
+            $categoryMinOrder = CategoryMinOrder::whereRaw("category = '$customerCategory' AND start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+        
+            // Validasi minimum order by category
+            if($salesOrder->order_total >= $categoryMinOrder->minimum_order){
+                return $this->processSubmit($id);
+            } else {
+                return redirect(route('salesOrders.show', $id))->with("error", "Tidak mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order));
+            }
+
+        }
+
+        
+    }
+
+    public function processSubmit($id)
+    {
+        // Ambil Jam Submit
         $parameter = Parameter::where('name','Maximum Time Order')->get()->first();
         $parameterNow = Carbon::now()->toTimeString();
 
@@ -502,7 +543,6 @@ class SalesOrderController extends AppBaseController
             $mailCC = MailSetting::where('name', 'Overtime Order')->where('type', 'Receiver')->where('sub_type', 'CC')->where('status', 1)->pluck('email');
             $mailBCC = MailSetting::where('name', 'Overtime Order')->where('type', 'Receiver')->where('sub_type', 'BCC')->where('status', 1)->pluck('email');
             
-
             $email = $mailTo;
             $cc = $mailCC;
             $bcc = $mailBCC;
@@ -516,9 +556,8 @@ class SalesOrderController extends AppBaseController
 
             Mail::to($email)->cc($cc)->bcc($bcc)->send(new SendMailSubmit($data));
 
+            return redirect(route('salesOrders.show', $id))->with('success', 'Order Submitted Sucessfully.');
         }
-
-        return redirect(route('salesOrders.show', $id))->with('success', 'Order Submitted Sucessfully.');
     }
 
     public function processOrder($id)
@@ -646,7 +685,7 @@ class SalesOrderController extends AppBaseController
             $code = $detail->inventory_id;
             $customer = $salesOrder->customer_id;
             // Get data price
-            $dataprice = $this->getPrice($code, $customer);
+            $dataprice = $this->getPrice($code, $customer, $salesOrder->delivery_date);
             $dataprice['unit_price'] = str_replace('.','',$dataprice['unit_price']);
             $dataprice['unit_price'] = str_replace(',','.',$dataprice['unit_price']);
             // Resum amount

@@ -189,10 +189,6 @@
                 },5000);
             });
 
-            window.setTimeout(function () {
-                window.location.reload();
-            }, 80000);
-
         });
     </script>
 @endpush

@@ -642,7 +642,7 @@ class SalesOrderController extends AppBaseController
             $code = $detail->inventory_id;
             $customer = $salesOrder->customer_id;
             // Get data price
-            $dataprice = $this->getPrice($code, $customer);
+            $dataprice = $this->getPrice($code, $customer, $salesOrder->delivery_date);
             $dataprice['unit_price'] = str_replace('.','',$dataprice['unit_price']);
             $dataprice['unit_price'] = str_replace(',','.',$dataprice['unit_price']);
             // Resum amount

@@ -20,6 +20,8 @@
     <div class="content px-3">
         <div class="card">
             <div class="card-body">
+                <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
+                
                 <div class="row">
                     @include('customer_min_orders.show_fields')
                 </div>

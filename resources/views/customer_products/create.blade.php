@@ -20,7 +20,8 @@
             {!! Form::open(['route' => 'customerProducts.store']) !!}
 
             <div class="card-body">
-
+                <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
+                
                 <div class="row">
                     @include('customer_products.fields')
                 </div>

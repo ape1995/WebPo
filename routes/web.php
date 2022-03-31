@@ -16,6 +16,11 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\CustomerMinOrderController;
 use App\Http\Controllers\CustomerMinOrderHistController;
+use App\Http\Controllers\CategoryMinOrderController;
+use App\Http\Controllers\ParameterVATController;
+use App\Http\Controllers\AddController;
+use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\ParameterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +50,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('roles', 'App\Http\Controllers\RoleController');
     Route::get('roles-inactive/{code}',[RoleController::class,'inactive'])->name('roles.inactive');
     Route::get('roles-active/{code}',[RoleController::class,'active'])->name('roles.active');
-    Route::resource('parameters', App\Http\Controllers\ParameterController::class);
+    Route::resource('parameters', ParameterController::class);
     Route::get('dataTableUser',[UserController::class,'dataTable'])->name('users.data');
     Route::get('users-inactive/{code}',[UserController::class,'inactive'])->name('users.inactive');
     Route::get('users-active/{code}',[UserController::class,'active'])->name('users.active');
@@ -80,11 +85,11 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('reportBalance', [ReportController::class, 'reportBalanceIndex'])->name('reportSalesOrder.reportBalanceIndex');
     Route::post('reportBalance', [ReportController::class, 'reportBalanceView'])->name('reportSalesOrder.reportBalanceView');
     Route::get('rekapBalances', [ReportController::class, 'rekapBalances'])->name('rekapBalances');
-    Route::resource('mailSettings', App\Http\Controllers\MailSettingController::class);
+    Route::resource('mailSettings', MailSettingController::class);
     Route::get('mailSettings-active/{code}',[MailSettingController::class,'active'])->name('mailSettings.active');
-    Route::resource('parameterVATs', App\Http\Controllers\ParameterVATController::class);
-    Route::resource('adds', App\Http\Controllers\AddController::class);
-    Route::resource('attachments', App\Http\Controllers\AttachmentController::class)->except('index', 'create', 'show');
+    Route::resource('parameterVATs', ParameterVATController::class);
+    Route::resource('adds', AddController::class);
+    Route::resource('attachments', AttachmentController::class)->except('index', 'create', 'show');
     Route::resource('estimasi', EstimasiController::class);
     Route::post('estimasi-updateData', [EstimasiController::class,'updateData'])->name('estimasi.updateData');
     Route::post('dataTableEstimasi',[EstimasiController::class,'dataTable'])->name('estimasi.data');
@@ -94,10 +99,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('customerProducts-store-bulk',  [CustomerProductController::class, 'storeBulk'])->name('customerProducts.storeBulk');
     Route::resource('customerMinOrders', CustomerMinOrderController::class)->except('edit');
     Route::resource('customerMinOrderHists', CustomerMinOrderHistController::class);
+    Route::resource('categoryMinOrders', CategoryMinOrderController::class);
 });
 
 
 Route::get('/send_notification', [SendEmailController::class, 'send']);
-
-
-Route::resource('categoryMinOrders', App\Http\Controllers\CategoryMinOrderController::class);

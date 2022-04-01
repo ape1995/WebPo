@@ -18,7 +18,7 @@
         @can('browse users')
             <li class="nav-item">
                 <a href="{{ route('users.index') }}" class="nav-link {{ Request::is('users*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fa fa-users nav-icon"></i>
                     <p>{{ trans('menu.user')}}</p>
                 </a>
             </li>
@@ -26,7 +26,7 @@
         @can('browse group permissions')
             <li class="nav-item">
                 <a href="{{ route('roles.index') }}" class="nav-link {{ Request::is('roles*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fa fa-paste nav-icon"></i>
                     <p>{{ trans('menu.group_permission')}}</p>
                 </a>
             </li>
@@ -34,7 +34,7 @@
         @can('browse parameter')
         <li class="nav-item">
             <a href="{{ route('parameters.index') }}" class="nav-link {{ Request::is('parameters*') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fa fa-clock nav-icon"></i>
                 <p>Parameter</p>
             </a>
         </li>
@@ -42,7 +42,7 @@
         @can('browse tax')
         <li class="nav-item">
             <a href="{{ route('parameterVATs.index') }}" class="nav-link {{ Request::is('parameterVATs*') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-money-check-alt nav-icon"></i>
                 <p>Parameter {{ trans('menu.vat') }}</p>
             </a>
         </li>
@@ -50,7 +50,7 @@
         @can('browse mail setting')
         <li class="nav-item">
             <a href="{{ route('mailSettings.index') }}" class="nav-link {{ Request::is('mailSettings*') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-mail-bulk nav-icon"></i>
                 <p>{{ trans('menu.mail_setting') }}</p>
             </a>
         </li>
@@ -58,7 +58,7 @@
         @can('browse adds')
         <li class="nav-item">
             <a href="{{ route('adds.index') }}" class="nav-link {{ Request::is('adds*') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-tv nav-icon"></i>
                 <p>{{ trans('menu.adds') }}</p>
             </a>
         </li>
@@ -66,7 +66,7 @@
         @can('browse customer products')
         <li class="nav-item">
             <a href="{{ route('customerProducts.index') }}" class="nav-link {{ Request::is('customerProducts*') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fab fa-product-hunt nav-icon"></i>
                 <p>Customer Products</p>
             </a>
         </li>
@@ -74,7 +74,7 @@
         @can('browse min orders')
         <li class="nav-item">
             <a href="{{ route('customerMinOrders.index') }}" class="nav-link {{ Request::is('customerMinOrders*') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-minus-circle nav-icon"></i>
                 <p>Customer Min Orders</p>
             </a>
         </li>
@@ -82,14 +82,14 @@
         @can('browse category minimum orders')
         <li class="nav-item">
             <a href="{{ route('categoryMinOrders.index') }}" class="nav-link {{ Request::is('categoryMinOrders*') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-minus-circle nav-icon"></i>
                 <p>Category Min Orders</p>
             </a>
         </li>
         @endcan
         <li class="nav-item">
             <a href="{{ route('dFormImportProduct') }}" class="nav-link {{ Request::is('dFormImportProduct*') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="far fa-file-excel nav-icon"></i>
                 <p>{{ trans('menu.dformatimport') }}</p>
             </a>
         </li>
@@ -111,7 +111,7 @@
         @can('create sales order')
             <li class="nav-item">
                 <a href="{{ route('createOrder') }}" class="nav-link {{ Request::is('createOrder*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-file-medical nav-icon"></i>
                     <p>{{ trans('menu.create_order')}}</p>
                 </a>
             </li>
@@ -119,7 +119,7 @@
         @can('list sales order')
             <li class="nav-item">
                 <a href="{{ route('salesOrders.index') }}" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="far fa-list-alt nav-icon"></i>
                     <p>{{ trans('menu.list_order')}}</p>
                 </a>
             </li>
@@ -141,7 +141,7 @@
         @can('view report sales order')
             <li class="nav-item">
                 <a href="{{ route('reportSalesOrder.index') }}" class="nav-link {{ Request::is('reportSalesOrder') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-clipboard-check nav-icon"></i>
                     <p>{{ trans('menu.report_rekap')}}</p>
                 </a>
             </li>
@@ -149,7 +149,7 @@
         @can('view report sales order detail')
         <li class="nav-item">
             <a href="{{ route('reportSalesOrder.detailIndex') }}" class="nav-link {{ Request::is('reportSalesOrderDetail') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-clipboard-check nav-icon"></i>
                 <p>{{ trans('menu.report_detail')}}</p>
             </a>
         </li>
@@ -157,7 +157,7 @@
         @can('view report request 1')
         <li class="nav-item">
             <a href="{{ route('reportSalesOrder.report1Index') }}" class="nav-link {{ Request::is('reportRequest1') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-clipboard-check nav-icon"></i>
                 <p>{{ trans('menu.report_1')}}</p>
             </a>
         </li>
@@ -165,7 +165,7 @@
         @can('view report customer')
         <li class="nav-item">
             <a href="{{ route('reportSalesOrder.reportCustomerIndex') }}" class="nav-link {{ Request::is('reportCustomer') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-clipboard-check nav-icon"></i>
                 <p>{{ trans('menu.report_customer')}}</p>
             </a>
         </li>
@@ -173,7 +173,7 @@
         @can('view report balance rekap')
         <li class="nav-item">
             <a href="{{ route('rekapBalances') }}" class="nav-link {{ Request::is('rekapBalances') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-clipboard-check nav-icon"></i>
                 <p>{{ trans('menu.report_balance_rekap')}}</p>
             </a>
         </li>
@@ -181,7 +181,7 @@
         @can('view report balance')
         <li class="nav-item">
             <a href="{{ route('reportSalesOrder.reportBalanceIndex') }}" class="nav-link {{ Request::is('reportBalance') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-clipboard-check nav-icon"></i>
                 <p>{{ trans('menu.report_balance')}}</p>
             </a>
         </li>

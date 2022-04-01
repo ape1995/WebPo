@@ -54,3 +54,52 @@
 
 @endsection
 
+
+@push('page_scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {              
+            var table = $('#dataTable').DataTable({
+                pageLength: 10,
+                lengthChange: true,
+                bFilter: true,
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw text-danger"></i><span class="sr-only">Loading...</span> '
+                },
+                ajax: {
+                    url:"{{route('customerProducts.data')}}",
+                    type: "GET"
+                        
+                },
+                columns: [
+                    {
+                        data: 'customer_code'                                  
+                    },
+                    {
+                        data: 'inventory'      
+                    },      
+                    {
+                        data: 'customer_class'      
+                    },                        
+                    {
+                        data: 'date_add'      
+                    },
+                    {
+                        data: 'action',
+                        "className": "text-center",
+                        orderable: false, 
+                        searchable: false    
+                    },    
+                ]
+            });
+
+            $("#customer_id").change(function() { 
+                var val = [];
+                val.push($('#customer_id').val());
+                table.search(val.join(' ')).draw();   
+            });
+        });
+    </script>
+@endpush

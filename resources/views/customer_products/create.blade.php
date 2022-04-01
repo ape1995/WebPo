@@ -20,8 +20,7 @@
             {!! Form::open(['route' => 'customerProducts.store']) !!}
 
             <div class="card-body">
-                <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
-                
+               
                 <div class="row">
                     @include('customer_products.fields')
                 </div>
@@ -38,3 +37,35 @@
         </div>
     </div>
 @endsection
+
+@push('page_scripts')
+    <script type='text/javascript'>
+        $(document).ready(function(){
+        // Check or Uncheck All checkboxes
+        $("#checkall").change(function(){
+            var checked = $(this).is(':checked');
+            if(checked){
+                $(".checkbox").each(function(){
+                    $(this).prop("checked",true);
+                });
+            }else{
+                console.log('tes2');
+                $(".checkbox").each(function(){
+                    $(this).prop("checked",false);
+                });
+            }
+        });
+        
+        // Changing state of CheckAll checkbox 
+        $(".checkbox").click(function(){
+        
+            if($(".checkbox").length == $(".checkbox:checked").length) {
+                $("#checkall").prop("checked", true);
+            } else {
+                $("#checkall").prop("checked", false);
+            }
+    
+        });
+    });
+   </script>
+@endpush

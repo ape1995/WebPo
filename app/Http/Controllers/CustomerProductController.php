@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\CustomerProduct;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use DataTables;
 use Flash;
 use Response;
 use DB;
@@ -40,6 +41,31 @@ class CustomerProductController extends AppBaseController
         $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         
         return view('customer_products.index', compact('customerProducts', 'customers'));
+    }
+
+    public function dataTable(Request $request)
+    {
+        if ($request->ajax()) {
+            $datas = CustomerProduct::query();
+
+            return DataTables::of($datas)
+                ->editColumn('customer_code', function (CustomerProduct $customerProduct) {
+                    return $customerProduct->customer->AcctCD.' - '.$customerProduct->customer->AcctName;
+                })
+                ->addColumn('inventory', function (CustomerProduct $customerProduct) {
+                    return $customerProduct->product->InventoryCD.' - '.$customerProduct->product->Descr;
+                })
+                ->addColumn('date_add', function (CustomerProduct $customerProduct) {
+                    return $customerProduct->created_at->format('Y-m-d');
+                })
+                ->addIndexColumn()
+                ->addColumn('action',function ($data){
+                    return view('customer_products.action')->with('customerProduct',$data)->render();
+                })
+                ->rawColumns(['action'])
+                ->escapeColumns()
+                ->toJson();
+        } 
     }
 
     /**
@@ -75,21 +101,22 @@ class CustomerProductController extends AppBaseController
     {
         $input = $request->all();
 
-        // Cek data sudah ada
-        $cekData = CustomerProduct::where('customer_code', $input['customer_code'])->where('inventory_code', $input['inventory_code'])->get()->first();
+        foreach ($input['check'] as $key => $value) {
+            // Cek data sudah ada
+            $cekData = CustomerProduct::where('customer_code', $input['customer_code'])->where('inventory_code', $value)->get()->first();
+            $cekCustomerClass = Customer::where('AcctCD', $input['customer_code'])->get()->first();
+                
+            // dd($cekData);
+            if($cekData == null){
 
-        // dd($cekData);
-        if($cekData != null){
-            Flash::error('Product for this customer already inserted');
+                $input['customer_class'] = $cekCustomerClass->customer2->CustomerClassID;
+                $input['inventory_code'] = $value;
+        
+                $customerProduct = $this->customerProductRepository->create($input);
+            }
 
-            return redirect()->route('customerProducts.create');
+            // Get Customer Class
         }
-
-        // Get Customer Class
-        $cekCustomerClass = Customer::where('AcctCD', $input['customer_code'])->get()->first();
-        $input['customer_class'] = $cekCustomerClass->customer2->CustomerClassID;
-
-        $customerProduct = $this->customerProductRepository->create($input);
 
         Flash::success('Customer Product saved successfully.');
 

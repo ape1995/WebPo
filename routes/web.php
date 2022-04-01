@@ -95,6 +95,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('dataTableEstimasi',[EstimasiController::class,'dataTable'])->name('estimasi.data');
     Route::get('dFormImportProduct', [ProductController::class, 'downloadFormat'])->name('dFormImportProduct');
     Route::resource('customerProducts', CustomerProductController::class)->except('edit');
+    Route::get('dataTableCustomerProducts',[CustomerProductController::class,'dataTable'])->name('customerProducts.data');
     Route::get('customerProducts-create-bulk',  [CustomerProductController::class, 'createBulk'])->name('customerProducts.createBulk');
     Route::post('customerProducts-store-bulk',  [CustomerProductController::class, 'storeBulk'])->name('customerProducts.storeBulk');
     Route::resource('customerMinOrders', CustomerMinOrderController::class)->except('edit');

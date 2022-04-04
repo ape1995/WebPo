@@ -525,6 +525,15 @@ class SalesOrderController extends AppBaseController
         // Get data minimum order for this customer
         $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$salesOrder->customer->AcctCD."'")->get()->first();
         
+        // Get all order by delivery date
+        $orders = SalesOrder::selectRaw('sum(order_total) as total')
+                            ->where('customer_id', $salesOrder->customer_id)
+                            ->where('delivery_date', $salesOrder->delivery_date)
+                            ->whereIn('status', ['R','P'])
+                            ->get();
+
+        dd($orders);
+
         // Jika ada datanya Validasi data order dengan minimum order per customer
         if($customerMinOrder !== null){
 

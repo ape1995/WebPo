@@ -18,7 +18,9 @@ class CustomerMinOrderRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'customer_code',
-        'minimum_order'
+        'minimum_order',
+        'start_date',
+        'end_date',
     ];
 
     /**

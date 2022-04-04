@@ -25,8 +25,8 @@
                 <div class="row">
                     @include('customer_min_orders.show_fields')
                 </div>
-                <h5>History</h5>
-                @include('customer_min_order_hists.table')
+                {{-- <h5>History</h5> --}}
+                {{-- @include('customer_min_order_hists.table') --}}
             </div>
         </div>
     </div>

@@ -10,10 +10,17 @@
     <p class="text-bold">Rp. {{ number_format($customerMinOrder->minimum_order, 0, ',', '.') }}</p>
 </div>
 
-<!-- Created At Field -->
+<!-- Start Date At Field -->
 <div class="col-sm-12">
-    {!! Form::label('created_at', 'Date Add:') !!}
-    <p>{{ $customerMinOrder->created_at->format('Y-m-d') }}</p>
+    {!! Form::label('start_date', 'Start Date:') !!}
+    <p>{{ $customerMinOrder->start_date == null ? '' : date('Y-m-d', strtotime($customerMinOrder->start_date)) }}</p>
+</div>
+
+
+<!-- End Date At Field -->
+<div class="col-sm-12">
+    {!! Form::label('end_date', 'End Date:') !!}
+    <p>{{ $customerMinOrder->end_date == null ? '' : date('Y-m-d', strtotime($customerMinOrder->end_date)) }}</p>
 </div>
 
 

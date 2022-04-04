@@ -26,7 +26,9 @@ class CustomerMinOrder extends Model
 
     public $fillable = [
         'customer_code',
-        'minimum_order'
+        'minimum_order',
+        'start_date',
+        'end_date',
     ];
 
     /**

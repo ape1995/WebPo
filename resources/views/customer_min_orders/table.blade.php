@@ -6,7 +6,7 @@
             <th>Minimum Order</th>
             <th>Start Date</th>
             <th>End Date</th>
-            <th width="1%">Action</th>
+            <th width="120">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -47,7 +47,7 @@
     $(document).ready(function() {
         $('#customerMinOrders-table').DataTable({
             columnDefs: [
-                { orderable: false, targets: 3 }
+                { orderable: false, targets: 4 }
             ],
         });
     });

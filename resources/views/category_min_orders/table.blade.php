@@ -13,7 +13,7 @@
         @foreach($categoryMinOrders as $categoryMinOrder)
             <tr>
                 <td>{{ $categoryMinOrder->category }}</td>
-                <td class="money">{{ number_format($categoryMinOrder->minimum_order, 0, ',', '.') }}</td>
+                <td class="money text-bold">Rp. {{ number_format($categoryMinOrder->minimum_order, 0, ',', '.') }}</td>
                 <td>{{ $categoryMinOrder->start_date->format('Y-m-d') }}</td>
                 <td>{{ $categoryMinOrder->end_date == null ? '' : $categoryMinOrder->end_date->format('Y-m-d') }}</td>
                 <td width="120">

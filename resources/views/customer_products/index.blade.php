@@ -15,11 +15,42 @@
                         </a>
                     @endcan
                     @can('bulk customer products')
-                        <a class="btn btn-info float-right"
+                        <a class="btn btn-info float-right ml-3"
                         href="{{ route('customerProducts.createBulk') }}">
                             Bulk Action
                         </a>
                     @endcan
+                    @can('create customer products')
+                        <button class="btn btn-success text-light float-right ml-3" id="btn_upload_product" type="button"  data-toggle="modal" data-target="#modalUpload">
+                            {{ trans('sales_order.btn_upload_product') }}
+                        </button>
+                    @endcan
+                    <!-- Modal -->
+                    <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="modalUpload" aria-hidden="true">
+                        <div class="modal-dialog  modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <form action="{{ route('uploadCustomerProducts') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Import</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="col-md-12 my-2">
+                                            <input type="file" name="file" id="file" class="form-control" accept=".xlsx, .xls" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="col-md-4 m-3">
+                                            <input type="submit" id="upload" class="btn btn-success" value="Import">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -36,7 +67,7 @@
                 <div class="row">
 
                     <div class="mb-3 col-md-3 mx-auto">
-                        Customer
+                        <label for="customer_id">Customer</label> 
                         <select name="customer_id" id="customer_id" class="form-control select2js">
                             <option value="">- All Customer -</option>
                             @foreach ($customers as $customer)

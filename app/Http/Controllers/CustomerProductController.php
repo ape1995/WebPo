@@ -6,6 +6,8 @@ use App\Http\Requests\CreateCustomerProductRequest;
 use App\Http\Requests\UpdateCustomerProductRequest;
 use App\Repositories\CustomerProductRepository;
 use App\Http\Controllers\AppBaseController;
+use App\Imports\CustomerProductImport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\CustomerProduct;
@@ -275,5 +277,17 @@ class CustomerProductController extends AppBaseController
         Flash::success('Customer Product deleted successfully.');
 
         return redirect(route('customerProducts.index'));
+    }
+
+    public function import(Request $request){
+        
+        $file = $request->file('file');
+        $namaFile =  $file->getClientOriginalName();
+        $file->move('uploads', $namaFile);
+
+        Excel::import(new CustomerProductImport, public_path('uploads/'.$namaFile));
+        
+        return redirect()->route('customerProducts.index')->with('success', 'Customer Product Imported Successfully');
+
     }
 }

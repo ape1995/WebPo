@@ -98,6 +98,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('dataTableCustomerProducts',[CustomerProductController::class,'dataTable'])->name('customerProducts.data');
     Route::get('customerProducts-create-bulk',  [CustomerProductController::class, 'createBulk'])->name('customerProducts.createBulk');
     Route::post('customerProducts-store-bulk',  [CustomerProductController::class, 'storeBulk'])->name('customerProducts.storeBulk');
+    Route::post('uploadCustomerProducts',  [CustomerProductController::class, 'import'])->name('uploadCustomerProducts');
     Route::resource('customerMinOrders', CustomerMinOrderController::class);
     Route::resource('customerMinOrderHists', CustomerMinOrderHistController::class);
     Route::resource('categoryMinOrders', CategoryMinOrderController::class);

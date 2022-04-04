@@ -217,7 +217,6 @@ class SalesOrderController extends AppBaseController
             'order_total' => 'required',
         ]);
 
-        $customerMinOrder = CustomerMinOrder::where('customer_code', \Auth::user()->customer->AcctCD)->get()->first();
         
         $input = $request->all();
 
@@ -225,14 +224,6 @@ class SalesOrderController extends AppBaseController
         $orderTotal = $input['order_total'];
         $orderTotal = str_replace('.','',$orderTotal);
         $orderTotal = (int)str_replace(',','.',$orderTotal);
-
-        // dd($customerMinOrder);
-
-        if($customerMinOrder != null){
-            if($orderTotal < $customerMinOrder->minimum_order){
-                return redirect()->route('createOrder')->withInput()->with('error', "Tidak Mencapai Minimum Order.");
-            }
-        }
         
         $cekOrder = SalesOrder::where('customer_id', $input['customer_id'])->where('delivery_date', $input['delivery_date'])->latest()->first();
         $thisCustomer = Customer::where('BAccountID', $input['customer_id'])->get()->first();
@@ -396,7 +387,7 @@ class SalesOrderController extends AppBaseController
         $orderTotal = str_replace('.','',$orderTotal);
         $orderTotal = (int)str_replace(',','.',$orderTotal);
 
-        dd($customerMinOrder);
+        // dd($customerMinOrder);
 
         if($customerMinOrder != null){
             if($orderTotal < $customerMinOrder->minimum_order){
@@ -511,33 +502,42 @@ class SalesOrderController extends AppBaseController
 
     public function submitOrder($id)
     {
-
+        // Cek Hak akses
         if (!\Auth::user()->can('submit sales order')) {
             abort(403);
         }
 
+        // Find data sales order
         $salesOrder = SalesOrder::find($id);
 
+        // Jika tidak ada return notfound
         if (empty($salesOrder)) {
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
         // Get data minimum order for this customer
-        $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$salesOrder->customer->AcctCD."'")->get()->first();
+        $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$salesOrder->customer->AcctCD."' AND start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
         
+        if($customerMinOrder == null){
+            $minimumOrder = 0;
+        } else {
+            $minimumOrder = $customerMinOrder->minimum_order;
+        }
+
         // Get all order by delivery date
         $orders = SalesOrder::selectRaw('sum(order_total) as total')
-                            ->where('customer_id', $salesOrder->customer_id)
-                            ->where('delivery_date', $salesOrder->delivery_date)
-                            ->whereIn('status', ['R','P'])
-                            ->get();
+                ->where('customer_id', $salesOrder->customer_id)
+                ->where('delivery_date', $salesOrder->delivery_date)
+                ->whereIn('status', ['R','P'])
+                ->whereNotIn('order_nbr', [$salesOrder->order_nbr])
+                ->get()->first();
 
-        dd($orders);
+        $totalOrderToday = $salesOrder->order_total + $orders->total;
 
         // Jika ada datanya Validasi data order dengan minimum order per customer
-        if($customerMinOrder !== null){
+        if($customerMinOrder != null){
 
-            if($salesOrder->order_total >= $customerMinOrder->minimum_order){
+            if($totalOrderToday >= $customerMinOrder->minimum_order ){
                 return $this->processSubmit($id);
             } else {
                 return redirect(route('salesOrders.show', $id))->with("error", "Tidak mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order));
@@ -548,12 +548,12 @@ class SalesOrderController extends AppBaseController
             $thisCustomer = Customer::where('BAccountID', $salesOrder->customer_id)->get()->first();
             $parseCustomer = explode('(',$thisCustomer->AcctName);
             $customerCategory = substr($parseCustomer[1], 0, 2);
-            
             // Minimum order category customer
             $categoryMinOrder = CategoryMinOrder::whereRaw("category = '$customerCategory' AND start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
-        
+
             // Validasi minimum order by category
-            if($salesOrder->order_total >= $categoryMinOrder->minimum_order){
+            if($totalOrderToday >= $categoryMinOrder->minimum_order ){
+                // dd('test');
                 return $this->processSubmit($id);
             } else {
                 return redirect(route('salesOrders.show', $id))->with("error", "Tidak mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order));
@@ -577,6 +577,7 @@ class SalesOrderController extends AppBaseController
         $salesOrder['submitted_by'] = \Auth::user()->id;
         $salesOrder['submitted_at'] = Carbon::now()->toDateTimeString();
         $salesOrder->save();
+        // dd('tes');
 
         if($parameterNow >= $parameter->parameter_hour){
 
@@ -595,10 +596,15 @@ class SalesOrderController extends AppBaseController
                 'url' => $url,
             ];
 
-            Mail::to($email)->cc($cc)->bcc($bcc)->send(new SendMailSubmit($data));
+            // if($email != null){
 
-            return redirect(route('salesOrders.show', $id))->with('success', 'Order Submitted Sucessfully.');
+                Mail::to($email)->cc($cc)->bcc($bcc)->send(new SendMailSubmit($data));
+
+            // }
+
         }
+
+        return redirect(route('salesOrders.show', $id))->with('success', 'Order Submitted Sucessfully.');
     }
 
     public function processOrder($id)

@@ -20,7 +20,6 @@ class UsersImport implements ToCollection, WithHeadingRow
 
         foreach ($rows as $index => $row) 
         { 
-            // dd($row);
             // cek customer code
             $cekCustomer = Customer::where('AcctCD', $row['customer_code'])->get();
             if ($cekCustomer->count() == 0) {

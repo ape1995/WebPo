@@ -24,7 +24,7 @@
                         <h3 class="text-danger bg-light rounded p-1">Order Rejected : {{ $salesOrder->rejected_reason }}</h3>
                     @endif
                 </div>
-                @if ($salesOrder->status == 'R' || $salesOrder->status == 'P')
+                @if ($salesOrder->status == 'R' || $salesOrder->status == 'P' || $salesOrder->status == 'B' || $salesOrder->status == 'C')
                     <div class="text-right m-2">
                         <a href="{{ route('salesOrders.printPdf', [$salesOrder->id]) }}" class="btn btn-sm btn-outline-danger" id="btnPrint"><i class="fa fa-file-pdf"></i> {{ trans('sales_order.btn_print') }}</a>
                         @can('create sales order')

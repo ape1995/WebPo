@@ -378,22 +378,12 @@ class SalesOrderController extends AppBaseController
 
         $input = $request->all();
 
-        $customerMinOrder = CustomerMinOrder::where('customer_code', \Auth::user()->customer->AcctCD)->get()->first();
-        
-        $input = $request->all();
-
         // Removing Mask
         $orderTotal = $input['order_total'];
         $orderTotal = str_replace('.','',$orderTotal);
         $orderTotal = (int)str_replace(',','.',$orderTotal);
 
         // dd($customerMinOrder);
-
-        if($customerMinOrder != null){
-            if($orderTotal < $customerMinOrder->minimum_order){
-                return redirect()->route('salesOrders.edit', $id)->withInput()->with('error', "Tidak Mencapai Minimum Order.");
-            }
-        }
 
         if( $input['order_type'] == $salesOrder->order_type && $input['delivery_date'] == $salesOrder->delivery_date->format('Y-m-d') ){
             
@@ -530,9 +520,10 @@ class SalesOrderController extends AppBaseController
                 ->where('delivery_date', $salesOrder->delivery_date)
                 ->whereIn('status', ['R','P'])
                 ->whereNotIn('order_nbr', [$salesOrder->order_nbr])
-                ->get()->first();
+                ->get();
+        // dd($orders);
 
-        $totalOrderToday = $salesOrder->order_total + $orders->total;
+        $totalOrderToday = $salesOrder->order_total + $orders[0]->total;
 
         // Jika ada datanya Validasi data order dengan minimum order per customer
         if($customerMinOrder != null){
@@ -540,7 +531,8 @@ class SalesOrderController extends AppBaseController
             if($totalOrderToday >= $customerMinOrder->minimum_order ){
                 return $this->processSubmit($id);
             } else {
-                return redirect(route('salesOrders.show', $id))->with("error", "Tidak mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order));
+                $minusOrder = $customerMinOrder->minimum_order - $salesOrder->order_total;
+                return redirect(route('salesOrders.show', $id))->with("error", "Tidak mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (- Rp. ".number_format($minusOrder).")");
             }
 
         } else {
@@ -556,7 +548,8 @@ class SalesOrderController extends AppBaseController
                 // dd('test');
                 return $this->processSubmit($id);
             } else {
-                return redirect(route('salesOrders.show', $id))->with("error", "Tidak mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order));
+                $minusOrder = $categoryMinOrder->minimum_order - $salesOrder->order_total;
+                return redirect(route('salesOrders.show', $id))->with("error", "Tidak mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (- Rp. ".number_format($minusOrder).")");
             }
 
         }

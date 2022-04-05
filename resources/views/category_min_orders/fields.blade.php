@@ -11,13 +11,13 @@
 <!-- Minimum Order Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('minimum_order', 'Minimum Order:') !!}
-    {!! Form::text('minimum_order', null, ['class' => 'form-control money']) !!}
+    {!! Form::text('minimum_order', null, ['class' => 'form-control money', 'required' => true]) !!}
 </div>
 
 <!-- Start Date Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('start_date', 'Start Date:') !!}
-    {!! Form::date('start_date', null, ['class' => 'form-control','id'=>'start_date']) !!}
+    {!! Form::date('start_date', null, ['class' => 'form-control','id'=>'start_date', 'required' => true]) !!}
 </div>
 
 <!-- End Date Field -->

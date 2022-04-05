@@ -6,6 +6,7 @@ use App\Http\Requests\CreateCategoryMinOrderRequest;
 use App\Http\Requests\UpdateCategoryMinOrderRequest;
 use App\Repositories\CategoryMinOrderRepository;
 use App\Http\Controllers\AppBaseController;
+use App\Models\CategoryMinOrder;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
@@ -58,11 +59,39 @@ class CategoryMinOrderController extends AppBaseController
 
         $input['minimum_order'] = str_replace('.','',$input['minimum_order']);
 
-        $categoryMinOrder = $this->categoryMinOrderRepository->create($input);
+        $cekData = CategoryMinOrder::where('category', $input['category'])->latest()->first();
+        
+        if($cekData != null){
 
-        Flash::success('Category Min Order saved successfully.');
+            if($cekData->end_date == null){
 
-        return redirect(route('categoryMinOrders.index'));
+                Flash::error('Please fill end date before input new value.');
+    
+                return redirect(route('categoryMinOrders.index'));
+    
+            } else if($cekData->end_date >= $input['start_date']) {
+    
+                return redirect(route('categoryMinOrders.create'))->withInput()->with('error', 'Start date must be newest from the last end date.');
+    
+            } else {
+    
+                $categoryMinOrder = $this->categoryMinOrderRepository->create($input);
+        
+                Flash::success('Category Min Order saved successfully.');
+        
+                return redirect(route('categoryMinOrders.index'));
+            }
+
+        } else {
+
+            $categoryMinOrder = $this->categoryMinOrderRepository->create($input);
+        
+            Flash::success('Category Min Order saved successfully.');
+    
+            return redirect(route('categoryMinOrders.index'));
+
+        }
+        
     }
 
     /**

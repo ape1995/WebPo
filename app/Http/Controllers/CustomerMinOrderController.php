@@ -59,37 +59,46 @@ class CustomerMinOrderController extends AppBaseController
      *
      * @return Response
      */
-    public function store(CreateCustomerMinOrderRequest $request)
+    public function store(Request $request)
     {
         $input = $request->all();
 
         $input['minimum_order'] = str_replace('.','',$input['minimum_order']);
 
         // cek existing data
-        $cekData = CustomerMinOrder::where('customer_code', $input['customer_code'])->get()->first();
+        $cekData = CustomerMinOrder::where('customer_code', $input['customer_code'])->latest()->first();
+        // dd($cekData);
+        if($cekData != null){
 
-        if($cekData == null || empty($cekData)){
-            $customerMinOrder = $this->customerMinOrderRepository->create($input);
+            if($cekData->end_date == null){
+    
+                Flash::error('Please fill end date before input new value.');
+    
+                return redirect(route('customerMinOrders.index'));
+    
+            } else if($cekData->end_date >= $input['start_date']) {
+    
+                return redirect(route('customerMinOrders.create'))->withInput()->with('error', 'Start date must be newest from the last end date.');
+    
+            } else {
+    
+                $this->customerMinOrderRepository->create($input);
+    
+                Flash::success('Customer Min Order saved successfully.');
+    
+                return redirect(route('customerMinOrders.index'));
+            }
+
         } else {
-            // Create History
-            CustomerMinOrderHist::create([
-                'customer_code' => $cekData->customer_code,
-                'old_price' => $cekData->minimum_order,
-                'new_price' => $input['minimum_order']
-            ]);
 
-            // Delete Min Order
-            $minOrder = CustomerMinOrder::find($cekData->id);
-            $minOrder->delete();
+            $this->customerMinOrderRepository->create($input);
+    
+            Flash::success('Customer Min Order saved successfully.');
 
-            // Store New Min Order
-            $customerMinOrder = $this->customerMinOrderRepository->create($input);
+            return redirect(route('customerMinOrders.index'));
+            
         }
-
-
-        Flash::success('Customer Min Order saved successfully.');
-
-        return redirect(route('customerMinOrders.index'));
+        
     }
 
     /**

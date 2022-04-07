@@ -61,35 +61,94 @@ class SalesOrderController extends AppBaseController
             abort(403);
         }
 
-        // if(\Auth::user()->role == 'Customers'  || \Auth::user()->role == 'Staff Customers'){
-        //     $salesOrders = SalesOrder::where('customer_id', \Auth::user()->customer_id)->latest();
-        // } else {
-        //     $salesOrders = SalesOrder::latest()->get();
-        // }
-
-        // dd($salesOrders);
-
         return view('sales_orders.index');
     }
 
-    public function filter(Request $request)
+    public function filter(Request $request, $status)
     {
         if (!\Auth::user()->can('list sales order')) {
             abort(403);
         }
 
-        // dd($request);
+        // dd($status);
 
-        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
-            $salesOrders = SalesOrder::where('customer_id', \Auth::user()->customer_id)->filter()->get();
-        } else {
-            $salesOrders = SalesOrder::filter()->get();
-        }
+        return view('sales_orders.filter', compact('status'));
+    }
 
-        // dd($salesOrders);
+    public function filterDataTable($status, Request $request)
+    {
+        if ($request->ajax()) {
 
-        return view('sales_orders.filter')
-            ->with('salesOrders', $salesOrders);
+            if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
+                $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
+            } else {
+                $datas = SalesOrder::where('status', $status)->orderBy('id', 'desc');
+            }
+
+            return DataTables::of($datas)
+                ->addColumn('customer', function (SalesOrder $salesOrder) {
+                    return $salesOrder->customer->AcctName;
+                })
+                ->addColumn('order_type', function (SalesOrder $salesOrder) {
+                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
+                })
+                ->addColumn('created_name', function (SalesOrder $salesOrder) {
+                    return $salesOrder->createdBy->name;
+                })
+                ->editColumn('order_date', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return date('d M Y', strtotime($salesOrder->order_date) );
+                })
+                ->editColumn('delivery_date', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return date('d M Y', strtotime($salesOrder->delivery_date) );
+                })
+                ->editColumn('order_amount', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_amount, 2, ',', '.');
+                })
+                ->editColumn('order_qty', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_qty, 0, ',', '.');
+                })
+                ->editColumn('tax', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->tax, 2, ',', '.');
+                })
+                ->editColumn('order_total', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_total, 2, ',', '.');
+                })
+                ->editColumn('status', function (SalesOrder $salesOrder) 
+                {
+                    if($salesOrder->status == "S"){
+                        $status = 'Draft';
+                    } else if ($salesOrder->status == "R"){
+                        $status = 'Submitted';
+                    } else if ($salesOrder->status == "C"){
+                        $status = 'Canceled';
+                    } else if ($salesOrder->status == "B"){
+                        $status = 'Rejected';
+                    } else {
+                        $status = 'Processed';
+                    }
+
+                    return $status;
+                })
+                ->addIndexColumn()
+                ->addColumn('action',function ($data){
+                    return view('sales_orders.action')->with('salesOrder',$data)->render();
+                })
+                ->rawColumns(['action'])
+                ->escapeColumns()
+                ->toJson();
+        } 
     }
 
     public function dataTable(Request $request)
@@ -99,7 +158,83 @@ class SalesOrderController extends AppBaseController
             if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
                 $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
             } else {
-                $datas = SalesOrder::whereNotIn('status', ['S'])->orderBy('id', 'desc');
+                $datas = SalesOrder::whereNotIn('status', ['S', 'C'])->orderBy('id', 'desc');
+            }
+
+            return DataTables::of($datas)
+                ->addColumn('customer', function (SalesOrder $salesOrder) {
+                    return $salesOrder->customer->AcctName;
+                })
+                ->addColumn('order_type', function (SalesOrder $salesOrder) {
+                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
+                })
+                ->addColumn('created_name', function (SalesOrder $salesOrder) {
+                    return $salesOrder->createdBy->name;
+                })
+                ->editColumn('order_date', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return date('d M Y', strtotime($salesOrder->order_date) );
+                })
+                ->editColumn('delivery_date', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return date('d M Y', strtotime($salesOrder->delivery_date) );
+                })
+                ->editColumn('order_amount', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_amount, 2, ',', '.');
+                })
+                ->editColumn('order_qty', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_qty, 0, ',', '.');
+                })
+                ->editColumn('tax', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->tax, 2, ',', '.');
+                })
+                ->editColumn('order_total', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_total, 2, ',', '.');
+                })
+                ->editColumn('status', function (SalesOrder $salesOrder) 
+                {
+                    if($salesOrder->status == "S"){
+                        $status = 'Draft';
+                    } else if ($salesOrder->status == "R"){
+                        $status = 'Submitted';
+                    } else if ($salesOrder->status == "C"){
+                        $status = 'Canceled';
+                    } else if ($salesOrder->status == "B"){
+                        $status = 'Rejected';
+                    } else {
+                        $status = 'Processed';
+                    }
+
+                    return $status;
+                })
+                ->addIndexColumn()
+                ->addColumn('action',function ($data){
+                    return view('sales_orders.action')->with('salesOrder',$data)->render();
+                })
+                ->rawColumns(['action'])
+                ->escapeColumns()
+                ->toJson();
+        } 
+    }
+
+    public function dataTableFilter(Request $request)
+    {
+        if ($request->ajax()) {
+
+            if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
+                $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
+            } else {
+                $datas = SalesOrder::whereNotIn('status', ['S', 'C'])->orderBy('id', 'desc');
             }
 
             return DataTables::of($datas)
@@ -532,24 +667,35 @@ class SalesOrderController extends AppBaseController
                 return $this->processSubmit($id);
             } else {
                 $minusOrder = $customerMinOrder->minimum_order - $salesOrder->order_total;
-                return redirect(route('salesOrders.show', $id))->with("error", "Tidak mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (- Rp. ".number_format($minusOrder).")");
+                return redirect(route('salesOrders.show', $id))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
             }
 
         } else {
             // Get Minimum Order Category 
             $thisCustomer = Customer::where('BAccountID', $salesOrder->customer_id)->get()->first();
-            $parseCustomer = explode('(',$thisCustomer->AcctName);
-            $customerCategory = substr($parseCustomer[1], 0, 2);
-            // Minimum order category customer
-            $categoryMinOrder = CategoryMinOrder::whereRaw("category = '$customerCategory' AND start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+            // dd($thisCustomer->category);
+            if($thisCustomer->category == null) {
 
-            // Validasi minimum order by category
-            if($totalOrderToday >= $categoryMinOrder->minimum_order ){
-                // dd('test');
-                return $this->processSubmit($id);
+                return redirect(route('salesOrders.show', $id))->with("error", "Category customer belum dibuat");
+
             } else {
-                $minusOrder = $categoryMinOrder->minimum_order - $salesOrder->order_total;
-                return redirect(route('salesOrders.show', $id))->with("error", "Tidak mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (- Rp. ".number_format($minusOrder).")");
+
+                $customerCategory = $thisCustomer->category->Value;
+                // Minimum order category customer
+                $categoryMinOrder = CategoryMinOrder::whereRaw("category = '$customerCategory' AND start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+                
+                if($categoryMinOrder == null){
+                    return redirect(route('salesOrders.show', $id))->with("error", "Error, Tolong hubungi admin");
+                } else {
+                    // Validasi minimum order by category
+                    if($totalOrderToday >= $categoryMinOrder->minimum_order ){
+                        // dd('test');
+                        return $this->processSubmit($id);
+                    } else {
+                        $minusOrder = $categoryMinOrder->minimum_order - $salesOrder->order_total;
+                        return redirect(route('salesOrders.show', $id))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
+                    }
+                }
             }
 
         }

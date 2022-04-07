@@ -47,7 +47,7 @@ class CustomerMinOrderController extends AppBaseController
     public function create()
     {
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         
         return view('customer_min_orders.create', compact('customers'));
     }
@@ -62,6 +62,12 @@ class CustomerMinOrderController extends AppBaseController
     public function store(Request $request)
     {
         $input = $request->all();
+
+        if($input['end_date'] != null || $input['end_date'] != ''){
+            if($input['start_date'] > $input['end_date']){
+                return redirect(route('customerMinOrders.create'))->withInput()->with('error', 'start date must be older than end date.');
+            }
+        }
 
         $input['minimum_order'] = str_replace('.','',$input['minimum_order']);
 
@@ -141,7 +147,7 @@ class CustomerMinOrderController extends AppBaseController
         }
 
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         
 
         return view('customer_min_orders.edit', compact('customerMinOrder', 'customers'));
@@ -159,17 +165,43 @@ class CustomerMinOrderController extends AppBaseController
     {
         $customerMinOrder = $this->customerMinOrderRepository->find($id);
 
+        $input = $request->all();
+
+        if($input['end_date'] != null || $input['end_date'] != ''){
+            if($input['start_date'] > $input['end_date']){
+                return redirect(route('customerMinOrders.edit', $id))->with('error', 'start date must be older than end date.');
+            }
+        }
+
         if (empty($customerMinOrder)) {
             Flash::error('Customer Min Order not found');
 
             return redirect(route('customerMinOrders.index'));
         }
 
-        $customerMinOrder = $this->customerMinOrderRepository->update($request->all(), $id);
+         // cek existing data
+        $cekData = CustomerMinOrder::where('customer_code', $input['customer_code'])->whereNotIn('id', [$customerMinOrder->id])->latest()->first();
+        // dd($cekData);
+        if($cekData != null){
+            if($input['start_date'] <= $cekData->end_date){
 
-        Flash::success('Customer Min Order updated successfully.');
+                return redirect(route('customerMinOrders.edit', $id))->with('error', 'Start date must be newest from end date last data, please setting last data first');
+            
+            } else {
+                $customerMinOrder = $this->customerMinOrderRepository->update($input, $id);
+    
+                Flash::success('Customer Min Order updated successfully.');
+        
+                return redirect(route('customerMinOrders.index'));
+            }
+        } else {
+            $customerMinOrder = $this->customerMinOrderRepository->update($input, $id);
+    
+            Flash::success('Customer Min Order updated successfully.');
+    
+            return redirect(route('customerMinOrders.index'));
+        }
 
-        return redirect(route('customerMinOrders.index'));
     }
 
     /**

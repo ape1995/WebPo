@@ -24,6 +24,7 @@ class Customer extends Model
         'DefAddressID',
         'DefLocationID',
         'ConsolidatingBAcountID',
+        'NoteID',
     ];
 
     public function location()
@@ -44,6 +45,11 @@ class Customer extends Model
     public function customer2()
     {
         return $this->hasOne(Customer2::class, 'BAccountID', 'BAccountID');
+    }
+
+    public function category()
+    {
+        return $this->hasOne(CSAnswer::class, 'RefNoteID', 'NoteID');
     }
 
 }

@@ -57,6 +57,12 @@ class CategoryMinOrderController extends AppBaseController
     {
         $input = $request->all();
 
+        if($input['end_date'] != null || $input['end_date'] != ''){
+            if($input['start_date'] > $input['end_date']){
+                return redirect(route('categoryMinOrders.index'))->withInput()->with('error', 'start date must be older than end date.');
+            }
+        }
+
         $input['minimum_order'] = str_replace('.','',$input['minimum_order']);
 
         $cekData = CategoryMinOrder::where('category', $input['category'])->latest()->first();
@@ -154,13 +160,37 @@ class CategoryMinOrderController extends AppBaseController
 
         $input = $request->all();
 
+        if($input['end_date'] != null || $input['end_date'] != ''){
+            if($input['start_date'] > $input['end_date']){
+                return redirect(route('categoryMinOrders.edit', $id))->with('error', 'start date must be older than end date.');
+            }
+        }
+        
         $input['minimum_order'] = str_replace('.','',$input['minimum_order']);
 
-        $categoryMinOrder = $this->categoryMinOrderRepository->update($input, $id);
+         // cek existing data
+        $cekData = CategoryMinOrder::where('category', $input['category'])->whereNotIn('id', [$categoryMinOrder->id])->latest()->first();
+         // dd($cekData);
+        if($cekData != null){
+            if($input['start_date'] <= $cekData->end_date){
 
-        Flash::success('Category Min Order updated successfully.');
+                return redirect(route('categoryMinOrders.edit', $id))->with('error', 'Start date must be newest from end date last data, please setting last data first');
+            
+            } else {
+                $categoryMinOrder = $this->categoryMinOrderRepository->update($input, $id);
 
-        return redirect(route('categoryMinOrders.index'));
+                Flash::success('Category Min Order updated successfully.');
+        
+                return redirect(route('categoryMinOrders.index'));
+            }
+        } else {
+            $categoryMinOrder = $this->categoryMinOrderRepository->update($input, $id);
+
+            Flash::success('Category Min Order updated successfully.');
+    
+            return redirect(route('categoryMinOrders.index'));
+         }
+
     }
 
     /**

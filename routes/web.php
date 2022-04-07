@@ -57,7 +57,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
     Route::resource('salesOrders', SalesOrderController::class)->except('create');
-    Route::get('salesOrders-Filter', [SalesOrderController::class,'filter'])->name('salesOrders.filter');
+    Route::get('salesOrders-Filter/{status}', [SalesOrderController::class,'filter'])->name('salesOrders.filter');
+    Route::get('salesOrders-DataTable/{status}', [SalesOrderController::class,'filterDataTable'])->name('salesOrders.filterData');
     Route::get('dataTableSalesOrder',[SalesOrderController::class,'dataTable'])->name('salesOrders.data');
     Route::get('submitOrder/{code}',[SalesOrderController::class,'submitOrder'])->name('salesOrders.submitOrder');
     Route::get('cancelOrder/{code}',[SalesOrderController::class,'cancelOrder'])->name('salesOrders.cancelOrder');

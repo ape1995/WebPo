@@ -97,7 +97,7 @@
                                 @if (Auth::user()->role == 'Customers' || Auth::user()->role == 'Staff Customers')
                                   <div class="row">
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=S&sort=id,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter?S') }}">
                                         <div class="card">
                                           <div class="card-body bg-secondary text-light">
                                             {{ trans('dashboard.draft_order')}}
@@ -107,7 +107,7 @@
                                       </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=R&sort=id,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter/R') }}">
                                         <div class="card">
                                           <div class="card-body bg-info">
                                             {{ trans('dashboard.submitted_order')}}
@@ -117,7 +117,7 @@
                                       </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=P&sort=created_at,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter/P') }}">
                                         <div class="card">
                                           <div class="card-body bg-success">
                                             {{ trans('dashboard.processed_order')}}
@@ -127,7 +127,7 @@
                                       </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=B&sort=created_at,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter/B') }}">
                                         <div class="card">
                                           <div class="card-body bg-danger">
                                             {{ trans('dashboard.rejected_order')}}
@@ -155,7 +155,7 @@
                                 @else
                                   <div class="row">
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=R&sort=id,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter/R') }}">
                                         <div class="card">
                                           <div class="card-body bg-warning">
                                             {{ trans('dashboard.waiting_process')}}
@@ -165,7 +165,7 @@
                                       </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=P&sort=id,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter/P') }}">
                                         <div class="card">
                                           <div class="card-body bg-success">
                                             {{ trans('dashboard.processed')}}
@@ -175,7 +175,7 @@
                                       </a>
                                     </div>
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?status=B&sort=id,desc') }}">
+                                      <a href="{{ url('/salesOrders-Filter/B') }}">
                                         <div class="card">
                                           <div class="card-body bg-danger">
                                             {{ trans('dashboard.rejected_order')}}

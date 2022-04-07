@@ -97,7 +97,7 @@
                                 @if (Auth::user()->role == 'Customers' || Auth::user()->role == 'Staff Customers')
                                   <div class="row">
                                     <div class="col-md-4">
-                                      <a href="{{ url('/salesOrders-Filter?S') }}">
+                                      <a href="{{ url('/salesOrders-Filter/S') }}">
                                         <div class="card">
                                           <div class="card-body bg-secondary text-light">
                                             {{ trans('dashboard.draft_order')}}

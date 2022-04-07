@@ -37,7 +37,7 @@ class UserController extends Controller
             if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
                 $datas = User::where('customer_id', \Auth::user()->customer_id)->latest();
             } else {
-                $datas = User::query();
+                $datas = User::with('customer')->latest()->get();
             }
             return DataTables::of($datas)
                 ->addColumn('customer', function (User $user) {

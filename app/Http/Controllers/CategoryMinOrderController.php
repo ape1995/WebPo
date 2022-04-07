@@ -137,7 +137,17 @@ class CategoryMinOrderController extends AppBaseController
             return redirect(route('categoryMinOrders.index'));
         }
 
-        return view('category_min_orders.edit')->with('categoryMinOrder', $categoryMinOrder);
+        $cekKategoryActive = CategoryMinOrder::where('category',$categoryMinOrder->category)->whereNull('end_date')->whereNotIn('id', [$categoryMinOrder->id])->get()->first();
+        // dd($cekKategoryActive);
+        if($cekKategoryActive == null){
+            return view('category_min_orders.edit')->with('categoryMinOrder', $categoryMinOrder);
+        } else {
+            Flash::error('Delete the newest data first');
+
+            return redirect(route('categoryMinOrders.index'));
+        }
+        
+
     }
 
     /**

@@ -146,6 +146,16 @@ class CustomerMinOrderController extends AppBaseController
             return redirect(route('customerMinOrders.index'));
         }
 
+        $cekCustomerActive = CustomerMinOrder::where('customer_code',$customerMinOrder->customer_code)->whereNull('end_date')->whereNotIn('id', [$customerMinOrder->id])->get()->first();
+        
+        if($cekCustomerActive !== null){
+            
+            Flash::error('Delete the newest data first');
+
+            return redirect(route('customerMinOrders.index'));
+
+        }
+
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
         $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         

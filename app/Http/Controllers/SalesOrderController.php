@@ -80,9 +80,9 @@ class SalesOrderController extends AppBaseController
         if ($request->ajax()) {
 
             if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
-                $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
+                $datas = SalesOrder::with('customer')->where('status', $status)->where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
             } else {
-                $datas = SalesOrder::where('status', $status)->orderBy('id', 'desc');
+                $datas = SalesOrder::with('customer')->where('status', $status)->latest()->get();
             }
 
             return DataTables::of($datas)
@@ -158,7 +158,7 @@ class SalesOrderController extends AppBaseController
             if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
                 $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
             } else {
-                $datas = SalesOrder::whereNotIn('status', ['S', 'C'])->orderBy('id', 'desc');
+                $datas = SalesOrder::with('customer')->whereNotIn('status', ['S', 'C'])->latest()->get();
             }
 
             return DataTables::of($datas)
@@ -676,7 +676,7 @@ class SalesOrderController extends AppBaseController
             // dd($thisCustomer->category);
             if($thisCustomer->category == null) {
 
-                return redirect(route('salesOrders.show', $id))->with("error", "Category customer belum dibuat");
+                return redirect(route('salesOrders.show', $id))->with("error", "Category customer belum diatur, Tolong hubungi admin Yamazaki");
 
             } else {
 
@@ -685,7 +685,7 @@ class SalesOrderController extends AppBaseController
                 $categoryMinOrder = CategoryMinOrder::whereRaw("category = '$customerCategory' AND start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
                 
                 if($categoryMinOrder == null){
-                    return redirect(route('salesOrders.show', $id))->with("error", "Error, Tolong hubungi admin");
+                    return redirect(route('salesOrders.show', $id))->with("error", "Category order belum di atur, Tolong hubungi admin Yamazaki");
                 } else {
                     // Validasi minimum order by category
                     if($totalOrderToday >= $categoryMinOrder->minimum_order ){

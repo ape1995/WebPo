@@ -41,6 +41,7 @@
                             <option value="DSJBR">DSJBR</option>
                             <option value="DSJTG">DSJTG</option>
                             <option value="DSJTM">DSJTM</option>
+                            <option value="INSTI">INSTI</option>
                             
                         </select>
                     </div>

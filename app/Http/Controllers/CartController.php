@@ -14,6 +14,7 @@ use Flash;
 use Response;
 use Auth;
 use DataTables;
+use DB;
 
 class CartController extends AppBaseController
 {
@@ -93,20 +94,19 @@ class CartController extends AppBaseController
     {
         $data = $request->all();
         
-        // Check sudah ada dalam cart
-        $cekCart = Cart::where('inventory_id', $data['inventory_id'])->where('customer_id', \Auth::user()->customer_id)->get()->first();
-
-        $data['qty'] = str_replace('.','',$data['qty']);
-        $data['unit_price'] = str_replace('.','',$data['unit_price']);
-        $data['unit_price'] = str_replace(',','.',$data['unit_price']);
-        $data['amount'] = str_replace('.','',$data['amount']);
-        $data['amount'] = str_replace(',','.',$data['amount']);
-        
+        $cekCart = Cart::where('inventory_id', $data['inventory_id'])->where('customer_id', $data['customer_id'])->get()->first();
+           
         if($cekCart !== null){
 
             return response()->json(['error'=>'Product already listed on carts.'], 403);
 
         } else {
+
+            $data['qty'] = str_replace('.','',$data['qty']);
+            $data['unit_price'] = str_replace('.','',$data['unit_price']);
+            $data['unit_price'] = str_replace(',','.',$data['unit_price']);
+            $data['amount'] = str_replace('.','',$data['amount']);
+            $data['amount'] = str_replace(',','.',$data['amount']);
 
             Cart::create([
                         'inventory_id' => $request->inventory_id,

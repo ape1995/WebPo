@@ -1,7 +1,7 @@
 <div class="table-responsive">
-    <table class="table" id="parameters-table">
+    <table class="table table-hover" id="parameters-table">
         <thead>
-        <tr>
+        <tr class="bg-info">
             <th>{{ trans('parameter.name') }}</th>
             {{-- <th>Parameter String</th>
             <th>Parameter Date</th> --}}

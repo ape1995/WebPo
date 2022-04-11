@@ -37,7 +37,7 @@ class UserController extends Controller
             if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
                 $datas = User::where('customer_id', \Auth::user()->customer_id)->latest();
             } else {
-                $datas = User::query();
+                $datas = User::with('customer')->latest()->get();
             }
             return DataTables::of($datas)
                 ->addColumn('customer', function (User $user) {
@@ -77,7 +77,7 @@ class UserController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
             $roles = Role::where('name', 'Staff Customers')->where('status', true)->get();
         } else {
-            $customers =  Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
+            $customers =  Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
             // $customers =  Customer::where('Type', 'CU')->get();
             $roles = Role::where('status', true)->get();
         }
@@ -154,7 +154,7 @@ class UserController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
             $roles = Role::where('name', 'Staff Customers')->where('status', true)->get();
         } else {
-            $customers =  Customer::whereRaw("LEFT(AcctCD,2) = '60'")->where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
+            $customers =  Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
             $roles = Role::where('status', true)->get();
         }
 

@@ -1,7 +1,7 @@
 <div class="table-responsive">
-    <table class="table" id="mailSettings-table">
+    <table class="table table-hover" id="mailSettings-table">
         <thead>
-        <tr>
+        <tr class="bg-info">
             <th>{{ trans('parameter.name') }}</th>
             <th>{{ trans('mail.type') }}</th>
             <th>{{ trans('mail.sub_type') }}</th>

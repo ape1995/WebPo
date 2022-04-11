@@ -36,6 +36,7 @@
                                     <a class="btn btn-outline-primary btn-sm" href="{{ route('users.create') }}">{{ trans('user.create')}}</a>
                                 </div>
                                 @endcan
+
                             </div>
                             @include('users.table')
                         </div>

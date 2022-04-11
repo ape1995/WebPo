@@ -1,7 +1,7 @@
 <div class="table-responsive">
     <table class="table table-hover table-sm" id="dataTable">
         <thead>
-            <tr>
+            <tr class="bg-info">
                 <th>{{ trans('user.table_name')}}</th>
                 <th>{{ trans('user.table_email')}}</th>
                 <th>{{ trans('user.table_group')}}</th>

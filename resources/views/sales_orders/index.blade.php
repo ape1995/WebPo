@@ -144,7 +144,7 @@
                                 orderable: false, 
                                 searchable: false    
                             },    
-                        ]
+                        ],
                     });
                 }         
         });

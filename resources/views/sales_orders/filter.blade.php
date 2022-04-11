@@ -6,7 +6,7 @@
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1 class="m-0">Sales Order</h1>
+            <h1 class="m-0">Sales Order - {{ $status }}</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -25,7 +25,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            @include('sales_orders.table-filter')
+                            @include('sales_orders.table')
                         </div>
                     </div>
                 </div>
@@ -34,11 +34,110 @@
             <!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
+    <!-- /.content -->
+    @php
+        $permissionPrice = '';
+    @endphp
+    @can('hide price sales order')
+        @php
+            $permissionPrice = 'hide price sales order';
+        @endphp
+    @endcan
 @endsection
 
 
 @push('page_scripts')
-    <script>
-
+    <script type="text/javascript">
+        $(document).ready(function() { 
+            var permissionPrice = "{{ $permissionPrice }}";
+            fetch_data()
+            function fetch_data(){                    
+                    $('#dataTable').DataTable({
+                        processing: true,
+                        serverSide: true,
+                        ordering: false,
+                        pageLength: 50,
+                        "language": {
+                            processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw text-danger"></i><span class="sr-only">Loading...</span> '
+                        },
+                        ajax: {
+                            url:"{{ url('salesOrders-DataTable') }}" + '/' + "{{ $status }}",
+                            type: "GET"
+                                
+                        },
+                        "rowCallback": function( row, data ) {
+                            if ( data.status == "Draft" ) {
+                                $('td:eq(10)', row).addClass("bg-secondary");
+                            }
+                            if ( data.status == "Submitted" ) {
+                                $('td:eq(10)', row).addClass("bg-info");
+                            }
+                            if ( data.status == "Processed" ) {
+                                $('td:eq(10)', row).addClass("bg-success");
+                            }
+                            if ( data.status == "Canceled" ) {
+                                $('td:eq(10)', row).addClass("bg-danger");
+                            }
+                            if ( data.status == "Rejected" ) {
+                                $('td:eq(10)', row).addClass("bg-danger");
+                            }
+                            if(permissionPrice == 'hide price sales order') {
+                                $('td:eq(7)', row).addClass("hide-component");
+                                $('td:eq(8)', row).addClass("hide-component");
+                                $('td:eq(9)', row).addClass("hide-component");
+                            }
+                            $('td:eq(6)', row).addClass("money");
+                            $('td:eq(7)', row).addClass("money");
+                            $('td:eq(8)', row).addClass("money");
+                            $('td:eq(9)', row).addClass("money");
+                        },
+                        columns: [
+                            { 
+                                data: 'DT_RowIndex',
+                                name: 'DT_Row_Index', 
+                                "className": "text-center" ,
+                                ordering: false, 
+                                searchable: false    
+                            },
+                            {
+                                data: 'order_type'                                    
+                            }, 
+                            {
+                                data: 'order_nbr'                                    
+                            },                
+                            {
+                                data: 'customer'      
+                            },  
+                            {
+                                data: 'order_date'
+                            },      
+                            {
+                                data: 'delivery_date'
+                            },       
+                            {
+                                data: 'order_qty'      
+                            },      
+                            {
+                                data: 'order_amount'    
+                            },       
+                            {
+                                data: 'tax'      
+                            },       
+                            {
+                                data: 'order_total'      
+                            },       
+                            {
+                                data: 'status' 
+                            },
+                            {
+                                data: 'action',
+                                "className": "text-center",
+                                orderable: false, 
+                                searchable: false    
+                            },    
+                        ]
+                    });
+                }         
+        });
     </script>
 @endpush

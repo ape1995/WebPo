@@ -13,6 +13,9 @@ use App\Models\MailSetting;
 use App\Mail\SendMailSubmit;
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\CustomerProduct;
+use App\Models\CategoryMinOrder;
+use App\Models\CustomerMinOrder;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\SalesPrice;
@@ -58,35 +61,94 @@ class SalesOrderController extends AppBaseController
             abort(403);
         }
 
-        // if(\Auth::user()->role == 'Customers'  || \Auth::user()->role == 'Staff Customers'){
-        //     $salesOrders = SalesOrder::where('customer_id', \Auth::user()->customer_id)->latest();
-        // } else {
-        //     $salesOrders = SalesOrder::latest()->get();
-        // }
-
-        // dd($salesOrders);
-
         return view('sales_orders.index');
     }
 
-    public function filter(Request $request)
+    public function filter(Request $request, $status)
     {
         if (!\Auth::user()->can('list sales order')) {
             abort(403);
         }
 
-        // dd($request);
+        // dd($status);
 
-        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
-            $salesOrders = SalesOrder::where('customer_id', \Auth::user()->customer_id)->filter()->get();
-        } else {
-            $salesOrders = SalesOrder::filter()->get();
-        }
+        return view('sales_orders.filter', compact('status'));
+    }
 
-        // dd($salesOrders);
+    public function filterDataTable($status, Request $request)
+    {
+        if ($request->ajax()) {
 
-        return view('sales_orders.filter')
-            ->with('salesOrders', $salesOrders);
+            if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
+                $datas = SalesOrder::with('customer')->where('status', $status)->where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
+            } else {
+                $datas = SalesOrder::with('customer')->where('status', $status)->latest()->get();
+            }
+
+            return DataTables::of($datas)
+                ->addColumn('customer', function (SalesOrder $salesOrder) {
+                    return $salesOrder->customer->AcctName;
+                })
+                ->addColumn('order_type', function (SalesOrder $salesOrder) {
+                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
+                })
+                ->addColumn('created_name', function (SalesOrder $salesOrder) {
+                    return $salesOrder->createdBy->name;
+                })
+                ->editColumn('order_date', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return date('d M Y', strtotime($salesOrder->order_date) );
+                })
+                ->editColumn('delivery_date', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return date('d M Y', strtotime($salesOrder->delivery_date) );
+                })
+                ->editColumn('order_amount', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_amount, 2, ',', '.');
+                })
+                ->editColumn('order_qty', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_qty, 0, ',', '.');
+                })
+                ->editColumn('tax', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->tax, 2, ',', '.');
+                })
+                ->editColumn('order_total', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_total, 2, ',', '.');
+                })
+                ->editColumn('status', function (SalesOrder $salesOrder) 
+                {
+                    if($salesOrder->status == "S"){
+                        $status = 'Draft';
+                    } else if ($salesOrder->status == "R"){
+                        $status = 'Submitted';
+                    } else if ($salesOrder->status == "C"){
+                        $status = 'Canceled';
+                    } else if ($salesOrder->status == "B"){
+                        $status = 'Rejected';
+                    } else {
+                        $status = 'Processed';
+                    }
+
+                    return $status;
+                })
+                ->addIndexColumn()
+                ->addColumn('action',function ($data){
+                    return view('sales_orders.action')->with('salesOrder',$data)->render();
+                })
+                ->rawColumns(['action'])
+                ->escapeColumns()
+                ->toJson();
+        } 
     }
 
     public function dataTable(Request $request)
@@ -96,7 +158,83 @@ class SalesOrderController extends AppBaseController
             if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
                 $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
             } else {
-                $datas = SalesOrder::whereNotIn('status', ['S'])->orderBy('id', 'desc');
+                $datas = SalesOrder::with('customer')->whereNotIn('status', ['S', 'C'])->latest()->get();
+            }
+
+            return DataTables::of($datas)
+                ->addColumn('customer', function (SalesOrder $salesOrder) {
+                    return $salesOrder->customer->AcctName;
+                })
+                ->addColumn('order_type', function (SalesOrder $salesOrder) {
+                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
+                })
+                ->addColumn('created_name', function (SalesOrder $salesOrder) {
+                    return $salesOrder->createdBy->name;
+                })
+                ->editColumn('order_date', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return date('d M Y', strtotime($salesOrder->order_date) );
+                })
+                ->editColumn('delivery_date', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return date('d M Y', strtotime($salesOrder->delivery_date) );
+                })
+                ->editColumn('order_amount', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_amount, 2, ',', '.');
+                })
+                ->editColumn('order_qty', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_qty, 0, ',', '.');
+                })
+                ->editColumn('tax', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->tax, 2, ',', '.');
+                })
+                ->editColumn('order_total', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_total, 2, ',', '.');
+                })
+                ->editColumn('status', function (SalesOrder $salesOrder) 
+                {
+                    if($salesOrder->status == "S"){
+                        $status = 'Draft';
+                    } else if ($salesOrder->status == "R"){
+                        $status = 'Submitted';
+                    } else if ($salesOrder->status == "C"){
+                        $status = 'Canceled';
+                    } else if ($salesOrder->status == "B"){
+                        $status = 'Rejected';
+                    } else {
+                        $status = 'Processed';
+                    }
+
+                    return $status;
+                })
+                ->addIndexColumn()
+                ->addColumn('action',function ($data){
+                    return view('sales_orders.action')->with('salesOrder',$data)->render();
+                })
+                ->rawColumns(['action'])
+                ->escapeColumns()
+                ->toJson();
+        } 
+    }
+
+    public function dataTableFilter(Request $request)
+    {
+        if ($request->ajax()) {
+
+            if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
+                $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
+            } else {
+                $datas = SalesOrder::whereNotIn('status', ['S', 'C'])->orderBy('id', 'desc');
             }
 
             return DataTables::of($datas)
@@ -188,7 +326,8 @@ class SalesOrderController extends AppBaseController
 
         $minDeliveryDate = $date->toDateString();
 
-        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereNotIn('InventoryCD', ['FG001011','FG007001','FG008004','FG008005','FG009001', 'FG010005', 'FG011004', 'FG001008', 'FG002013', 'FG008001', 'FG008002', 'FG007009', 'FG002021'])->orderBy('InventoryCD', 'ASC')->get();
+        $customerProducts = CustomerProduct::select('inventory_code')->where('customer_code',  \Auth::user()->customer->AcctCD)->get()->pluck('inventory_code');
+        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereIn('InventoryCD', $customerProducts)->orderBy('InventoryCD', 'ASC')->get();
 
         return view('sales_orders.create', compact('customers', 'products', 'minDeliveryDate'));
     }
@@ -212,9 +351,15 @@ class SalesOrderController extends AppBaseController
             'tax' => 'required',
             'order_total' => 'required',
         ]);
+
         
         $input = $request->all();
 
+        // Removing Mask
+        $orderTotal = $input['order_total'];
+        $orderTotal = str_replace('.','',$orderTotal);
+        $orderTotal = (int)str_replace(',','.',$orderTotal);
+        
         $cekOrder = SalesOrder::where('customer_id', $input['customer_id'])->where('delivery_date', $input['delivery_date'])->latest()->first();
         $thisCustomer = Customer::where('BAccountID', $input['customer_id'])->get()->first();
         // dd($thisCustomer);
@@ -234,6 +379,10 @@ class SalesOrderController extends AppBaseController
         $deliveryDate = $input['delivery_date'];
 
         $carts = Cart::where('customer_id', $input['customer_id'])->get();
+
+        if($carts == null){
+            return redirect(route('SalesOrders.create'))->with('error', 'Keranjang anda kosong');
+        }
         // dd($carts);
         $parameterVAT = ParameterVAT::whereRaw("start_date <= '$deliveryDate' AND (end_date is null OR end_date >= '$deliveryDate') ")->get()->first();
 
@@ -343,7 +492,9 @@ class SalesOrderController extends AppBaseController
 
         $minDeliveryDate = $date->toDateString();
 
-        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereNotIn('InventoryCD', ['FG001011','FG007001','FG008004','FG008005','FG009001', 'FG010005', 'FG011004', 'FG001008', 'FG002013', 'FG008001', 'FG008002', 'FG007009', 'FG002021'])->orderBy('InventoryCD', 'ASC')->get();
+        $customerProducts = CustomerProduct::select('inventory_code')->where('customer_code',  \Auth::user()->customer->AcctCD)->get()->pluck('inventory_code');
+        $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereIn('InventoryCD', $customerProducts)->orderBy('InventoryCD', 'ASC')->get();
+
 
         return view('sales_orders.edit', compact('salesOrder', 'customers', 'products', 'minDeliveryDate'));
     }
@@ -361,6 +512,13 @@ class SalesOrderController extends AppBaseController
         $salesOrder = $this->salesOrderRepository->find($id);
 
         $input = $request->all();
+
+        // Removing Mask
+        $orderTotal = $input['order_total'];
+        $orderTotal = str_replace('.','',$orderTotal);
+        $orderTotal = (int)str_replace(',','.',$orderTotal);
+
+        // dd($customerMinOrder);
 
         if( $input['order_type'] == $salesOrder->order_type && $input['delivery_date'] == $salesOrder->delivery_date->format('Y-m-d') ){
             
@@ -479,18 +637,85 @@ class SalesOrderController extends AppBaseController
 
     public function submitOrder($id)
     {
-
+        // Cek Hak akses
         if (!\Auth::user()->can('submit sales order')) {
             abort(403);
         }
 
+        // Find data sales order
         $salesOrder = SalesOrder::find($id);
 
+        // Jika tidak ada return notfound
         if (empty($salesOrder)) {
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
-        // Cek Jam Submit
+        // Get data minimum order for this customer
+        $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$salesOrder->customer->AcctCD."' AND start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+        
+        if($customerMinOrder == null){
+            $minimumOrder = 0;
+        } else {
+            $minimumOrder = $customerMinOrder->minimum_order;
+        }
+
+        // Get all order by delivery date
+        $orders = SalesOrder::selectRaw('sum(order_total) as total')
+                ->where('customer_id', $salesOrder->customer_id)
+                ->where('delivery_date', $salesOrder->delivery_date)
+                ->whereIn('status', ['R','P'])
+                ->whereNotIn('order_nbr', [$salesOrder->order_nbr])
+                ->get();
+        // dd($orders);
+
+        $totalOrderToday = $salesOrder->order_total + $orders[0]->total;
+
+        // Jika ada datanya Validasi data order dengan minimum order per customer
+        if($customerMinOrder != null){
+
+            if($totalOrderToday >= $customerMinOrder->minimum_order ){
+                return $this->processSubmit($id);
+            } else {
+                $minusOrder = $customerMinOrder->minimum_order - $salesOrder->order_total;
+                return redirect(route('salesOrders.show', $id))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
+            }
+
+        } else {
+            // Get Minimum Order Category 
+            $thisCustomer = Customer::where('BAccountID', $salesOrder->customer_id)->get()->first();
+            // dd($thisCustomer->category);
+            if($thisCustomer->category == null) {
+
+                return redirect(route('salesOrders.show', $id))->with("error", "Category customer belum diatur, Tolong hubungi admin Yamazaki");
+
+            } else {
+
+                $customerCategory = $thisCustomer->category->Value;
+                // Minimum order category customer
+                $categoryMinOrder = CategoryMinOrder::whereRaw("category = '$customerCategory' AND start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+                
+                if($categoryMinOrder == null){
+                    return redirect(route('salesOrders.show', $id))->with("error", "Category order belum di atur, Tolong hubungi admin Yamazaki");
+                } else {
+                    // Validasi minimum order by category
+                    if($totalOrderToday >= $categoryMinOrder->minimum_order ){
+                        // dd('test');
+                        return $this->processSubmit($id);
+                    } else {
+                        $minusOrder = $categoryMinOrder->minimum_order - $salesOrder->order_total;
+                        return redirect(route('salesOrders.show', $id))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
+                    }
+                }
+            }
+
+        }
+
+        
+    }
+
+    public function processSubmit($id)
+    {
+        // Ambil Jam Submit
         $parameter = Parameter::where('name','Maximum Time Order')->get()->first();
         $parameterNow = Carbon::now()->toTimeString();
 
@@ -522,7 +747,6 @@ class SalesOrderController extends AppBaseController
             $mailCC = MailSetting::where('name', 'Overtime Order')->where('type', 'Receiver')->where('sub_type', 'CC')->where('status', 1)->pluck('email');
             $mailBCC = MailSetting::where('name', 'Overtime Order')->where('type', 'Receiver')->where('sub_type', 'BCC')->where('status', 1)->pluck('email');
             
-
             $email = $mailTo;
             $cc = $mailCC;
             $bcc = $mailBCC;
@@ -534,7 +758,11 @@ class SalesOrderController extends AppBaseController
                 'url' => $url,
             ];
 
-            Mail::to($email)->cc($cc)->bcc($bcc)->send(new SendMailSubmit($data));
+            // if($email != null){
+
+                Mail::to($email)->cc($cc)->bcc($bcc)->send(new SendMailSubmit($data));
+
+            // }
 
         }
 
@@ -716,11 +944,20 @@ class SalesOrderController extends AppBaseController
         $namaFile =  $file->getClientOriginalName();
         $file->move('uploads/product', $namaFile);
 
-        Excel::import(new ProductImport($request->date_file), public_path('uploads/product/'.$namaFile));
+        $import = Excel::import(new ProductImport($request->date_file), public_path('uploads/product/'.$namaFile));
         
-        return response()->json([
-            'success' => 'Data Imported Successfully',
-        ]);
+        $carts = Cart::where('customer_id', \Auth::user()->customer_id)->get()->first();
+
+        if($carts == null){
+            return response()->json([
+                'error' => 'You have not accesiable for some products',
+            ], 404);
+        } else {
+            return response()->json([
+                'success' => 'Data Imported Successfully',
+            ]);
+        }
+        
 
     }
 }

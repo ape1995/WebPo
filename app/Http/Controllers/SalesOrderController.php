@@ -390,14 +390,24 @@ class SalesOrderController extends AppBaseController
 
         }
 
-        $input['order_qty'] = str_replace('.','',$input['order_qty']);
-        $input['order_qty'] = str_replace(',','.',$input['order_qty']);
-        $input['order_amount'] = str_replace('.','',$input['order_amount']);
-        $input['order_amount'] = str_replace(',','.',$input['order_amount']);
-        $input['tax'] = str_replace('.','',$input['tax']);
-        $input['tax'] = str_replace(',','.',$input['tax']);
-        $input['order_total'] = str_replace('.','',$input['order_total']);
-        $input['order_total'] = str_replace(',','.',$input['order_total']);
+        
+        $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $id)->get();
+        $deliveryDate = $input['delivery_date'];
+
+        $parameterVAT = ParameterVAT::whereRaw("start_date <= '$deliveryDate' AND (end_date is null OR end_date >= '$deliveryDate') ")->get()->first();
+
+
+        $dataEdit = [];
+        $dataEdit['order_nbr'] = $input['order_nbr'];
+        $dataEdit['order_type'] = $input['order_type'];
+        $dataEdit['delivery_date'] = $input['delivery_date'];
+        $dataEdit['description'] = $input['description'];
+        $dataEdit['order_qty'] = $salesOrderDetail->sum('qty');
+        $dataEdit['order_amount'] = $salesOrderDetail->sum('amount');
+        $dataEdit['tax'] = ($parameterVAT->value/100) * $salesOrder['order_amount'];
+        $dataEdit['updated_by'] = \Auth::user()->id;
+        $dataEdit['updated_at'] = Carbon::now()->toDateTimeString();
+
 
         if (empty($salesOrder)) {
             Flash::error('Sales Order not found');
@@ -405,7 +415,7 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'));
         }
 
-        $salesOrder = $this->salesOrderRepository->update($input, $id);
+        $salesOrder = $this->salesOrderRepository->update($dataEdit, $id);
 
         return redirect(route('salesOrders.show', $id))->with('success', 'Order Updated Sucessfully');
     }
@@ -484,13 +494,27 @@ class SalesOrderController extends AppBaseController
         $parameter = Parameter::where('name','Maximum Time Order')->get()->first();
         $parameterNow = Carbon::now()->toTimeString();
 
-        // dd($parameter->parameter_hour, $parameterNow);
+        // Cek Ulang Data Detail
+        $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $salesOrder->id)->get();
 
-        $salesOrder = SalesOrder::find($id);
-        $salesOrder['status'] = 'R';
-        $salesOrder['submitted_by'] = \Auth::user()->id;
-        $salesOrder['submitted_at'] = Carbon::now()->toDateTimeString();
-        $salesOrder->save();
+        if($salesOrder->order_amount == $salesOrderDetail->sum('qty')){
+            $salesOrder = SalesOrder::find($id);
+            $salesOrder['status'] = 'R';
+            $salesOrder['submitted_by'] = \Auth::user()->id;
+            $salesOrder['submitted_at'] = Carbon::now()->toDateTimeString();
+            $salesOrder->save();
+        } else {
+            $salesOrder = SalesOrder::find($id);
+            $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+            $salesOrder['status'] = 'R';
+            $salesOrder['order_qty'] = $salesOrderDetail->sum('qty');
+            $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
+            $salesOrder['tax'] = ($parameterVAT->value/100) * $salesOrder['order_amount'];
+            $salesOrder['submitted_by'] = \Auth::user()->id;
+            $salesOrder['submitted_at'] = Carbon::now()->toDateTimeString();
+            $salesOrder->save();
+        }
+
 
         if($parameterNow >= $parameter->parameter_hour){
 

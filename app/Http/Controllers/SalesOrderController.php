@@ -720,6 +720,7 @@ class SalesOrderController extends AppBaseController
         $parameterNow = Carbon::now()->toTimeString();
 
         // Cek Ulang Data Detail
+        $salesOrder = SalesOrder::find($id);
         $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $salesOrder->id)->get();
 
         if($salesOrder->order_amount == $salesOrderDetail->sum('qty')){

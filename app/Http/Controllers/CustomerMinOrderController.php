@@ -47,7 +47,7 @@ class CustomerMinOrderController extends AppBaseController
     public function create()
     {
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        $customers = Customer::whereIn('BAccountID', $createdCustomer)->whereNotIn('AcctCD', ['MAIN'])->get();
         
         return view('customer_min_orders.create', compact('customers'));
     }
@@ -157,7 +157,7 @@ class CustomerMinOrderController extends AppBaseController
         }
 
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        $customers = Customer::whereIn('BAccountID', $createdCustomer)->whereNotIn('AcctCD', ['MAIN'])->get();
         
 
         return view('customer_min_orders.edit', compact('customerMinOrder', 'customers'));

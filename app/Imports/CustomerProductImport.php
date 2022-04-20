@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\CustomerProduct;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -24,7 +25,13 @@ class CustomerProductImport implements ToCollection, WithHeadingRow
             // cek customer code
             $cekCustomer = Customer::where('AcctCD', $row['customer_code'])->get();
             if ($cekCustomer->count() == 0) {
-                return redirect()->route('customerProducts.index')->with('error', 'customer '.$row['customer_code'].' - '.$row['customer_name']. ' tidak ditemukan!');
+                return redirect()->route('customerProducts.index')->with('error', 'customer '.$row['customer_code'].' - '.$row['customer_name']. ' tidak ditemukan di data acumatica!');
+            }
+
+            $cekCustomer = Customer::where('AcctCD', $row['customer_code'])->get()->first();
+            $cekCreatedCustomer = User::where('customer_id', $cekCustomer->BAccountID)->get();
+            if ($cekCreatedCustomer->count() == 0) {
+                return redirect()->route('customerProducts.index')->with('error', 'customer '.$row['customer_code'].' - '.$row['customer_name']. ' tidak ditemukan di data user!');
             }
 
             // cek produk
@@ -55,12 +62,11 @@ class CustomerProductImport implements ToCollection, WithHeadingRow
                 }
             }
 
-
-
+            
+            
         }
-
-        Flash::success('Import Data successfully.');
-
+        Flash::success('Customer Product Imported successfully.');
+        
     }
 
     public function headingRow(): int

@@ -40,7 +40,8 @@ class CustomerProductController extends AppBaseController
         $customerProducts = $this->customerProductRepository->all();
         
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        // $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        $customers = Customer::whereIn('BAccountID', $createdCustomer)->whereNotIn('AcctCD', ['MAIN'])->get();
         
         return view('customer_products.index', compact('customerProducts', 'customers'));
     }
@@ -78,7 +79,9 @@ class CustomerProductController extends AppBaseController
     public function create()
     {
         $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
-        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        // $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'AC')->whereIn('BAccountID', $createdCustomer)->get();
+        $customers = Customer::whereIn('BAccountID', $createdCustomer)->whereNotIn('AcctCD', ['MAIN'])->get();
+        // dd($customers);
         $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->orderBy('InventoryCD', 'ASC')->get();
 
         return view('customer_products.create', compact('customers', 'products'));
@@ -160,7 +163,7 @@ class CustomerProductController extends AppBaseController
 
             $customersByClasses = DB::connection('sqlsrv')->table('Customer')->where('Customer.CustomerClassID', $input['customer_class'])
                                 ->join('BAccount', 'Customer.BAccountID', '=', 'BAccount.BAccountID')
-                                ->whereIn('Customer.BAccountID', $createdCustomer)->get();
+                                ->whereIn('Customer.BAccountID', $createdCustomer)->whereNotIn('AcctCD', ['MAIN'])->get();
 
             foreach($customersByClasses as $customer){
                 
@@ -287,7 +290,7 @@ class CustomerProductController extends AppBaseController
 
         Excel::import(new CustomerProductImport, public_path('uploads/'.$namaFile));
         
-        return redirect()->route('customerProducts.index')->with('success', 'Customer Product Imported Successfully');
+        return redirect()->route('customerProducts.index');
 
     }
 }

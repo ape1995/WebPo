@@ -7,7 +7,7 @@
 <!-- Name Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('name', trans('parameter.name')) !!}
-    {!! Form::select('name', ['' => '- Choose -','Daily Notification' => 'Daily Notification', 'Overtime Order' => 'Overtime Order'], null, ['class' => 'form-control']) !!}
+    {!! Form::select('name', ['' => '- Choose -','Daily Notification' => 'Daily Notification', 'Overtime Order' => 'Overtime Order', 'Confirm Shipment Not Invoiced' => 'Confirm Shipment Not Invoiced'], null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Sub Type Field -->

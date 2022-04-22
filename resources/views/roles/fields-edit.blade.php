@@ -84,7 +84,7 @@
                                 }
                             @endphp
                             @php
-                                if(stripos($permission->name, 'group permissions') !== FALSE){
+                                if(stripos($permission->name, 'permissions') !== FALSE){
                             @endphp
                             <tr>
                                 <td width="10%"><input type="checkbox" name="permission[]" id="permission" value="{{ $permission->id }}" {{ $checked }}></td>

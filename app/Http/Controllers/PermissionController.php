@@ -1,87 +1,119 @@
 <?php
 
 namespace App\Http\Controllers;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+
+use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use App\Models\User;
+use Flash;
+use Response;
+use Artisan;
 
 class PermissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        // $roles = Role::all();
 
-        // return view('group_permissions.index', compact('roles'));
+    /**
+     * Display a listing of the Signs.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function index(Request $request)
+    {
+        if (!\Auth::user()->can('browse permissions')) {
+            abort(403);
+        }
+
+        $permissions = Permission::orderBy('id', 'asc')->get();
+
+        return view('permissions.index',compact('permissions'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Signs.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
-        //
+        if (!\Auth::user()->can('create permissions')) {
+            abort(403);
+        }
+
+        return view('permissions.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Signs in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param CreateSignsRequest $request
+     *
+     * @return Response
      */
     public function store(Request $request)
     {
-        //
+        $permission = Permission::create(['name' => $request->name]);
+
+        Flash::success('Permission created successfully.');
+
+        return redirect(route('permissions.index'))->with('success', 'Permission saved successfully.');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified Signs.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return Response
      */
     public function show($id)
     {
-        //
+        if (!\Auth::user()->can('view group permissions')) {
+            abort(403);
+        }
+
+        $permission = Permission::find($id);
+
+        // dd($permissions);
+
+        if (empty($permission)) {
+            return redirect(route('permissions.index'))->with('error', 'Permission not found.');
+        }
+
+        return view('permissions.show')->with('permission', $permission);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified Signs.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return Response
      */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified Signs from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * @param int $id
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     *
+     * @return Response
      */
     public function destroy($id)
     {
-        //
+        if (!\Auth::user()->can('delete permissions')) {
+            abort(403);
+        }
+
+        $permission = Permission::findOrFail($id); 
+        $permission->delete();
+
+        Flash::success('Permission deleted successfully.');
+
+        return redirect(route('permissions.index'))->with('success', 'Permission deleted successfully.');
     }
+
 }

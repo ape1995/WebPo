@@ -46,7 +46,9 @@ Auth::routes(['verify' => true]);
 //routing admin cms
 Route::group(['middleware' => ['auth']], function(){
     Route::resource('users', 'App\Http\Controllers\UserController');
+    Route::get('users-export', [UserController::class,'export'])->name('users.export');
     Route::post('users-import', [UserController::class,'import'])->name('users.import');
+    Route::resource('permissions', 'App\Http\Controllers\PermissionController')->except('edit', 'update', 'view');
     Route::resource('roles', 'App\Http\Controllers\RoleController');
     Route::get('roles-inactive/{code}',[RoleController::class,'inactive'])->name('roles.inactive');
     Route::get('roles-active/{code}',[RoleController::class,'active'])->name('roles.active');

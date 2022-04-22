@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Customer;
 use App\Imports\UsersImport;
+use App\Exports\UserExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -301,6 +302,14 @@ class UserController extends Controller
         Excel::import(new UsersImport, public_path('uploads/'.$namaFile));
         
         return redirect()->route('users.index');
+
+    }
+
+    public function export(Request $request){
+
+        $users = User::all();
+
+        return Excel::download(new UserExport($users), "All Users.xlsx");
 
     }
 }

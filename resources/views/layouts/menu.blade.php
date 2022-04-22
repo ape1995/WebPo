@@ -23,14 +23,14 @@
                 </a>
             </li>
         @endcan
-        {{-- @can('browse permissions') --}}
+        @can('browse permissions')
             <li class="nav-item">
                 <a href="{{ route('permissions.index') }}" class="nav-link {{ Request::is('permissions*') ? 'active' : '' }}">
                     <i class="fa fa-paste nav-icon"></i>
                     <p>Permissions</p>
                 </a>
             </li>
-        {{-- @endcan --}}
+        @endcan
         @can('browse group permissions')
             <li class="nav-item">
                 <a href="{{ route('roles.index') }}" class="nav-link {{ Request::is('roles*') ? 'active' : '' }}">

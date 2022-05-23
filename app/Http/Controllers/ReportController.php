@@ -241,7 +241,7 @@ class ReportController extends Controller
             $customerCode = $salesOrders[0]->customer->AcctCD;
         }
 
-        $reportName = 'Order Rekap'.' - '.$date1.' sd '.$date2. ' - status : '.$status.' - customer : '.$customerCode;
+        $reportName = 'Order Detail'.' - '.$date1.' sd '.$date2. ' - status : '.$status.' - customer : '.$customerCode;
 
         if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();

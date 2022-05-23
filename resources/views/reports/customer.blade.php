@@ -124,6 +124,9 @@
                                             <tr>
                                                 <th>Delivery Date</th>
                                                 <th>Order Numbaer</th>
+                                                <th>Order Type</th>
+                                                <th>Customer</th>
+                                                <th>Order Numbaer</th>
                                                 <th>Product ID</th>
                                                 <th>Product Name</th>
                                                 <th>Qty</th>
@@ -138,6 +141,8 @@
                                                     <tr>
                                                         <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
                                                         <td>{{ $salesOrder->order_nbr }}</td>
+                                                        <td>{{ $salesOrder->order_type == 'R' ? 'Reguler' : 'Direct Selling' }}</td>
+                                                        <td>{{ $detail->customer->AcctName }} - {{ $detail->customer->AcctCD }}</td>
                                                         <td>{{ $detail->inventory_id }}</td>
                                                         <td>{{ $detail->inventory_name }}</td>
                                                         <td>{{ $detail->qty }}</td>

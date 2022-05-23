@@ -126,7 +126,6 @@
                                                 <th>Order Numbaer</th>
                                                 <th>Order Type</th>
                                                 <th>Customer</th>
-                                                <th>Order Numbaer</th>
                                                 <th>Product ID</th>
                                                 <th>Product Name</th>
                                                 <th>Qty</th>

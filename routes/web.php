@@ -21,6 +21,8 @@ use App\Http\Controllers\ParameterVATController;
 use App\Http\Controllers\AddController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\ParameterController;
+use App\Http\Controllers\DsRuleController;
+use App\Http\Controllers\DsPercentageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,9 +107,14 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('customerMinOrders', CustomerMinOrderController::class);
     Route::resource('customerMinOrderHists', CustomerMinOrderHistController::class);
     Route::resource('categoryMinOrders', CategoryMinOrderController::class);
+    Route::resource('dsRules', DsRuleController::class)->except('create', 'edit');
+    Route::resource('dsPercentages', DsPercentageController::class);
+    Route::get('dsPercentages-dataTable',[DsPercentageController::class,'getData'])->name('dsPercentagesDataTable.data');
 });
 
 
 Route::get('/send_notification', [SendEmailController::class, 'send']);
 
 Route::get('/send-notif-confirmShipmentNotInvoiced', [SendEmailController::class, 'sendNotifConfirmShipmentNotInvoiced']);
+
+

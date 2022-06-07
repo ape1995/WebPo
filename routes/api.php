@@ -22,5 +22,5 @@ Route::get('get-inventory-data/{code}/{customer}/{date}',[App\Http\Controllers\S
 Route::get('getAllCounter/{customer}/{date}',[App\Http\Controllers\CartController::class, 'getAllCounter']);
 Route::get('countOrderDetail/{code}/{date}',[App\Http\Controllers\SalesOrderDetailController::class, 'countOrderDetail']);
 Route::get('get-outlet-data/{code}', [App\Http\Controllers\EstimasiController::class, 'getOutletData']);
-
+Route::get('update-ds-status/{code}', [App\Http\Controllers\DsRuleController::class, 'updateStatus']);
 Route::resource('carts', App\Http\Controllers\API\CartAPIController::class);

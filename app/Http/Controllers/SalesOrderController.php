@@ -26,6 +26,8 @@ use App\Models\ParameterVAT;
 use App\Models\SalesOrderDetail;
 use App\Models\Attachment;
 use App\Models\SOOrder;
+use App\Models\DsRule;
+use App\Models\DsPercentage;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -650,6 +652,56 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
+        // Get Status Direct Selling Rule
+        $dsRule = DsRule::get()->first();
+
+
+        // Cek Jika Direct Selling
+        if($salesOrder->order_type == 'D'){
+            // Cek Status Rule, IF Active, cek data prosentase PO reguler
+            if ($dsRule->status == true) {
+                $cekCountOrder = SalesOrder::whereIn('status', ['R', 'P'])->where('delivery_date', $salesOrder->delivery_date)->where('customer_id', $salesOrder->customer_id)->get()->first();
+                // dd($cekCountOrder);
+                if($cekCountOrder == null){
+                    return redirect(route('salesOrders.show', $id))->with("error", "Untuk PO jenis Direct Selling, Anda harus melakukan submit PO Reguler terlebih dahulu");
+                } else {
+                    $dsPercentage = DsPercentage::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+                    if ($dsPercentage == null) {
+                        return $this->nextSubmit($id);
+                    } else {
+                        $percentage = $dsPercentage->percentage;
+                        $orderRegulerSubmitted = SalesOrder::whereIn('status', ['R', 'P'])->where('order_type', 'R')->where('delivery_date', $salesOrder->delivery_date)->where('customer_id', $salesOrder->customer_id)->get();
+                        $totalOrderRegulerSubmitted = $orderRegulerSubmitted->sum('order_total');
+                        $orderTotalSubmitted = SalesOrder::whereIn('status', ['R', 'P'])->where('delivery_date', $salesOrder->delivery_date)->where('customer_id', $salesOrder->customer_id)->get();
+                        $totalOrderAllSubmitted = $orderTotalSubmitted->sum('order_total');
+                        $totalOrderCounted = $totalOrderAllSubmitted + $salesOrder->order_total;
+                        
+                        // Perhitungan prosentase
+                        $prosentaseReguler = ($totalOrderRegulerSubmitted / $totalOrderCounted) * 100;
+
+                        if($prosentaseReguler < $percentage){
+                            $minusPercentage = round($percentage - $prosentaseReguler,0);
+                            return redirect(route('salesOrders.show', $id))->with("error", "PO Reguler anda belum memenuhi persyaratan. Kurang ".$minusPercentage." %" );
+                        } else {
+                            return $this->nextSubmit($id);
+                        }
+                    }
+                }
+            }
+
+        } else {
+            return $this->nextSubmit($id);
+        }
+
+        
+
+        
+    }
+
+    public function nextSubmit($id)
+    {
+        $salesOrder = SalesOrder::find($id);
+
         // Get data minimum order for this customer
         $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$salesOrder->customer->AcctCD."' AND start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
         
@@ -666,8 +718,8 @@ class SalesOrderController extends AppBaseController
                 ->whereIn('status', ['R','P'])
                 ->whereNotIn('order_nbr', [$salesOrder->order_nbr])
                 ->get();
-        // dd($orders);
-
+        
+        
         $totalOrderToday = $salesOrder->order_total + $orders[0]->total;
 
         // Jika ada datanya Validasi data order dengan minimum order per customer
@@ -710,7 +762,6 @@ class SalesOrderController extends AppBaseController
 
         }
 
-        
     }
 
     public function processSubmit($id)

@@ -82,7 +82,7 @@ class SalesOrderController extends AppBaseController
             if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
                 $datas = SalesOrder::with('customer')->where('status', $status)->where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
             } else {
-                $datas = SalesOrder::with('customer')->where('status', $status)->latest()->get();
+                $datas = SalesOrder::with('customer')->where('status', $status)->latest();
             }
 
             return DataTables::of($datas)
@@ -158,7 +158,7 @@ class SalesOrderController extends AppBaseController
             if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers'){
                 $datas = SalesOrder::where('customer_id', \Auth::user()->customer_id)->orderBy('id', 'desc');
             } else {
-                $datas = SalesOrder::with('customer')->whereNotIn('status', ['S', 'C'])->latest()->get();
+                $datas = SalesOrder::with('customer')->whereNotIn('status', ['S', 'C'])->latest();
             }
 
             return DataTables::of($datas)

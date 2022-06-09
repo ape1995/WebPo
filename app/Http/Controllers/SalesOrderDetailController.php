@@ -130,7 +130,7 @@ class SalesOrderDetailController extends AppBaseController
     public function edit($id)
     {
         $salesOrderDetail = SalesOrderDetail::find($id);
-        $response = $salesOrderDetail->all();
+        
         $response['id'] = $salesOrderDetail->id;
         $response['inventory_name'] = $salesOrderDetail->inventory_name;
         $response['inventory_id']= $salesOrderDetail->inventory_id;

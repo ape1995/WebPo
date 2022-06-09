@@ -13,7 +13,7 @@
 
         <div class="card">
             <div class="card-body">
-                <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
+                <a href="{{ route('salesOrders.index') }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
                 <div class="m-2 text-center">
                     
                     @if ($salesOrder->status == 'C')

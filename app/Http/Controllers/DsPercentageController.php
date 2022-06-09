@@ -60,15 +60,18 @@ class DsPercentageController extends AppBaseController
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    // if(date('Y-m-d') >= $row->start_date){
-                    //     return '<span class="text-success">On Going</span>';
-                    // } else {
+                    
+                    $maxID = DsPercentage::latest()->first();
+
+                    if($row->id == $maxID->id) {
 
                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook" title="Edit"><i class="fa fa-edit"></i></a>';
                         // $btn = '';
                         $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fa fa-trash"></i></a>';
     
                         return $btn;
+                    }
+
                     // }
                 })
                 ->rawColumns(['action'])
@@ -98,9 +101,48 @@ class DsPercentageController extends AppBaseController
     {
         $input = $request->all();
 
-        $dsPercentage = $this->dsPercentageRepository->create($input);
+        $cekLatestData = DSPercentage::latest()->first();
 
-        return response()->json(['success'=>'Condition added successfully.']);
+        if($input['start_date'] > $input['end_date'] && $input['end_date'] != null) {
+
+            $returnData = array(
+                'message' => 'End Date harus lebih dari Start Date!',
+            );
+    
+            return response()->json($returnData, 403);
+        
+        } else if($cekLatestData == null){
+
+            $dsPercentage = $this->dsPercentageRepository->create($input);
+
+            return response()->json(['success'=>'Condition added successfully.']);
+
+        } else if($cekLatestData->end_date == null) {
+            
+            $returnData = array(
+                'message' => 'Silahkan isi terlebih dahulu tanggal akhir condition sebelumnya!',
+            );
+    
+            return response()->json($returnData, 403);
+
+        } else if($cekLatestData->end_date >= $input['start_date']) {
+
+            $returnData = array(
+                'message' => 'Start Date harus lebih dari End date Kondisi sebelumnya!',
+            );
+    
+            return response()->json($returnData, 403);
+
+        } else {
+
+            $dsPercentage = $this->dsPercentageRepository->create($input);
+
+            return response()->json(['success'=>'Condition added successfully.']);
+
+        }
+       
+
+        
     }
 
     /**
@@ -153,6 +195,7 @@ class DsPercentageController extends AppBaseController
      */
     public function update($id, Request $request)
     {
+        
         $dsPercentage = $this->dsPercentageRepository->find($id);
 
         if (empty($dsPercentage)) {
@@ -161,9 +204,34 @@ class DsPercentageController extends AppBaseController
             return redirect(route('dsPercentages.index'));
         }
 
-        $dsPercentage = $this->dsPercentageRepository->update($request->all(), $id);
+        $input = $request->all();
 
-        return response()->json(['success'=>'Condition updated successfully.']);
+        $cekLatestData = DSPercentage::whereNotIn('id', [$id])->latest()->first();
+
+        if($input['start_date'] > $input['end_date'] && $input['end_date'] != null) {
+
+            $returnData = array(
+                'message' => 'End Date harus lebih dari Start Date!',
+            );
+    
+            return response()->json($returnData, 403);
+        
+        } else if($cekLatestData->end_date >= $input['start_date']) {
+
+            $returnData = array(
+                'message' => 'Start Date harus lebih dari End date Kondisi sebelumnya!',
+            );
+    
+            return response()->json($returnData, 403);
+
+        } else {
+
+            $dsPercentage = $this->dsPercentageRepository->update($input, $id);
+
+            return response()->json(['success'=>'Condition updated successfully.']);
+
+        }
+        
     }
 
     /**

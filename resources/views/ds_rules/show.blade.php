@@ -216,12 +216,11 @@
                     type: "POST",
                     dataType: 'json',
                     success: function (data) {
-                        // hidden_fields.hide();
                         $('#addProduct').modal('hide');
                         table.draw();
                     },
                     error: function (data) {
-                        alert('Asset Ini sudah ada dalam list');
+                        alert(data.responseJSON.message);
                     }
                 });
             });
@@ -253,14 +252,11 @@
                     type: "PATCH",
                     dataType: 'json',
                     success: function (data) {
-                        // console.log(data);
                         $('#ajaxModel').modal('hide');
                         table.draw();
-                        // getAllCounter();
                     },
                     error: function (data) {
-                        // console.log('Error:', data);
-                        alert('Error Updating data!');
+                        alert(data.responseJSON.message);
                     }
                 });
             });

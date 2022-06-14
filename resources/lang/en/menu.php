@@ -12,6 +12,7 @@ return [
     'sales_order' => 'Sales Order',
     'create_order' => 'Create Order',
     'list_order' => 'List Order',
+    'bulk_submit' => 'Bulk Submit',
     'report' => 'Report',
     'report_rekap' => 'Order Rekap',
     'report_detail' => 'Order Detail',

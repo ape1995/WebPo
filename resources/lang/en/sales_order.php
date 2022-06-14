@@ -36,6 +36,7 @@ return [
     'btn_upload_tf' => 'Upload Attachments',
     'btn_upload_product' => 'Upload Products',
     'btn_submit_order' => 'Submit Order',
+    'btn_submit_selected_order' => 'Submit Selected Order',
     'btn_process_order' => 'Process Order',
     'btn_reject_order' => 'Reject Order',
     'btn_add_to_cart' => 'Add To Cart',

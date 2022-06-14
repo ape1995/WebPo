@@ -36,6 +36,7 @@ return [
     'type' => 'Tipe',
     'btn_cancel_order' => 'Batalkan Pesanan',
     'btn_submit_order' => 'Submit Pesanan',
+    'btn_submit_selected_order' => 'Submit Pesanan Terpilih',
     'btn_process_order' => 'Proses Pesanan',
     'btn_reject_order' => 'Tolak Pesanan',
     'btn_add_to_cart' => 'Tambahkan',

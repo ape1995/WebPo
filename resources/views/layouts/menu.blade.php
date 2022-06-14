@@ -117,8 +117,8 @@
 @endif
 
 @if(Gate::check('list sales order') || Gate::check('create sales order'))
-<li class="nav-item {{ Request::is('salesOrders*') ? 'menu-open' : '' }} {{ Request::is('createOrder*') ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }} {{ Request::is('createOrder*') ? 'active' : '' }}">
+<li class="nav-item {{ Request::is('salesOrders*') ? 'menu-open' : '' }} {{ Request::is('createOrder*') ? 'menu-open' : '' }} {{ Request::is('salesOrderBulkSubmit*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }} {{ Request::is('createOrder*') ? 'active' : '' }} {{ Request::is('salesOrderBulkSubmit*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-dollar-sign"></i>
         <p>
         {{ trans('menu.sales_order')}}
@@ -139,6 +139,14 @@
                 <a href="{{ route('salesOrders.index') }}" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }}">
                     <i class="far fa-list-alt nav-icon"></i>
                     <p>{{ trans('menu.list_order')}}</p>
+                </a>
+            </li>
+        @endcan
+        @can('bulk submit sales order')
+            <li class="nav-item">
+                <a href="{{ route('salesOrders.bulkSubmitIndex') }}" class="nav-link {{ Request::is('salesOrderBulkSubmit*') ? 'active' : '' }}">
+                    <i class="fa fa-upload nav-icon"></i>
+                    <p>{{ trans('menu.bulk_submit')}}</p>
                 </a>
             </li>
         @endcan

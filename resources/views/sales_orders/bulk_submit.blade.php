@@ -66,8 +66,15 @@
             submit.prop('disabled', true);
             
             date.on('change', function() {
-                submit.prop('disabled', false);
-                fetch_data();
+                submit.prop('disabled', true);
+                if (date.val() == null || date.val() == '') {
+                    console.log('Choose Date First');
+                    submit.prop('disabled', true);
+                } else {
+                    submit.prop('disabled', false);
+                    fetch_data();
+                    submit.prop('disabled', false);
+                }
             });
 
             $("#checkAll").click(function(){

@@ -79,8 +79,10 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('createOrder', [SalesOrderController::class, 'create'])->name('createOrder');
     Route::resource('salesOrderDetails', SalesOrderDetailController::class);
     Route::get('dataTableSalesOrderDetail/{code}',[SalesOrderDetailController::class,'getData'])->name('salesOrder.dataDetail');
+    Route::get('salesOrderDetails-reCountDetailProduct/{code}/{date}',[SalesOrderDetailController::class,'reCountDetailProduct'])->name('salesOrderDetail.reCountDetailProduct');
     Route::resource('carts', CartController::class)->except('create');
     Route::get('dataTableCart',[CartController::class,'getData'])->name('carts.data');
+    Route::get('carts-reCountDetailProduct/{date}',[CartController::class,'reCountDetailProduct'])->name('carts.reCountDetailProduct');
     Route::post('updatePassword', [UserController::class, 'updatePassword'])->name('updatePassword');
     Route::get('reportSalesOrder', [ReportController::class, 'index'])->name('reportSalesOrder.index');
     Route::post('reportSalesOrder', [ReportController::class, 'view'])->name('reportSalesOrder.view');

@@ -8,6 +8,9 @@ use App\Repositories\CartRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Cart;
 use App\Models\ParameterVAT;
+use App\Models\Location;
+use App\Models\Product;
+use App\Models\SalesPrice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Flash;
@@ -221,4 +224,43 @@ class CartController extends AppBaseController
 
         return $data;
     }
+
+    public function reCountDetailProduct($date)
+    {
+        // dd('test');
+        $carts = Cart::where('customer_id', \Auth::user()->customer_id)->get();
+        $priceClass = $this->getCPriceClass(\Auth::user()->customer_id);
+
+        if($carts->count('id') > 0){
+            foreach($carts as $cart){
+                $inventory = $this->getInventoryID($cart->inventory_id);
+                $inventoryID = $inventory->InventoryID;
+                $inventoryName = $inventory->Descr;
+                $salesPrice = SalesPrice::whereRaw("CustPriceClassID = '$priceClass' AND InventoryID = '$inventoryID' AND EffectiveDate <= '$date' AND (ExpirationDate IS NULL OR ExpirationDate >= '$date')")->get()->first();
+                
+                $updateCart = Cart::find($cart->id);
+                $updateCart['unit_price'] = $salesPrice->SalesPrice;
+                $updateCart['amount'] = $salesPrice->SalesPrice * $cart->qty;
+                $updateCart->save();
+            }
+        }
+            
+        return response()->json(['success'=>'Product deleted successfully.']);
+    }
+
+    public function getCPriceClass($id){
+
+        $location = Location::where('BAccountID', $id)->get()->first();
+        $priceClass = $location->CPriceClassID;
+
+        return $priceClass;
+
+    }
+
+    public function getInventoryID($id){
+        $product = Product::where('InventoryCD', $id)->get()->first();
+
+        return $product;
+    }
+
 }

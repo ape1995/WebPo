@@ -7,6 +7,9 @@ use App\Http\Requests\UpdateSalesOrderDetailRequest;
 use App\Repositories\SalesOrderDetailRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Models\SalesOrder;
+use App\Models\Product;
+use App\Models\Location;
+use App\Models\SalesPrice;
 use App\Models\SalesOrderDetail;
 use App\Models\ParameterVAT;
 use Illuminate\Http\Request;
@@ -256,5 +259,41 @@ class SalesOrderDetailController extends AppBaseController
 
         return $data;
 
+    }
+
+    public function reCountDetailProduct($id, $date)
+    {
+        // dd('test');
+        $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $id)->get();
+        $priceClass = $this->getCPriceClass(\Auth::user()->customer_id);
+
+        if($salesOrderDetails->count('id') > 0){
+            foreach($salesOrderDetails as $detail){
+                $inventory = $this->getInventoryID($detail->inventory_id);
+                $salesPrice = SalesPrice::whereRaw("CustPriceClassID = '$priceClass' AND InventoryID = '$inventory->InventoryID' AND EffectiveDate <= '$date' AND (ExpirationDate IS NULL OR ExpirationDate >= '$date')")->get()->first();
+                
+                $updateDetail = SalesOrderDetail::find($detail->id);
+                $updateDetail['unit_price'] = $salesPrice->SalesPrice;
+                $updateDetail['amount'] = $salesPrice->SalesPrice * $detail->qty;
+                $updateDetail->save();
+            }
+        }
+            
+        return response()->json(['success'=>'Product deleted successfully.']);
+    }
+
+    public function getCPriceClass($id){
+
+        $location = Location::where('BAccountID', $id)->get()->first();
+        $priceClass = $location->CPriceClassID;
+
+        return $priceClass;
+
+    }
+
+    public function getInventoryID($id){
+        $product = Product::where('InventoryCD', $id)->get()->first();
+
+        return $product;
     }
 }

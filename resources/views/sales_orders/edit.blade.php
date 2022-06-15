@@ -161,7 +161,7 @@
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
+                {!! Form::submit('Update', ['class' => 'btn btn-primary', 'id' => 'savePageButton']) !!}
                 {{-- <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a> --}}
             </div>
 
@@ -209,9 +209,22 @@
                 if(delivery_date.val() == null || delivery_date.val() == ''){
                     add_product.prop("disabled", true);
                 } else {
-                    add_product.prop("disabled", false);
+                    table.draw();
+                    add_product.prop("disabled", true);
+                    $("#savePageButton").prop("disabled", true);
+
+                    var url = "{{ url('salesOrderDetails-reCountDetailProduct') }}" + "/" + "{{ $salesOrder->id }}" + "/" + delivery_date.val();
+                    // send data to your endpoint
+                    $.ajax({
+                        url: url,
+                        method: 'get',
+                        dataType: 'json',
+                        success: function(response) {
+                            table.draw();
+                            getAllCounter();
+                        }
+                    });
                 }
-                getAllCounter();
             });
 
             inventory_id.on('change', function() {
@@ -281,6 +294,8 @@
                         } else {
                             $("#savePageButton").attr("disabled", false);
                         }
+
+                        add_product.prop("disabled", false);
 
                     }
                 });

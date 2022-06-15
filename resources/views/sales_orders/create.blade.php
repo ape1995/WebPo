@@ -283,14 +283,32 @@
             });
 
             delivery_date.on('change', function() {
+
                 if(delivery_date.val() == null || delivery_date.val() == ''){
                     add_product.prop("disabled", true);
                 } else {
-                    $('#date_file').val(delivery_date.val())
-                    add_product.prop("disabled", false);
-                    btn_upload_product.prop("disabled", false);
+                    table.draw();
+                    $('#date_file').val(delivery_date.val());
+                    add_product.prop("disabled", true);
+                    btn_upload_product.prop("disabled", true);
+                    $("#savePageButton").prop("disabled", true);
+
+                    var url = "{{ url('carts-reCountDetailProduct') }}" + "/" + delivery_date.val();
+                    // send data to your endpoint
+                    $.ajax({
+                        url: url,
+                        method: 'get',
+                        dataType: 'json',
+                        success: function(response) {
+                            table.draw();
+                            getAllCounter();
+                        }
+                    });
+
+                    
+                    
                 }
-                getAllCounter();
+                
             });
 
             inventory_id.on('change', function() {

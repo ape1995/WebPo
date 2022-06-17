@@ -6,8 +6,8 @@
 </li>
 
 @if(Gate::check('browse users') || Gate::check('browse permissions') || Gate::check('browse group permissions') || Gate::check('browse parameter')  || Gate::check('browse adds')  || Gate::check('browse tax')  || Gate::check('browse customer products')  || Gate::check('browse min orders') || Gate::check('browse category minimum orders'))
-<li class="nav-item {{ Request::is('users*') ? 'menu-open' : '' }} {{ Request::is('permissions*') ? 'menu-open' : '' }} {{ Request::is('roles*') ? 'menu-open' : '' }} {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }} {{ Request::is('customerProducts*') ? 'menu-open' : '' }} {{ Request::is('customerMinOrders*') ? 'menu-open' : '' }} {{ Request::is('categoryMinOrders*') ? 'menu-open' : '' }} {{ Request::is('dsRules*') ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link {{ Request::is('users*') ? 'active' : '' }} {{ Request::is('permissions*') ? 'active' : '' }} {{ Request::is('roles*') ? 'active' : '' }} {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }} {{ Request::is('customerProducts*') ? 'active' : '' }} {{ Request::is('customerMinOrders*') ? 'active' : '' }} {{ Request::is('categoryMinOrders*') ? 'active' : '' }} {{ Request::is('dsRules*') ? 'active' : '' }}">
+<li class="nav-item {{ Request::is('users*') ? 'menu-open' : '' }} {{ Request::is('permissions*') ? 'menu-open' : '' }} {{ Request::is('roles*') ? 'menu-open' : '' }} {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }} {{ Request::is('customerProducts*') ? 'menu-open' : '' }} {{ Request::is('customerMinOrders*') ? 'menu-open' : '' }} {{ Request::is('categoryMinOrders*') ? 'menu-open' : '' }} {{ Request::is('dsRules*') ? 'menu-open' : '' }} {{ Request::is('packetDiscounts*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('users*') ? 'active' : '' }} {{ Request::is('permissions*') ? 'active' : '' }} {{ Request::is('roles*') ? 'active' : '' }} {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }} {{ Request::is('customerProducts*') ? 'active' : '' }} {{ Request::is('customerMinOrders*') ? 'active' : '' }} {{ Request::is('categoryMinOrders*') ? 'active' : '' }} {{ Request::is('dsRules*') ? 'active' : '' }} {{ Request::is('packetDiscounts*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-file-alt"></i>
         <p>
         {{ trans('menu.master')}}
@@ -103,22 +103,27 @@
             </a>
         </li>
         @endcan
+        @can('browse packet discounts')
+        <li class="nav-item">
+            <a href="{{ route('packetDiscounts.index') }}" class="nav-link {{ Request::is('packetDiscounts*') ? 'active' : '' }}">
+                <i class="fa fa-percentage nav-icon"></i>
+                <p>Packet Discounts</p>
+            </a>
+        </li>
+        @endcan
         <li class="nav-item">
             <a href="{{ route('dFormImportProduct') }}" class="nav-link {{ Request::is('dFormImportProduct*') ? 'active' : '' }}">
                 <i class="far fa-file-excel nav-icon"></i>
                 <p>{{ trans('menu.dformatimport') }}</p>
             </a>
         </li>
-
-        
-        
     </ul>
 </li>
 @endif
 
 @if(Gate::check('list sales order') || Gate::check('create sales order'))
-<li class="nav-item {{ Request::is('salesOrders*') ? 'menu-open' : '' }} {{ Request::is('createOrder*') ? 'menu-open' : '' }} {{ Request::is('salesOrderBulkSubmit*') ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }} {{ Request::is('createOrder*') ? 'active' : '' }} {{ Request::is('salesOrderBulkSubmit*') ? 'active' : '' }}">
+<li class="nav-item {{ Request::is('salesOrders*') ? 'menu-open' : '' }} {{ Request::is('createOrder*') ? 'menu-open' : '' }} {{ Request::is('salesOrderBulkSubmit*') ? 'menu-open' : '' }} {{ Request::is('salesOrderPromos*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }} {{ Request::is('createOrder*') ? 'active' : '' }} {{ Request::is('salesOrderBulkSubmit*') ? 'active' : '' }} {{ Request::is('salesOrderPromos*') ? 'active' : '' }}" >
         <i class="nav-icon fas fa-dollar-sign"></i>
         <p>
         {{ trans('menu.sales_order')}}
@@ -142,6 +147,12 @@
                 </a>
             </li>
         @endcan
+        <li class="nav-item">
+            <a href="{{ route('salesOrderPromos.index') }}" class="nav-link {{ Request::is('salesOrderPromos*') ? 'active' : '' }}">
+                <i class="far fa-list-alt nav-icon"></i>
+                <p>List Order Promo</p>
+            </a>
+        </li>
         @can('bulk submit sales order')
             <li class="nav-item">
                 <a href="{{ route('salesOrders.bulkSubmitIndex') }}" class="nav-link {{ Request::is('salesOrderBulkSubmit*') ? 'active' : '' }}">

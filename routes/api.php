@@ -19,7 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('get-inventory-data/{code}/{customer}/{date}',[App\Http\Controllers\SalesOrderController::class, 'getPrice']);
+Route::get('get-inventory-data-2/{code}/{rbp}/{date}',[App\Http\Controllers\PacketDiscountDetailController::class, 'getPrice']);
+Route::get('cek-data-packet-code/{code}',[App\Http\Controllers\PacketDiscountController::class, 'getCode']);
 Route::get('getAllCounter/{customer}/{date}',[App\Http\Controllers\CartController::class, 'getAllCounter']);
+Route::get('getAllCounterDiscount/{user}',[App\Http\Controllers\PacketDiscountDetailController::class, 'getAllCounter']);
+Route::get('getAllCounterDiscountDetail/{code}',[App\Http\Controllers\PacketDiscountDetailController::class, 'getAllCounterDetail']);
 Route::get('countOrderDetail/{code}/{date}',[App\Http\Controllers\SalesOrderDetailController::class, 'countOrderDetail']);
 Route::get('get-outlet-data/{code}', [App\Http\Controllers\EstimasiController::class, 'getOutletData']);
 Route::get('update-ds-status/{code}', [App\Http\Controllers\DsRuleController::class, 'updateStatus']);

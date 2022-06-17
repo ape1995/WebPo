@@ -23,6 +23,10 @@ use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\DsRuleController;
 use App\Http\Controllers\DsPercentageController;
+use App\Http\Controllers\PacketDiscountController;
+use App\Http\Controllers\PacketDiscountDetailController;
+use App\Http\Controllers\SalesOrderPromoController;
+use App\Http\Controllers\SalesOrderPromoDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -121,6 +125,17 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('dsRules-import', [DsPercentageController::class, 'import'])->name('dsRules.import');
     Route::resource('dsPercentages', DsPercentageController::class);
     Route::get('dsPercentages-dataTable',[DsPercentageController::class,'getData'])->name('dsPercentagesDataTable.data');
+    Route::resource('packetDiscounts', PacketDiscountController::class);
+    Route::get('packetDiscounts-release/{code}', [PacketDiscountController::class, 'release'])->name('packetDiscounts.release');
+    Route::get('dataTablePacketDiscounts',[PacketDiscountController::class,'dataTable'])->name('packetDiscounts.data');
+    Route::resource('packetDiscountDetails', PacketDiscountDetailController::class);
+    Route::get('packetDiscountDetails-carts/{user}',[PacketDiscountDetailController::class,'carts'])->name('packetDiscountDetails.cart');
+    Route::get('packetDiscountDetails-reset/{user}',[PacketDiscountDetailController::class,'reset'])->name('packetDiscountDetails.reset');
+    Route::get('packetDiscountDetails-detailData/{code}',[PacketDiscountDetailController::class,'detailData'])->name('packetDiscountDetails.detailData');
+    Route::get('packetDiscountDetails-resetDetail/{code}',[PacketDiscountDetailController::class,'resetDetail'])->name('packetDiscountDetails.resetDetail');
+    Route::resource('salesOrderPromos', SalesOrderPromoController::class);
+    Route::resource('salesOrderPromoDetails', SalesOrderPromoDetailController::class);
+    Route::get('dataTableSalesOrderPromo',[SalesOrderPromoController::class,'dataTable'])->name('salesOrderPromos.data');
 });
 
 

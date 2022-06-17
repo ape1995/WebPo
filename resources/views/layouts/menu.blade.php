@@ -111,6 +111,14 @@
             </a>
         </li>
         @endcan
+        @can('browse packet discounts')
+        <li class="nav-item">
+            <a href="{{ route('packetDiscounts.index') }}" class="nav-link {{ Request::is('packetDiscounts*') ? 'active' : '' }}">
+                <i class="fa fa-percentage nav-icon"></i>
+                <p>Packet Discounts</p>
+            </a>
+        </li>
+        @endcan
         <li class="nav-item">
             <a href="{{ route('dFormImportProduct') }}" class="nav-link {{ Request::is('dFormImportProduct*') ? 'active' : '' }}">
                 <i class="far fa-file-excel nav-icon"></i>

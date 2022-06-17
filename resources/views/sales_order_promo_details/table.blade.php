@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="table-responsive mt-3">
     <table class="table table-sm table-bordered" id="salesOrderDetails-table">
         <thead>
@@ -19,6 +20,21 @@
                 <td class="money" @can('hide price sales order') style="display:none" @endcan>{{ number_format($salesOrderDetail->total,2,',','.') }}</td>
             </tr>
         @endforeach
+=======
+<div class="table-responsive">
+    <table class="table" id="salesOrderPromoDetails-table">
+        <thead>
+        <tr>
+            <th>Sales Order Promo Id</th>
+            <th>Packet Code</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+>>>>>>> 7af42b6 (update packet discount module)
         </tbody>
     </table>
 </div>

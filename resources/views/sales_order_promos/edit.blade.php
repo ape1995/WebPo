@@ -5,7 +5,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
+<<<<<<< HEAD
                     <h1>Edit {{ trans('sales_order.order') }}</h1>
+=======
+                    <h1>Edit Sales Order Promo</h1>
+>>>>>>> 7af42b6 (update packet discount module)
                 </div>
             </div>
         </div>
@@ -19,6 +23,7 @@
 
             {!! Form::model($salesOrderPromo, ['route' => ['salesOrderPromos.update', $salesOrderPromo->id], 'method' => 'patch']) !!}
 
+<<<<<<< HEAD
             <div class="card-header">
                 <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
             </div>
@@ -166,12 +171,24 @@
             <div class="card-footer">
                 {!! Form::submit( trans('sales_order.btn_update'), ['class' => 'btn btn-primary', 'id' => 'savePageButton']) !!}
                 {{-- <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a> --}}
+=======
+            <div class="card-body">
+                <div class="row">
+                    @include('sales_order_promos.fields')
+                </div>
+            </div>
+
+            <div class="card-footer">
+                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                <a href="{{ route('salesOrderPromos.index') }}" class="btn btn-default">Cancel</a>
+>>>>>>> 7af42b6 (update packet discount module)
             </div>
 
             {!! Form::close() !!}
 
         </div>
     </div>
+<<<<<<< HEAD
     @php
         $permissionPrice = '';
     @endphp
@@ -473,3 +490,6 @@
 
     </script>
 @endsection
+=======
+@endsection
+>>>>>>> 7af42b6 (update packet discount module)

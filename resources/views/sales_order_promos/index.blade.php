@@ -6,7 +6,11 @@
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
+<<<<<<< HEAD
             <h1 class="m-0">Sales Order - Promo</h1>
+=======
+            <h1 class="m-0">Sales Order</h1>
+>>>>>>> 7af42b6 (update packet discount module)
             </div><!-- /.col -->
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">

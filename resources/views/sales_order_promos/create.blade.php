@@ -1,11 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
+<<<<<<< HEAD
     {{-- <section class="content-header"> --}}
         <div class="container-fluid p-1 mx-3">
             <h5>{{ trans('sales_order_promo.title') }}</h5>
         </div>
     {{-- </section> --}}
+=======
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <h1>Create Sales Order Promo</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+>>>>>>> 7af42b6 (update packet discount module)
 
     <div class="content px-3">
 
@@ -17,6 +29,7 @@
 
             <div class="card-body">
 
+<<<<<<< HEAD
                 <div class="row mb-3">
                     @include('sales_order_promos.fields')
                 </div>
@@ -154,12 +167,24 @@
                 {{-- {!! Form::submit('Save', ['class' => 'btn btn-primary', 'id' => 'savePageButton']) !!} --}}
                 <input type="submit" name="savePageButton" id="savePageButton" class="btn btn-primary" value="{{ trans('sales_order.btn_save') }}">
                 <a href="{{ route('salesOrders.resetOrder') }}" onclick="return confirm('{{ trans('sales_order.question_reset') }}')" class="btn btn-default">{{ trans('sales_order.btn_reset') }}</a>
+=======
+                <div class="row">
+                    @include('sales_order_promos.fields')
+                </div>
+
+            </div>
+
+            <div class="card-footer">
+                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                <a href="{{ route('salesOrderPromos.index') }}" class="btn btn-default">Cancel</a>
+>>>>>>> 7af42b6 (update packet discount module)
             </div>
 
             {!! Form::close() !!}
 
         </div>
     </div>
+<<<<<<< HEAD
     @php
         $permissionPrice = '';
     @endphp
@@ -530,3 +555,6 @@
 
     </script>
 @endsection
+=======
+@endsection
+>>>>>>> 7af42b6 (update packet discount module)

@@ -22,7 +22,6 @@ use DataTables;
 use PDF;
 
 
-
 class SalesOrderPromoController extends AppBaseController
 {
     /** @var  SalesOrderPromoRepository */

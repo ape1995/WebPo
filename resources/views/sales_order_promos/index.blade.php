@@ -7,10 +7,14 @@
         <div class="row mb-2">
             <div class="col-sm-6">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <h1 class="m-0">Sales Order - Promo</h1>
 =======
             <h1 class="m-0">Sales Order</h1>
 >>>>>>> 7af42b6 (update packet discount module)
+=======
+            <h1 class="m-0">Sales Order - Promo</h1>
+>>>>>>> b1f0485 (update feature packet discount)
             </div><!-- /.col -->
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">

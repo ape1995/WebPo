@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b1f0485 (update feature packet discount)
 <div class="col-md-6">
     <div class="row">
         <!-- Order Nbr Field -->
@@ -61,6 +64,7 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 </div>
 
 <div class="col-md-6">
@@ -158,10 +162,62 @@
     {!! Form::label('order_total', 'Order Total:') !!}
     <p>{{ $salesOrderPromo->order_total }}</p>
 >>>>>>> 7af42b6 (update packet discount module)
+=======
+</div>
+
+<div class="col-md-6">
+    <div class="row">
+        <!-- Order Qty Field -->
+        <div class="col-sm-12 mb-1">
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('order_qty', trans('sales_order.order_qty')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('order_qty', number_format($salesOrderPromo->order_qty, 0, ',', '.'), ['class' => 'form-control money', 'readonly' => true ]) !!}
+                </div>
+            </div>
+        </div>
+        <!-- Order Amount Field -->
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style="visibility: collapse" @endcan>
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('order_amount', trans('sales_order.order_amount')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('order_amount', number_format($salesOrderPromo->order_amount, 2, ',', '.'), ['class' => 'form-control money', 'readonly' => true]) !!}
+                </div>
+            </div>
+        </div>
+        <!-- Tax Field -->
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style="visibility: collapse" @endcan>
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('tax', trans('sales_order.tax')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('tax', number_format($salesOrderPromo->tax, 2, ',', '.'), ['class' => 'form-control money', 'readonly' => true]) !!}
+                </div>
+            </div>
+        </div>
+        <!-- Order Total Field -->
+        <div class="col-sm-12 mb-1"  @can('hide price sales order') style="visibility: collapse" @endcan>
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('order_total', trans('sales_order.order_total')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('order_total', number_format($salesOrderPromo->order_total, 2, ',', '.'), ['class' => 'form-control money', 'readonly' => true]) !!}
+                </div>
+            </div>
+        </div>
+    </div>
+>>>>>>> b1f0485 (update feature packet discount)
 </div>
 
 <!-- Description Field -->
 <div class="col-sm-12">
+<<<<<<< HEAD
 <<<<<<< HEAD
     {!! Form::label('description', trans('sales_order.description')) !!}
     {!! Form::textarea('description', $salesOrderPromo->description, ['class' => 'form-control', 'rows' => 2, 'readonly' => true ]) !!}
@@ -262,3 +318,8 @@
 </div>
 
 >>>>>>> 7af42b6 (update packet discount module)
+=======
+    {!! Form::label('description', trans('sales_order.description')) !!}
+    {!! Form::textarea('description', $salesOrderPromo->description, ['class' => 'form-control', 'rows' => 2, 'readonly' => true ]) !!}
+</div>
+>>>>>>> b1f0485 (update feature packet discount)

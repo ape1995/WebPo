@@ -115,7 +115,7 @@
         <li class="nav-item">
             <a href="{{ route('packetDiscounts.index') }}" class="nav-link {{ Request::is('packetDiscounts*') ? 'active' : '' }}">
                 <i class="fa fa-percentage nav-icon"></i>
-                <p>Packet Discounts</p>
+                <p>{{ trans('menu.packet_discounts') }}</p>
             </a>
         </li>
         @endcan

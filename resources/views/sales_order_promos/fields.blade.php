@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b1f0485 (update feature packet discount)
 <div class="col-md-6">
     <div class="row">
         <!-- Order Nbr Field -->
@@ -70,6 +73,7 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 </div>
 
 <div class="col-md-6">
@@ -134,71 +138,61 @@
 <div class="form-group col-sm-6">
     {!! Form::label('order_nbr', 'Order Nbr:') !!}
     {!! Form::text('order_nbr', null, ['class' => 'form-control']) !!}
+=======
+>>>>>>> b1f0485 (update feature packet discount)
 </div>
 
-<!-- Customer Id Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('customer_id', 'Customer Id:') !!}
-    {!! Form::text('customer_id', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Order Date Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('order_date', 'Order Date:') !!}
-    {!! Form::text('order_date', null, ['class' => 'form-control','id'=>'order_date']) !!}
-</div>
-
-@push('page_scripts')
-    <script type="text/javascript">
-        $('#order_date').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm:ss',
-            useCurrent: true,
-            sideBySide: true
-        })
-    </script>
-@endpush
-
-<!-- Delivery Date Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('delivery_date', 'Delivery Date:') !!}
-    {!! Form::text('delivery_date', null, ['class' => 'form-control','id'=>'delivery_date']) !!}
-</div>
-
-@push('page_scripts')
-    <script type="text/javascript">
-        $('#delivery_date').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm:ss',
-            useCurrent: true,
-            sideBySide: true
-        })
-    </script>
-@endpush
-
-<!-- Order Qty Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('order_qty', 'Order Qty:') !!}
-    {!! Form::number('order_qty', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Order Amount Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('order_amount', 'Order Amount:') !!}
-    {!! Form::number('order_amount', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Tax Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('tax', 'Tax:') !!}
-    {!! Form::number('tax', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Order Total Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('order_total', 'Order Total:') !!}
-    {!! Form::number('order_total', null, ['class' => 'form-control']) !!}
+<div class="col-md-6">
+    <div class="row">
+        <!-- Order Qty Field -->
+        <div class="col-sm-12 mb-1">
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('order_qty', trans('sales_order.order_qty')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('order_qty', null, ['class' => 'form-control money', 'readonly' => true ]) !!}
+                </div>
+            </div>
+        </div>
+        <!-- Order Amount Field -->
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('order_amount', trans('sales_order.order_amount')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('order_amount', null, ['class' => 'form-control money', 'readonly' => true]) !!}
+                </div>
+            </div>
+        </div>
+        <!-- Tax Field -->
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('tax', trans('sales_order.tax')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('tax', null, ['class' => 'form-control money', 'readonly' => true]) !!}
+                </div>
+            </div>
+        </div>
+        <!-- Order Total Field -->
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('order_total', trans('sales_order.order_total')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('order_total', null, ['class' => 'form-control money', 'readonly' => true]) !!}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Description Field -->
+<<<<<<< HEAD
 <div class="form-group col-sm-6">
     {!! Form::label('description', 'Description:') !!}
     {!! Form::text('description', null, ['class' => 'form-control']) !!}
@@ -321,4 +315,13 @@
     {!! Form::label('order_type', 'Order Type:') !!}
     {!! Form::text('order_type', null, ['class' => 'form-control']) !!}
 >>>>>>> 7af42b6 (update packet discount module)
+=======
+<div class="col-sm-12">
+    {!! Form::label('description', trans('sales_order.description')) !!}
+    @if ($data = Session::get('data'))
+        {!! Form::textarea('description', $data['description'], ['class' => 'form-control', 'rows' => 2, 'required' => true ]) !!}
+    @else     
+        {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 2, 'required' => true ]) !!}
+    @endif
+>>>>>>> b1f0485 (update feature packet discount)
 </div>

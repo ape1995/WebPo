@@ -22,9 +22,8 @@
         <div class="card card-body">
             <!-- Button trigger modal -->
             <div class="col-md-12 mb-3 mt-3">
-                @can('create direct selling rules')
-                <button type="button" id="add_item" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addProduct">
-                    Add Condition
+                <button type="button" id="add_item" class="btn btn-primary" data-toggle="modal" data-target="#addProduct">
+                    {{ trans('ds_rules.add_condition') }}
                 </button>
                 @endcan
                 @can('export direct selling rules')

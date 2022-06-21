@@ -6,10 +6,14 @@
             <div class="row mb-2">
                 <div class="col-sm-12">
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <h1>Edit {{ trans('sales_order.order') }}</h1>
 =======
                     <h1>Edit Sales Order Promo</h1>
 >>>>>>> 7af42b6 (update packet discount module)
+=======
+                    <h1>Edit {{ trans('sales_order.order') }}</h1>
+>>>>>>> b1f0485 (update feature packet discount)
                 </div>
             </div>
         </div>
@@ -24,10 +28,14 @@
             {!! Form::model($salesOrderPromo, ['route' => ['salesOrderPromos.update', $salesOrderPromo->id], 'method' => 'patch']) !!}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b1f0485 (update feature packet discount)
             <div class="card-header">
                 <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
             </div>
 
+<<<<<<< HEAD
             <div class="card-body">
                 <div class="row mb-3">
                     @include('sales_order_promos.fields-edit')
@@ -172,16 +180,157 @@
                 {!! Form::submit( trans('sales_order.btn_update'), ['class' => 'btn btn-primary', 'id' => 'savePageButton']) !!}
                 {{-- <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a> --}}
 =======
+=======
+>>>>>>> b1f0485 (update feature packet discount)
             <div class="card-body">
-                <div class="row">
-                    @include('sales_order_promos.fields')
+                <div class="row mb-3">
+                    @include('sales_order_promos.fields-edit')
                 </div>
+                
+                <button class="btn btn-primary text-light mb-2" type="button" id="add_product"  data-toggle="modal" data-target="#modalProduct">
+                    {{ trans('sales_order_promo.add') }}
+                </button>
+
+                @include('cart_promos.table')
+
+                <!-- Modal -->
+                <div class="modal fade" id="modalProduct" role="dialog" aria-labelledby="modalProduct" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <form id="cartsForm" name="cartsForm" class="form-horizontal">
+                            @csrf
+                            <div class="modal-content">
+                                <div class="modal-header text-light" style="background-color: #c61325">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">{{ trans('sales_order_promo.list_promo') }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    {{-- Product --}}
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                {!! Form::label('packet_code',  trans('sales_order_promo.packet_code')) !!}
+                                            </div>
+                                            <div class="col-8">
+                                                <select name="packet_code" id="packet_code" class="form-control">
+                                                    <option value="">Please Choose</option>
+                                                    @foreach ($packetDiscounts as $packet)
+                                                        <option value="{{ $packet->packet_code }}">{{ $packet->packet_code }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Detail Product Field -->
+                                    <div id="data_show" style="display: none">
+                                        <div class="col-sm-12 mb-1">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    {!! Form::label('packet_name',  trans('sales_order_promo.packet_name')) !!}
+                                                </div>
+                                                <div class="col-9">
+                                                    <textarea name="packet_name" id="packet_name" class="form-control" rows="3" readonly></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 mb-1">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    {!! Form::label('unit_price', trans('sales_order.unit_price')) !!}
+                                                </div>
+                                                <div class="col-4">
+                                                    {!! Form::text('unit_price', null, ['class' => 'form-control', 'readonly' => true ]) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- Qty Field --}}
+                                        <div class="col-sm-12 mb-1">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    {!! Form::label('qty', trans('sales_order.qty')) !!}
+                                                </div>
+                                                <div class="col-3">
+                                                    <input pattern="\d*" type="number" class="form-control" name="qty" id="qty" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- Amount Field --}}
+                                        <div class="col-sm-12 mb-1">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    {!! Form::label('amount', trans('sales_order.amount')) !!}
+                                                </div>
+                                                <div class="col-6">
+                                                    {!! Form::text('amount', null, ['class' => 'form-control', 'readonly', true ]) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="saveBtn" class="btn btn-primary">{{ trans('sales_order.btn_add_to_cart') }}</button>
+                                </div>
+                            </div>
+                        {{-- </form> --}}
+                    </div>
+                </div>
+
+                {{-- Modal edit product --}}
+                {{-- Modal Edit --}}
+                <div class="modal fade" id="ajaxModel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header text-light" style="background-color: #c61325">
+                                <h4 class="modal-title" id="modelHeading">{{ trans('sales_order.btn_update') }}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="cartForm" name="cartForm" class="form-horizontal">
+                                   <input type="hidden" name="product_id" id="product_id">
+                                    <div class="form-group">
+                                        <label for="product" class="col-sm-4 control-label">{{  trans('sales_order_promo.packet_name') }}</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="product_name" name="product_name" readonly>
+                                        </div>
+                                    </div>
+
+                                    <label class="col-sm-4" @can('hide price sales order') style=" visibility: collapse;" @endcan>{{ trans('sales_order.unit_price') }}</label>
+                                    <div class="col-sm-12" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+                                        <input type="text" class="form-control" id="unit_price_edit" name="unit_price_edit" readonly>
+                                    </div>
+                     
+                                    <label class="col-sm-4 control-label">{{ trans('sales_order.qty') }}</label>
+                                    <div class="col-sm-12">
+                                        <input pattern="\d*" type="number" class="form-control" name="quantity" id="quantity" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                    </div>
+
+                                    <div class="form-group" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+                                        <label class="col-sm-4 control-label">{{ trans('sales_order.amount') }}</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="amount_edit" name="amount_edit" readonly>
+                                        </div>
+                                    </div>
+                      
+                                    <div class="col-md-12 text-right">
+                                     <button type="submit" class="btn btn-primary updateBtn" id="updateBtn">{{ trans('sales_order.btn_update') }}</button>
+                                    </div>
+                                {{-- </form> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="card-footer">
+<<<<<<< HEAD
                 {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
                 <a href="{{ route('salesOrderPromos.index') }}" class="btn btn-default">Cancel</a>
 >>>>>>> 7af42b6 (update packet discount module)
+=======
+                {!! Form::submit( trans('sales_order.btn_update'), ['class' => 'btn btn-primary', 'id' => 'savePageButton']) !!}
+                {{-- <a href="{{ URL::previous() }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> Back</a> --}}
+>>>>>>> b1f0485 (update feature packet discount)
             </div>
 
             {!! Form::close() !!}
@@ -189,6 +338,9 @@
         </div>
     </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b1f0485 (update feature packet discount)
     @php
         $permissionPrice = '';
     @endphp
@@ -489,7 +641,11 @@
         });
 
     </script>
+<<<<<<< HEAD
 @endsection
 =======
 @endsection
 >>>>>>> 7af42b6 (update packet discount module)
+=======
+@endsection
+>>>>>>> b1f0485 (update feature packet discount)

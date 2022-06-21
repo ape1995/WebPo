@@ -22,6 +22,7 @@ use DataTables;
 use PDF;
 
 
+
 class SalesOrderPromoController extends AppBaseController
 {
     /** @var  SalesOrderPromoRepository */
@@ -63,9 +64,6 @@ class SalesOrderPromoController extends AppBaseController
                 })
                 ->addColumn('order_type', function (SalesOrderPromo $salesOrder) {
                     return $salesOrder->order_type == 'P' ? 'Packet Discount' : '';
-                })
-                ->addColumn('created_name', function (SalesOrderPromo $salesOrder) {
-                    return $salesOrder->createdBy->name;
                 })
                 ->editColumn('order_date', function (SalesOrderPromo $salesOrder) 
                 {

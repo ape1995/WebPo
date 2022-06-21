@@ -26,7 +26,7 @@
                 </div>
                 @if ($salesOrderPromo->status == 'R' || $salesOrderPromo->status == 'P' || $salesOrderPromo->status == 'B' || $salesOrderPromo->status == 'C')
                     <div class="text-right m-2">
-                        <a href="{{ route('salesOrders.printPdf', [$salesOrderPromo->id]) }}" class="btn btn-sm btn-outline-danger" id="btnPrint"><i class="fa fa-file-pdf"></i> {{ trans('sales_order.btn_print') }}</a>
+                        <a href="{{ route('salesOrderPromos.printPdf', [$salesOrderPromo->id]) }}" class="btn btn-sm btn-outline-danger" id="btnPrint"><i class="fa fa-file-pdf"></i> {{ trans('sales_order.btn_print') }}</a>
                         {{-- @can('create sales order')
                             <a href="{{ route('salesOrders.reOrder', [$salesOrderPromo->id]) }}" class="btn btn-sm btn-outline-info" onclick="return confirm('{{ trans('sales_order.question_reorder') }}')"><i class="fas fa-redo-alt"></i> {{ trans('sales_order.reorder') }}</a>
                         @endcan --}}
@@ -72,7 +72,7 @@
                 </div>
                 @endif
 
-                @include('attachments.table')
+                @include('attachments.table_promo')
 
             </div>
 
@@ -115,7 +115,7 @@
                                             <div class="row">
                                                 <div class="col-sm-12 mb-1">
                                                     {!! Form::label('reason', trans('sales_order.reason')) !!}
-                                                    <input type="hidden" name="id_order" value="{{ $salesOrderPromos->id }}">
+                                                    <input type="hidden" name="id_order" value="{{ $salesOrderPromo->id }}">
                                                     {!! Form::textarea('reason', null, ['class' => 'form-control', 'required' => true, 'rows' => 2]) !!}
                                                 </div>
                                             </div>
@@ -135,7 +135,7 @@
                         <!-- Modal -->
                         <div class="modal fade" id="modalReject" tabindex="-1" role="dialog" aria-labelledby="modalReject" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
-                                <form action="{{ route('salesOrders.rejectOrder') }}" method="post">
+                                <form action="{{ route('salesOrderPromos.rejectOrder') }}" method="post">
                                     @csrf
                                     <div class="modal-content">
                                         <div class="modal-header text-light" style="background-color: #c61325">

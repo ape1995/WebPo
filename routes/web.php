@@ -145,6 +145,11 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('SalesOrderPromoSubmitOrder/{code}',[SalesOrderPromoController::class,'submitOrder'])->name('salesOrderPromos.submitOrder');
     Route::get('SalesOrderPromoProcessOrder/{code}',[SalesOrderPromoController::class,'processOrder'])->name('salesOrderPromos.processOrder');
     Route::get('dataTableSalesOrderPromoDetail/{code}',[SalesOrderPromoDetailController::class,'getData'])->name('salesOrderPromos.dataDetail');
+    Route::post('SOPromouploadAttachments',[SalesOrderPromoController::class,'uploadAttachment'])->name('salesOrderPromos.uploadAttachment');
+    Route::post('rejectOrderPromo',[SalesOrderPromoController::class,'rejectOrder'])->name('salesOrderPromos.rejectOrder');
+    Route::get('printOrderPromo/{code}',[SalesOrderPromoController::class,'printPdf'])->name('salesOrderPromos.printPdf');
+    Route::get('reportSalesOrderPromoDetail', [ReportController::class, 'detailPromoIndex'])->name('reportSalesOrder.detailPromoIndex');
+    Route::post('reportSalesOrderPromoDetail', [ReportController::class, 'detailPromoView'])->name('reportSalesOrder.detailPromoView');
     
 });
 

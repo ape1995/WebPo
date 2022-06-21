@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Flash;
 use Response;
 use DataTables;
+use PDF;
 
 
 class SalesOrderPromoController extends AppBaseController
@@ -518,6 +519,45 @@ class SalesOrderPromoController extends AppBaseController
         $salesOrderPromo->save();
 
         return redirect(route('salesOrderPromos.index'))->with('success', 'Order Processed Sucessfully.');
+    }
+
+    public function uploadAttachment(Request $request){
+
+        $request->validate([
+            'file' => 'required|image|mimes:jpeg,png,jpg',
+        ]);
+
+        $x=20;
+        $file = time().'-1.'.$request->file->extension();
+        
+        $img=\Image::make($request->file('file'))->orientate();
+        
+        $img->save(public_path('uploads/attachments/convert_'.$file),$x);
+
+        $input['sales_order_promo_id'] = $request->id_order;
+        $input['type'] = $request->type;
+        $input['image'] = 'convert_'.$file;
+
+        AttachmentPromo::create($input);
+
+        return redirect(route('salesOrderPromos.show', $request->id_order));
+    }
+
+    public function printPdf($id)
+    {
+
+        $salesOrder = SalesOrderPromo::find($id);
+        $salesOrderDetails = SalesOrderPromoDetail::where('sales_order_promo_id', $id)->orderBy('packet_code', 'ASC')->get();
+        // dd($salesOrder);
+
+        if (empty($salesOrder)) {
+            return redirect(route('salesOrderPromos.index'))->with('error', 'Order Not Found');
+        }
+
+        $pdf = PDF::loadview('sales_order_promos.print',['salesOrder'=>$salesOrder, 'salesOrderDetails'=>$salesOrderDetails]);
+    	return $pdf->download("Order Promo - $salesOrder->order_nbr.pdf");
+
+        // return view('sales_orders.print', compact('salesOrder', 'salesOrderDetails'));
     }
 
 

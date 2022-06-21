@@ -143,6 +143,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('resetOrderPromo',[SalesOrderPromoController::class,'resetOrder'])->name('salesOrderPromos.resetOrder');
     Route::get('SalesOrderPromocancelOrder/{code}',[SalesOrderPromoController::class,'cancelOrder'])->name('salesOrderPromos.cancelOrder');
     Route::get('SalesOrderPromoSubmitOrder/{code}',[SalesOrderPromoController::class,'submitOrder'])->name('salesOrderPromos.submitOrder');
+    Route::get('SalesOrderPromoProcessOrder/{code}',[SalesOrderPromoController::class,'processOrder'])->name('salesOrderPromos.processOrder');
     Route::get('dataTableSalesOrderPromoDetail/{code}',[SalesOrderPromoDetailController::class,'getData'])->name('salesOrderPromos.dataDetail');
     
 });

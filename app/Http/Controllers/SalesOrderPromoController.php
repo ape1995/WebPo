@@ -201,7 +201,7 @@ class SalesOrderPromoController extends AppBaseController
         $parameterVAT = ParameterVAT::whereRaw("start_date <= '$deliveryDate' AND (end_date is null OR end_date >= '$deliveryDate') ")->get()->first();
 
         $input['order_qty'] = $carts->sum('qty');
-        $input['order_amount'] = $carts->sum('amount');
+        $input['order_amount'] = $carts->sum('total');
         $input['tax'] = ($parameterVAT->value/100) *$input['order_amount'];
         $input['order_total'] = $input['order_amount'] + $input['tax'];
 
@@ -277,7 +277,7 @@ class SalesOrderPromoController extends AppBaseController
 
         $salesOrderPromo = $this->salesOrderPromoRepository->find($id);
 
-        if ($salesOrderPromo->status == 'R' || $salesOrderPromo->status == 'P') {
+        if ($salesOrderPromo->status == 'C' || $salesOrderPromo->status == 'P') {
             // Flash::error('Cannot edit this order');
 
             return redirect(route('salesOrderPromos.index'))->with('error', 'Cannot edit this order');
@@ -474,6 +474,50 @@ class SalesOrderPromoController extends AppBaseController
         $salesOrderPromo->save();
 
         return redirect(route('salesOrderPromos.show', $id))->with('success', 'Order Rejected Sucessfully.');
+    }
+
+    public function submitOrder ($id)
+    {
+
+        if (!\Auth::user()->can('submit sales order')) {
+            abort(403);
+        }
+
+        $salesOrderPromo = SalesOrderPromo::find($id);
+
+        if (empty($salesOrderPromo)) {
+            return redirect(route('salesOrderPromos.index'))->with('error', 'Order Not Found');
+        }
+
+        $salesOrderPromo = SalesOrderPromo::find($id);
+        $salesOrderPromo['status'] = 'R';
+        $salesOrderPromo['submitted_by'] = \Auth::user()->id;
+        $salesOrderPromo['submitted_at'] = Carbon::now()->toDateTimeString();
+        $salesOrderPromo->save();
+
+        return redirect(route('salesOrderPromos.index'))->with('success', 'Order Submitted Sucessfully.');
+    }
+
+    public function processOrder($id)
+    {
+
+        if (!\Auth::user()->can('process sales order')) {
+            abort(403);
+        }
+
+        $salesOrderPromo = SalesOrderPromo::find($id);
+
+        if (empty($salesOrderPromo)) {
+            return redirect(route('salesOrderPromos.index'))->with('error', 'Order Not Found');
+        }
+
+        $salesOrderPromo = SalesOrderPromo::find($id);
+        $salesOrderPromo['status'] = 'P';
+        $salesOrderPromo['processed_by'] = \Auth::user()->id;
+        $salesOrderPromo['processed_at'] = Carbon::now()->toDateTimeString();
+        $salesOrderPromo->save();
+
+        return redirect(route('salesOrderPromos.index'))->with('success', 'Order Processed Sucessfully.');
     }
 
 

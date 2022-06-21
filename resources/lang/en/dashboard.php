@@ -6,6 +6,7 @@ return [
     'change_password' => 'Change Password',
     'language' => 'Language',
     'btn_order_here' => 'Order Here',
+    'btn_promo_order' => 'Order Promo Here',
     'logout' => 'Logout',
     'question' => 'Out of stock?',
     'draft_order' => 'DRAFT ORDER',

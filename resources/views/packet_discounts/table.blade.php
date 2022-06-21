@@ -2,17 +2,17 @@
     <table class="table table-hover table-sm" id="dataTable">
         <thead>
             <tr class="bg-info">
-                <th>Packet Code</th>
-                <th>Packet Name</th>
-                <th>Start Date</th>
-                <th>End Date</th>
+                <th>{{ trans('packet_discount.packet_code') }}</th>
+                <th>{{ trans('packet_discount.packet_name') }}</th>
+                <th>{{ trans('packet_discount.start_date') }}</th>
+                <th>{{ trans('packet_discount.end_date') }}</th>
                 <th>Rbp Class</th>
                 <th>Total</th>
-                <th>Discount</th>
+                <th>{{ trans('packet_discount.discount') }}</th>
                 <th>Grand Total</th>
                 <th>Status</th>
-                <th>Released Date</th>
-                <th>Action</th>
+                <th>{{ trans('packet_discount.released_date') }}</th>
+                <th>{{ trans('packet_discount.action') }}</th>
             </tr>
         </thead>
         <tbody>

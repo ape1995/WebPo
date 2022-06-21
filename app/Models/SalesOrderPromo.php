@@ -106,5 +106,15 @@ class SalesOrderPromo extends Model
         
     ];
 
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'BAccountID', 'customer_id');
+    }
+
+    public function detail()
+    {
+        return $this->hasMany(SalesOrderPromoDetail::class, 'sales_order_promo_id', 'id');
+    }
+
     
 }

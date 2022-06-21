@@ -1,12 +1,12 @@
 <!-- Name Field -->
 <div class="col-2">
-    {!! Form::label('name', 'Rule Name') !!}
+    {!! Form::label('name', trans('ds_rules.rule_name')) !!}
     <p>{{ $dsRule->name }}</p>
 </div>
 
 <!-- Status Field -->
 <div class="form-group col-6">
-    {!! Form::label('status', 'Active:') !!}
+    {!! Form::label('status', trans('ds_rules.active')) !!}
     <!-- Status -->
     <div class="custom-control custom-switch">
         @if (isset($dsRule))

@@ -75,7 +75,7 @@
         <li class="nav-item">
             <a href="{{ route('customerProducts.index') }}" class="nav-link {{ Request::is('customerProducts*') ? 'active' : '' }}">
                 <i class="fab fa-product-hunt nav-icon"></i>
-                <p>Customer Products</p>
+                <p>{{ trans('menu.customer_products') }}</p>
             </a>
         </li>
         @endcan
@@ -83,7 +83,7 @@
         <li class="nav-item">
             <a href="{{ route('customerMinOrders.index') }}" class="nav-link {{ Request::is('customerMinOrders*') ? 'active' : '' }}">
                 <i class="fas fa-minus-circle nav-icon"></i>
-                <p>Customer Min Orders</p>
+                <p>{{ trans('menu.customer_min_orders') }}</p>
             </a>
         </li>
         @endcan
@@ -91,7 +91,7 @@
         <li class="nav-item">
             <a href="{{ route('categoryMinOrders.index') }}" class="nav-link {{ Request::is('categoryMinOrders*') ? 'active' : '' }}">
                 <i class="fas fa-minus-circle nav-icon"></i>
-                <p>Category Min Orders</p>
+                <p>{{ trans('menu.category_min_orders') }}</p>
             </a>
         </li>
         @endcan
@@ -99,7 +99,7 @@
         <li class="nav-item">
             <a href="{{ route('dsRules.index') }}" class="nav-link {{ Request::is('dsRules*') ? 'active' : '' }}">
                 <i class="fas fa-paste nav-icon"></i>
-                <p>Ds Rules</p>
+                <p>{{ trans('menu.ds_rules') }}</p>
             </a>
         </li>
         @endcan
@@ -107,7 +107,7 @@
         <li class="nav-item">
             <a href="{{ route('packetDiscounts.index') }}" class="nav-link {{ Request::is('packetDiscounts*') ? 'active' : '' }}">
                 <i class="fa fa-percentage nav-icon"></i>
-                <p>Packet Discounts</p>
+                <p>{{ trans('menu.packet_discounts') }}</p>
             </a>
         </li>
         @endcan
@@ -122,8 +122,8 @@
 @endif
 
 @if(Gate::check('list sales order') || Gate::check('create sales order'))
-<li class="nav-item {{ Request::is('salesOrders*') ? 'menu-open' : '' }} {{ Request::is('createOrder*') ? 'menu-open' : '' }} {{ Request::is('salesOrderBulkSubmit*') ? 'menu-open' : '' }} {{ Request::is('salesOrderPromos*') ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }} {{ Request::is('createOrder*') ? 'active' : '' }} {{ Request::is('salesOrderBulkSubmit*') ? 'active' : '' }} {{ Request::is('salesOrderPromos*') ? 'active' : '' }}" >
+<li class="nav-item {{ Request::is('salesOrders*') ? 'menu-open' : '' }} {{ Request::is('createOrder*') ? 'menu-open' : '' }} {{ Request::is('salesOrderBulkSubmit*') ? 'menu-open' : '' }} {{ Request::is('salesOrderPromos*') ? 'menu-open' : '' }} {{ Request::is('createPromoOrder*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }} {{ Request::is('createOrder*') ? 'active' : '' }} {{ Request::is('salesOrderBulkSubmit*') ? 'active' : '' }} {{ Request::is('salesOrderPromos*') ? 'active' : '' }} {{ Request::is('createPromoOrder*') ? 'active' : '' }}"  >
         <i class="nav-icon fas fa-dollar-sign"></i>
         <p>
         {{ trans('menu.sales_order')}}
@@ -147,12 +147,22 @@
                 </a>
             </li>
         @endcan
-        <li class="nav-item">
-            <a href="{{ route('salesOrderPromos.index') }}" class="nav-link {{ Request::is('salesOrderPromos*') ? 'active' : '' }}">
-                <i class="far fa-list-alt nav-icon"></i>
-                <p>List Order Promo</p>
-            </a>
-        </li>
+        @can('create sales order')
+            <li class="nav-item">
+                <a href="{{ route('createPromoOrder') }}" class="nav-link {{ Request::is('createPromoOrder*') ? 'active' : '' }}">
+                    <i class="fas fa-file-medical nav-icon"></i>
+                    <p>{{ trans('menu.create_order_promo')}}</p>
+                </a>
+            </li>
+        @endcan
+        @can('list sales order')
+            <li class="nav-item">
+                <a href="{{ route('salesOrderPromos.index') }}" class="nav-link {{ Request::is('salesOrderPromos*') ? 'active' : '' }}">
+                    <i class="far fa-list-alt nav-icon"></i>
+                    <p>{{ trans('menu.list_order_promo')}}</p>
+                </a>
+            </li>
+        @endcan
         @can('bulk submit sales order')
             <li class="nav-item">
                 <a href="{{ route('salesOrders.bulkSubmitIndex') }}" class="nav-link {{ Request::is('salesOrderBulkSubmit*') ? 'active' : '' }}">

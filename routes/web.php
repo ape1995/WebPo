@@ -27,6 +27,7 @@ use App\Http\Controllers\PacketDiscountController;
 use App\Http\Controllers\PacketDiscountDetailController;
 use App\Http\Controllers\SalesOrderPromoController;
 use App\Http\Controllers\SalesOrderPromoDetailController;
+use App\Http\Controllers\CartPromoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,9 +134,17 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('packetDiscountDetails-reset/{user}',[PacketDiscountDetailController::class,'reset'])->name('packetDiscountDetails.reset');
     Route::get('packetDiscountDetails-detailData/{code}',[PacketDiscountDetailController::class,'detailData'])->name('packetDiscountDetails.detailData');
     Route::get('packetDiscountDetails-resetDetail/{code}',[PacketDiscountDetailController::class,'resetDetail'])->name('packetDiscountDetails.resetDetail');
-    Route::resource('salesOrderPromos', SalesOrderPromoController::class);
+    Route::resource('salesOrderPromos', SalesOrderPromoController::class)->except('create');
+    Route::get('createPromoOrder', [SalesOrderPromoController::class, 'create'])->name('createPromoOrder');
     Route::resource('salesOrderPromoDetails', SalesOrderPromoDetailController::class);
     Route::get('dataTableSalesOrderPromo',[SalesOrderPromoController::class,'dataTable'])->name('salesOrderPromos.data');
+    Route::resource('cartPromos', CartPromoController::class);
+    Route::get('dataTableCartPromo',[CartPromoController::class,'getData'])->name('cartPromos.data');
+    Route::get('resetOrderPromo',[SalesOrderPromoController::class,'resetOrder'])->name('salesOrderPromos.resetOrder');
+    Route::get('SalesOrderPromocancelOrder/{code}',[SalesOrderPromoController::class,'cancelOrder'])->name('salesOrderPromos.cancelOrder');
+    Route::get('SalesOrderPromoSubmitOrder/{code}',[SalesOrderPromoController::class,'submitOrder'])->name('salesOrderPromos.submitOrder');
+    Route::get('dataTableSalesOrderPromoDetail/{code}',[SalesOrderPromoDetailController::class,'getData'])->name('salesOrderPromos.dataDetail');
+    
 });
 
 

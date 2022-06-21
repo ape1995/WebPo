@@ -1,6 +1,6 @@
 <!-- Customer Code Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('customer_code', 'Customer Code:') !!}
+    {!! Form::label('customer_code', trans('customer_product.customer_code')) !!}
     <select name="customer_code" id="customer_code" class="form-control select2js" required>
         <option value="">- Choose Customer -</option>
         @foreach ($customers as $customer)

@@ -6,6 +6,7 @@ return [
     'change_password' => 'Ubah Sandi',
     'language' => 'Bahasa',
     'btn_order_here' => 'Pesan Disini',
+    'btn_promo_order' => 'Pesan Promo Disini',
     'logout' => 'Keluar',
     'question' => 'Stok Hampir Habis?',
     'draft_order' => 'DRAFT PESANAN',

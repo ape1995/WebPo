@@ -2,11 +2,11 @@
     <table class="table table-bordered" id="categoryMinOrders-table">
         <thead>
         <tr class="bg-info">
-            <th>Category</th>
-            <th>Minimum Order</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Action</th>
+            <th>{{trans('category_min_order.category')}}</th>
+            <th>{{ trans('category_min_order.minimum_order') }}</th>
+            <th>{{ trans('category_min_order.start_date') }}</th>
+            <th>{{ trans('category_min_order.end_date') }}</th>
+            <th>{{ trans('category_min_order.action') }}</th>
         </tr>
         </thead>
         <tbody>

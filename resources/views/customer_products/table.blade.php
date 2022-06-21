@@ -2,11 +2,11 @@
     <table class="table" id="dataTable">
         <thead>
         <tr class="bg-info">
-            <th>Customer</th>
-            <th>Inventory Code</th>
-            <th>Customer Class</th>
-            <th>Date Add</th>
-            <th width="1%">Action</th>
+            <th>{{ trans('customer_product.customer') }}</th>
+            <th>{{ trans('customer_product.inventory_code') }}</th>
+            <th>{{ trans('customer_product.customer_class') }}</th>
+            <th>{{ trans('customer_product.date_add') }}</th>
+            <th width="1%">{{ trans('customer_product.action') }}</th>
         </tr>
         </thead>
         <tbody>

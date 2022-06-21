@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Direct Selling Rule Setting</h1>
+                    <h1>{{ trans('ds_rules.title') }}</h1>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
                         <div class="col-sm-12 mb-1">
                             <div class="row">
                                 <div class="col-3">
-                                    {!! Form::label('start_date', 'Start Date') !!}
+                                    {!! Form::label('start_date', trans('ds_rules.start_date')) !!}
                                 </div>
                                 <div class="col-9" style="">
                                     <input type="date" class="form-control" name="start_date" id="start_date">
@@ -62,7 +62,7 @@
                         <div class="col-sm-12 mb-1">
                             <div class="row">
                                 <div class="col-3">
-                                    {!! Form::label('end_date', 'End Date') !!}
+                                    {!! Form::label('end_date', trans('ds_rules.end_date')) !!}
                                 </div>
                                 <div class="col-9" style="">
                                     <input type="date" class="form-control" name="end_date" id="end_date">
@@ -89,7 +89,7 @@
                         <div class="col-sm-12 mb-1">
                             <div class="row">
                                 <div class="col-3">
-                                    {!! Form::label('percentage', 'Percentage') !!}
+                                    {!! Form::label('percentage', trans('ds_rules.percentage')) !!}
                                 </div>
                                 <div class="col-4" style="">
                                     <input type="number" class="form-control" name="percentage" id="percentage">
@@ -146,7 +146,7 @@
                             <div class="col-sm-12 mb-1">
                                 <div class="row">
                                     <div class="col-3">
-                                        {!! Form::label('start_date', 'Start Date') !!}
+                                        {!! Form::label('start_date', trans('ds_rules.start_date')) !!}
                                     </div>
                                     <div class="col-9" style="">
                                         <input type="hidden" id="percentage_id" name="percentage_id">
@@ -158,7 +158,7 @@
                             <div class="col-sm-12 mb-1">
                                 <div class="row">
                                     <div class="col-3">
-                                        {!! Form::label('end_date', 'End Date') !!}
+                                        {!! Form::label('end_date', trans('ds_rules.end_date')) !!}
                                     </div>
                                     <div class="col-9" style="">
                                         <input type="date" class="form-control" name="end_date_edit" id="end_date_edit">
@@ -180,7 +180,7 @@
                             <div class="col-sm-12 mb-1">
                                 <div class="row">
                                     <div class="col-3">
-                                        {!! Form::label('percentage', 'Percentage') !!}
+                                        {!! Form::label('percentage', trans('ds_rules.percentage')) !!}
                                     </div>
                                     <div class="col-4" style="">
                                         <input type="number" class="form-control" name="percentage_edit" id="percentage_edit">

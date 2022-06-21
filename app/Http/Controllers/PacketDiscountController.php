@@ -9,6 +9,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Models\PacketDiscount;
 use App\Models\PacketDiscountDetail;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
@@ -313,5 +314,32 @@ class PacketDiscountController extends AppBaseController
             return response()->json($returnData, 403);
         }
 
+    }
+
+    public function getActivePakcets($date, $user_id)
+    {
+
+        $user = User::find($user_id);
+
+        $packetDiscounts = PacketDiscount::whereRaw("start_date <= '$date' AND (end_date is null OR end_date >= '$date') ")->where('status', 'Released')->where('rbp_class', $user->customer->location->CPriceClassID)->get();
+
+        $output = [];
+        $output[] = '<option value="">- Please Choose - </option>';
+        foreach($packetDiscounts as $row){
+            $output[] = '<option value="'.$row->packet_code.'">'.$row->packet_code.'</option>';
+        }
+        return $output;
+
+    }
+
+    public function getPacketData($code)
+    {
+        $packetDiscount = PacketDiscount::where('packet_code', $code)->get()->first();
+
+        $output = [];
+        $output['packet_name'] = $packetDiscount->packet_name;
+        $output['unit_price'] = number_format($packetDiscount->grand_total, 2, ',', '.');
+
+        return $output;
     }
 }

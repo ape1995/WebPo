@@ -40,7 +40,7 @@ class SalesOrderPromoDetail extends Model
      */
     protected $casts = [
         'sales_order_promo_id' => 'integer',
-        'packet_code' => 'integer',
+        'packet_code' => 'string',
         'qty' => 'integer',
         'unit_price' => 'double',
         'total' => 'double'
@@ -54,6 +54,11 @@ class SalesOrderPromoDetail extends Model
     public static $rules = [
         
     ];
+
+    public function packet()
+    {
+        return $this->hasOne(PacketDiscount::class, 'packet_code', 'packet_code');
+    }
 
     
 }

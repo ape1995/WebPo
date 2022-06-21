@@ -1,6 +1,6 @@
 <!-- Packet Code Field -->
 <div class="form-group col-sm-3">
-    {!! Form::label('packet_code', 'Packet Code:') !!}
+    {!! Form::label('packet_code', trans('packet_discount.packet_code')) !!}
     {!! Form::text('packet_code', null, ['class' => 'form-control', 'required' => true, 'minlength' => 5, 'maxlength' => 5, 'oninput' => 'this.value = this.value.toUpperCase()']) !!}
     <div id="warning" style="display: none">
         <span id="warning_text" class="text-danger text-sm"></span>
@@ -9,19 +9,19 @@
 
 <!-- Packet Name Field -->
 <div class="form-group col-sm-10">
-    {!! Form::label('packet_name', 'Packet Name:') !!}
+    {!! Form::label('packet_name', trans('packet_discount.packet_name')) !!}
     {!! Form::text('packet_name', null, ['class' => 'form-control', 'required' => true]) !!}
 </div>
 
 <!-- Start Date Field -->
 <div class="form-group col-sm-4">
-    {!! Form::label('start_date', 'Start Date:') !!}
+    {!! Form::label('start_date', trans('packet_discount.start_date')) !!}
     {!! Form::date('start_date', null, ['class' => 'form-control','id'=>'start_date', 'required' => true]) !!}
 </div>
 
 <!-- End Date Field -->
 <div class="form-group col-sm-4">
-    {!! Form::label('end_date', 'End Date:') !!}
+    {!! Form::label('end_date', trans('packet_discount.end_date')) !!}
     {!! Form::date('end_date', null, ['class' => 'form-control','id'=>'end_date', 'required' => true]) !!}
 </div>
 
@@ -38,7 +38,7 @@
 
 <!-- Description Field -->
 <div class="form-group col-sm-12 col-lg-12">
-    {!! Form::label('description', 'Description:') !!}
+    {!! Form::label('description', trans('packet_discount.description')) !!}
     {!! Form::textarea('description', null, ['class' => 'form-control', 'required' => true, 'rows' => 3]) !!}
 </div>
 
@@ -184,7 +184,7 @@
 
 <!-- Discount Field -->
 <div class="form-group col-sm-4">
-    {!! Form::label('discount', 'Discount:') !!}
+    {!! Form::label('discount', trans('packet_discount.discount')) !!}
     {!! Form::text('discount', null, ['class' => 'form-control money', 'id' => 'discount', 'required' => true]) !!}
 </div>
 

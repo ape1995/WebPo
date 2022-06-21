@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>Edit Category Min Order</h1>
+                    <h1>Edit {{trans('category_min_order.title')}}</h1>
                 </div>
             </div>
         </div>
@@ -26,8 +26,8 @@
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('categoryMinOrders.index') }}" class="btn btn-default">Cancel</a>
+                {!! Form::submit(trans('category_min_order.save'), ['class' => 'btn btn-primary']) !!}
+                <a href="{{ route('categoryMinOrders.index') }}" class="btn btn-default">{{ trans('category_min_order.cancel') }}</a>
             </div>
 
             {!! Form::close() !!}

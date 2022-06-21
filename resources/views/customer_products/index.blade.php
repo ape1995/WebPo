@@ -11,13 +11,13 @@
                     @can('create customer products')
                         <a class="btn btn-primary float-right ml-3"
                         href="{{ route('customerProducts.create') }}">
-                            Add New
+                            {{ trans('customer_product.create') }}
                         </a>
                     @endcan
                     @can('bulk customer products')
                         <a class="btn btn-info float-right ml-3"
                         href="{{ route('customerProducts.createBulk') }}">
-                            Bulk Action
+                            {{ trans('customer_product.bulk_action') }}
                         </a>
                     @endcan
                     @can('create customer products')
@@ -67,7 +67,7 @@
                 <div class="row">
 
                     <div class="mb-3 col-md-3 mx-auto">
-                        <label for="customer_id">Customer</label> 
+                        <label for="customer_id">{{ trans('customer_product.customer') }}</label> 
                         <select name="customer_id" id="customer_id" class="form-control select2js">
                             <option value="">- All Customer -</option>
                             @foreach ($customers as $customer)

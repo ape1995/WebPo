@@ -104,14 +104,14 @@
                     processData: false,
                     success:function(data)
                     {
-                        alert(data.success);
+                        swal("Done!", data.success, "success");
                         $('#submit').val("{{ trans('sales_order.btn_submit_selected_order') }}");
                         $('#submit').attr('disabled', false);
                         table.draw();
                     },
                     error:function(data)
                     {
-                        alert(data.responseJSON.message);
+                        swal("Failed!", data.responseJSON.message, "error");
                         $('#submit').val("{{ trans('sales_order.btn_submit_selected_order') }}");
                         $('#submit').attr('disabled', false);
                     }

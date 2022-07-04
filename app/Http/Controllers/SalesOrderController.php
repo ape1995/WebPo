@@ -667,7 +667,8 @@ class SalesOrderController extends AppBaseController
                 if($cekCountOrder == null){
                     return redirect(route('salesOrders.show', $id))->with("error", "Untuk PO jenis Direct Selling, Anda harus melakukan submit PO Reguler terlebih dahulu");
                 } else {
-                    $dsPercentage = DsPercentage::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+                    $customerCode = $salesOrder->customer->AcctCD;
+                    $dsPercentage = DsPercentage::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') AND customer_code = '$customerCode' ")->get()->first();
                     if ($dsPercentage == null) {
                         return $this->nextSubmit($id);
                     } else {
@@ -1158,13 +1159,12 @@ class SalesOrderController extends AppBaseController
                     return response()->json($returnData, 403);
                 
                 } else {
+                    $customer = Customer::where('BAccountID', $submitOrders[0]->customer_id)->get()->first();
 
-                    $dsPercentage = DsPercentage::whereRaw("start_date <= '$deliveryDate' AND (end_date is null OR end_date >= '$deliveryDate') ")->get()->first();
+                    $dsPercentage = DsPercentage::whereRaw("start_date <= '$deliveryDate' AND (end_date is null OR end_date >= '$deliveryDate') AND customer_code = '$customer->AcctCD' ")->get()->first();
                     
                     if ($dsPercentage == null) {
                         // Jika DS Percentage Null, Maka Langsung cek Minimum Order
-                        $customer = Customer::where('BAccountID', $submitOrders[0]->customer_id)->get()->first();
-
                         // Cek Minimum Order Customer
                         $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$customer->AcctCD."' AND start_date <= '$deliveryDate' AND (end_date IS NULL OR end_date >= '$deliveryDate') ")->get()->first();
                     

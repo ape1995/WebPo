@@ -40,7 +40,7 @@ class DsPercentageController extends AppBaseController
     public function getData(Request $request)
     {
         if ($request->ajax()) {
-            $datas = DsPercentage::query()->with(['customer']);
+            $datas = DsPercentage::query()->with(['customer'])->get();
             return DataTables::of($datas)
                 ->editColumn('start_date', function (DsPercentage $data) 
                 {
@@ -65,16 +65,16 @@ class DsPercentageController extends AppBaseController
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
                     
-                    $maxID = DsPercentage::latest()->first();
+                    // $maxID = DsPercentage::latest()->first();
 
-                    if($row->id == $maxID->id) {
+                    // if($row->id == $maxID->id) {
 
-                        // $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook" title="Edit"><i class="fa fa-edit"></i></a>';
-                        $btn = '';
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook" title="Edit"><i class="fa fa-edit"></i></a>';
+                        // $btn = '';
                         $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fa fa-trash"></i></a>';
     
                         return $btn;
-                    }
+                    // }
 
                     // }
                 })
@@ -183,6 +183,7 @@ class DsPercentageController extends AppBaseController
         $data = [];
         $data['id'] = $dsPercentage->id;
         $data['start_date'] = date('Y-m-d',strtotime($dsPercentage->start_date));
+        $data['customer'] = $dsPercentage->customer->AcctName.' - '.$dsPercentage->customer_code;
         $data['end_date'] = $dsPercentage->end_date == null ? '' : date('Y-m-d',strtotime($dsPercentage->end_date))    ;
         $data['percentage'] = $dsPercentage->percentage;
 
@@ -199,6 +200,12 @@ class DsPercentageController extends AppBaseController
      */
     public function update($id, Request $request)
     {
+        $returnData = array(
+            'message' => 'End Date harus lebih dari Start Date!',
+        );
+
+        return response()->json($request->all(), 403);
+
         
         $dsPercentage = $this->dsPercentageRepository->find($id);
 
@@ -210,7 +217,7 @@ class DsPercentageController extends AppBaseController
 
         $input = $request->all();
 
-        $cekLatestData = DSPercentage::whereNotIn('id', [$id])->latest()->first();
+        $cekLatestData = DSPercentage::where('customer_code', $dsPercentage->customer_code)->whereNotIn('id', [$id])->latest()->first();
 
         if($input['start_date'] > $input['end_date'] && $input['end_date'] != null) {
 

@@ -55,7 +55,7 @@
                                 @include('sales_orders.table_submit')
                             </div>
                             <div class="card-footer">
-                                <input onclick="return confirm('Are you sure?')" type="submit" name="submit" id="submit" class="btn btn-success btn-sm" value="{{ trans('sales_order.btn_submit_selected_order') }}">
+                                <input onclick="return confirm('Are you sure?')" type="submit" name="submit" id="submit" class="btn btn-success btn-sm" value="Merge Order">
                             </div>
                         </form>
                     </div>

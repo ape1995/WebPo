@@ -96,7 +96,7 @@
             </div>
 
             {{-- Modal Edit --}}
-            <!-- <div class="modal fade" id="ajaxModel" aria-hidden="true">
+            <div class="modal fade" id="ajaxModel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header text-light bg-success">
@@ -127,6 +127,17 @@
                                     </div>
                                 </div>
                             </div>
+                            {{-- Customer --}}
+                            <div class="col-sm-12 mb-1">
+                                <div class="row">
+                                    <div class="col-3">
+                                        {!! Form::label('customer', 'Customer') !!}
+                                    </div>
+                                    <div class="col-9" style="">
+                                        <input type="text" class="form-control" name="customer_edit" id="customer_edit" readonly>
+                                    </div>
+                                </div>
+                            </div>
                             {{-- Percentage --}}
                             <div class="col-sm-12 mb-1">
                                 <div class="row">
@@ -145,7 +156,6 @@
                     </div>
                 </div>
             </div>
-        -->
             @include('ds_percentages.table')
         </div>
     </div>
@@ -249,11 +259,12 @@
             $('body').on('click', '.editBook', function () {
                 var item_id = $(this).data('id');
                 $.get("{{ route('dsPercentages.index') }}" +'/' + item_id +'/edit', function (data) {
-                    console.log(data);
+                    // console.log(data);
                     $('#ajaxModel').modal('show');
                     $('#percentage_id').val(data.id);
                     $('#start_date_edit').val(data.start_date);
                     $('#end_date_edit').val(data.end_date);
+                    $('#customer_edit').val(data.customer);
                     $('#percentage_edit').val(data.percentage);
                 })
             });
@@ -277,6 +288,7 @@
                         table.draw();
                     },
                     error: function (data) {
+                        console.log(data);
                         alert(data.responseJSON.message);
                     }
                 });

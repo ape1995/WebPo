@@ -13,6 +13,7 @@ return [
     'create_order' => 'Create Order',
     'list_order' => 'List Order',
     'bulk_submit' => 'Bulk Submit',
+    'merge_order' => 'Merge Order',
     'report' => 'Report',
     'report_rekap' => 'Order Rekap',
     'report_detail' => 'Order Detail',

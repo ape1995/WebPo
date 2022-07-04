@@ -376,6 +376,7 @@ class SalesOrderController extends AppBaseController
 
 
         $input['order_nbr'] = $orderNbr;
+        $input['order_nbr_merge'] = $orderNbr;
         $input['created_by'] = \Auth::user()->id;
         $input['status'] = 'S';
         $deliveryDate = $input['delivery_date'];
@@ -559,6 +560,7 @@ class SalesOrderController extends AppBaseController
 
         $dataEdit = [];
         $dataEdit['order_nbr'] = $input['order_nbr'];
+        $dataEdit['order_nbr_merge'] = $input['order_nbr'];
         $dataEdit['order_type'] = $input['order_type'];
         $dataEdit['delivery_date'] = $input['delivery_date'];
         $dataEdit['description'] = $input['description'];
@@ -1569,6 +1571,108 @@ class SalesOrderController extends AppBaseController
                 ->escapeColumns()
                 ->toJson();
         } 
+    }
+
+    public function dataMerge(Request $request, $date, $customer, $type)
+    {
+        if ($request->ajax()) {
+
+            $soOrder = SOOrder::select('OrderNbr')->whereYear('RequestDate', date('Y', strtotime($date)))->whereMonth('RequestDate', date('m', strtotime($date)))->pluck('OrderNbr')->toArray();
+
+            $datas = SalesOrder::where('delivery_date', $date)->where('customer_id', $customer)->where('order_type', $type)->whereIn('status', ['R', 'P'])->whereNotIn('order_nbr', $soOrder)->orderBy('id', 'desc');
+            
+
+            return DataTables::of($datas)
+                ->addColumn('checkbox', function (SalesOrder $salesOrder) {
+                    return "<input type='checkbox' class='checkbox1' id='checkbox1' name='id[]' value='".$salesOrder->id."'>";
+                })
+                ->addColumn('customer', function (SalesOrder $salesOrder) {
+                    return $salesOrder->customer->AcctName;
+                })
+                ->addColumn('order_type', function (SalesOrder $salesOrder) {
+                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
+                })
+                ->addColumn('created_name', function (SalesOrder $salesOrder) {
+                    return $salesOrder->createdBy->name;
+                })
+                ->editColumn('order_date', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return date('d M Y', strtotime($salesOrder->order_date) );
+                })
+                ->editColumn('delivery_date', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return date('d M Y', strtotime($salesOrder->delivery_date) );
+                })
+                ->editColumn('order_amount', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_amount, 2, ',', '.');
+                })
+                ->editColumn('order_qty', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_qty, 0, ',', '.');
+                })
+                ->editColumn('tax', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->tax, 2, ',', '.');
+                })
+                ->editColumn('order_total', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->order_total, 2, ',', '.');
+                })
+                ->editColumn('status', function (SalesOrder $salesOrder) 
+                {
+                    if ($salesOrder->status == 'R') {
+                        return 'Submitted';
+                    } else {
+                        return 'Processed';
+                    }
+                })
+                ->addIndexColumn()
+                ->addColumn('action',function ($data){
+                    return view('sales_orders.action')->with('salesOrder',$data)->render();
+                })
+                ->rawColumns(['action', 'checkbox'])
+                ->escapeColumns()
+                ->toJson();
+        } 
+    }
+
+    public function mergeIndex()
+    {
+        $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
+        $customers = Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        
+        return view('sales_orders.merge', compact('customers'));
+    }
+
+    public function mergeProcess(Request $request)
+    {
+        $input = $request->all();
+        if(!isset($input['id']) || count($input['id']) < 2){
+            $returnData = array(
+                'message' => 'Pilih Minimal 2 Order yang akan di merge!',
+            );
+    
+            return response()->json($returnData, 403);
+        }
+
+        $salesOrders = SalesOrder::whereIn('id', $input['id'])->orderBy('id')->get();
+        $noOrder = $salesOrders[0]->order_nbr;
+        foreach ($salesOrders as $order) {
+            $dataOrder = SalesOrder::find($order->id);
+            $dataOrder['order_nbr_merge'] = $noOrder;
+            $dataOrder['order_merged_by'] = \Auth::user()->id;
+            $dataOrder->save();
+        }
+
+        return response()->json(['success' => 'Merge Successfull!']);
+                        
     }
 
 }

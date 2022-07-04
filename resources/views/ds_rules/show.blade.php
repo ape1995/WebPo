@@ -59,6 +59,22 @@
                                 </div>
                             </div>
                         </div>
+                        {{-- Customers --}}
+                        <div class="col-sm-12 mb-1">
+                            <div class="row">
+                                <div class="col-3">
+                                    {!! Form::label('customer', 'Customer') !!}
+                                </div>
+                                <div class="col-9">
+                                    <select name="customer_code" id="customer_code" class="form-control select2js">
+                                        <option value="">-Choose-</option>
+                                        @foreach ($customers as $customer)
+                                            <option value="{{ $customer->AcctCD }}">{{ $customer->AcctName }} - {{ $customer->AcctCD }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         {{-- Percentage --}}
                         <div class="col-sm-12 mb-1">
                             <div class="row">
@@ -80,7 +96,7 @@
             </div>
 
             {{-- Modal Edit --}}
-            <div class="modal fade" id="ajaxModel" aria-hidden="true">
+            <!-- <div class="modal fade" id="ajaxModel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header text-light bg-success">
@@ -129,6 +145,7 @@
                     </div>
                 </div>
             </div>
+        -->
             @include('ds_percentages.table')
         </div>
     </div>
@@ -171,10 +188,10 @@
                 lengthChange: false,
                 bFilter: true,
                 destroy: true,
-                paging: false,
+                paging: true,
                 processing: true,
                 serverSide: true,
-                searching: false,
+                searching: true,
                 ordering: false,
                 bInfo : false,
                 "language": {
@@ -186,6 +203,9 @@
                         
                 },
                 columns: [
+                    {
+                        data: 'customer'      
+                    }, 
                     {
                         data: 'start_date'      
                     }, 
@@ -209,6 +229,7 @@
                     data: {
                         start_date:$('#start_date').val(),
                         end_date:$('#end_date').val(),
+                        customer_code:$('#customer_code').val(),
                         percentage:$('#percentage').val(),
                         created_by:{{ \Auth::user()->id }},
                     },

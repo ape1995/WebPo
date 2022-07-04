@@ -63,10 +63,14 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('salesOrders', SalesOrderController::class)->except('create');
     Route::get('salesOrderBulkSubmit', [SalesOrderController::class, 'bulkSubmitIndex'])->name('salesOrders.bulkSubmitIndex');
     Route::post('salesOrderBulkSubmit', [SalesOrderController::class, 'bulkSubmitProcess'])->name('bulkSubmitProcess');
+    Route::get('salesOrderMerge', [SalesOrderController::class, 'mergeIndex'])->name('salesOrders.mergeIndex');
+    Route::post('salesOrderMerge', [SalesOrderController::class, 'mergeProcess'])->name('salesOrders.mergeProcess');
     Route::get('salesOrders-Filter/{status}', [SalesOrderController::class,'filter'])->name('salesOrders.filter');
     Route::get('salesOrders-DataTable/{status}', [SalesOrderController::class,'filterDataTable'])->name('salesOrders.filterData');
     Route::get('dataTableSalesOrder',[SalesOrderController::class,'dataTable'])->name('salesOrders.data');
     Route::get('dataSalesOrder-dataSubmit/{date}',[SalesOrderController::class,'dataSubmit'])->name('salesOrders.dataSubmit');
+    Route::get('dataSalesOrder-dataMerge/{date}',[SalesOrderController::class,'dataMerge'])->name('salesOrders.dataMerge');
+    Route::get('dataSalesOrder-dataMerge/{date}/{customer}/{type}',[SalesOrderController::class,'dataMerge'])->name('salesOrders.dataMerge');
     Route::get('submitOrder/{code}',[SalesOrderController::class,'submitOrder'])->name('salesOrders.submitOrder');
     Route::get('cancelOrder/{code}',[SalesOrderController::class,'cancelOrder'])->name('salesOrders.cancelOrder');
     Route::get('processOrder/{code}',[SalesOrderController::class,'processOrder'])->name('salesOrders.processOrder');

@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateDsRuleRequest;
 use App\Repositories\DsRuleRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Models\DsRule;
+use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
@@ -34,10 +36,12 @@ class DsRuleController extends AppBaseController
             abort(403);
         }
 
+        $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
+        $customers = Customer::whereIn('BAccountID', $createdCustomer)->whereNotIn('AcctCD', ['MAIN'])->get();
+
         $dsRule = $this->dsRuleRepository->find(1);
 
-        return view('ds_rules.index')
-            ->with('dsRule', $dsRule);
+        return view('ds_rules.index', compact('dsRule', 'customers'));
     }
 
     /**

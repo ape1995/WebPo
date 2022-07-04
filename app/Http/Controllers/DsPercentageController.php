@@ -40,11 +40,15 @@ class DsPercentageController extends AppBaseController
     public function getData(Request $request)
     {
         if ($request->ajax()) {
-            $datas = DsPercentage::query();
+            $datas = DsPercentage::query()->with(['customer']);
             return DataTables::of($datas)
                 ->editColumn('start_date', function (DsPercentage $data) 
                 {
                     return $data->start_date->format('Y-m-d');
+                })
+                ->addColumn('customer', function (DsPercentage $data) 
+                {
+                    return $data->customer->AcctCD.'-'.$data->customer->AcctName;
                 })
                 ->editColumn('end_date', function (DsPercentage $data) 
                 {
@@ -65,8 +69,8 @@ class DsPercentageController extends AppBaseController
 
                     if($row->id == $maxID->id) {
 
-                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook" title="Edit"><i class="fa fa-edit"></i></a>';
-                        // $btn = '';
+                        // $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook" title="Edit"><i class="fa fa-edit"></i></a>';
+                        $btn = '';
                         $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fa fa-trash"></i></a>';
     
                         return $btn;
@@ -97,11 +101,11 @@ class DsPercentageController extends AppBaseController
      *
      * @return Response
      */
-    public function store(CreateDsPercentageRequest $request)
+    public function store(Request $request)
     {
         $input = $request->all();
 
-        $cekLatestData = DSPercentage::latest()->first();
+        $cekLatestData = DSPercentage::where('customer_code', $input['customer_code'])->latest()->first();
 
         if($input['start_date'] > $input['end_date'] && $input['end_date'] != null) {
 

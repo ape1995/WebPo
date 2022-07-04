@@ -13,6 +13,7 @@ return [
     'create_order' => 'Buat Pesanan',
     'list_order' => 'Daftar Pesanan',
     'bulk_submit' => 'Submit Masal',
+    'merge_order' => 'Merge Pesanan',
     'report' => 'Laporan',
     'report_rekap' => 'Pesanan Rekapitulasi',
     'report_detail' => 'Pesanan Detil',

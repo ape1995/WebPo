@@ -13,6 +13,7 @@ use App\Models\CustomerBalance;
 use App\Exports\ReportBalanceExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth;
+use DB;
 
 class ReportController extends Controller
 {
@@ -94,18 +95,25 @@ class ReportController extends Controller
         $soOrder = SOOrder::select('OrderNbr')->whereYear('RequestDate', date('Y', strtotime($input['date_2'])))->whereMonth('RequestDate', date('m', strtotime($input['date_2'])))->pluck('OrderNbr')->toArray();
 
         if($input['customer_id'] == 'All'){
-            if($input['status'] == 'All'){
-                $salesOrders = SalesOrder::whereBetween('delivery_date',[$input['date_1'],$input['date_2']])->whereNotIn('order_nbr', $soOrder)->get();
-            } else {
-                $salesOrders = SalesOrder::where('status', $input['status'])->whereBetween('delivery_date',[$input['date_1'],$input['date_2']])->whereNotIn('order_nbr', $soOrder)->get();
-            }
+            $salesOrders = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
+            ->select('sales_orders.order_nbr_merge', 'sales_orders.customer_id', 'sales_orders.delivery_date', 'sales_order_details.inventory_id', 'sales_order_details.inventory_name', DB::raw('sum(sales_order_details.qty) as qty'))
+            ->whereBetween('sales_orders.delivery_date', array($input['date_1'],$input['date_2']))
+            ->whereNotIn('sales_orders.order_nbr', $soOrder)
+            ->whereNotIn('sales_orders.order_nbr_merge', $soOrder)
+            ->groupBy(['sales_orders.order_nbr_merge', 'sales_orders.customer_id', 'sales_orders.delivery_date', 'sales_order_details.inventory_id', 'sales_order_details.inventory_name'])
+            ->get();
         } else {
-            if($input['status'] == 'All'){
-                $salesOrders = SalesOrder::where('customer_id', $input['customer_id'])->whereBetween('delivery_date',array($input['date_1'],$input['date_2']))->whereNotIn('order_nbr', $soOrder)->get();
-            } else {
-                $salesOrders = SalesOrder::where('status', $input['status'])->where('customer_id', $input['customer_id'])->whereBetween('delivery_date',array($input['date_1'],$input['date_2']))->whereNotIn('order_nbr', $soOrder)->get();
-            }
+            $salesOrders = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
+            ->select('sales_orders.order_nbr_merge', 'sales_orders.customer_id', 'sales_orders.delivery_date', 'sales_order_details.inventory_id', 'sales_order_details.inventory_name', DB::raw('sum(sales_order_details.qty) as qty'))
+            ->whereBetween('sales_orders.delivery_date', array($input['date_1'],$input['date_2']))
+            ->whereNotIn('sales_orders.order_nbr', $soOrder)
+            ->whereNotIn('sales_orders.order_nbr_merge', $soOrder)
+            ->where('sales_orders.customer_id', $input['customer_id'])
+            ->groupBy(['sales_orders.order_nbr_merge', 'sales_orders.customer_id', 'sales_orders.delivery_date', 'sales_order_details.inventory_id', 'sales_order_details.inventory_name'])
+            ->get();
         }
+
+        // dd($salesOrders);
         // dd($salesOrders->count() == 0);
         if($salesOrders == null || !$salesOrders || $salesOrders->count() == 0){
             return redirect()->route('reportSalesOrder.detailIndex')->with('error', 'Data Not Found');

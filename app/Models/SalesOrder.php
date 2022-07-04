@@ -56,7 +56,9 @@ class SalesOrder extends Model
         'rejected_at',
         'rejected_reason',
         'processed_by',
-        'processed_at'
+        'processed_at',
+        'order_nbr_merge',
+        'order_merged_by',
     ];
 
     /**

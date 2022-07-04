@@ -123,24 +123,22 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($salesOrders as $salesOrder)
-                                                @foreach ($salesOrder->detail as $salesOrderDetail)    
-                                                    <tr>
-                                                        <td>AD</td>
-                                                        <td>F01</td>
-                                                        <td>{{ $salesOrder->order_nbr }}</td>
-                                                        <td>{{ $salesOrder->customer->AcctCD }}</td>
-                                                        <td>{{ $salesOrder->customer->AcctName }}</td>
-                                                        <td>{{ $salesOrder->customer->outlet->OutletID }}</td>
-                                                        <td>{{ $salesOrder->customer->outlet->OutletName }}</td>
-                                                        <td>{{ $salesOrder->customer->outlet->RitID }}</td>
-                                                        <td>{{ $salesOrderDetail->inventory_id }}</td>
-                                                        <td>{{ $salesOrderDetail->inventory_name }}</td>
-                                                        <td>{{ $salesOrderDetail->qty }}</td>
-                                                        <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
-                                                        <td>{{ $salesOrder->customer->outlet->UsrRitNbr }}</td>
-                                                        <td>WH03FG</td>
-                                                    </tr>
-                                                @endforeach
+                                                <tr>
+                                                <td>AD</td>
+                                                <td>F01</td>
+                                                <td>{{ $salesOrder->order_nbr_merge }}</td>
+                                                <td>{{ $salesOrder->customer->AcctCD }}</td>
+                                                <td>{{ $salesOrder->customer->AcctName }}</td>
+                                                <td>{{ $salesOrder->customer->outlet->OutletID }}</td>
+                                                <td>{{ $salesOrder->customer->outlet->OutletName }}</td>
+                                                <td>{{ $salesOrder->customer->outlet->RitID }}</td>
+                                                <td>{{ $salesOrder->inventory_id }}</td>
+                                                <td>{{ $salesOrder->inventory_name }}</td>
+                                                <td>{{ $salesOrder->qty }}</td>
+                                                <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
+                                                <td>{{ $salesOrder->customer->outlet->UsrRitNbr }}</td>
+                                                <td>WH03FG</td>
+                                            </tr>
                                             @endforeach
                                         </tbody>
                                     </table>

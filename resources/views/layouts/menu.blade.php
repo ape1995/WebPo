@@ -150,6 +150,14 @@
                 </a>
             </li>
         @endcan
+        @can('merge sales order')
+            <li class="nav-item">
+                <a href="{{ route('salesOrders.mergeIndex') }}" class="nav-link {{ Request::is('salesOrderMerge*') ? 'active' : '' }}">
+                    <i class="fa fa-upload nav-icon"></i>
+                    <p>{{ trans('menu.merge_order')}}</p>
+                </a>
+            </li>
+        @endcan
     </ul>
 </li>
 @endif

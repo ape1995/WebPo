@@ -28,6 +28,7 @@ class DsPercentage extends Model
     public $fillable = [
         'start_date',
         'end_date',
+        'customer_code',
         'percentage'
     ];
 
@@ -50,6 +51,11 @@ class DsPercentage extends Model
     public static $rules = [
         
     ];
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'AcctCD', 'customer_code');
+    }
 
     
 }

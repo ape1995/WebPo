@@ -155,7 +155,7 @@ class UserController extends Controller
             $customers = Customer::where('BAccountID', \Auth::user()->customer_id)->get();
             $roles = Role::where('name', 'Staff Customers')->where('status', true)->get();
         } else {
-            $customers =  Customer::whereRaw("LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40'")->where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
+            $customers =  Customer::whereRaw("(LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40')")->where('Type', 'CU')->where('Status', 'A')->orWhere('BAccountID', '3')->get();
             $roles = Role::where('status', true)->get();
         }
 

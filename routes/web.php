@@ -117,6 +117,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('customerMinOrderHists', CustomerMinOrderHistController::class);
     Route::resource('categoryMinOrders', CategoryMinOrderController::class);
     Route::resource('dsRules', DsRuleController::class)->except('create', 'edit');
+    Route::get('dsRules-export', [DsPercentageController::class, 'export'])->name('dsRules.export');
+    Route::post('dsRules-import', [DsPercentageController::class, 'import'])->name('dsRules.import');
     Route::resource('dsPercentages', DsPercentageController::class);
     Route::get('dsPercentages-dataTable',[DsPercentageController::class,'getData'])->name('dsPercentagesDataTable.data');
 });

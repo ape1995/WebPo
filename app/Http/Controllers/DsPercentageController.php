@@ -8,6 +8,9 @@ use App\Repositories\DsPercentageRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Models\DsPercentage;
 use Illuminate\Http\Request;
+use App\Imports\DsPercentageImport;
+use App\Exports\DsPercentageExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Flash;
 use Response;
 use DataTables;
@@ -64,19 +67,21 @@ class DsPercentageController extends AppBaseController
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
+
+                    $btn = '';
                     
-                    // $maxID = DsPercentage::latest()->first();
-
-                    // if($row->id == $maxID->id) {
-
+                    if (\Auth::user()->can('edit direct selling rules')) {
                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook" title="Edit"><i class="fa fa-edit"></i></a>';
-                        // $btn = '';
-                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fa fa-trash"></i></a>';
-    
-                        return $btn;
-                    // }
+                    
+                    }
 
-                    // }
+                    if (\Auth::user()->can('delete direct selling rules')) {
+                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fa fa-trash"></i></a>';
+                    }
+                    // $btn = '';
+                    
+                    return $btn;
+
                 })
                 ->rawColumns(['action'])
                 ->escapeColumns()
@@ -267,5 +272,25 @@ class DsPercentageController extends AppBaseController
         $this->dsPercentageRepository->delete($id);
 
         return response()->json(['success'=>'Condition deleted successfully.']);
+    }
+
+    public function import(Request $request){
+
+        $file = $request->file('file');
+        $namaFile =  $file->getClientOriginalName();
+        $file->move('uploads/ds_percentage', $namaFile);
+
+        Excel::import(new DsPercentageImport, public_path('uploads/ds_percentage/'.$namaFile));
+        
+        return redirect()->route('dsRules.index');
+
+    }
+
+    public function export(Request $request){
+
+        $dsPercentages = DsPercentage::all();
+
+        return Excel::download(new DsPercentageExport($dsPercentages), "All Rule Percentages.xlsx");
+
     }
 }

@@ -22,9 +22,19 @@
         <div class="card card-body">
             <!-- Button trigger modal -->
             <div class="col-md-12 mb-3 mt-3">
-                <button type="button" id="add_item" class="btn btn-primary" data-toggle="modal" data-target="#addProduct">
+                @can('create direct selling rules')
+                <button type="button" id="add_item" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addProduct">
                     Add Condition
                 </button>
+                @endcan
+                @can('export direct selling rules')
+                <a href="{{ route('dsRules.export') }}" class="btn btn-success btn-sm float-right ml-3">Export All Data</a>
+                @endcan
+                @can('import direct selling rules')
+                <button class="btn btn-info btn-sm text-light float-right ml-3" id="btn_upload_product" type="button"  data-toggle="modal" data-target="#modalUpload">
+                    Import Data
+                </button>
+                @endcan
             </div>
             <!-- Modal -->
             <div class="modal fade" id="addProduct" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -92,6 +102,33 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="modalUpload" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <form action="{{ route('dsRules.import') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Import</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-md-12 my-2">
+                                    <input type="file" name="file" id="file" class="form-control" accept=".xlsx, .xls" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                {{-- <div class="col-md-4"> --}}
+                                    <input type="submit" id="upload" class="btn btn-success" value="Import">
+                                {{-- </div> --}}
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 

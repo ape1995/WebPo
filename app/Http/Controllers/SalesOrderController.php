@@ -654,52 +654,32 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
-        // Get Status Direct Selling Rule
-        $dsRule = DsRule::get()->first();
-
-
-        // Cek Jika Direct Selling
         if($salesOrder->order_type == 'D'){
-            // Cek Status Rule, IF Active, cek data prosentase PO reguler
-            if ($dsRule->status == true) {
-                $cekCountOrder = SalesOrder::whereIn('status', ['R', 'P'])->where('delivery_date', $salesOrder->delivery_date)->where('customer_id', $salesOrder->customer_id)->get()->first();
-                // dd($cekCountOrder);
-                if($cekCountOrder == null){
-                    return redirect(route('salesOrders.show', $id))->with("error", "Untuk PO jenis Direct Selling, Anda harus melakukan submit PO Reguler terlebih dahulu");
+            $customerCode = $salesOrder->customer->AcctCD;
+            $dsPercentage = DsPercentage::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') AND customer_code = '$customerCode' ")->get()->first();
+                if ($dsPercentage == null) {
+                    return $this->nextSubmit($id);
                 } else {
-                    $customerCode = $salesOrder->customer->AcctCD;
-                    $dsPercentage = DsPercentage::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') AND customer_code = '$customerCode' ")->get()->first();
-                    if ($dsPercentage == null) {
-                        return $this->nextSubmit($id);
-                    } else {
-                        $percentage = $dsPercentage->percentage;
-                        $orderRegulerSubmitted = SalesOrder::whereIn('status', ['R', 'P'])->where('order_type', 'R')->where('delivery_date', $salesOrder->delivery_date)->where('customer_id', $salesOrder->customer_id)->get();
-                        $totalOrderRegulerSubmitted = $orderRegulerSubmitted->sum('order_total');
-                        $orderTotalSubmitted = SalesOrder::whereIn('status', ['R', 'P'])->where('delivery_date', $salesOrder->delivery_date)->where('customer_id', $salesOrder->customer_id)->get();
-                        $totalOrderAllSubmitted = $orderTotalSubmitted->sum('order_total');
-                        $totalOrderCounted = $totalOrderAllSubmitted + $salesOrder->order_total;
-                        
-                        // Perhitungan prosentase
-                        $prosentaseReguler = ($totalOrderRegulerSubmitted / $totalOrderCounted) * 100;
+                    $percentage = $dsPercentage->percentage;
+                    $orderRegulerSubmitted = SalesOrder::whereIn('status', ['R', 'P'])->where('order_type', 'R')->where('delivery_date', $salesOrder->delivery_date)->where('customer_id', $salesOrder->customer_id)->get();
+                    $totalOrderRegulerSubmitted = $orderRegulerSubmitted->sum('order_total');
+                    $orderTotalSubmitted = SalesOrder::whereIn('status', ['R', 'P'])->where('delivery_date', $salesOrder->delivery_date)->where('customer_id', $salesOrder->customer_id)->get();
+                    $totalOrderAllSubmitted = $orderTotalSubmitted->sum('order_total');
+                    $totalOrderCounted = $totalOrderAllSubmitted + $salesOrder->order_total;
+                    
+                    // Perhitungan prosentase
+                    $prosentaseReguler = ($totalOrderRegulerSubmitted / $totalOrderCounted) * 100;
 
-                        if($prosentaseReguler < $percentage){
-                            $minusPercentage = round($percentage - $prosentaseReguler,0);
-                            return redirect(route('salesOrders.show', $id))->with("error", "PO Reguler anda belum memenuhi persyaratan. Kurang ".$minusPercentage." %" );
-                        } else {
-                            return $this->nextSubmit($id);
-                        }
+                    if($prosentaseReguler < $percentage){
+                        $minusPercentage = round($percentage - $prosentaseReguler,0);
+                        return redirect(route('salesOrders.show', $id))->with("error", "PO Reguler anda belum memenuhi persyaratan. Kurang ".$minusPercentage." %" );
+                    } else {
+                        return $this->nextSubmit($id);
                     }
                 }
             } else {
                 return $this->nextSubmit($id);
             }
-
-        } else {
-            return $this->nextSubmit($id);
-        }
-
-        
-
         
     }
 
@@ -1051,9 +1031,6 @@ class SalesOrderController extends AppBaseController
         $processedOrderD = SalesOrder::where('order_type', 'D')->where('delivery_date', $input['date'])->whereIn('status', ['P', 'R'])->where('customer_id', $submitOrders[0]->customer_id)->get();
         $processedOrderR = SalesOrder::where('order_type', 'R')->where('delivery_date', $input['date'])->whereIn('status', ['P', 'R'])->where('customer_id', $submitOrders[0]->customer_id)->get();
 
-        // Get Status Direct Selling Rule
-        $dsRule = DsRule::get()->first();
-
         // Jika Order Direct Selling Tidak Ada
         if ($submitOrderD->sum('order_total') == null) {
 
@@ -1144,223 +1121,12 @@ class SalesOrderController extends AppBaseController
 
         } else {
 
-            // Cek Status Rule, IF Active, cek data prosentase PO reguler
-            if ($dsRule->status == true) {
-                $totalOrderReguler = $submitOrderR->sum('order_total') + $processedOrderR->sum('order_total');
-                // dd($cekCountOrder);
-                if($totalOrderReguler == 0){
-                    
-                    // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Untuk PO jenis Direct Selling, Anda harus melakukan submit PO Reguler terlebih dahulu");
-                    
-                    $returnData = array(
-                        "message" => "Untuk PO jenis Direct Selling, Anda harus melakukan submit PO Reguler terlebih dahulu",
-                    );
+            $customer = Customer::where('BAccountID', $submitOrders[0]->customer_id)->get()->first();
+
+            $dsPercentage = DsPercentage::whereRaw("start_date <= '$deliveryDate' AND (end_date is null OR end_date >= '$deliveryDate') AND customer_code = '$customer->AcctCD' ")->get()->first();
             
-                    return response()->json($returnData, 403);
-                
-                } else {
-                    $customer = Customer::where('BAccountID', $submitOrders[0]->customer_id)->get()->first();
-
-                    $dsPercentage = DsPercentage::whereRaw("start_date <= '$deliveryDate' AND (end_date is null OR end_date >= '$deliveryDate') AND customer_code = '$customer->AcctCD' ")->get()->first();
-                    
-                    if ($dsPercentage == null) {
-                        // Jika DS Percentage Null, Maka Langsung cek Minimum Order
-                        // Cek Minimum Order Customer
-                        $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$customer->AcctCD."' AND start_date <= '$deliveryDate' AND (end_date IS NULL OR end_date >= '$deliveryDate') ")->get()->first();
-                    
-                        if($customerMinOrder == null){
-                            $minimumOrder = 0;
-                        } else {
-                            $minimumOrder = $customerMinOrder->minimum_order;
-                        }
-
-                        // Jika ada datanya Validasi data order dengan minimum order per customer
-                        if($customerMinOrder != null){
-
-                            $totalOrderToday = $submitOrders->sum('order_total') + $processedOrders->sum('order_total');
-
-                            if($totalOrderToday >= $customerMinOrder->minimum_order ){
-                                foreach($submitOrders as $order) {
-                                    $this->processSubmitBulk($order->id);
-                                }
-                                return response()->json(['success'=>'Order Submitted successfully.']);
-                            } else {
-                                $minusOrder = $customerMinOrder->minimum_order - $totalOrderToday;
-                                // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
-                                $returnData = array(
-                                    "message" => "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")",
-                                );
-                        
-                                return response()->json($returnData, 403);
-                            }
-
-                        } else {
-                            // Get Minimum Order Category 
-                            $thisCustomer = Customer::where('BAccountID', $submitOrders[0]->customer_id)->get()->first();
-                            // dd($thisCustomer->category);
-                            if($thisCustomer->category == null) {
-
-                                // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Category customer belum diatur, Tolong hubungi admin Yamazaki");
-
-                                $returnData = array(
-                                    "message" => "Category customer belum diatur, Tolong hubungi admin Yamazaki",
-                                );
-                        
-                                return response()->json($returnData, 403);
-
-                            } else {
-
-                                $totalOrderToday = $submitOrders->sum('order_total') + $processedOrders->sum('order_total');
-
-                                $customerCategory = $thisCustomer->category->Value;
-                                // Minimum order category customer
-                                $categoryMinOrder = CategoryMinOrder::whereRaw("category = '$customerCategory' AND start_date <= '$deliveryDate' AND (end_date IS NULL OR end_date >= '$deliveryDate') ")->get()->first();
-                                
-                                if($categoryMinOrder == null){
-                                    // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Category order belum di atur, Tolong hubungi admin Yamazaki");
-                                
-                                    $returnData = array(
-                                        "message" => "Category order belum di atur, Tolong hubungi admin Yamazaki",
-                                    );
-                            
-                                    return response()->json($returnData, 403);
-
-                                } else {
-                                    // Validasi minimum order by category
-                                    if($totalOrderToday >= $categoryMinOrder->minimum_order ){
-                                        foreach($submitOrders as $order) {
-                                            $this->processSubmitBulk($order->id);
-                                        }
-                                        return response()->json(['success'=>'Order Submitted successfully.']);
-                                    } else {
-                                        $minusOrder = $categoryMinOrder->minimum_order - $totalOrderToday;
-                                        // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
-                                    
-                                        $returnData = array(
-                                            "message" => "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")",
-                                        );
-                                
-                                        return response()->json($returnData, 403);
-                                    }
-                                }
-                            }
-
-                        }
-                    } else {
-                        
-                        $percentage = $dsPercentage->percentage;
-                        $totalOrderCounted = $submitOrders->sum('order_total') + $processedOrders->sum('order_total');
-                        
-                        // Perhitungan prosentase
-                        $prosentaseReguler = (( $submitOrderR->sum('order_total') + $processedOrderR->sum('order_total')) / $totalOrderCounted) * 100;
-
-                        if($prosentaseReguler < $percentage){
-                            $minusPercentage = round($percentage - $prosentaseReguler, 2);
-                            // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "PO Reguler anda belum memenuhi persyaratan. Kurang ".$minusPercentage." %" );
-                            
-                            $returnData = array(
-                                "message" => "PO Reguler anda belum memenuhi persyaratan. Kurang ".$minusPercentage." %",
-                            );
-                    
-                            return response()->json($returnData, 403);
-                        
-                        } else {
-                            // Jika Memenuhi Persyaratan Persentase, Langsung cek Minimum Order
-                            $customer = Customer::where('BAccountID', $submitOrders[0]->customer_id)->get()->first();
-
-                            // Cek Minimum Order Customer
-                            $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$customer->AcctCD."' AND start_date <= '$deliveryDate' AND (end_date IS NULL OR end_date >= '$deliveryDate') ")->get()->first();
-                        
-                            if($customerMinOrder == null){
-                                $minimumOrder = 0;
-                            } else {
-                                $minimumOrder = $customerMinOrder->minimum_order;
-                            }
-
-                            // Jika ada datanya Validasi data order dengan minimum order per customer
-                            if($customerMinOrder != null){
-
-                                $totalOrderToday = $submitOrders->sum('order_total') + $processedOrders->sum('order_total');
-
-                                if($totalOrderToday >= $customerMinOrder->minimum_order ){
-                                    foreach($submitOrders as $order) {
-                                        $this->processSubmitBulk($order->id);
-                                    }
-                                    // return redirect(route('salesOrders.bulkSubmitIndex'))->with('success', 'Order Submitted Sucessfully.');
-                                
-                                    return response()->json(['success'=>'Order Submitted successfully.']);
-                                } else {
-                                    $minusOrder = $customerMinOrder->minimum_order - $totalOrderToday;
-                                    // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
-
-                                    $returnData = array(
-                                        "message" => "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")",
-                                    );
-                            
-                                    return response()->json($returnData, 403);
-                                }
-
-                            } else {
-                                // Get Minimum Order Category 
-                                $thisCustomer = Customer::where('BAccountID', $submitOrders[0]->customer_id)->get()->first();
-                                // dd($thisCustomer->category);
-                                if($thisCustomer->category == null) {
-
-                                    // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Category customer belum diatur, Tolong hubungi admin Yamazaki");
-                                    
-                                    $returnData = array(
-                                        "message" => "Category customer belum diatur, Tolong hubungi admin Yamazaki",
-                                    );
-                            
-                                    return response()->json($returnData, 403);
-
-                                } else {
-
-                                    $totalOrderToday = $submitOrders->sum('order_total') + $processedOrders->sum('order_total');
-
-                                    $customerCategory = $thisCustomer->category->Value;
-                                    // Minimum order category customer
-                                    $categoryMinOrder = CategoryMinOrder::whereRaw("category = '$customerCategory' AND start_date <= '$deliveryDate' AND (end_date IS NULL OR end_date >= '$deliveryDate') ")->get()->first();
-                                    
-                                    if($categoryMinOrder == null){
-                                        // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Category order belum di atur, Tolong hubungi admin Yamazaki");
-                                        
-                                        $returnData = array(
-                                            "message" => "Category order belum di atur, Tolong hubungi admin Yamazaki",
-                                        );
-                                
-                                        return response()->json($returnData, 403);
-                                    } else {
-                                        // Validasi minimum order by category
-                                        if($totalOrderToday >= $categoryMinOrder->minimum_order ){
-                                            foreach($submitOrders as $order) {
-                                                $this->processSubmitBulk($order->id);
-                                            }
-                                            // return redirect(route('salesOrders.bulkSubmitIndex'))->with('success', 'Order Submitted Sucessfully.');
-                                            
-                                            return response()->json(['success'=>'Order Submitted successfully.']);
-                                        } else {
-                                            $minusOrder = $categoryMinOrder->minimum_order - $totalOrderToday;
-                                            // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
-                                        
-                                            $returnData = array(
-                                                "message" => "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")",
-                                            );
-                                    
-                                            return response()->json($returnData, 403);
-
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }
-            } else {
-                // Jika DS Rule Tidak Ada, Langsung cek minimum Order
-                $customer = Customer::where('BAccountID', $submitOrders[0]->customer_id)->get()->first();
-
+            if ($dsPercentage == null) {
+                // Jika DS Percentage Null, Maka Langsung cek Minimum Order
                 // Cek Minimum Order Customer
                 $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$customer->AcctCD."' AND start_date <= '$deliveryDate' AND (end_date IS NULL OR end_date >= '$deliveryDate') ")->get()->first();
             
@@ -1379,13 +1145,10 @@ class SalesOrderController extends AppBaseController
                         foreach($submitOrders as $order) {
                             $this->processSubmitBulk($order->id);
                         }
-                        // return redirect(route('salesOrders.bulkSubmitIndex'))->with('success', 'Order Submitted Sucessfully.');
-                    
                         return response()->json(['success'=>'Order Submitted successfully.']);
                     } else {
                         $minusOrder = $customerMinOrder->minimum_order - $totalOrderToday;
                         // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
-                        
                         $returnData = array(
                             "message" => "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")",
                         );
@@ -1423,20 +1186,18 @@ class SalesOrderController extends AppBaseController
                             );
                     
                             return response()->json($returnData, 403);
+
                         } else {
                             // Validasi minimum order by category
                             if($totalOrderToday >= $categoryMinOrder->minimum_order ){
                                 foreach($submitOrders as $order) {
                                     $this->processSubmitBulk($order->id);
                                 }
-                                
-                                // return redirect(route('salesOrders.bulkSubmitIndex'))->with('success', 'Order Submitted Sucessfully.');
                                 return response()->json(['success'=>'Order Submitted successfully.']);
-                            
                             } else {
                                 $minusOrder = $categoryMinOrder->minimum_order - $totalOrderToday;
                                 // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
-
+                            
                                 $returnData = array(
                                     "message" => "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")",
                                 );
@@ -1446,6 +1207,115 @@ class SalesOrderController extends AppBaseController
                         }
                     }
 
+                }
+            } else {
+                
+                $percentage = $dsPercentage->percentage;
+                $totalOrderCounted = $submitOrders->sum('order_total') + $processedOrders->sum('order_total');
+                
+                // Perhitungan prosentase
+                $prosentaseReguler = (( $submitOrderR->sum('order_total') + $processedOrderR->sum('order_total')) / $totalOrderCounted) * 100;
+
+                if($prosentaseReguler < $percentage){
+                    $minusPercentage = round($percentage - $prosentaseReguler, 2);
+                    // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "PO Reguler anda belum memenuhi persyaratan. Kurang ".$minusPercentage." %" );
+                    
+                    $returnData = array(
+                        "message" => "PO Reguler anda belum memenuhi persyaratan. Kurang ".$minusPercentage." %",
+                    );
+            
+                    return response()->json($returnData, 403);
+                
+                } else {
+                    // Jika Memenuhi Persyaratan Persentase, Langsung cek Minimum Order
+                    $customer = Customer::where('BAccountID', $submitOrders[0]->customer_id)->get()->first();
+
+                    // Cek Minimum Order Customer
+                    $customerMinOrder = CustomerMinOrder::whereRaw("customer_code = '".$customer->AcctCD."' AND start_date <= '$deliveryDate' AND (end_date IS NULL OR end_date >= '$deliveryDate') ")->get()->first();
+                
+                    if($customerMinOrder == null){
+                        $minimumOrder = 0;
+                    } else {
+                        $minimumOrder = $customerMinOrder->minimum_order;
+                    }
+
+                    // Jika ada datanya Validasi data order dengan minimum order per customer
+                    if($customerMinOrder != null){
+
+                        $totalOrderToday = $submitOrders->sum('order_total') + $processedOrders->sum('order_total');
+
+                        if($totalOrderToday >= $customerMinOrder->minimum_order ){
+                            foreach($submitOrders as $order) {
+                                $this->processSubmitBulk($order->id);
+                            }
+                            // return redirect(route('salesOrders.bulkSubmitIndex'))->with('success', 'Order Submitted Sucessfully.');
+                        
+                            return response()->json(['success'=>'Order Submitted successfully.']);
+                        } else {
+                            $minusOrder = $customerMinOrder->minimum_order - $totalOrderToday;
+                            // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
+
+                            $returnData = array(
+                                "message" => "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")",
+                            );
+                    
+                            return response()->json($returnData, 403);
+                        }
+
+                    } else {
+                        // Get Minimum Order Category 
+                        $thisCustomer = Customer::where('BAccountID', $submitOrders[0]->customer_id)->get()->first();
+                        // dd($thisCustomer->category);
+                        if($thisCustomer->category == null) {
+
+                            // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Category customer belum diatur, Tolong hubungi admin Yamazaki");
+                            
+                            $returnData = array(
+                                "message" => "Category customer belum diatur, Tolong hubungi admin Yamazaki",
+                            );
+                    
+                            return response()->json($returnData, 403);
+
+                        } else {
+
+                            $totalOrderToday = $submitOrders->sum('order_total') + $processedOrders->sum('order_total');
+
+                            $customerCategory = $thisCustomer->category->Value;
+                            // Minimum order category customer
+                            $categoryMinOrder = CategoryMinOrder::whereRaw("category = '$customerCategory' AND start_date <= '$deliveryDate' AND (end_date IS NULL OR end_date >= '$deliveryDate') ")->get()->first();
+                            
+                            if($categoryMinOrder == null){
+                                // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Category order belum di atur, Tolong hubungi admin Yamazaki");
+                                
+                                $returnData = array(
+                                    "message" => "Category order belum di atur, Tolong hubungi admin Yamazaki",
+                                );
+                        
+                                return response()->json($returnData, 403);
+                            } else {
+                                // Validasi minimum order by category
+                                if($totalOrderToday >= $categoryMinOrder->minimum_order ){
+                                    foreach($submitOrders as $order) {
+                                        $this->processSubmitBulk($order->id);
+                                    }
+                                    // return redirect(route('salesOrders.bulkSubmitIndex'))->with('success', 'Order Submitted Sucessfully.');
+                                    
+                                    return response()->json(['success'=>'Order Submitted successfully.']);
+                                } else {
+                                    $minusOrder = $categoryMinOrder->minimum_order - $totalOrderToday;
+                                    // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
+                                
+                                    $returnData = array(
+                                        "message" => "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")",
+                                    );
+                            
+                                    return response()->json($returnData, 403);
+
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
             

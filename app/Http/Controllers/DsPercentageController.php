@@ -205,12 +205,6 @@ class DsPercentageController extends AppBaseController
      */
     public function update($id, Request $request)
     {
-        $returnData = array(
-            'message' => 'End Date harus lebih dari Start Date!',
-        );
-
-        return response()->json($request->all(), 403);
-
         
         $dsPercentage = $this->dsPercentageRepository->find($id);
 
@@ -232,6 +226,12 @@ class DsPercentageController extends AppBaseController
     
             return response()->json($returnData, 403);
         
+        } else if ($cekLatestData == null){
+
+            $dsPercentage = $this->dsPercentageRepository->update($input, $id);
+
+            return response()->json(['success'=>'Condition updated successfully.']);
+
         } else if($cekLatestData->end_date >= $input['start_date']) {
 
             $returnData = array(

@@ -12,13 +12,13 @@
     </section>
 
     <div class="content px-3">
-        <div class="card">
+        {{-- <div class="card">
             <div class="card-body">
                 <div class="row">
                     @include('ds_rules.show_fields')
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="card card-body">
             <!-- Button trigger modal -->
             <div class="col-md-12 mb-3 mt-3">
@@ -309,7 +309,6 @@
 
             $('#updateBtn').click(function (e) {
                 e.preventDefault();
-                
                 $.ajax({
                     data: {
                             start_date:$('#start_date_edit').val(),
@@ -320,13 +319,14 @@
                     url: "{{ route('dsPercentages.index') }}" +'/' + $('#percentage_id').val(),
                     type: "PATCH",
                     dataType: 'json',
-                    success: function (data) {
+                    success: function (response) {
+                        console.log(response);
                         $('#ajaxModel').modal('hide');
                         table.draw();
                     },
-                    error: function (data) {
-                        console.log(data);
-                        alert(data.responseJSON.message);
+                    error: function (response) {
+                        console.log(response);
+                        alert(response.responseJSON.message);
                     }
                 });
             });

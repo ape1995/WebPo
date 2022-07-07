@@ -123,6 +123,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
+                                <a href="{{ asset('assets/format/format_import_ds.xlsx') }}">Download Format Import</a>
                                 {{-- <div class="col-md-4"> --}}
                                     <input type="submit" id="upload" class="btn btn-success" value="Import">
                                 {{-- </div> --}}

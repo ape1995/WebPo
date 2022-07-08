@@ -100,6 +100,7 @@ class ReportController extends Controller
             ->whereBetween('sales_orders.delivery_date', array($input['date_1'],$input['date_2']))
             ->whereNotIn('sales_orders.order_nbr', $soOrder)
             ->whereNotIn('sales_orders.order_nbr_merge', $soOrder)
+            ->where('sales_orders.status', 'P')
             ->groupBy(['sales_orders.order_nbr_merge', 'sales_orders.customer_id', 'sales_orders.delivery_date', 'sales_order_details.inventory_id', 'sales_order_details.inventory_name'])
             ->get();
         } else {
@@ -109,6 +110,7 @@ class ReportController extends Controller
             ->whereNotIn('sales_orders.order_nbr', $soOrder)
             ->whereNotIn('sales_orders.order_nbr_merge', $soOrder)
             ->where('sales_orders.customer_id', $input['customer_id'])
+            ->where('sales_orders.status', 'P')
             ->groupBy(['sales_orders.order_nbr_merge', 'sales_orders.customer_id', 'sales_orders.delivery_date', 'sales_order_details.inventory_id', 'sales_order_details.inventory_name'])
             ->get();
         }

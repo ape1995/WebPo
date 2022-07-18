@@ -4,6 +4,7 @@ return [
 
     'dashboard' => 'Dashboard',
     'master' => 'Data Master',
+    'configuration' => 'Configuration',
     'user' => 'Users',
     'group_permission' => 'Group Permission',
     'adds' => 'Adds',

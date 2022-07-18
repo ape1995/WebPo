@@ -23,11 +23,7 @@ use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\DsRuleController;
 use App\Http\Controllers\DsPercentageController;
-use App\Http\Controllers\PacketDiscountController;
-use App\Http\Controllers\PacketDiscountDetailController;
-use App\Http\Controllers\SalesOrderPromoController;
-use App\Http\Controllers\SalesOrderPromoDetailController;
-use App\Http\Controllers\CartPromoController;
+use App\Http\Controllers\BundlingGimmickController;
 
 /*
 |--------------------------------------------------------------------------
@@ -126,31 +122,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('dsRules-import', [DsPercentageController::class, 'import'])->name('dsRules.import');
     Route::resource('dsPercentages', DsPercentageController::class);
     Route::get('dsPercentages-dataTable',[DsPercentageController::class,'getData'])->name('dsPercentagesDataTable.data');
-    Route::resource('packetDiscounts', PacketDiscountController::class);
-    Route::get('packetDiscounts-release/{code}', [PacketDiscountController::class, 'release'])->name('packetDiscounts.release');
-    Route::get('dataTablePacketDiscounts',[PacketDiscountController::class,'dataTable'])->name('packetDiscounts.data');
-    Route::resource('packetDiscountDetails', PacketDiscountDetailController::class);
-    Route::get('packetDiscountDetails-carts/{user}',[PacketDiscountDetailController::class,'carts'])->name('packetDiscountDetails.cart');
-    Route::get('packetDiscountDetails-reset/{user}',[PacketDiscountDetailController::class,'reset'])->name('packetDiscountDetails.reset');
-    Route::get('packetDiscountDetails-detailData/{code}',[PacketDiscountDetailController::class,'detailData'])->name('packetDiscountDetails.detailData');
-    Route::get('packetDiscountDetails-resetDetail/{code}',[PacketDiscountDetailController::class,'resetDetail'])->name('packetDiscountDetails.resetDetail');
-    Route::resource('salesOrderPromos', SalesOrderPromoController::class)->except('create');
-    Route::get('createPromoOrder', [SalesOrderPromoController::class, 'create'])->name('createPromoOrder');
-    Route::resource('salesOrderPromoDetails', SalesOrderPromoDetailController::class);
-    Route::get('dataTableSalesOrderPromo',[SalesOrderPromoController::class,'dataTable'])->name('salesOrderPromos.data');
-    Route::resource('cartPromos', CartPromoController::class);
-    Route::get('dataTableCartPromo',[CartPromoController::class,'getData'])->name('cartPromos.data');
-    Route::get('resetOrderPromo',[SalesOrderPromoController::class,'resetOrder'])->name('salesOrderPromos.resetOrder');
-    Route::get('SalesOrderPromocancelOrder/{code}',[SalesOrderPromoController::class,'cancelOrder'])->name('salesOrderPromos.cancelOrder');
-    Route::get('SalesOrderPromoSubmitOrder/{code}',[SalesOrderPromoController::class,'submitOrder'])->name('salesOrderPromos.submitOrder');
-    Route::get('SalesOrderPromoProcessOrder/{code}',[SalesOrderPromoController::class,'processOrder'])->name('salesOrderPromos.processOrder');
-    Route::get('dataTableSalesOrderPromoDetail/{code}',[SalesOrderPromoDetailController::class,'getData'])->name('salesOrderPromos.dataDetail');
-    Route::post('SOPromouploadAttachments',[SalesOrderPromoController::class,'uploadAttachment'])->name('salesOrderPromos.uploadAttachment');
-    Route::post('rejectOrderPromo',[SalesOrderPromoController::class,'rejectOrder'])->name('salesOrderPromos.rejectOrder');
-    Route::get('printOrderPromo/{code}',[SalesOrderPromoController::class,'printPdf'])->name('salesOrderPromos.printPdf');
-    Route::get('reportSalesOrderPromoDetail', [ReportController::class, 'detailPromoIndex'])->name('reportSalesOrder.detailPromoIndex');
-    Route::post('reportSalesOrderPromoDetail', [ReportController::class, 'detailPromoView'])->name('reportSalesOrder.detailPromoView');
-    
+    Route::resource('bundlingGimmicks', BundlingGimmickController::class);
 });
 
 
@@ -159,3 +131,9 @@ Route::get('/send_notification', [SendEmailController::class, 'send']);
 Route::get('/send-notif-confirmShipmentNotInvoiced', [SendEmailController::class, 'sendNotifConfirmShipmentNotInvoiced']);
 
 
+
+
+Route::resource('bundlingProducts', App\Http\Controllers\BundlingProductController::class);
+
+
+Route::resource('bundlingProductFrees', App\Http\Controllers\BundlingProductFreeController::class);

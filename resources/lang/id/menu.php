@@ -4,6 +4,7 @@ return [
 
     'dashboard' => 'Menu Utama',
     'master' => 'Data Master',
+    'configuration' => 'Konfigurasi',
     'user' => 'Data User',
     'group_permission' => 'Grup Akses',
     'mail_setting' => 'Pengaturan Email',

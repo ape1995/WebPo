@@ -24,6 +24,10 @@ use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\DsRuleController;
 use App\Http\Controllers\DsPercentageController;
 use App\Http\Controllers\BundlingGimmickController;
+use App\Http\Controllers\PacketDiscountController;
+use App\Http\Controllers\PacketDiscountDetailController;
+use App\Http\Controllers\BundlingProductController;
+use App\Http\Controllers\BundlingProductFreeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -123,17 +127,25 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('dsPercentages', DsPercentageController::class);
     Route::get('dsPercentages-dataTable',[DsPercentageController::class,'getData'])->name('dsPercentagesDataTable.data');
     Route::resource('bundlingGimmicks', BundlingGimmickController::class);
+    Route::resource('packetDiscounts', PacketDiscountController::class);
+    Route::resource('bundlingProducts', BundlingProductController::class);
+    Route::resource('bundlingProductFrees', BundlingProductFreeController::class);
+    Route::get('bundlingProductFrees-carts/{user}',[BundlingProductFreeController::class,'carts'])->name('bundlingProductFrees.cart');
+    Route::get('bundlingProductFrees-reset/{user}',[BundlingProductFreeController::class,'reset'])->name('bundlingProductFrees.reset');
+    Route::get('bundlingProductFrees-detailData/{code}',[BundlingProductFreeController::class,'detailData'])->name('bundlingProductFrees.detailData');
+    Route::get('bundlingProductFrees-resetDetail/{code}',[BundlingProductFreeController::class,'resetDetail'])->name('bundlingProductFrees.resetDetail');
+    
+    Route::get('packetDiscounts-release/{code}', [PacketDiscountController::class, 'release'])->name('packetDiscounts.release');
+    Route::get('dataTablePacketDiscounts',[PacketDiscountController::class,'dataTable'])->name('packetDiscounts.data');
+    Route::resource('packetDiscountDetails', PacketDiscountDetailController::class);
+    Route::get('packetDiscountDetails-carts/{user}',[PacketDiscountDetailController::class,'carts'])->name('packetDiscountDetails.cart');
+    Route::get('packetDiscountDetails-reset/{user}',[PacketDiscountDetailController::class,'reset'])->name('packetDiscountDetails.reset');
+    Route::get('packetDiscountDetails-detailData/{code}',[PacketDiscountDetailController::class,'detailData'])->name('packetDiscountDetails.detailData');
+    Route::get('packetDiscountDetails-resetDetail/{code}',[PacketDiscountDetailController::class,'resetDetail'])->name('packetDiscountDetails.resetDetail');
+    
 });
 
 
 Route::get('/send_notification', [SendEmailController::class, 'send']);
 
 Route::get('/send-notif-confirmShipmentNotInvoiced', [SendEmailController::class, 'sendNotifConfirmShipmentNotInvoiced']);
-
-
-
-
-Route::resource('bundlingProducts', App\Http\Controllers\BundlingProductController::class);
-
-
-Route::resource('bundlingProductFrees', App\Http\Controllers\BundlingProductFreeController::class);

@@ -16,9 +16,10 @@ class CreateBundlingProductFreesTable extends Migration
     {
         Schema::create('bundling_product_frees', function (Blueprint $table) {
             $table->id('id');
-            $table->integer('bundling_product_id');
+            $table->integer('bundling_product_id')->nullable();
             $table->string('product_code');
             $table->integer('qty');
+            $table->integer('user_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

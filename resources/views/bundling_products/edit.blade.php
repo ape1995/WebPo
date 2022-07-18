@@ -22,6 +22,12 @@
             <div class="card-body">
                 <div class="row">
                     @include('bundling_products.fields')
+
+                    <div class="col-md-12">
+                        <div class="card card-body">
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
 

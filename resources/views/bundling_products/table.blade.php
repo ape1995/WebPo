@@ -1,21 +1,31 @@
 <div class="table-responsive">
-    <table class="table" id="bundlingProducts-table">
+    <table class="table table-sm table-hover table-bordered" id="bundlingProducts-table">
         <thead>
-        <tr>
+            <tr class="bg-info">
             <th>Start Date</th>
-        <th>End Date</th>
-        <th>Product Code</th>
-        <th>Qty</th>
-            <th colspan="3">Action</th>
+            <th>End Date</th>
+            <th>Buy</th>
+            <th>Free Items</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
         @foreach($bundlingProducts as $bundlingProduct)
             <tr>
-                <td>{{ $bundlingProduct->start_date }}</td>
-            <td>{{ $bundlingProduct->end_date }}</td>
-            <td>{{ $bundlingProduct->product_code }}</td>
-            <td>{{ $bundlingProduct->qty }}</td>
+                <td>{{ $bundlingProduct->start_date->format('Y-m-d') }}</td>
+                <td>{{ $bundlingProduct->end_date == null ? '' : $bundlingProduct->end_date->format('Y-m-d') }}</td>
+                <td>{{ $bundlingProduct->product_code }} - {{ $bundlingProduct->product->Descr }} ( {{ $bundlingProduct->qty }} pcs ) </td>
+                <td>
+                    <ul>
+                        @foreach ($bundlingProduct->detail as $detail)
+                        <li>
+                            {{ $detail->product_code }} - 
+                            {{ $detail->product->Descr }} (
+                            {{ $detail->qty }} pcs )
+                        </li>
+                        @endforeach
+                    </ul>
+                </td>
                 <td width="120">
                     {!! Form::open(['route' => ['bundlingProducts.destroy', $bundlingProduct->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
@@ -36,3 +46,14 @@
         </tbody>
     </table>
 </div>
+@push('page_scripts')
+    <script>
+    $(document).ready(function() {
+        $('#bundlingProducts-table').DataTable({
+            // columnDefs: [
+            //     { orderable: false, targets: 4 }
+            // ],
+        });
+    });
+    </script>
+@endpush

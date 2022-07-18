@@ -57,5 +57,13 @@ class BundlingProduct extends Model
         
     ];
 
-    
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'InventoryCD', 'product_code');
+    }
+
+    public function detail()
+    {
+        return $this->hasMany(BundlingProductFree::class, 'bundling_product_id', 'id');
+    }
 }

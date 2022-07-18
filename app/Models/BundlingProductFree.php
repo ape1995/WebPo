@@ -31,7 +31,8 @@ class BundlingProductFree extends Model
     public $fillable = [
         'bundling_product_id',
         'product_code',
-        'qty'
+        'qty',
+        'user_id'
     ];
 
     /**
@@ -54,5 +55,8 @@ class BundlingProductFree extends Model
         
     ];
 
-    
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'InventoryCD', 'product_code');
+    }
 }

@@ -2,7 +2,7 @@
 
 return [
 
-    'title' => 'Packet Discounts',
+    'title' => 'Bundling Cut Price',
     'create' => 'Create',
     'packet_code' => 'Packet Code',
     'packet_name' => 'Packet Name',

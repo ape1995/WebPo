@@ -7,8 +7,11 @@ use App\Http\Requests\UpdateBundlingProductFreeRequest;
 use App\Repositories\BundlingProductFreeRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use App\Models\BundlingProduct;
+use App\Models\BundlingProductFree;
 use Flash;
 use Response;
+use DataTables;
 
 class BundlingProductFreeController extends AppBaseController
 {
@@ -52,15 +55,13 @@ class BundlingProductFreeController extends AppBaseController
      *
      * @return Response
      */
-    public function store(CreateBundlingProductFreeRequest $request)
+    public function store(Request $request)
     {
         $input = $request->all();
+        
+        $packetDiscountDetail = BundlingProductFree::create($input);
 
-        $bundlingProductFree = $this->bundlingProductFreeRepository->create($input);
-
-        Flash::success('Bundling Product Free saved successfully.');
-
-        return redirect(route('bundlingProductFrees.index'));
+        return response()->json(['success'=>'Data saved successfully.']);
     }
 
     /**
@@ -100,7 +101,15 @@ class BundlingProductFreeController extends AppBaseController
             return redirect(route('bundlingProductFrees.index'));
         }
 
-        return view('bundling_product_frees.edit')->with('bundlingProductFree', $bundlingProductFree);
+        $data = [];
+        $data['id'] = $bundlingProductFree->id;
+        $data['product_code'] = $bundlingProductFree->product_code;
+        $data['product_name'] = $bundlingProductFree->product->Descr;
+        $data['qty'] = $bundlingProductFree->qty;
+
+        return $data;
+
+        // return view('bundling_product_frees.edit')->with('bundlingProductFree', $bundlingProductFree);
     }
 
     /**
@@ -111,21 +120,13 @@ class BundlingProductFreeController extends AppBaseController
      *
      * @return Response
      */
-    public function update($id, UpdateBundlingProductFreeRequest $request)
+    public function update($id, Request $request)
     {
         $bundlingProductFree = $this->bundlingProductFreeRepository->find($id);
 
-        if (empty($bundlingProductFree)) {
-            Flash::error('Bundling Product Free not found');
-
-            return redirect(route('bundlingProductFrees.index'));
-        }
-
         $bundlingProductFree = $this->bundlingProductFreeRepository->update($request->all(), $id);
 
-        Flash::success('Bundling Product Free updated successfully.');
-
-        return redirect(route('bundlingProductFrees.index'));
+        return response()->json(['success'=>'Data saved successfully.']);
     }
 
     /**
@@ -149,8 +150,76 @@ class BundlingProductFreeController extends AppBaseController
 
         $this->bundlingProductFreeRepository->delete($id);
 
-        Flash::success('Bundling Product Free deleted successfully.');
+        return response()->json(['success'=>'Data saved successfully.']);
+    }
 
-        return redirect(route('bundlingProductFrees.index'));
+    public function carts(Request $request, $user_id)
+    {
+        if ($request->ajax()) {
+
+            $datas = BundlingProductFree::where('user_id', $user_id)->where('bundling_product_id', null);
+
+            return DataTables::of($datas)
+                ->editColumn('product', function (BundlingProductFree $product) 
+                {
+                    return $product->product->InventoryCD.' - '.$product->product->Descr;
+                })
+                ->addIndexColumn()
+                ->addColumn('action',function ($row){
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook" title="Edit"><i class="fas fa-edit"></i></a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fas fa-trash-alt"></i></a>';
+
+                    return $btn;
+
+                })
+                ->rawColumns(['action'])
+                ->escapeColumns()
+                ->toJson();
+        } 
+    }
+
+    public function detailData(Request $request, $id)
+    {
+        if ($request->ajax()) {
+
+            $datas = BundlingProductFree::where('packet_discount_id', $id);
+
+            return DataTables::of($datas)
+                ->editColumn('unit_price', function (BundlingProductFree $packetDiscount) 
+                {
+                    return number_format($packetDiscount->unit_price,0,',','.');
+                })
+                ->editColumn('total_amount', function (BundlingProductFree $packetDiscount) 
+                {
+                    return number_format($packetDiscount->total_amount,0,',','.');
+                })
+                ->addIndexColumn()
+                ->addColumn('action',function ($row){
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook" title="Edit"><i class="fas fa-edit"></i></a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fas fa-trash-alt"></i></a>';
+
+                    return $btn;
+
+                })
+                ->rawColumns(['action'])
+                ->escapeColumns()
+                ->toJson();
+        } 
+    }
+
+    public function reset($user_id)
+    {
+        $packetDiscountDetail = BundlingProductFree::where('user_id', $user_id)->where('packet_discount_id', null)->delete();
+
+        return response()->json(['success'=>'Data deleted successfully.']);
+    }
+
+    public function resetDetail($code)
+    {
+        $packetDiscountDetail = BundlingProductFree::where('packet_discount_id', $code)->delete();
+
+        return response()->json(['success'=>'Data deleted successfully.']);
     }
 }

@@ -7,6 +7,9 @@ use App\Http\Requests\UpdateBundlingProductRequest;
 use App\Repositories\BundlingProductRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\BundlingProductFree;
+use App\Models\BundlingProduct;
 use Flash;
 use Response;
 
@@ -42,7 +45,10 @@ class BundlingProductController extends AppBaseController
      */
     public function create()
     {
-        return view('bundling_products.create');
+        $products = Product::whereRaw("LEFT(InventoryCD,2) = 'FG' and ItemStatus = 'AC'")->get();
+        // dd($products);
+
+        return view('bundling_products.create', compact('products'));
     }
 
     /**
@@ -56,7 +62,14 @@ class BundlingProductController extends AppBaseController
     {
         $input = $request->all();
 
+        $input['qty'] = $input['qty_total'];
+
         $bundlingProduct = $this->bundlingProductRepository->create($input);
+
+        $bundlingProductFree = BundlingProductFree::where('user_id', \Auth::user()->id)->where('bundling_product_id', null)
+                                ->update([
+                                    'bundling_product_id' => $bundlingProduct->id]
+                                );
 
         Flash::success('Bundling Product saved successfully.');
 
@@ -100,7 +113,9 @@ class BundlingProductController extends AppBaseController
             return redirect(route('bundlingProducts.index'));
         }
 
-        return view('bundling_products.edit')->with('bundlingProduct', $bundlingProduct);
+        $products = Product::whereRaw("LEFT(InventoryCD,2) = 'FG' and ItemStatus = 'AC'")->get();
+
+        return view('bundling_products.edit', compact('bundlingProduct', 'products'));
     }
 
     /**

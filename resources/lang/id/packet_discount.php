@@ -2,7 +2,7 @@
 
 return [
 
-    'title' => 'Diskon Paket',
+    'title' => 'Paket Diskon',
     'create' => 'Tambah',
     'packet_code' => 'Kode Paket',
     'packet_name' => 'Nama Paket',

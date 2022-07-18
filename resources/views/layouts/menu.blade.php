@@ -49,9 +49,9 @@
 </li>
 @endif
 
-@if(Gate::check('browse parameter')  || Gate::check('browse adds')  || Gate::check('browse tax')  || Gate::check('browse customer products')  || Gate::check('browse min orders') || Gate::check('browse category minimum orders'))
-<li class="nav-item {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }} {{ Request::is('customerProducts*') ? 'menu-open' : '' }} {{ Request::is('customerMinOrders*') ? 'menu-open' : '' }} {{ Request::is('categoryMinOrders*') ? 'menu-open' : '' }} {{ Request::is('dsRules*') ? 'menu-open' : '' }} {{ Request::is('bundlingGimmicks*') ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }} {{ Request::is('customerProducts*') ? 'active' : '' }} {{ Request::is('customerMinOrders*') ? 'active' : '' }} {{ Request::is('categoryMinOrders*') ? 'active' : '' }} {{ Request::is('dsRules*') ? 'active' : '' }} {{ Request::is('bundlingGimmicks*') ? 'active' : '' }} ">
+@if(Gate::check('setting direct selling rules') || Gate::check('browse parameter')  || Gate::check('browse adds')  || Gate::check('browse tax')  || Gate::check('browse customer products')  || Gate::check('browse min orders') || Gate::check('browse category minimum orders'))
+<li class="nav-item {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }} {{ Request::is('customerProducts*') ? 'menu-open' : '' }} {{ Request::is('customerMinOrders*') ? 'menu-open' : '' }} {{ Request::is('categoryMinOrders*') ? 'menu-open' : '' }} {{ Request::is('dsRules*') ? 'menu-open' : '' }} {{ Request::is('bundlingGimmicks*') ? 'menu-open' : '' }} {{ Request::is('bundlingProducts*') ? 'menu-open' : '' }} {{ Request::is('packetDiscounts*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }} {{ Request::is('customerProducts*') ? 'active' : '' }} {{ Request::is('customerMinOrders*') ? 'active' : '' }} {{ Request::is('categoryMinOrders*') ? 'active' : '' }} {{ Request::is('dsRules*') ? 'active' : '' }} {{ Request::is('bundlingGimmicks*') ? 'active' : '' }} {{ Request::is('bundlingProducts*') ? 'active' : '' }} {{ Request::is('packetDiscounts*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-cogs"></i>
         <p>
         {{ trans('menu.configuration')}}
@@ -94,7 +94,7 @@
         @can('browse customer products')
         <li class="nav-item">
             <a href="{{ route('customerProducts.index') }}" class="nav-link {{ Request::is('customerProducts*') ? 'active' : '' }}">
-                <i class="fab fa-product-hunt nav-icon"></i>
+                &nbsp;&nbsp;&nbsp;<i class="fab fa-product-hunt nav-icon"></i>
                 <p>{{ trans('menu.customer_products') }}</p>
             </a>
         </li>
@@ -102,7 +102,7 @@
         @can('browse min orders')
         <li class="nav-item">
             <a href="{{ route('customerMinOrders.index') }}" class="nav-link {{ Request::is('customerMinOrders*') ? 'active' : '' }}">
-                <i class="fas fa-minus-circle nav-icon"></i>
+                &nbsp;&nbsp;&nbsp;<i class="fas fa-minus-circle nav-icon"></i>
                 <p>{{ trans('menu.customer_min_orders') }}</p>
             </a>
         </li>
@@ -110,7 +110,7 @@
         @can('browse category minimum orders')
         <li class="nav-item">
             <a href="{{ route('categoryMinOrders.index') }}" class="nav-link {{ Request::is('categoryMinOrders*') ? 'active' : '' }}">
-                <i class="fas fa-minus-circle nav-icon"></i>
+                &nbsp;&nbsp;&nbsp;<i class="fas fa-minus-circle nav-icon"></i>
                 <p>{{ trans('menu.category_min_orders') }}</p>
             </a>
         </li>
@@ -118,25 +118,32 @@
         @can('setting direct selling rules')
         <li class="nav-item">
             <a href="{{ route('dsRules.index') }}" class="nav-link {{ Request::is('dsRules*') ? 'active' : '' }}">
-                <i class="fas fa-paste nav-icon"></i>
+                &nbsp;&nbsp;&nbsp;<i class="fas fa-paste nav-icon"></i>
                 <p>{{ trans('menu.ds_rules') }}</p>
             </a>
         </li>
         @endcan
-        @can('browse packet discounts')
-        <li class="nav-item">
-            <a href="{{ route('packetDiscounts.index') }}" class="nav-link {{ Request::is('packetDiscounts*') ? 'active' : '' }}">
-                <i class="fa fa-percentage nav-icon"></i>
-                <p>{{ trans('menu.packet_discounts') }}</p>
-            </a>
-        </li>
-        @endcan
+        
         <li class="nav-item">
             <a href="{{ route('bundlingGimmicks.index') }}" class="nav-link {{ Request::is('bundlingGimmicks*') ? 'active' : '' }}">
                 &nbsp;&nbsp;&nbsp;<i class="fas fa-list nav-icon"></i>
                 <p>Bundling Gimmicks</p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('bundlingProducts.index') }}" class="nav-link {{ Request::is('bundlingProducts*') ? 'active' : '' }}">
+                &nbsp;&nbsp;&nbsp;<i class="fas fa-list nav-icon"></i>
+                <p>Bundling Products</p>
+            </a>
+        </li>
+        @can('browse packet discounts')
+        <li class="nav-item">
+            <a href="{{ route('packetDiscounts.index') }}" class="nav-link {{ Request::is('packetDiscounts*') ? 'active' : '' }}">
+                &nbsp;&nbsp;&nbsp;<i class="fas fa-list nav-icon"></i>
+                <p>Bundling Cut Prices</p>
+            </a>
+        </li>
+        @endcan
     </ul>
 </li>
 @endif
@@ -164,22 +171,6 @@
                 <a href="{{ route('salesOrders.index') }}" class="nav-link {{ Request::is('salesOrders*') ? 'active' : '' }}">
                     &nbsp;&nbsp;&nbsp;<i class="far fa-list-alt nav-icon"></i>
                     <p>{{ trans('menu.list_order')}}</p>
-                </a>
-            </li>
-        @endcan
-        @can('create sales order')
-            <li class="nav-item">
-                <a href="{{ route('createPromoOrder') }}" class="nav-link {{ Request::is('createPromoOrder*') ? 'active' : '' }}">
-                    <i class="fas fa-file-medical nav-icon"></i>
-                    <p>{{ trans('menu.create_order_promo')}}</p>
-                </a>
-            </li>
-        @endcan
-        @can('list sales order')
-            <li class="nav-item">
-                <a href="{{ route('salesOrderPromos.index') }}" class="nav-link {{ Request::is('salesOrderPromos*') ? 'active' : '' }}">
-                    <i class="far fa-list-alt nav-icon"></i>
-                    <p>{{ trans('menu.list_order_promo')}}</p>
                 </a>
             </li>
         @endcan
@@ -229,14 +220,6 @@
                 </a>
             </li>
         @endcan
-        @can('view report sales order detail')
-        <li class="nav-item">
-            <a href="{{ route('reportSalesOrder.detailPromoIndex') }}" class="nav-link {{ Request::is('reportSalesOrderPromoDetail') ? 'active' : '' }}">
-                <i class="fas fa-clipboard-check nav-icon"></i>
-                <p>{{ trans('menu.report_detail')}} Promo</p>
-            </a>
-        </li>
-        @endcan
         @can('view report request 1')
             <li class="nav-item">
                 <a href="{{ route('reportSalesOrder.report1Index') }}" class="nav-link {{ Request::is('reportRequest1') ? 'active' : '' }}">
@@ -281,19 +264,4 @@
     </a>
 </li>
 @endcan
-<li class="nav-item">
-    <a href="{{ route('bundlingProducts.index') }}"
-       class="nav-link {{ Request::is('bundlingProducts*') ? 'active' : '' }}">
-        <p>Bundling Products</p>
-    </a>
-</li>
-
-
-<li class="nav-item">
-    <a href="{{ route('bundlingProductFrees.index') }}"
-       class="nav-link {{ Request::is('bundlingProductFrees*') ? 'active' : '' }}">
-        <p>Bundling Product Frees</p>
-    </a>
-</li>
-
 

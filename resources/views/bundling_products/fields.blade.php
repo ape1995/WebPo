@@ -1,43 +1,30 @@
 <!-- Start Date Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('start_date', 'Start Date:') !!}
-    {!! Form::text('start_date', null, ['class' => 'form-control','id'=>'start_date']) !!}
+    {!! Form::date('start_date', null, ['class' => 'form-control','id'=>'start_date', 'required' => true]) !!}
 </div>
-
-@push('page_scripts')
-    <script type="text/javascript">
-        $('#start_date').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm:ss',
-            useCurrent: true,
-            sideBySide: true
-        })
-    </script>
-@endpush
 
 <!-- End Date Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('end_date', 'End Date:') !!}
-    {!! Form::text('end_date', null, ['class' => 'form-control','id'=>'end_date']) !!}
+    {!! Form::date('end_date', null, ['class' => 'form-control','id'=>'end_date']) !!}
 </div>
 
-@push('page_scripts')
-    <script type="text/javascript">
-        $('#end_date').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm:ss',
-            useCurrent: true,
-            sideBySide: true
-        })
-    </script>
-@endpush
 
 <!-- Product Code Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('product_code', 'Product Code:') !!}
-    {!! Form::text('product_code', null, ['class' => 'form-control']) !!}
+    {!! Form::label('product_code', 'Product:') !!}
+    <select name="product_code" id="product_code" class="form-control select2js" required>
+        <option value="">choose</option>
+        @foreach ($products as $product)
+            <option value="{{ $product->InventoryCD }}">{{ $product->Descr }} - {{ $product->InventoryCD }}</option>
+        @endforeach
+    </select>
 </div>
+
 
 <!-- Qty Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('qty', 'Qty:') !!}
-    {!! Form::number('qty', null, ['class' => 'form-control']) !!}
+    {!! Form::number('qty_total', null, ['class' => 'form-control', 'required' => true ]) !!}
 </div>

@@ -40,3 +40,14 @@
         </tbody>
     </table>
 </div>
+@push('page_scripts')
+    <script>
+    $(document).ready(function() {
+        $('#bundlingGimmicks-table').DataTable({
+            // columnDefs: [
+            //     { orderable: false, targets: 4 }
+            // ],
+        });
+    });
+    </script>
+@endpush

@@ -17,7 +17,7 @@ class CreateBundlingProductsTable extends Migration
         Schema::create('bundling_products', function (Blueprint $table) {
             $table->id('id');
             $table->date('start_date');
-            $table->date('end_date');
+            $table->date('end_date')->nullable();
             $table->string('product_code');
             $table->integer('qty');
             $table->timestamps();

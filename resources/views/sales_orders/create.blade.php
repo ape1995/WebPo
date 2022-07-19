@@ -227,6 +227,7 @@
             var customer_id =  $("select#customer_id");
             var inventory_id =  $("select#inventory_id");
             var inventory_name =  $("#inventory_name");
+            var order_type =  $("#order_type");
             var uom =  $("#uom");
             var qty =  $("#qty");
             var delivery_date =  $("#delivery_date");
@@ -309,6 +310,20 @@
                     
                 }
                 
+            });
+
+            order_type.on('change', function() {
+
+                var url = "{{ url('resetOrder') }}";
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    dataType: 'json',
+                });
+
+                table.draw();
+                getAllCounter();
+
             });
 
             inventory_id.on('change', function() {

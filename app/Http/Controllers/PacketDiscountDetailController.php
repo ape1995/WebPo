@@ -72,6 +72,7 @@ class PacketDiscountDetailController extends AppBaseController
         $input['amount'] = str_replace(',','.',$input['amount']);
         $input['total_amount'] = $input['unit_price'] * $input['qty'];
         $input['amount'] = $input['total_amount'] - ($input['total_amount'] * $input['discount_percentage'] / 100);
+        $input['discount_amount'] = $input['total_amount'] - $input['amount'];
         $input['inventory_name'] = $product->Descr;
         
         $packetDiscountDetail = $this->packetDiscountDetailRepository->create($input);
@@ -148,6 +149,7 @@ class PacketDiscountDetailController extends AppBaseController
         $input['amount'] = str_replace(',','.',$input['amount']);
         $input['total_amount'] = $input['unit_price'] * $input['qty'];
         $input['amount'] = $input['total_amount'] - ($input['total_amount'] * $input['discount_percentage'] / 100);
+        $input['discount_amount'] = $input['total_amount'] - $input['amount'];
 
         $packetDiscountDetail = $this->packetDiscountDetailRepository->find($id);
 
@@ -242,7 +244,7 @@ class PacketDiscountDetailController extends AppBaseController
                 })
                 ->editColumn('discount_percentage', function (PacketDiscountDetail $packetDiscount) 
                 {
-                    return number_format($packetDiscount->discount_percentage,0).' %';
+                    return number_format($packetDiscount->discount_amount,0).' ('.number_format($packetDiscount->discount_percentage,0).' %)';
                 })
                 ->editColumn('amount', function (PacketDiscountDetail $packetDiscount) 
                 {
@@ -280,7 +282,7 @@ class PacketDiscountDetailController extends AppBaseController
                 })
                 ->editColumn('discount_percentage', function (PacketDiscountDetail $packetDiscount) 
                 {
-                    return number_format($packetDiscount->discount_percentage, 0).' %';
+                    return number_format($packetDiscount->discount_amount,0).' ('.number_format($packetDiscount->discount_percentage,0).' %)';
                 })
                 ->editColumn('amount', function (PacketDiscountDetail $packetDiscount) 
                 {

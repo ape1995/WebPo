@@ -53,10 +53,6 @@
                                 <h5>{{ trans('dashboard.question')}}</h5>
                                 <a href="{{ route('createOrder') }}" class="btn btn-outline-info btn-block">{{ trans('dashboard.btn_order_here') }}</a>
                               </div>
-                              <div class="col-md-2">
-                                <h5>&nbsp;</h5>
-                                <a href="{{ route('createPromoOrder') }}" class="btn btn-outline-primary btn-block">{{ trans('dashboard.btn_promo_order') }}</a>
-                              </div>
                               @endif
                             </div>
                         </div>

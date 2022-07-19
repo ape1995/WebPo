@@ -21,7 +21,9 @@
                 <div class="col-8">
                     <select name="order_type" id="order_type" class="form-control select2js" required>
                         <option value="R" {{ $salesOrder->order_type == 'R' ? 'selected' : '' }}>REGULAR</option>
-                        <option value="D" {{ $salesOrder->order_type == 'D' ? 'selected' : '' }}>DIRECT SELLING</option>
+                        <option value="G" {{ $salesOrder->order_type == 'G' ? 'selected' : '' }}>BUNDLING GIMMICK</option>
+                        <option value="P" {{ $salesOrder->order_type == 'P' ? 'selected' : '' }}>BUNDLING PRODUCT</option>
+                        <option value="C" {{ $salesOrder->order_type == 'C' ? 'selected' : '' }}>BUNDLING DISCOUNT</option>
                     </select>
                 </div>
             </div>

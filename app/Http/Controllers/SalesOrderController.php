@@ -654,7 +654,7 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
-        if($salesOrder->order_type == 'D'){
+        if($salesOrder->order_type == 'G'){
             $customerCode = $salesOrder->customer->AcctCD;
             $dsPercentage = DsPercentage::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') AND customer_code = '$customerCode' ")->get()->first();
                 if ($dsPercentage == null) {
@@ -1025,10 +1025,10 @@ class SalesOrderController extends AppBaseController
         $deliveryDate = $input['date'];
 
         $submitOrders = SalesOrder::whereIn('id', $idOrders)->get();
-        $submitOrderD = SalesOrder::whereIn('id', $idOrders)->where('order_type', 'D')->get();
+        $submitOrderD = SalesOrder::whereIn('id', $idOrders)->where('order_type', 'G')->get();
         $submitOrderR = SalesOrder::whereIn('id', $idOrders)->where('order_type', 'R')->get();
         $processedOrders = SalesOrder::where('delivery_date', $input['date'])->whereIn('status', ['P', 'R'])->where('customer_id', $submitOrders[0]->customer_id)->get();
-        $processedOrderD = SalesOrder::where('order_type', 'D')->where('delivery_date', $input['date'])->whereIn('status', ['P', 'R'])->where('customer_id', $submitOrders[0]->customer_id)->get();
+        $processedOrderD = SalesOrder::where('order_type', 'G')->where('delivery_date', $input['date'])->whereIn('status', ['P', 'R'])->where('customer_id', $submitOrders[0]->customer_id)->get();
         $processedOrderR = SalesOrder::where('order_type', 'R')->where('delivery_date', $input['date'])->whereIn('status', ['P', 'R'])->where('customer_id', $submitOrders[0]->customer_id)->get();
 
         // Jika Order Direct Selling Tidak Ada

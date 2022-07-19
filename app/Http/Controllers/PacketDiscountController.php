@@ -235,14 +235,6 @@ class PacketDiscountController extends AppBaseController
 
         $packetDiscount = $this->packetDiscountRepository->update($input, $id);
 
-        foreach($packetDiscount->detail as $detail){
-            $detailData = PacketDiscountDetail::find($detail->id);
-            $detailData['discount_percentage'] = $discountPercentage;
-            $detailData['discount_amount'] = $detail->total_amount * $discountPercentage / 100;
-            $detailData['amount'] = $detail->total_amount - $detailData['discount_amount'];
-            $detailData->save();
-        }
-
         Flash::success('Packet Discount updated successfully.');
 
         return redirect(route('packetDiscounts.index'));

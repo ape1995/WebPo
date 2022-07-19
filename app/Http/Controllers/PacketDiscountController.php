@@ -134,9 +134,6 @@ class PacketDiscountController extends AppBaseController
         $input['discount'] = str_replace('.','',$input['discount']);
         $input['grand_total'] = str_replace('.','',$input['grand_total']);
 
-        $discountPercentage = $input['discount'] / $input['grand_total'] * 100;
-
-        // dd($discountPercentage);
 
         $packetDiscount = $this->packetDiscountRepository->create($input);
 
@@ -145,13 +142,14 @@ class PacketDiscountController extends AppBaseController
                                     'packet_discount_id' => $packetDiscount->id]
                                 );
 
-        foreach($packetDiscount->detail as $detail){
-            $detailData = PacketDiscountDetail::find($detail->id);
-            $detailData['discount_percentage'] = $discountPercentage;
-            $detailData['discount_amount'] = $detail->total_amount * $discountPercentage / 100;
-            $detailData['amount'] = $detail->total_amount - $detailData['discount_amount'];
-            $detailData->save();
-        }
+        // $discountPercentage = $input['discount'] / $input['grand_total'] * 100;                                
+        // foreach($packetDiscount->detail as $detail){
+        //     $detailData = PacketDiscountDetail::find($detail->id);
+        //     $detailData['discount_percentage'] = $discountPercentage;
+        //     $detailData['discount_amount'] = $detail->total_amount * $discountPercentage / 100;
+        //     $detailData['amount'] = $detail->total_amount - $detailData['discount_amount'];
+        //     $detailData->save();
+        // }
 
         Flash::success('Packet Discount saved successfully.');
 

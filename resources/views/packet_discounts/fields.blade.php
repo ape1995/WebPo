@@ -1,7 +1,7 @@
 <!-- Packet Code Field -->
 <div class="form-group col-sm-3">
     {!! Form::label('packet_code', trans('packet_discount.packet_code')) !!}
-    {!! Form::text('packet_code', null, ['class' => 'form-control', 'required' => true, 'minlength' => 5, 'maxlength' => 5, 'oninput' => 'this.value = this.value.toUpperCase()']) !!}
+    {!! Form::text('packet_code', null, ['class' => 'form-control', 'required' => true, 'minlength' => 10, 'maxlength' => 10, 'oninput' => 'this.value = this.value.toUpperCase()']) !!}
     <div id="warning" style="display: none">
         <span id="warning_text" class="text-danger text-sm"></span>
     </div>
@@ -79,11 +79,11 @@
                             <div id="data_show" style="display: none">
                                 <div class="col-sm-12 mb-1">
                                     <div class="row">
-                                        <div class="col-3" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+                                        <div class="col-3">
                                             <input name="inventory_name" id="inventory_name" type="hidden" value="">
                                             {!! Form::label('unit_price', trans('sales_order.unit_price')) !!}
                                         </div>
-                                        <div class="col-4" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+                                        <div class="col-4">
                                             <input type="text" name="unit_price" id="unit_price" class="form-control" readonly>
                                             {{-- {!! Form::text('unit_price', null, ['class' => 'form-control', 'readonly' => true ]) !!} --}}
                                         </div>
@@ -109,11 +109,33 @@
                                 {{-- Amount Field --}}
                                 <div class="col-sm-12 mb-1">
                                     <div class="row">
-                                        <div class="col-3" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+                                        <div class="col-3">
                                             {!! Form::label('amount', trans('sales_order.amount')) !!}
                                         </div>
-                                        <div class="col-6" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+                                        <div class="col-6">
                                             {!! Form::text('amount', null, ['class' => 'form-control', 'readonly', true ]) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- Discount Field --}}
+                                <div class="col-sm-12 mb-1">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            {!! Form::label('discount_percentage', trans('sales_order.discount_percentage')) !!}
+                                        </div>
+                                        <div class="col-6">
+                                            <input pattern="\d*" type="number" class="form-control" name="discount_percentage" id="discount_percentage" max="100" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- Amount Field --}}
+                                <div class="col-sm-12 mb-1">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            {!! Form::label('total_amount', trans('sales_order.amount')) !!}
+                                        </div>
+                                        <div class="col-6">
+                                            {!! Form::text('total_amount', null, ['class' => 'form-control', 'readonly', true ]) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -144,8 +166,8 @@
                                 </div>
                             </div>
         
-                            <label class="col-sm-4" @can('hide price sales order') style=" visibility: collapse;" @endcan>{{ trans('sales_order.unit_price') }}</label>
-                            <div class="col-sm-12" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+                            <label class="col-sm-4">{{ trans('sales_order.unit_price') }}</label>
+                            <div class="col-sm-12" >
                                 <input type="text" class="form-control" id="unit_price_edit" name="unit_price_edit" readonly>
                             </div>
              
@@ -154,10 +176,22 @@
                                 <input pattern="\d*" type="number" class="form-control" name="quantity" id="quantity" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                             </div>
         
-                            <div class="form-group" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+                            <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('sales_order.amount') }}</label>
                                 <div class="col-sm-12">
                                     <input type="text" class="form-control" id="amount_edit" name="amount_edit" readonly>
+                                </div>
+                            </div>
+
+                            <label class="col-sm-4 control-label">{{ trans('sales_order.discount_percentage') }}</label>
+                            <div class="col-sm-12">
+                                <input pattern="\d*" type="number" class="form-control" name="discount_percentage_edit" id="discount_percentage_edit" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                            </div>
+        
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{{ trans('sales_order.amount') }}</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="total_amount_edit" name="total_amount_edit" readonly>
                                 </div>
                             </div>
               
@@ -185,7 +219,7 @@
 <!-- Discount Field -->
 <div class="form-group col-sm-4">
     {!! Form::label('discount', trans('packet_discount.discount')) !!}
-    {!! Form::text('discount', null, ['class' => 'form-control money', 'id' => 'discount', 'required' => true]) !!}
+    {!! Form::text('discount', null, ['class' => 'form-control money', 'id' => 'discount', 'readonly' => true]) !!}
 </div>
 
 <!-- Grand Total Field -->
@@ -202,6 +236,8 @@
             var inventory_name =  $("#inventory_name");
             var uom =  $("#uom");
             var qty =  $("#qty");
+            var discount_percentage =  $("#discount_percentage");
+            var discount_percentage_edit =  $("#discount_percentage_edit");
             var start_date =  $("#start_date");
             var end_date =  $("#end_date");
             var add_product =  $("#add_product");
@@ -210,6 +246,8 @@
             var discount =  $("#discount");
             var grand_total =  $("#grand_total");
             var amount =  $("#amount");
+            var total_amount =  $("#total_amount");
+            var total_amount_edit =  $("#total_amount_edit");
             var rbp_class =  $("select#rbp_class");
             // var rbp_class_selected =  $("rbp_class_selected");
             var save =  $("#saveBtn");
@@ -327,6 +365,13 @@
                 }
             });
 
+            $("#discount_percentage").on('keyup keydown change click', function() {
+                let eachprice = unit_price.val().replace('.','').replace(',','.');
+                var total = eachprice * qty.val();
+                var totalAfDisc = total - (total * discount_percentage.val() / 100);
+                total_amount.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalAfDisc));
+            });
+
             $("#quantity").on('keyup keydown change click', function(event) {
                 let unitPrice = $("#unit_price_edit").val().replace('.','').replace(',','.');
                 var totalPrice = unitPrice * $("#quantity").val();
@@ -339,18 +384,25 @@
                 }
             });
 
-            $("#discount").on('keyup keydown change click', function(event) {
-                let total = $("#total").val().replace('.','').replace(',','.');
-                let discount = $("#discount").val().replace('.','').replace(',','.');
-                var totalPrice = total - discount;
-                $("#grand_total").val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalPrice));
-
-                if($("#discount").val() == null || $("#discount").val() == 0){
-                    $("#savePageButton").attr("disabled", true);
-                } else {
-                    $("#savePageButton").attr("disabled", false);
-                }
+            $("#discount_percentage_edit").on('keyup keydown change click', function() {
+                let unitPrice = $("#unit_price_edit").val().replace('.','').replace(',','.');
+                var totalPrice = unitPrice * $("#quantity").val();
+                var totalAfDisc2 = totalPrice - (totalPrice * discount_percentage_edit.val() / 100);
+                total_amount_edit.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalAfDisc2));
             });
+
+            // $("#discount").on('keyup keydown change click', function(event) {
+            //     let total = $("#total").val().replace('.','').replace(',','.');
+            //     let discount = $("#discount").val().replace('.','').replace(',','.');
+            //     var totalPrice = total - discount;
+            //     $("#grand_total").val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalPrice));
+
+            //     if($("#discount").val() == null || $("#discount").val() == 0){
+            //         $("#savePageButton").attr("disabled", true);
+            //     } else {
+            //         $("#savePageButton").attr("disabled", false);
+            //     }
+            // });
 
             $('.money').mask("#.##0", {reverse: true});
 
@@ -364,6 +416,8 @@
                     success: function(response) {
                         // console.log(response);
                         total.val(response['total_amount']);
+                        discount.val(response['discount']);
+                        grand_total.val(response['grand_total']);
 
                         // disable save if qty = 0
                         if(response['total_amount'] == 0 || response['total_amount'] == null || response['total_amount'] == ''){
@@ -428,7 +482,13 @@
                     },   
                     {
                         data: 'total_amount'      
-                    },   
+                    }, 
+                    {
+                        data: 'discount_percentage'      
+                    },
+                    {
+                        data: 'amount'      
+                    }, 
                     {
                         data: 'action',
                         "className": "text-center",
@@ -456,14 +516,16 @@
                     $('#unit_price_edit').val(data.unit_price);
                     $('#amount_edit').val(data.total_amount);
                     $('#quantity').val(data.qty);
+                    $('#discount_percentage_edit').val(data.discount_percentage);
+                    $('#total_amount_edit').val(data.amount);
                 })
             });
 
             $('#saveBtn').click(function (e) {
                 e.preventDefault();
                 // $(this).html('Save');
-                if($('#qty').val() > 9999){
-                    return alert('maksimum kuantitas adalah 9999');
+                if($('#qty').val() > 99){
+                    return alert('maksimum kuantitas adalah 99');
                 }
                 $.ajax({
                     data: {
@@ -471,6 +533,8 @@
                         qty:$('#qty').val(),
                         unit_price:$('#unit_price').val(),
                         total_amount:$('#amount').val(),
+                        discount_percentage:$('#discount_percentage').val(),
+                        amount:$('#total_amount').val(),
                         user_id:"{{ Auth::user()->id }}",
                     },
                     url: "{{ route('packetDiscountDetails.store') }}",
@@ -481,6 +545,8 @@
                         $('#data_show').hide();
                         qty.val('');
                         amount.val('');
+                        discount_percentage.val('');
+                        total_amount.val('');
                         $('#modalProduct').modal('hide');
                         table.draw();
                         getAllCounter();
@@ -495,26 +561,28 @@
             $('#updateBtn').click(function (e) {
                 e.preventDefault();
                 // $(this).html('Save');
-                if($('#quantity').val() > 9999){
-                    return alert('maksimum kuantitas adalah 9999');
+                if($('#quantity').val() > 99){
+                    return alert('maksimum kuantitas adalah 99');
                 }
                 $.ajax({
                     data: {
                         qty:$('#quantity').val(),
                         unit_price:$('#unit_price_edit').val(),
                         total_amount:$('#amount_edit').val(),
+                        discount_percentage:$('#discount_percentage_edit').val(),
+                        amount:$('#total_amount_edit').val()
                         },
                     url: "{{ route('packetDiscountDetails.index') }}" +'/' + $('#product_id').val(),
                     type: "PATCH",
                     dataType: 'json',
                     success: function (data) {
-                        // console.log(data);
+                        console.log(data);
                         $('#ajaxModel').modal('hide');
                         table.draw();
                         getAllCounter();
                     },
                     error: function (data) {
-                        // console.log('Error:', data);
+                        console.log('Error:', data);
                         alert('Error Updating data!');
                     }
                 });

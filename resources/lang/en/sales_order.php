@@ -52,5 +52,6 @@ return [
     'reason' => 'Reason',
     'confirm' => 'Confirm',
     'reorder' => 'Re-Order',
+    'discount_percentage' => 'Discount (%)',
 
 ];

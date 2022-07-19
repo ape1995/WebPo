@@ -23,15 +23,13 @@
                 <td width="120">
                     {!! Form::open(['route' => ['bundlingGimmicks.destroy', $bundlingGimmick->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
-                        {{-- <a href="{{ route('bundlingGimmicks.show', [$bundlingGimmick->id]) }}"
-                           class='btn btn-default btn-xs'>
-                            <i class="far fa-eye"></i>
-                        </a> --}}
-                        <a href="{{ route('bundlingGimmicks.edit', [$bundlingGimmick->id]) }}"
-                           class='btn btn-default btn-xs'>
-                            <i class="far fa-edit"></i>
-                        </a>
-                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                        @if ($bundlingGimmick->id == $maxId)
+                            <a href="{{ route('bundlingGimmicks.edit', [$bundlingGimmick->id]) }}"
+                            class='btn btn-default btn-xs'>
+                                <i class="far fa-edit"></i>
+                            </a>
+                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                        @endif
                     </div>
                     {!! Form::close() !!}
                 </td>
@@ -44,9 +42,7 @@
     <script>
     $(document).ready(function() {
         $('#bundlingGimmicks-table').DataTable({
-            // columnDefs: [
-            //     { orderable: false, targets: 4 }
-            // ],
+            "order": [[0, 'desc']],
         });
     });
     </script>

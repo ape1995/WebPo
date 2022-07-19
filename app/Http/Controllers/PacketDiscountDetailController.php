@@ -66,6 +66,12 @@ class PacketDiscountDetailController extends AppBaseController
         $input['unit_price'] = str_replace(',','.',$input['unit_price']);
         $input['total_amount'] = str_replace('.','',$input['total_amount']);
         $input['total_amount'] = str_replace(',','.',$input['total_amount']);
+        $input['discount_percentage'] = str_replace('.','',$input['discount_percentage']);
+        $input['discount_percentage'] = str_replace(',','.',$input['discount_percentage']);
+        $input['amount'] = str_replace('.','',$input['amount']);
+        $input['amount'] = str_replace(',','.',$input['amount']);
+        $input['total_amount'] = $input['unit_price'] * $input['qty'];
+        $input['amount'] = $input['total_amount'] - ($input['total_amount'] * $input['discount_percentage'] / 100);
         $input['inventory_name'] = $product->Descr;
         
         $packetDiscountDetail = $this->packetDiscountDetailRepository->create($input);
@@ -108,6 +114,8 @@ class PacketDiscountDetailController extends AppBaseController
         $response['inventory_name'] = $packetDiscount->inventory_name;
         $response['qty'] = $packetDiscount->qty;
         $response['unit_price'] = number_format($packetDiscount->unit_price,2,',','.');
+        $response['discount_percentage'] = number_format($packetDiscount->discount_percentage,0);
+        $response['amount'] = number_format($packetDiscount->amount,2,',','.');
         $response['total_amount'] = number_format($packetDiscount->total_amount,2,',','.');
 
         return response()->json($response);
@@ -123,12 +131,23 @@ class PacketDiscountDetailController extends AppBaseController
      */
     public function update($id, Request $request)
     {
-
+        
         $input = $request->all();
+        // $returnData = array(
+        //     $input
+        // );
+
+        // return response()->json($returnData, 403);
         $input['unit_price'] = str_replace('.','',$input['unit_price']);
         $input['unit_price'] = str_replace(',','.',$input['unit_price']);
         $input['total_amount'] = str_replace('.','',$input['total_amount']);
         $input['total_amount'] = str_replace(',','.',$input['total_amount']);
+        $input['discount_percentage'] = str_replace('.','',$input['discount_percentage']);
+        $input['discount_percentage'] = str_replace(',','.',$input['discount_percentage']);
+        $input['amount'] = str_replace('.','',$input['amount']);
+        $input['amount'] = str_replace(',','.',$input['amount']);
+        $input['total_amount'] = $input['unit_price'] * $input['qty'];
+        $input['amount'] = $input['total_amount'] - ($input['total_amount'] * $input['discount_percentage'] / 100);
 
         $packetDiscountDetail = $this->packetDiscountDetailRepository->find($id);
 
@@ -181,8 +200,12 @@ class PacketDiscountDetailController extends AppBaseController
         $getCounter = PacketDiscountDetail::where('user_id', $user_id)->where('packet_discount_id', null)->get();
         
         $data['total_amount'] = $getCounter->sum('total_amount');
+        $data['discount'] = $getCounter->sum('total_amount') - $getCounter->sum('amount');
+        $data['grand_total'] = $getCounter->sum('amount');
 
         $data['total_amount'] = number_format($data['total_amount'],0,',','.');
+        $data['discount'] = number_format($data['discount'],0,',','.');
+        $data['grand_total'] = number_format($data['grand_total'],0,',','.');
 
         return $data;
     }
@@ -192,8 +215,12 @@ class PacketDiscountDetailController extends AppBaseController
         $getCounter = PacketDiscountDetail::where('packet_discount_id', $id)->get();
         
         $data['total_amount'] = $getCounter->sum('total_amount');
+        $data['discount'] = $getCounter->sum('total_amount') - $getCounter->sum('amount');
+        $data['grand_total'] = $getCounter->sum('amount');
 
         $data['total_amount'] = number_format($data['total_amount'],0,',','.');
+        $data['discount'] = number_format($data['discount'],0,',','.');
+        $data['grand_total'] = number_format($data['grand_total'],0,',','.');
 
         return $data;
     }
@@ -212,6 +239,14 @@ class PacketDiscountDetailController extends AppBaseController
                 ->editColumn('total_amount', function (PacketDiscountDetail $packetDiscount) 
                 {
                     return number_format($packetDiscount->total_amount,0,',','.');
+                })
+                ->editColumn('discount_percentage', function (PacketDiscountDetail $packetDiscount) 
+                {
+                    return number_format($packetDiscount->discount_percentage,0).' %';
+                })
+                ->editColumn('amount', function (PacketDiscountDetail $packetDiscount) 
+                {
+                    return number_format($packetDiscount->amount,0,',','.');
                 })
                 ->addIndexColumn()
                 ->addColumn('action',function ($row){
@@ -242,6 +277,14 @@ class PacketDiscountDetailController extends AppBaseController
                 ->editColumn('total_amount', function (PacketDiscountDetail $packetDiscount) 
                 {
                     return number_format($packetDiscount->total_amount,0,',','.');
+                })
+                ->editColumn('discount_percentage', function (PacketDiscountDetail $packetDiscount) 
+                {
+                    return number_format($packetDiscount->discount_percentage, 0).' %';
+                })
+                ->editColumn('amount', function (PacketDiscountDetail $packetDiscount) 
+                {
+                    return number_format($packetDiscount->amount,0,',','.');
                 })
                 ->addIndexColumn()
                 ->addColumn('action',function ($row){

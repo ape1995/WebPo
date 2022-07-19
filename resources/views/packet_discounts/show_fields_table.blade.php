@@ -23,7 +23,7 @@
                                 <td>{{ $detail->qty }}</td>
                                 <td class="text-right">{{ number_format($detail->unit_price,2) }}</td>
                                 <td class="text-right">{{ number_format($detail->total_amount,2) }}</td>
-                                <td class="text-right">{{ number_format($detail->discount_percentage, 2) }}</td>
+                                <td class="text-right">{{ number_format($detail->discount_percentage, 0) }} %</td>
                                 <td class="text-right">{{ number_format($detail->discount_amount,2) }}</td>
                                 <td class="text-right">{{ number_format($detail->amount,2) }}</td>
                             </tr>

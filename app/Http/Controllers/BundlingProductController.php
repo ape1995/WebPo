@@ -130,13 +130,17 @@ class BundlingProductController extends AppBaseController
     {
         $bundlingProduct = $this->bundlingProductRepository->find($id);
 
+        $input = $request->all();
+
         if (empty($bundlingProduct)) {
             Flash::error('Bundling Product not found');
 
             return redirect(route('bundlingProducts.index'));
         }
 
-        $bundlingProduct = $this->bundlingProductRepository->update($request->all(), $id);
+        $input['qty'] = $input['qty_total'];
+
+        $bundlingProduct = $this->bundlingProductRepository->update($input, $id);
 
         Flash::success('Bundling Product updated successfully.');
 

@@ -14,6 +14,7 @@
     <div class="content px-3">
 
         @include('adminlte-templates::common.errors')
+        @include('flash::message')
 
         <div class="card">
 
@@ -190,7 +191,7 @@
 
             $('#saveBtn').click(function (e) {
                 e.preventDefault();
-                console.log('test');
+                // console.log('test');
                 // $(this).html('Save');
                 if($('#qty').val() > 9999){
                     return alert('maksimum kuantitas adalah 9999');

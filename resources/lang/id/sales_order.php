@@ -52,5 +52,6 @@ return [
     'reason' => 'Alasan ditolak',
     'confirm' => 'Konfirmasi',
     'reorder' => 'Order Ulang',
+    'discount_percentage' => 'Diskon (%)',
 
 ];

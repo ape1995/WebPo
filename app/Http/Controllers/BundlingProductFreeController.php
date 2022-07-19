@@ -183,16 +183,12 @@ class BundlingProductFreeController extends AppBaseController
     {
         if ($request->ajax()) {
 
-            $datas = BundlingProductFree::where('packet_discount_id', $id);
+            $datas = BundlingProductFree::where('bundling_product_id', $id);
 
             return DataTables::of($datas)
-                ->editColumn('unit_price', function (BundlingProductFree $packetDiscount) 
+                ->editColumn('product', function (BundlingProductFree $packetDiscount) 
                 {
-                    return number_format($packetDiscount->unit_price,0,',','.');
-                })
-                ->editColumn('total_amount', function (BundlingProductFree $packetDiscount) 
-                {
-                    return number_format($packetDiscount->total_amount,0,',','.');
+                    return $packetDiscount->product_code.' - '.$packetDiscount->product->Descr;
                 })
                 ->addIndexColumn()
                 ->addColumn('action',function ($row){

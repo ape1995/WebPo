@@ -8,6 +8,8 @@
                 <th>Qty</th>
                 <th>Unit Price</th>
                 <th>Total Amount</th>
+                <th>Discount</th>
+                <th>Amount</th>
                 <th>Action</th>
             </tr>
         </thead>

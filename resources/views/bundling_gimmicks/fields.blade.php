@@ -45,7 +45,7 @@
 @push('page_scripts')
     <script>
         $(function() {
-            $('#nominal').on('change, click', function() {
+            $('#nominal').on('change click', function() {
                 let amount = $("#nominal").val().replace('.','').replace(',','');
                 $("#nominal").val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(amount));
             });

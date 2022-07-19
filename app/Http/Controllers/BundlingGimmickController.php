@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateBundlingGimmickRequest;
 use App\Repositories\BundlingGimmickRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use App\Models\BundlingGimmick;
 use Flash;
 use Response;
 
@@ -29,10 +30,11 @@ class BundlingGimmickController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $bundlingGimmicks = $this->bundlingGimmickRepository->all();
+        $bundlingGimmicks = BundlingGimmick::orderBy('id', 'DESC')->get();
+        $maxId = BundlingGimmick::max('id');
 
-        return view('bundling_gimmicks.index')
-            ->with('bundlingGimmicks', $bundlingGimmicks);
+        return view('bundling_gimmicks.index', compact('bundlingGimmicks', 'maxId'));
+
     }
 
     /**
@@ -56,14 +58,43 @@ class BundlingGimmickController extends AppBaseController
     {
         $input = $request->all();
 
+        // dd($input);
+
         $input['nominal'] = str_replace(',','',$input['nominal']);
         $input['nominal'] = str_replace('.','',$input['nominal']);
 
-        $bundlingGimmick = $this->bundlingGimmickRepository->create($input);
+        $cekData = BundlingGimmick::latest()->first();
 
-        Flash::success('Bundling Gimmick saved successfully.');
+        if ($input['end_date'] != null) {
+            if ($input['end_date'] < $input['start_date']) {
+                return redirect(route('bundlingGimmicks.create'))->with('error', 'End date must be newest from Start date!');
+            }
+        }
 
-        return redirect(route('bundlingGimmicks.index'));
+        if($cekData == null){
+
+            $bundlingGimmick = $this->bundlingGimmickRepository->create($input);
+            Flash::success('Data Saved Successfull');
+            return redirect(route('bundlingGimmicks.index'));
+
+        } else if ($cekData->end_date == null) {
+
+            Flash::error('Let fill the end date of the latest data before you create new one!');
+            return redirect(route('bundlingGimmicks.index'));
+
+        } else if ($input['start_date'] <= $cekData->end_date) {
+            
+            return redirect(route('bundlingGimmicks.create'))->with('error', 'Start date cannot be less than end date from latest data!');
+
+        } else {
+
+            $bundlingGimmick = $this->bundlingGimmickRepository->create($input);
+            Flash::success('Data Saved Successfull');
+            return redirect(route('bundlingGimmicks.index'));
+
+        }
+
+
     }
 
     /**
@@ -120,16 +151,45 @@ class BundlingGimmickController extends AppBaseController
 
         $input = $request->all();
 
+        
+        if (empty($bundlingGimmick)) {
+            Flash::error('Bundling Gimmick not found');
+            
+            return redirect(route('bundlingGimmicks.index'));
+        }
         $input['nominal'] = str_replace(',','',$input['nominal']);
         $input['nominal'] = str_replace('.','',$input['nominal']);
 
-        if (empty($bundlingGimmick)) {
-            Flash::error('Bundling Gimmick not found');
-
-            return redirect(route('bundlingGimmicks.index'));
+        $cekData = BundlingGimmick::whereNotIn('id', [$id])->latest()->first();
+        // dd($cekData);
+        if ($input['end_date'] != null) {
+            if ($input['end_date'] < $input['start_date']) {
+                return redirect(route('bundlingGimmicks.edit', $id))->with('error', 'End date must be newest from Start date!');
+            }
         }
 
-        $bundlingGimmick = $this->bundlingGimmickRepository->update($input, $id);
+        if($cekData == null){
+
+            $bundlingGimmick = $this->bundlingGimmickRepository->update($input, $id);
+            Flash::success('Data Updated Successfull');
+            return redirect(route('bundlingGimmicks.index'));
+
+        } else if ($cekData->end_date == null) {
+
+            Flash::error('Let fill the end date of the latest data before you create new one!');
+            return redirect(route('bundlingGimmicks.index'));
+
+        } else if ($input['start_date'] <= $cekData->end_date) {
+            
+            return redirect(route('bundlingGimmicks.edit', $id))->with('error', 'Start date cannot be less than end date from latest data!');
+
+        } else {
+
+            $bundlingGimmick = $this->bundlingGimmickRepository->update($input, $id);
+            Flash::success('Data Updated Successfull');
+            return redirect(route('bundlingGimmicks.index'));
+
+        }
 
         Flash::success('Bundling Gimmick updated successfully.');
 

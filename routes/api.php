@@ -32,3 +32,5 @@ Route::get('countOrderPromoDetail/{code}/{date}',[App\Http\Controllers\SalesOrde
 Route::get('get-outlet-data/{code}', [App\Http\Controllers\EstimasiController::class, 'getOutletData']);
 Route::get('update-ds-status/{code}', [App\Http\Controllers\DsRuleController::class, 'updateStatus']);
 Route::resource('carts', App\Http\Controllers\API\CartAPIController::class);
+route::get('get-promo-active/{date}/{user}', [App\Http\Controllers\PacketDiscountController::class, 'getPromoActive']);
+Route::get('get-promo-data/{code}',[App\Http\Controllers\PacketDiscountController::class, 'getPromoData']);

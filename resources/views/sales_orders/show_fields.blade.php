@@ -18,7 +18,21 @@
                     {!! Form::label('order_type', trans('sales_order.order_type')) !!}
                 </div>
                 <div class="col-8">
-                    {!! Form::text('order_type', $salesOrder->order_type == 'R' ? "Regular" : "Direct Selling", ['class' => 'form-control', 'readonly' => true]) !!}
+                    @php
+                        if ($salesOrder->order_type == 'R') {
+                            $type = 'REGULAR';
+                        } else if ($salesOrder->order_type == 'D') {
+                            $type = 'DIRECT SELLING';
+                        } else if ($salesOrder->order_type == 'G') {
+                            $type = 'BUNDLING GIMMICK';
+                        } else if ($salesOrder->order_type == 'P') {
+                            $type = 'BUNDLING PRODUCT';
+                        } else {
+                            $type = 'BUNDLING DISCOUNT';
+                        }
+                        
+                    @endphp
+                    {!! Form::text('order_type', $type, ['class' => 'form-control', 'readonly' => true]) !!}
                 </div>
             </div>
         </div>
@@ -83,6 +97,17 @@
                 </div>
                 <div class="col-8">
                     {!! Form::text('order_amount', number_format($salesOrder->order_amount, 2, ',', '.'), ['class' => 'form-control money', 'readonly' => true]) !!}
+                </div>
+            </div>
+        </div>
+        <!-- Discount Field -->
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style="visibility: collapse" @endcan>
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('discount', trans('sales_order.discount')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('discount', number_format($salesOrder->discount, 2, ',', '.'), ['class' => 'form-control money', 'readonly' => true]) !!}
                 </div>
             </div>
         </div>

@@ -41,6 +41,7 @@ class SalesOrderDetail extends Model
         'qty',
         'uom',
         'unit_price',
+        'discount',
         'amount',
         'created_by',
         'updated_by'

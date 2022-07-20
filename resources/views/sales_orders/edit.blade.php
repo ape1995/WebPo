@@ -197,6 +197,7 @@
             var customer_id =  $("#customer_id");
             var order_qty =  $("#order_qty");
             var order_amount =  $("#order_amount");
+            var discount =  $("#discount");
             var tax =  $("#tax");
             var order_total =  $("#order_total");
             var save =  $("#saveBtn");
@@ -286,6 +287,7 @@
                         console.log(response);
                         order_qty.val(response['order_qty']);
                         order_amount.val(response['order_amount']);
+                        discount.val(response['discount']);
                         tax.val(response['tax']);
                         order_total.val(response['order_total']);
 
@@ -354,7 +356,10 @@
                     },   
                     {
                         data: 'unit_price'      
-                    },   
+                    },  
+                    {
+                        data: 'discount'      
+                    },  
                     {
                         data: 'amount'      
                     },   

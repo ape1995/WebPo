@@ -117,6 +117,11 @@ class SalesOrderController extends AppBaseController
                     //change over here
                     return number_format($salesOrder->order_qty, 0, ',', '.');
                 })
+                ->editColumn('discount', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->discount, 2, ',', '.');
+                })
                 ->editColumn('tax', function (SalesOrder $salesOrder) 
                 {
                     //change over here
@@ -193,6 +198,11 @@ class SalesOrderController extends AppBaseController
                     //change over here
                     return number_format($salesOrder->order_qty, 0, ',', '.');
                 })
+                ->editColumn('discount', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->discount, 2, ',', '.');
+                })
                 ->editColumn('tax', function (SalesOrder $salesOrder) 
                 {
                     //change over here
@@ -268,6 +278,11 @@ class SalesOrderController extends AppBaseController
                 {
                     //change over here
                     return number_format($salesOrder->order_qty, 0, ',', '.');
+                })
+                ->editColumn('discount', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->discount, 2, ',', '.');
                 })
                 ->editColumn('tax', function (SalesOrder $salesOrder) 
                 {
@@ -391,8 +406,9 @@ class SalesOrderController extends AppBaseController
 
         $input['order_qty'] = $carts->sum('qty');
         $input['order_amount'] = $carts->sum('amount');
-        $input['tax'] = ($parameterVAT->value/100) *$input['order_amount'];
-        $input['order_total'] = $input['order_amount'] + $input['tax'];
+        $input['discount'] = $carts->sum('discount');
+        $input['tax'] = ($parameterVAT->value/100) * ($input['order_amount'] - $input['discount']);
+        $input['order_total'] = $input['order_amount'] - $input['discount'] + $input['tax'];
 
 
         // Store To Sales Order DB
@@ -566,6 +582,7 @@ class SalesOrderController extends AppBaseController
         $dataEdit['description'] = $input['description'];
         $dataEdit['order_qty'] = $salesOrderDetail->sum('qty');
         $dataEdit['order_amount'] = $salesOrderDetail->sum('amount');
+        $dataEdit['discount'] = $salesOrderDetail->sum('discount');
         $dataEdit['tax'] = ($parameterVAT->value/100) * $salesOrder['order_amount'];
         $dataEdit['updated_by'] = \Auth::user()->id;
         $dataEdit['updated_at'] = Carbon::now()->toDateTimeString();
@@ -1419,6 +1436,11 @@ class SalesOrderController extends AppBaseController
                     //change over here
                     return number_format($salesOrder->order_qty, 0, ',', '.');
                 })
+                ->editColumn('dkiscount', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->discount, 2, ',', '.');
+                })
                 ->editColumn('tax', function (SalesOrder $salesOrder) 
                 {
                     //change over here
@@ -1484,6 +1506,11 @@ class SalesOrderController extends AppBaseController
                 {
                     //change over here
                     return number_format($salesOrder->order_qty, 0, ',', '.');
+                })
+                ->editColumn('discount', function (SalesOrder $salesOrder) 
+                {
+                    //change over here
+                    return number_format($salesOrder->discount, 2, ',', '.');
                 })
                 ->editColumn('tax', function (SalesOrder $salesOrder) 
                 {

@@ -53,5 +53,8 @@ return [
     'confirm' => 'Confirm',
     'reorder' => 'Re-Order',
     'discount_percentage' => 'Discount (%)',
+    'discount' => 'Discount',
+    'list_promo' => 'List Promo',
+    'add_promo' => 'Add Promo',
 
 ];

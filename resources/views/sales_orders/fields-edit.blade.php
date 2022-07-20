@@ -19,7 +19,7 @@
                     {!! Form::label('order_type', trans('sales_order.order_type')) !!}
                 </div>
                 <div class="col-8">
-                    <select name="order_type" id="order_type" class="form-control select2js" required>
+                    <select name="order_type" id="order_type" class="form-control select2js" required disabled>
                         <option value="R" {{ $salesOrder->order_type == 'R' ? 'selected' : '' }}>REGULAR</option>
                         <option value="G" {{ $salesOrder->order_type == 'G' ? 'selected' : '' }}>BUNDLING GIMMICK</option>
                         <option value="P" {{ $salesOrder->order_type == 'P' ? 'selected' : '' }}>BUNDLING PRODUCT</option>
@@ -35,7 +35,7 @@
                     {!! Form::label('customer_id', trans('sales_order.customer')) !!}
                 </div>
                 <div class="col-8">
-                    <select name="customer_id" id="customer_id" class="form-control" readonly>
+                    <select name="customer_id" id="customer_id" class="form-control select2js" disabled>
                         @foreach ($customers as $customer)
                             <option value="{{ $customer->BAccountID }}" {{ $customer->BAccountID == $salesOrder->customer_id ? 'selected' : '' }}>{{ $customer->AcctName }}</option>
                         @endforeach
@@ -89,6 +89,17 @@
                 </div>
                 <div class="col-8">
                     {!! Form::text('order_amount', null, ['class' => 'form-control money', 'readonly' => true]) !!}
+                </div>
+            </div>
+        </div>
+        <!-- Tax Field -->
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('discount', trans('sales_order.discount')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('discount', null, ['class' => 'form-control money', 'readonly' => true]) !!}
                 </div>
             </div>
         </div>

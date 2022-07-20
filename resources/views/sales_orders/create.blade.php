@@ -20,13 +20,29 @@
                 <div class="row mb-3">
                     @include('sales_orders.fields')
                 </div>
-                <button class="btn btn-primary text-light mb-2" id="add_product" type="button"  data-toggle="modal" data-target="#modalProduct">
-                    {{ trans('sales_order.add_product') }}
-                </button>
 
-                <button class="btn btn-success text-light mb-2" id="btn_upload_product" type="button"  data-toggle="modal" data-target="#modalUpload">
-                    {{ trans('sales_order.btn_upload_product') }}
-                </button>
+                <div class="row" id="div_reguler" style="display: none">
+                    <div class="col-md-2">
+                        <button class="btn btn-primary btn-block text-light mb-2" id="add_product" type="button"  data-toggle="modal" data-target="#modalProduct">
+                            {{ trans('sales_order.add_product') }}
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-success btn-block text-light mb-2" id="btn_upload_product" type="button"  data-toggle="modal" data-target="#modalUpload">
+                            {{ trans('sales_order.btn_upload_product') }}
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="row" id="div_promo" style="display: none">
+                    <div class="col-md-2">
+                        <button class="btn btn-success btn-block text-light mb-2" id="add_promo" type="button"  data-toggle="modal" data-target="#modalPromo">
+                            {{ trans('sales_order.add_promo') }}
+                        </button>
+                    </div>
+                </div>
+                
+
                    
                 {{-- <a class="btn btn-success mb-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                     {{ trans('sales_order.btn_upload_product') }}
@@ -208,6 +224,58 @@
                 </div>
             </div>
 
+            <!-- Modal -->
+            <div class="modal fade" id="modalPromo" tabindex="-1" role="dialog" aria-labelledby="modalPromo" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <form id="m_add_promo" action="javascript:void(0)" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">{{ trans('sales_order.list_promo') }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row mb-1">
+                                    <div class="col-2">
+                                        Promo
+                                    </div>
+                                    <div class="col-9">
+                                        <select name="promo_list" id="promo_list" class="form-control"></select>
+                                    </div>
+                                </div>
+                                <div id="hidden_promo" style="display: none">
+                                    {{-- Desc Field --}}
+                                    <div class="row mb-1">
+                                        <div class="col-2">
+                                            {!! Form::label('promo_desc', trans('sales_order.description')) !!}
+                                        </div>
+                                        <div class="col-9">
+                                            <textarea name="promo_desc" id="promo_desc" class="form-control" rows="2" readonly></textarea>
+                                        </div>
+                                    </div>
+                                    {{-- Qty Field --}}
+                                    <div class="row mb-1">
+                                        <div class="col-2">
+                                            {!! Form::label('qty_promo', trans('sales_order.qty')) !!}
+                                        </div>
+                                        <div class="col-3">
+                                            <input pattern="\d*" type="number" class="form-control" name="qty_promo" id="qty_promo" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="col-md-3">
+                                    <input type="submit" id="save_promo" class="btn btn-success btn-block" value="{{ trans('sales_order.btn_save') }}">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     @php
@@ -227,24 +295,35 @@
             var customer_id =  $("select#customer_id");
             var inventory_id =  $("select#inventory_id");
             var inventory_name =  $("#inventory_name");
+            var div_promo =  $("#div_promo");
+            var hidden_promo =  $("#hidden_promo");
+            var promo_desc =  $("#promo_desc");
+            var promo_list =  $("#promo_list");
+            var save_promo =  $("#save_promo");
+            var div_reguler =  $("#div_reguler");
             var order_type =  $("#order_type");
             var uom =  $("#uom");
             var qty =  $("#qty");
+            var qty_promo =  $("#qty_promo");
             var delivery_date =  $("#delivery_date");
             var add_product =  $("#add_product");
+            var add_promo =  $("#add_promo");
             var unit_price =  $("#unit_price");
             var amount =  $("#amount");
             var customer_id =  $("#customer_id");
             var order_qty =  $("#order_qty");
             var order_amount =  $("#order_amount");
             var tax =  $("#tax");
+            var discount =  $("#discount");
             var order_total =  $("#order_total");
             var save =  $("#saveBtn");
             var btn_upload_product =  $("#btn_upload_product");
             // var mupload_product =  $("#mupload_product");
             btn_upload_product.prop("disabled", true);
             save.prop("disabled", true);
+            save_promo.prop("disabled", true);
             add_product.prop("disabled", true);
+            add_promo.prop("disabled", true);
             $("#savePageButton").prop("disabled", true);
 
             getAllCounter();
@@ -306,13 +385,34 @@
                         }
                     });
 
-                    
-                    
+                    var url2 = "{{ url('api/get-promo-active') }}" + "/" + delivery_date.val() + "/" + "{{ \Auth::user()->id }}";
+                    // send data to your endpoint
+                    $.ajax({
+                        url: url2,
+                        method: 'get',
+                        dataType: 'json',
+                        success: function(response) {
+                            promo_list.empty();
+                            promo_list.html(response)
+                        }
+                    });
+
                 }
                 
             });
 
             order_type.on('change', function() {
+
+                if (order_type.val() == 'C') {
+                    div_promo.show();
+                    div_reguler.hide();
+                } else if (order_type.val() == 'R' || order_type.val() == 'G' || order_type.val() == 'P' || order_type.val() == 'D') {
+                    div_reguler.show();
+                    div_promo.hide();
+                } else {
+                    div_promo.hide();
+                    div_reguler.hide();
+                }
 
                 var url = "{{ url('resetOrder') }}";
                 $.ajax({
@@ -325,6 +425,24 @@
                 getAllCounter();
 
             });
+
+            promo_list.on('change', function() {
+                hidden_promo.hide(); 
+                qty.val('');
+                var url = "{{ url('api/get-promo-data') }}" + '/' + promo_list.val();
+                // send data to your endpoint
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        // console.log(response);
+                        hidden_promo.show(); 
+                        promo_desc.val(response['packet_name']);
+                    }
+                });
+            });
+
 
             inventory_id.on('change', function() {
                 $('#data_show').hide();
@@ -372,6 +490,14 @@
                 }
             });
 
+            $("#qty_promo").on('keyup keydown change click', function() {
+                if(qty_promo.val() == null || qty_promo.val() == 0){
+                    save_promo.attr("disabled", true);
+                } else {
+                    save_promo.attr("disabled", false);
+                }
+            });
+
             $('.money').mask("#,##0.00", {reverse: true});
 
             function getAllCounter(){
@@ -385,6 +511,7 @@
                         // console.log(response);
                         order_qty.val(response['order_qty']);
                         order_amount.val(response['order_amount']);
+                        discount.val(response['discount']);
                         tax.val(response['tax']);
                         order_total.val(response['order_total']);
 
@@ -395,12 +522,14 @@
                             $("#savePageButton").attr("disabled", false);
                         }
 
-                        if($("#delivery_date").val() == null){
+                        if($("#delivery_date").val() == null || $("#order_type").val() == null){
                             btn_upload_product.prop("disabled", true);
                             add_product.prop("disabled", true);
+                            add_promo.prop("disabled", true);
                         } else {
                             btn_upload_product.prop("disabled", false);
                             add_product.prop("disabled", false);
+                            add_promo.prop("disabled", false);
                         }
                         
                     }
@@ -436,10 +565,12 @@
                     if(permissionPrice == 'hide price sales order') {
                         $('td:eq(4)', row).addClass("hide-component");
                         $('td:eq(5)', row).addClass("hide-component");
+                        $('td:eq(6)', row).addClass("hide-component");
                     }
                     $('td:eq(2)', row).addClass("money");
                     $('td:eq(4)', row).addClass("money");
                     $('td:eq(5)', row).addClass("money");
+                    $('td:eq(6)', row).addClass("money");
                 },
                 columns: [
                     { 
@@ -459,7 +590,10 @@
                     },   
                     {
                         data: 'unit_price'      
-                    },   
+                    },  
+                    {
+                        data: 'discount'      
+                    },  
                     {
                         data: 'amount'      
                     },   
@@ -524,6 +658,34 @@
                     error: function (data) {
                         console.log(data);
                         alert('Produk sudah ada dalam list');
+                    }
+                });
+            });
+
+            save_promo.click(function (e) {
+                e.preventDefault();
+                // $(this).html('Save');
+                if($('#qty').val() > 999){
+                    return alert('maksimum kuantitas adalah 999');
+                }
+                $.ajax({
+                    data: {
+                        packet_code:$('#promo_list').val(),
+                        qty:$('#qty_promo').val(),
+                        customer_id:$('#customer_id').val(),
+                        },
+                    url: "{{ route('carts.storePromo') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function (data) {
+                        hidden_promo.hide();
+                        qty_promo.val('');
+                        $('#modalPromo').modal('hide');
+                        table.draw();
+                        getAllCounter();
+                    },
+                    error: function (data) {
+                        alert('Error !');
                     }
                 });
             });

@@ -58,6 +58,10 @@ class CartController extends AppBaseController
                 {
                     return number_format($cart->unit_price, 2, ',', '.');
                 })
+                ->editColumn('discount', function (Cart $cart) 
+                {
+                    return number_format($cart->discount, 2, ',', '.');
+                })
                 ->editColumn('amount', function (Cart $cart) 
                 {
                     return number_format($cart->amount, 2, ',', '.');
@@ -117,6 +121,43 @@ class CartController extends AppBaseController
                         'qty' => $request->qty,
                         'uom' => $request->uom,
                         'unit_price' => $data['unit_price'],
+                        'amount' => $data['amount'],
+                        'customer_id' => $request->customer_id,
+                        'created_by' => \Auth::user()->id,
+                    ]);    
+       
+            return response()->json(['success'=>'Cart added successfully.']);
+
+        }
+
+
+    }
+
+    public function storePromo(Request $request)
+    {
+        $data = $request->all();
+        
+        $cekCart = Cart::where('packet_code', $data['packet_code'])->where('customer_id', $data['customer_id'])->get()->first();
+           
+        if($cekCart !== null){
+
+            return response()->json(['error'=>'Product already listed on carts.'], 403);
+
+        } else {
+
+            $data['qty'] = str_replace('.','',$data['qty']);
+            $data['unit_price'] = str_replace('.','',$data['unit_price']);
+            $data['unit_price'] = str_replace(',','.',$data['unit_price']);
+            $data['amount'] = str_replace('.','',$data['amount']);
+            $data['amount'] = str_replace(',','.',$data['amount']);
+
+            Cart::create([
+                        'inventory_id' => $request->inventory_id,
+                        'inventory_name' => $request->inventory_name,
+                        'qty' => $request->qty,
+                        'uom' => $request->uom,
+                        'unit_price' => $data['unit_price'],
+                        'discount' => $data['discount'],
                         'amount' => $data['amount'],
                         'customer_id' => $request->customer_id,
                         'created_by' => \Auth::user()->id,
@@ -214,11 +255,13 @@ class CartController extends AppBaseController
         // dd($parameterVAT);
         $data['order_qty'] = $getCounter->sum('qty');
         $data['order_amount'] = $getCounter->sum('amount');
-        $tax = ($parameterVAT->value/100) * $data['order_amount'];
-        $total = $data['order_amount'] + $tax;
+        $data['discount'] = $getCounter->sum('discount');
+        $tax = ($parameterVAT->value/100) * ($data['order_amount'] - $data['discount']);
+        $total = $data['order_amount'] - $data['discount'] + $tax;
         // dd($tax);
         $data['order_qty'] = number_format($data['order_qty'],0,',','.');
         $data['order_amount'] = number_format($data['order_amount'],2,',','.');
+        $data['discount'] = number_format($data['discount'],2,',','.');
         $data['tax'] = number_format($tax,2,',','.');
         $data['order_total'] = number_format($total,2,',','.');
 

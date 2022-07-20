@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('dataTableSalesOrderDetail/{code}',[SalesOrderDetailController::class,'getData'])->name('salesOrder.dataDetail');
     Route::get('salesOrderDetails-reCountDetailProduct/{code}/{date}',[SalesOrderDetailController::class,'reCountDetailProduct'])->name('salesOrderDetail.reCountDetailProduct');
     Route::resource('carts', CartController::class)->except('create');
+    Route::post('cartPromoStore', [CartController::class, 'storePromo'])->name('carts.storePromo');
     Route::get('dataTableCart',[CartController::class,'getData'])->name('carts.data');
     Route::get('carts-reCountDetailProduct/{date}',[CartController::class,'reCountDetailProduct'])->name('carts.reCountDetailProduct');
     Route::post('updatePassword', [UserController::class, 'updatePassword'])->name('updatePassword');

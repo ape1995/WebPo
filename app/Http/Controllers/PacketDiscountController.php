@@ -9,6 +9,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Models\PacketDiscount;
 use App\Models\PacketDiscountDetail;
 use App\Models\Product;
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Flash;
@@ -331,5 +332,32 @@ class PacketDiscountController extends AppBaseController
         $output['unit_price'] = number_format($packetDiscount->grand_total, 2, ',', '.');
 
         return $output;
+    }
+
+    public function getPromoActive($date, $user)
+    {
+        $user = User::find($user);
+
+        $cekCustomerClass = Customer::where('BAccountID', $user->customer_id)->get()->first();
+        $rbpClass = $cekCustomerClass->location->CPriceClassID;
+        // dd($rbpClass);
+
+        $packetDiscounts = PacketDiscount::whereRaw("start_date <= '$date' AND (end_date is null OR end_date >= '$date') ")->where('status', 'Released')->get();
+        // dd($packetDiscounts);
+
+        $output = [];
+        $output[] = "<option value=''>- Choose -</option>";
+        foreach ($packetDiscounts as $item) {
+            $output[] = "<option value='$item->packet_code'>$item->packet_name ( $item->packet_code )</option>";
+        }
+
+        return $output;
+    }
+
+    public function getPromoData($code)
+    {
+        $packetDiscount = PacketDiscount::where('packet_code', $code)->get()->first();
+
+        return $packetDiscount;
     }
 }

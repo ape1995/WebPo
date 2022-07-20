@@ -53,5 +53,8 @@ return [
     'confirm' => 'Konfirmasi',
     'reorder' => 'Order Ulang',
     'discount_percentage' => 'Diskon (%)',
+    'discount' => 'Diskon',
+    'list_promo' => 'Daftar Promo',
+    'add_promo' => 'Tambah Promo',
 
 ];

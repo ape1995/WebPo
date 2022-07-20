@@ -20,6 +20,7 @@
                 <div class="col-8">
                     @if ($data = Session::get('data'))
                         <select name="order_type" id="order_type" class="form-control select2js" required>
+                            <option value="">- Choose -</option>
                             <option value="R" {{ $data['order_type'] == 'R' ? 'selected' : '' }}>REGULAR</option>
                             <option value="G" {{ $data['order_type'] == 'G' ? 'selected' : '' }}>BUNDLING GIMMICK</option>
                             <option value="P" {{ $data['order_type'] == 'P' ? 'selected' : '' }}>BUNDLING PRODUCT</option>
@@ -27,6 +28,7 @@
                         </select>
                     @else
                         <select name="order_type" id="order_type" class="form-control select2js" required>
+                            <option value="">- Choose -</option>
                             <option value="R">REGULAR</option>
                             <option value="G">BUNDLING GIMMICK</option>
                             <option value="P">BUNDLING PRODUCT</option>
@@ -97,6 +99,17 @@
                 </div>
                 <div class="col-8">
                     {!! Form::text('order_amount', null, ['class' => 'form-control money', 'readonly' => true]) !!}
+                </div>
+            </div>
+        </div>
+        <!-- Discount Field -->
+        <div class="col-sm-12 mb-1" @can('hide price sales order') style=" visibility: collapse;" @endcan>
+            <div class="row">
+                <div class="col-3">
+                    {!! Form::label('discount', trans('sales_order.discount')) !!}
+                </div>
+                <div class="col-8">
+                    {!! Form::text('discount', null, ['class' => 'form-control money', 'readonly' => true]) !!}
                 </div>
             </div>
         </div>

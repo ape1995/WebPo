@@ -43,6 +43,7 @@ class SalesOrder extends Model
         'order_qty',
         'order_amount',
         'tax',
+        'discount',
         'order_total',
         'description',
         'status',

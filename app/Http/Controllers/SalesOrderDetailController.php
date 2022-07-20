@@ -94,8 +94,9 @@ class SalesOrderDetailController extends AppBaseController
             $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
             $salesOrder['order_qty'] = $salesOrderDetail->sum('qty');
             $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
-            $salesOrder['tax'] = ($parameterVAT->value/100) * $salesOrder['order_amount'];
-            $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
+            $salesOrder['discount'] = $salesOrderDetail->sum('discount');
+            $salesOrder['tax'] = ($parameterVAT->value/100) * ( $salesOrder['order_amount'] - $salesOrder['discount'] );
+            $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
             $salesOrder->save();
        
             return response()->json(['success'=>'Products added successfully.']);
@@ -173,8 +174,9 @@ class SalesOrderDetailController extends AppBaseController
         $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
         $salesOrder['order_qty'] = $salesOrderDetails->sum('qty');
         $salesOrder['order_amount'] = $salesOrderDetails->sum('amount');
-        $salesOrder['tax'] = ($parameterVAT->value/100) * $salesOrder['order_amount'];
-        $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
+        $salesOrder['discount'] = $salesOrderDetails->sum('discount');
+        $salesOrder['tax'] = ($parameterVAT->value/100) * ($salesOrder['order_amount'] - $salesOrder['discount']);
+        $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
         $salesOrder->save();
 
 
@@ -202,8 +204,9 @@ class SalesOrderDetailController extends AppBaseController
         $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
         $salesOrder['order_qty'] = $salesOrderDetail->sum('qty');
         $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
-        $salesOrder['tax'] = ($parameterVAT->value/100) * $salesOrder['order_amount'];
-        $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
+        $salesOrder['discount'] = $salesOrderDetail->sum('discount');
+        $salesOrder['tax'] = ($parameterVAT->value/100) * ($salesOrder['order_amount'] - $salesOrder['discount']);
+        $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
         $salesOrder->save();
 
      
@@ -223,6 +226,10 @@ class SalesOrderDetailController extends AppBaseController
                 ->editColumn('unit_price', function (SalesOrderDetail $data) 
                 {
                     return number_format($data->unit_price, 2, ',', '.');
+                })
+                ->editColumn('discount', function (SalesOrderDetail $data) 
+                {
+                    return number_format($data->discount, 2, ',', '.');
                 })
                 ->editColumn('amount', function (SalesOrderDetail $data) 
                 {
@@ -250,8 +257,10 @@ class SalesOrderDetailController extends AppBaseController
             
         $data['order_qty'] = $salesOrderDetail->sum('qty');
         $data['order_amount'] = $salesOrderDetail->sum('amount');
-        $tax = ($parameterVAT->value/100) * $data['order_amount'];
-        $total = $data['order_amount'] + $tax;
+        $data['discount'] = $salesOrderDetail->sum('discount');
+        $tax = ($parameterVAT->value/100) * ($data['order_amount'] - $data['discount']);
+        $total = $data['order_amount'] - $data['discount'] + $tax;
+        $data['discount'] = number_format($data['discount'],2,',','.');
         $data['order_qty'] = number_format($data['order_qty'],0,',','.');
         $data['order_amount'] = number_format($data['order_amount'],2,',','.');
         $data['tax'] = number_format($tax,2,',','.');

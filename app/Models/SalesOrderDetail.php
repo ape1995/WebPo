@@ -72,5 +72,10 @@ class SalesOrderDetail extends Model
         
     ];
 
+    public function header()
+    {
+        return $this->hasOne(SalesOrder::class, 'id', 'sales_order_id');
+    }
+
     
 }

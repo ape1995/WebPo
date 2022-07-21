@@ -255,6 +255,24 @@
                                             <textarea name="promo_desc" id="promo_desc" class="form-control" rows="2" readonly></textarea>
                                         </div>
                                     </div>
+                                    <div class="row mb-1">
+                                        <div class="col-2">{{ trans('sales_order.promo_original_price') }}</div>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" id="promo_original_price" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col-2">{{ trans('sales_order.discount') }}</div>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" id="promo_discount" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col-2">{{ trans('sales_order.promo_amount') }}</div>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" id="promo_amount" readonly>
+                                        </div>
+                                    </div>
                                     {{-- Qty Field --}}
                                     <div class="row mb-1">
                                         <div class="col-2">
@@ -262,6 +280,9 @@
                                         </div>
                                         <div class="col-3">
                                             <input pattern="\d*" type="number" class="form-control" name="qty_promo" id="qty_promo" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                        </div>
+                                        <div class="col-3">
+                                            {{ trans('sales_order.packet') }}
                                         </div>
                                     </div>
                                 </div>
@@ -305,6 +326,9 @@
             var uom =  $("#uom");
             var qty =  $("#qty");
             var qty_promo =  $("#qty_promo");
+            var promo_original_price =  $("#promo_original_price");
+            var promo_discount =  $("#promo_discount");
+            var promo_amount =  $("#promo_amount");
             var delivery_date =  $("#delivery_date");
             var add_product =  $("#add_product");
             var add_promo =  $("#add_promo");
@@ -363,6 +387,13 @@
             });
 
             delivery_date.on('change', function() {
+
+                var url2 = "{{ url('resetOrder') }}";
+                $.ajax({
+                    url: url2,
+                    method: 'get',
+                    dataType: 'json',
+                });
 
                 if(delivery_date.val() == null || delivery_date.val() == ''){
                     add_product.prop("disabled", true);
@@ -439,6 +470,9 @@
                         // console.log(response);
                         hidden_promo.show(); 
                         promo_desc.val(response['packet_name']);
+                        promo_original_price.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(response['total']));
+                        promo_discount.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(response['discount']));
+                        promo_amount.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(response['grand_total']));
                     }
                 });
             });
@@ -678,11 +712,14 @@
                     type: "POST",
                     dataType: 'json',
                     success: function (data) {
+                        console.log(data);
                         hidden_promo.hide();
+                        promo_list.select2().select2('val','');
                         qty_promo.val('');
                         $('#modalPromo').modal('hide');
                         table.draw();
                         getAllCounter();
+                        save_promo.prop('disabled', true);
                     },
                     error: function (data) {
                         alert('Error !');
@@ -737,6 +774,26 @@
                     });
                 }
             });
+
+            $('body').on('click', '.deleteBook2', function () {
+            
+            var product_id = $(this).data("id");
+
+            if (confirm("Are You sure want to delete ?") == true) {
+                
+                $.ajax({
+                    type: "delete",
+                    url: "{{ route('carts.storePromo') }}"+'/'+product_id,
+                    success: function (data) {
+                        table.draw();
+                        getAllCounter();
+                    },
+                    error: function (data) {
+                        // console.log('Error:', data);
+                    }
+                });
+            }
+        });
             
         });
 

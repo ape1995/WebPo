@@ -237,8 +237,11 @@ class SalesOrderDetailController extends AppBaseController
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-
+                    if ($row->header->order_type == 'C') {
+                        $btn = '';
+                    } else {
                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editProduct" title="Edit"><i class="fas fa-edit"></i></a>';
+                    }
                         $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fas fa-trash-alt"></i></a>';
 
                         return $btn;

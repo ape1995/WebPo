@@ -907,6 +907,13 @@ class SalesOrderController extends AppBaseController
         return redirect(route('createOrder'));
     }
 
+    // public function resetOrderDetail($id)
+    // {
+    //     $salesOrder = SalesOrder::find($id);
+
+    //     $salesOrderDetail
+    // }
+
     public function printPdf($id)
     {
 

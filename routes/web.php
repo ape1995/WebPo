@@ -85,12 +85,14 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('printOrder/{code}',[SalesOrderController::class,'printPdf'])->name('salesOrders.printPdf');
     Route::get('createReOrder/{code}',[SalesOrderController::class,'reOrder'])->name('salesOrders.reOrder');
     Route::get('resetOrder',[SalesOrderController::class,'resetOrder'])->name('salesOrders.resetOrder');
+    Route::get('resetOrderDetail',[SalesOrderController::class,'resetOrderDetail'])->name('salesOrders.resetOrderDetail');
     Route::get('createOrder', [SalesOrderController::class, 'create'])->name('createOrder');
     Route::resource('salesOrderDetails', SalesOrderDetailController::class);
     Route::get('dataTableSalesOrderDetail/{code}',[SalesOrderDetailController::class,'getData'])->name('salesOrder.dataDetail');
     Route::get('salesOrderDetails-reCountDetailProduct/{code}/{date}',[SalesOrderDetailController::class,'reCountDetailProduct'])->name('salesOrderDetail.reCountDetailProduct');
     Route::resource('carts', CartController::class)->except('create');
     Route::post('cartPromoStore', [CartController::class, 'storePromo'])->name('carts.storePromo');
+    Route::delete('cartPromoStore/{id}', [CartController::class, 'destroyPromo'])->name('carts.destroyPromo');
     Route::get('dataTableCart',[CartController::class,'getData'])->name('carts.data');
     Route::get('carts-reCountDetailProduct/{date}',[CartController::class,'reCountDetailProduct'])->name('carts.reCountDetailProduct');
     Route::post('updatePassword', [UserController::class, 'updatePassword'])->name('updatePassword');

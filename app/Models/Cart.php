@@ -39,6 +39,7 @@ class Cart extends Model
         'amount',
         'created_by',
         'updated_by',
+        'packet_code',
         'customer_id'
     ];
 

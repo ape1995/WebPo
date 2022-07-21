@@ -8,6 +8,7 @@ use App\Repositories\CartRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Cart;
 use App\Models\ParameterVAT;
+use App\Models\PacketDiscount;
 use App\Models\Location;
 use App\Models\Product;
 use App\Models\SalesPrice;
@@ -69,8 +70,14 @@ class CartController extends AppBaseController
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook" title="Edit"><i class="fas fa-edit"></i></a>';
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fas fa-trash-alt"></i></a>';
+                    if ($row->packet_code == null) {
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editBook" title="Edit"><i class="fas fa-edit"></i></a>';
+                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fas fa-trash-alt"></i></a>';
+                    } else {
+                        $btn = '';
+                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook2" title="Delete"><i class="fas fa-trash-alt"></i></a>';
+                    }
+                    
 
                     return $btn;
                 })
@@ -136,33 +143,47 @@ class CartController extends AppBaseController
     public function storePromo(Request $request)
     {
         $data = $request->all();
+
+        // return response()->json(['success'=>$data]);
         
         $cekCart = Cart::where('packet_code', $data['packet_code'])->where('customer_id', $data['customer_id'])->get()->first();
-           
-        if($cekCart !== null){
+        //    return response()->json(['success' => $cekCart]);
+        if($cekCart == null){
 
-            return response()->json(['error'=>'Product already listed on carts.'], 403);
+            $packetDiscount = PacketDiscount::where('packet_code', $data['packet_code'])->get()->first();
+
+
+            foreach($packetDiscount->detail as $detail){
+                Cart::create([
+                    'packet_code' => $packetDiscount->packet_code,
+                    'inventory_id' => $detail->inventory_code,
+                    'inventory_name' => $detail->inventory_name,
+                    'qty' => $detail->qty * $data['qty'],
+                    'uom' => 'PIECE',
+                    'unit_price' => $detail->unit_price,
+                    'discount' => $detail->discount_amount * $data['qty'],
+                    'amount' => $detail->amount * $data['qty'],
+                    'customer_id' => $data['customer_id'],
+                    'created_by' => \Auth::user()->id,
+                ]);    
+            }
+
+            
+       
+            return response()->json(['success'=>'Cart added successfully.']);
 
         } else {
 
-            $data['qty'] = str_replace('.','',$data['qty']);
-            $data['unit_price'] = str_replace('.','',$data['unit_price']);
-            $data['unit_price'] = str_replace(',','.',$data['unit_price']);
-            $data['amount'] = str_replace('.','',$data['amount']);
-            $data['amount'] = str_replace(',','.',$data['amount']);
+            $packetDiscount = PacketDiscount::where('packet_code', $data['packet_code'])->get()->first();
+            
+            foreach($packetDiscount->detail as $detail){
+                $cart = Cart::where('packet_code', $data['packet_code'])->where('customer_id', $data['customer_id'])->where('inventory_id', $detail->inventory_code)->get()->first();
+                $cart['qty'] = $cart->qty + ($detail->qty * $data['qty']);
+                $cart['discount'] = $cart->discount + ($detail->discount_amount * $data['qty']);
+                $cart['amount'] = $cart->amount + ($detail->amount * $data['qty']);
+                $cart->save();
+            }
 
-            Cart::create([
-                        'inventory_id' => $request->inventory_id,
-                        'inventory_name' => $request->inventory_name,
-                        'qty' => $request->qty,
-                        'uom' => $request->uom,
-                        'unit_price' => $data['unit_price'],
-                        'discount' => $data['discount'],
-                        'amount' => $data['amount'],
-                        'customer_id' => $request->customer_id,
-                        'created_by' => \Auth::user()->id,
-                    ]);    
-       
             return response()->json(['success'=>'Cart added successfully.']);
 
         }
@@ -244,6 +265,16 @@ class CartController extends AppBaseController
     public function destroy($id)
     {
         Cart::find($id)->delete();
+     
+        return response()->json(['success'=>'Product deleted successfully.']);
+    }
+
+    public function destroyPromo($id)
+    {
+
+        $cart = Cart::find($id);
+
+        Cart::where('packet_code', $cart->packet_code)->where('created_by', \Auth::user()->id)->delete();
      
         return response()->json(['success'=>'Product deleted successfully.']);
     }

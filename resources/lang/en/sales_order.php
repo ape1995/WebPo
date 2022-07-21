@@ -56,5 +56,8 @@ return [
     'discount' => 'Discount',
     'list_promo' => 'List Promo',
     'add_promo' => 'Add Promo',
+    'promo_amount' => 'Price',
+    'promo_original_price' => 'Original Price',
+    'packet' => 'Packet(s)',
 
 ];

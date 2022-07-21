@@ -28,9 +28,16 @@
                     @include('sales_orders.fields-edit')
                 </div>
                 
-                <button class="btn btn-primary text-light mb-2" type="button" id="add_product"  data-toggle="modal" data-target="#modalProduct">
-                    {{ trans('sales_order.add_product') }}
-                </button>
+                @if ($salesOrder->order_type == 'C')
+                    <button class="btn btn-success text-light mb-2" id="add_promo" type="button"  data-toggle="modal" data-target="#modalPromo">
+                        {{ trans('sales_order.add_promo') }}
+                    </button>
+                @else
+                    <button class="btn btn-primary text-light mb-2" type="button" id="add_product"  data-toggle="modal" data-target="#modalProduct">
+                        {{ trans('sales_order.add_product') }}
+                    </button>
+                @endif
+
 
                 @include('carts.table')
 
@@ -158,6 +165,79 @@
                     </div>
                 </div>
 
+                <!-- Modal -->
+                <div class="modal fade" id="modalPromo" tabindex="-1" role="dialog" aria-labelledby="modalPromo" aria-hidden="true">
+                    <div class="modal-dialog  modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <form id="m_add_promo" action="javascript:void(0)" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">{{ trans('sales_order.list_promo') }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row mb-1">
+                                        <div class="col-2">
+                                            Promo
+                                        </div>
+                                        <div class="col-9">
+                                            <select name="promo_list" id="promo_list" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <div id="hidden_promo" style="display: none">
+                                        {{-- Desc Field --}}
+                                        <div class="row mb-1">
+                                            <div class="col-2">
+                                                {!! Form::label('promo_desc', trans('sales_order.description')) !!}
+                                            </div>
+                                            <div class="col-9">
+                                                <textarea name="promo_desc" id="promo_desc" class="form-control" rows="2" readonly></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col-2">{{ trans('sales_order.promo_original_price') }}</div>
+                                            <div class="col-6">
+                                                <input type="text" class="form-control" id="promo_original_price" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col-2">{{ trans('sales_order.discount') }}</div>
+                                            <div class="col-6">
+                                                <input type="text" class="form-control" id="promo_discount" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col-2">{{ trans('sales_order.promo_amount') }}</div>
+                                            <div class="col-6">
+                                                <input type="text" class="form-control" id="promo_amount" readonly>
+                                            </div>
+                                        </div>
+                                        {{-- Qty Field --}}
+                                        <div class="row mb-1">
+                                            <div class="col-2">
+                                                {!! Form::label('qty_promo', trans('sales_order.qty')) !!}
+                                            </div>
+                                            <div class="col-3">
+                                                <input pattern="\d*" type="number" class="form-control" name="qty_promo" id="qty_promo" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                            </div>
+                                            <div class="col-3">
+                                                {{ trans('sales_order.packet') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="col-md-3">
+                                        <input type="submit" id="save_promo" class="btn btn-success btn-block" value="{{ trans('sales_order.btn_save') }}">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="card-footer">
@@ -190,11 +270,21 @@
             var inventory_name =  $("#inventory_name");
             var uom =  $("#uom");
             var qty =  $("#qty");
+            var div_promo =  $("#div_promo");
+            var hidden_promo =  $("#hidden_promo");
+            var promo_desc =  $("#promo_desc");
+            var promo_list =  $("#promo_list");
+            var save_promo =  $("#save_promo");
             var delivery_date =  $("#delivery_date");
             var add_product =  $("#add_product");
+            var add_promo =  $("#add_promo");
             var unit_price =  $("#unit_price");
             var amount =  $("#amount");
             var customer_id =  $("#customer_id");
+            var qty_promo =  $("#qty_promo");
+            var promo_original_price =  $("#promo_original_price");
+            var promo_discount =  $("#promo_discount");
+            var promo_amount =  $("#promo_amount");
             var order_qty =  $("#order_qty");
             var order_amount =  $("#order_amount");
             var discount =  $("#discount");
@@ -204,6 +294,7 @@
             save.prop("disabled", true);
             $("#savePageButton").attr("disabled", true);
 
+            getPromoActive();
             getAllCounter();
 
             delivery_date.on('change', function() {
@@ -211,6 +302,7 @@
                     add_product.prop("disabled", true);
                 } else {
                     table.draw();
+                    getPromoActive();
                     add_product.prop("disabled", true);
                     $("#savePageButton").prop("disabled", true);
 
@@ -224,6 +316,13 @@
                             table.draw();
                             getAllCounter();
                         }
+                    });
+
+                    var url2 = "{{ url('resetOrderDetail') }}" + "/" + "{{ $salesOrder->id }}";
+                    $.ajax({
+                        url: url2,
+                        method: 'get',
+                        dataType: 'json',
                     });
                 }
             });
@@ -468,6 +567,40 @@
                     });
                 }
             });
+
+            $('body').on('click', '.deleteBook2', function () {
+            
+                var product_id = $(this).data("id");
+
+                if (confirm("Are You sure want to delete this product?") == true) {
+                    
+                    $.ajax({
+                        type: "DELETE",
+                        url: "{{ route('salesOrderDetails.store') }}"+'/'+product_id,
+                        success: function (data) {
+                            table.draw();
+                            getAllCounter();
+                        },
+                        error: function (data) {
+                            // console.log('Error:', data);
+                        }
+                    });
+                }
+            });
+
+            function getPromoActive(){
+                var url2 = "{{ url('api/get-promo-active') }}" + "/" + delivery_date.val() + "/" + "{{ \Auth::user()->id }}";
+                // send data to your endpoint
+                $.ajax({
+                    url: url2,
+                    method: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        promo_list.empty();
+                        promo_list.html(response)
+                    }
+                });
+            }
             
         });
 

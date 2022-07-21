@@ -56,5 +56,8 @@ return [
     'discount' => 'Diskon',
     'list_promo' => 'Daftar Promo',
     'add_promo' => 'Tambah Promo',
+    'promo_amount' => 'Harga',
+    'promo_original_price' => 'Harga Asli',
+    'packet' => 'Paket',
 
 ];

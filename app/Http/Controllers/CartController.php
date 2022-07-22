@@ -51,6 +51,14 @@ class CartController extends AppBaseController
         if ($request->ajax()) {
             $datas = Cart::where('customer_id', \Auth::user()->customer_id)->orderBy('inventory_id', 'ASC')->get();
             return DataTables::of($datas)
+                ->editColumn('inventory_name', function (Cart $cart) 
+                {
+                    if ($cart->packet_code == null) {
+                        return $cart->inventory_name;
+                    } else {
+                        return $cart->inventory_name.' ( ' .$cart->packet_code. ' )';
+                    }
+                })
                 ->editColumn('qty', function (Cart $cart) 
                 {
                     return number_format($cart->qty, 0, ',', '.');

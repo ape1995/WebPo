@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Location;
 use App\Models\SalesPrice;
 use App\Models\SalesOrderDetail;
+use App\Models\PacketDiscount;
 use App\Models\ParameterVAT;
 use Illuminate\Http\Request;
 use Flash;
@@ -102,6 +103,80 @@ class SalesOrderDetailController extends AppBaseController
             return response()->json(['success'=>'Products added successfully.']);
 
         }
+    }
+
+    public function storePromo(Request $request)
+    {
+        $data = $request->all();
+
+        // return response()->json(['success'=>$data]);
+        
+        $cekCart = SalesOrderDetail::where('packet_code', $data['packet_code'])->where('sales_order_id', $data['sales_order_id'])->get()->first();
+        //    return response()->json(['success' => $cekCart]);
+        if($cekCart == null){
+
+            $packetDiscount = PacketDiscount::where('packet_code', $data['packet_code'])->get()->first();
+
+
+            foreach($packetDiscount->detail as $detail){
+                SalesOrderDetail::create([
+                    'packet_code' => $packetDiscount->packet_code,
+                    'sales_order_id' => $request->sales_order_id,
+                    'inventory_id' => $detail->inventory_code,
+                    'inventory_name' => $detail->inventory_name,
+                    'qty' => $detail->qty * $data['qty'],
+                    'uom' => 'PIECE',
+                    'unit_price' => $detail->unit_price,
+                    'discount' => $detail->discount_amount * $data['qty'],
+                    'amount' => $detail->amount * $data['qty'],
+                    'customer_id' => $data['customer_id'],
+                    'created_by' => \Auth::user()->id,
+                ]);    
+            }
+
+            $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $request->sales_order_id)->get();
+        
+            $salesOrder = SalesOrder::find($request->sales_order_id);
+            $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+            $salesOrder['order_qty'] = $salesOrderDetail->sum('qty');
+            $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
+            $salesOrder['discount'] = $salesOrderDetail->sum('discount');
+            $salesOrder['tax'] = ($parameterVAT->value/100) * ( $salesOrder['order_amount'] - $salesOrder['discount'] );
+            $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
+            $salesOrder->save();
+
+            
+       
+            return response()->json(['success'=>'Cart added successfully.']);
+
+        } else {
+
+            $packetDiscount = PacketDiscount::where('packet_code', $data['packet_code'])->get()->first();
+            
+            foreach($packetDiscount->detail as $detail){
+                $cart = SalesOrderDetail::where('packet_code', $data['packet_code'])->where('sales_order_id', $data['sales_order_id'])->where('inventory_id', $detail->inventory_code)->get()->first();
+                $cart['qty'] = $cart->qty + ($detail->qty * $data['qty']);
+                $cart['discount'] = $cart->discount + ($detail->discount_amount * $data['qty']);
+                $cart['amount'] = $cart->amount + ($detail->amount * $data['qty']);
+                $cart->save();
+            }
+
+            $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $request->sales_order_id)->get();
+        
+            $salesOrder = SalesOrder::find($request->sales_order_id);
+            $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+            $salesOrder['order_qty'] = $salesOrderDetail->sum('qty');
+            $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
+            $salesOrder['discount'] = $salesOrderDetail->sum('discount');
+            $salesOrder['tax'] = ($parameterVAT->value/100) * ( $salesOrder['order_amount'] - $salesOrder['discount'] );
+            $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
+            $salesOrder->save();
+
+            return response()->json(['success'=>'Cart added successfully.']);
+
+        }
+
+
     }
 
     /**
@@ -213,12 +288,43 @@ class SalesOrderDetailController extends AppBaseController
         return response()->json(['success'=>'Product deleted successfully.']);
     }
 
+    public function destroyPromo($id)
+    {
+
+        $salesOrderDetail = SalesOrderDetail::find($id);
+        $salesOrderID = $salesOrderDetail->sales_order_id;
+        SalesOrderDetail::where('packet_code', $salesOrderDetail->packet_code)->where('sales_order_id', $salesOrderDetail->sales_order_id)->delete();
+     
+        $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $salesOrderID)->get();
+        
+        $salesOrder = SalesOrder::find($salesOrderID);
+        $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
+        $salesOrder['order_qty'] = $salesOrderDetail->sum('qty');
+        $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
+        $salesOrder['discount'] = $salesOrderDetail->sum('discount');
+        $salesOrder['tax'] = ($parameterVAT->value/100) * ($salesOrder['order_amount'] - $salesOrder['discount']);
+        $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
+        $salesOrder->save();
+
+
+        return response()->json(['success'=>'Product deleted successfully.']);
+    }
+
     public function getData(Request $request, $code)
     {
         
         if ($request->ajax()) {
             $datas = SalesOrderDetail::where('sales_order_id', $code)->orderBy('inventory_id', 'ASC')->get();
             return DataTables::of($datas)
+                ->editColumn('inventory_name', function (SalesOrderDetail $data) 
+                {
+                    if ($data->packet_code == null) {
+                        return $data->inventory_name;
+                    } else {
+                        return $data->inventory_name.' ( ' .$data->packet_code. ' )';
+                    }
+                    
+                })
                 ->editColumn('qty', function (SalesOrderDetail $data) 
                 {
                     return number_format($data->qty, 0, ',', '.');
@@ -239,10 +345,11 @@ class SalesOrderDetailController extends AppBaseController
                 ->addColumn('action', function($row){
                     if ($row->header->order_type == 'C') {
                         $btn = '';
+                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook2" title="Delete"><i class="fas fa-trash-alt"></i></a>';
                     } else {
                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-success btn-sm editProduct" title="Edit"><i class="fas fa-edit"></i></a>';
-                    }
                         $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook" title="Delete"><i class="fas fa-trash-alt"></i></a>';
+                    }
 
                         return $btn;
                 })

@@ -75,7 +75,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <td>{!! Form::label('description', 'Description') !!}</td>
                     <td class="font-weight-bold">{!! Form::label('description', $salesOrder->description) !!}</td>
                     <td>{!! Form::label('order_type', 'Order Type') !!}</td>
-                    <td class="font-weight-bold">{!! Form::label('description', $salesOrder->order_type == 'R' ? "Regular" : "Direct Selling") !!}</td>
+                    @php
+                        if ($salesOrder->order_type == 'R') {
+                            $type = 'REGULAR';
+                        } else if ($salesOrder->order_type == 'D') {
+                            $type = 'DIRECT SELLING';
+                        } else if ($salesOrder->order_type == 'G') {
+                            $type = 'BUNDLING GIMMICK';
+                        } else if ($salesOrder->order_type == 'P') {
+                            $type = 'BUNDLING PRODUCT';
+                        } else {
+                            $type = 'BUNDLING DISCOUNT';
+                        }
+                        
+                    @endphp
+                    <td class="font-weight-bold">{!! Form::label('description', $type) !!}</td>
                 </tr>
             </table>
             <hr>
@@ -92,7 +106,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <tbody>
                 @foreach($salesOrderDetails as $salesOrderDetail)
                     <tr>
-                        <td>{{ $salesOrderDetail->inventory_name }}</td>
+                        <td>{{ $salesOrderDetail->inventory_name.$salesOrderDetail->packet_code == null ? '' : $salesOrderDetail->packet_code.' ( ' .$salesOrderDetail->packet_code. ' ) ' }}</td>
                         <td class="money">{{ $salesOrderDetail->qty }}</td>
                         <td>{{ $salesOrderDetail->uom }}</td>
                         <td class="money">{{ number_format($salesOrderDetail->unit_price,2,',','.') }}</td>

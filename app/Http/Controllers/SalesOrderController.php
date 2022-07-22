@@ -425,6 +425,7 @@ class SalesOrderController extends AppBaseController
             $detailData['uom'] = $data->uom;
             $detailData['unit_price'] = $data->unit_price;
             $detailData['amount'] = $data->amount;
+            $detailData['packet_code'] = $data->packet_code;
             $detailData['created_by'] = \Auth::user()->id;
 
             $salesOrderDetail = SalesOrderDetail::create($detailData);

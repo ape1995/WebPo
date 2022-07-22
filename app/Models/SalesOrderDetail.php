@@ -37,6 +37,7 @@ class SalesOrderDetail extends Model
     public $fillable = [
         'sales_order_id',
         'inventory_id',
+        'packet_code',
         'inventory_name',
         'qty',
         'uom',

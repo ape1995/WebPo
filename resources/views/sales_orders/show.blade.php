@@ -28,7 +28,9 @@
                     <div class="text-right m-2">
                         <a href="{{ route('salesOrders.printPdf', [$salesOrder->id]) }}" class="btn btn-sm btn-outline-danger" id="btnPrint"><i class="fa fa-file-pdf"></i> {{ trans('sales_order.btn_print') }}</a>
                         @can('create sales order')
+                            @if ($salesOrder->order_type != 'C')
                             <a href="{{ route('salesOrders.reOrder', [$salesOrder->id]) }}" class="btn btn-sm btn-outline-info" onclick="return confirm('{{ trans('sales_order.question_reorder') }}')"><i class="fas fa-redo-alt"></i> {{ trans('sales_order.reorder') }}</a>
+                            @endif
                         @endcan
                     </div>
                 @endif

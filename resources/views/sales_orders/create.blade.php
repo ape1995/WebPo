@@ -404,18 +404,6 @@
                     btn_upload_product.prop("disabled", true);
                     $("#savePageButton").prop("disabled", true);
 
-                    var url = "{{ url('carts-reCountDetailProduct') }}" + "/" + delivery_date.val();
-                    // send data to your endpoint
-                    $.ajax({
-                        url: url,
-                        method: 'get',
-                        dataType: 'json',
-                        success: function(response) {
-                            table.draw();
-                            getAllCounter();
-                        }
-                    });
-
                     var url2 = "{{ url('api/get-promo-active') }}" + "/" + delivery_date.val() + "/" + "{{ \Auth::user()->id }}";
                     // send data to your endpoint
                     $.ajax({
@@ -425,6 +413,18 @@
                         success: function(response) {
                             promo_list.empty();
                             promo_list.html(response)
+                        }
+                    });
+
+                    var url = "{{ url('carts-reCountDetailProduct') }}" + "/" + delivery_date.val();
+                    // send data to your endpoint
+                    $.ajax({
+                        url: url,
+                        method: 'get',
+                        dataType: 'json',
+                        success: function(response) {
+                            table.draw();
+                            getAllCounter();
                         }
                     });
 
@@ -777,23 +777,23 @@
 
             $('body').on('click', '.deleteBook2', function () {
             
-            var product_id = $(this).data("id");
+                var product_id = $(this).data("id");
 
-            if (confirm("Are You sure want to delete ?") == true) {
-                
-                $.ajax({
-                    type: "delete",
-                    url: "{{ route('carts.storePromo') }}"+'/'+product_id,
-                    success: function (data) {
-                        table.draw();
-                        getAllCounter();
-                    },
-                    error: function (data) {
-                        // console.log('Error:', data);
-                    }
-                });
-            }
-        });
+                if (confirm("Are You sure want to delete ?") == true) {
+                    
+                    $.ajax({
+                        type: "delete",
+                        url: "{{ route('carts.storePromo') }}"+'/'+product_id,
+                        success: function (data) {
+                            table.draw();
+                            getAllCounter();
+                        },
+                        error: function (data) {
+                            // console.log('Error:', data);
+                        }
+                    });
+                }
+            });
             
         });
 

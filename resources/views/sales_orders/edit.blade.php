@@ -233,7 +233,7 @@
                                         <input type="submit" id="save_promo" class="btn btn-success btn-block" value="{{ trans('sales_order.btn_save') }}">
                                     </div>
                                 </div>
-                            </form>
+                            {{-- </form> --}}
                         </div>
                     </div>
                 </div>
@@ -292,6 +292,7 @@
             var order_total =  $("#order_total");
             var save =  $("#saveBtn");
             save.prop("disabled", true);
+            save_promo.prop("disabled", true);
             $("#savePageButton").attr("disabled", true);
 
             getPromoActive();
@@ -348,6 +349,26 @@
                 });
             });
 
+            promo_list.on('change', function() {
+                hidden_promo.hide(); 
+                qty.val('');
+                var url = "{{ url('api/get-promo-data') }}" + '/' + promo_list.val();
+                // send data to your endpoint
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        // console.log(response);
+                        hidden_promo.show(); 
+                        promo_desc.val(response['packet_name']);
+                        promo_original_price.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(response['total']));
+                        promo_discount.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(response['discount']));
+                        promo_amount.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(response['grand_total']));
+                    }
+                });
+            });
+
             
             $("#qty").on('keyup keydown change click', function() {
                 let eachprice = unit_price.val().replace('.','').replace(',','.');
@@ -373,6 +394,14 @@
                 }
             });
 
+            $("#qty_promo").on('keyup keydown change click', function() {
+                if(qty_promo.val() == null || qty_promo.val() == 0){
+                    save_promo.attr("disabled", true);
+                } else {
+                    save_promo.attr("disabled", false);
+                }
+            });
+
             $('.money').mask("#,##0.00", {reverse: true});
 
             function getAllCounter(){
@@ -383,7 +412,7 @@
                     method: 'get',
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response);
+                        // console.log(response);
                         order_qty.val(response['order_qty']);
                         order_amount.val(response['order_amount']);
                         discount.val(response['discount']);
@@ -507,6 +536,38 @@
                 });
             });
 
+            save_promo.click(function (e) {
+                e.preventDefault();
+                // $(this).html('Save');
+                if($('#qty').val() > 999){
+                    return alert('maksimum kuantitas adalah 999');
+                }
+                $.ajax({
+                    data: {
+                        sales_order_id:$('#order_id').val(),
+                        packet_code:$('#promo_list').val(),
+                        qty:$('#qty_promo').val(),
+                        customer_id:$('#customer_id').val(),
+                        },
+                    url: "{{ route('salesOrderDetails.storePromo') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        hidden_promo.hide();
+                        promo_list.select2().select2('val','');
+                        qty_promo.val('');
+                        $('#modalPromo').modal('hide');
+                        table.draw();
+                        getAllCounter();
+                        save_promo.prop('disabled', true);
+                    },
+                    error: function (data) {
+                        alert('Error !');
+                    }
+                });
+            });
+
             $('body').on('click', '.editProduct', function () {
                 var productId = $(this).data('id');
                 $.get("{{ route('salesOrderDetails.index') }}" +'/' + productId +'/edit', function (data) {
@@ -576,7 +637,7 @@
                     
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('salesOrderDetails.store') }}"+'/'+product_id,
+                        url: "{{ route('salesOrderDetails.storePromo') }}"+'/'+product_id,
                         success: function (data) {
                             table.draw();
                             getAllCounter();

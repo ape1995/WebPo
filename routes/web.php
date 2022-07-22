@@ -93,6 +93,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('carts', CartController::class)->except('create');
     Route::post('cartPromoStore', [CartController::class, 'storePromo'])->name('carts.storePromo');
     Route::delete('cartPromoStore/{id}', [CartController::class, 'destroyPromo'])->name('carts.destroyPromo');
+    Route::post('salesOrderDetailPromoStore', [SalesOrderDetailController::class, 'storePromo'])->name('salesOrderDetails.storePromo');
+    Route::delete('salesOrderDetailPromoStore/{id}', [SalesOrderDetailController::class, 'destroyPromo'])->name('salesOrderDetails.destroyPromo');
     Route::get('dataTableCart',[CartController::class,'getData'])->name('carts.data');
     Route::get('carts-reCountDetailProduct/{date}',[CartController::class,'reCountDetailProduct'])->name('carts.reCountDetailProduct');
     Route::post('updatePassword', [UserController::class, 'updatePassword'])->name('updatePassword');

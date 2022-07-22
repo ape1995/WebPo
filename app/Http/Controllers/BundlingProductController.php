@@ -32,6 +32,10 @@ class BundlingProductController extends AppBaseController
      */
     public function index(Request $request)
     {
+        if (!\Auth::user()->can('browse bundling products')) {
+            abort(403);
+        }
+
         $bundlingProducts = $this->bundlingProductRepository->all();
 
         return view('bundling_products.index')
@@ -45,6 +49,10 @@ class BundlingProductController extends AppBaseController
      */
     public function create()
     {
+        if (!\Auth::user()->can('create bundling products')) {
+            abort(403);
+        }
+
         $products = Product::whereRaw("LEFT(InventoryCD,2) = 'FG' and ItemStatus = 'AC'")->get();
         // dd($products);
 
@@ -85,6 +93,10 @@ class BundlingProductController extends AppBaseController
      */
     public function show($id)
     {
+        if (!\Auth::user()->can('view bundling products')) {
+            abort(403);
+        }
+
         $bundlingProduct = $this->bundlingProductRepository->find($id);
 
         if (empty($bundlingProduct)) {
@@ -105,6 +117,10 @@ class BundlingProductController extends AppBaseController
      */
     public function edit($id)
     {
+        if (!\Auth::user()->can('edit bundling products')) {
+            abort(403);
+        }
+
         $bundlingProduct = $this->bundlingProductRepository->find($id);
 
         if (empty($bundlingProduct)) {
@@ -158,6 +174,10 @@ class BundlingProductController extends AppBaseController
      */
     public function destroy($id)
     {
+        if (!\Auth::user()->can('delete bundling products')) {
+            abort(403);
+        }
+
         $bundlingProduct = $this->bundlingProductRepository->find($id);
 
         if (empty($bundlingProduct)) {

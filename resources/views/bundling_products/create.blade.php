@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>Create Bundling Product</h1>
+                    <h1>{{ trans('bundling_product.create') }} {{ trans('bundling_product.title') }}</h1>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
 
                     <div class="col-md-12">
                         <div class="card card-body">
-                            <h5>Free Items</h5>
+                            <h5>{{ trans('bundling_product.free_item') }}</h5>
                             <button class="btn btn-primary text-light col-md-2 mb-2" id="add_product" type="button"  data-toggle="modal" data-target="#modalProduct">
                                 {{ trans('sales_order.add_product') }}
                             </button>
@@ -117,8 +117,8 @@
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary', 'id' => 'savePageButton']) !!}
-                <a href="{{ route('bundlingProducts.index') }}" class="btn btn-default">Cancel</a>
+                {!! Form::submit(trans('bundling_product.save'), ['class' => 'btn btn-primary', 'id' => 'savePageButton']) !!}
+                <a href="{{ route('bundlingProducts.index') }}" class="btn btn-default">{{ trans('bundling_product.cancel') }}</a>
             </div>
 
             {!! Form::close() !!}

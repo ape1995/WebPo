@@ -1,12 +1,12 @@
 <!-- Start Date Field -->
 <div class="col-sm-4">
-    {!! Form::label('start_date', 'Start Date:') !!}
+    {!! Form::label('start_date', trans('bundling_product.start_date')) !!}
     <input type="text" class="form-control" value="{{ $bundlingProduct->start_date->format('Y-m-d') }}" disabled>
 </div>
 
 <!-- End Date Field -->
 <div class="col-sm-4">
-    {!! Form::label('end_date', 'End Date:') !!}
+    {!! Form::label('end_date', trans('bundling_product.end_date')) !!}
     <input type="text" class="form-control" value="{{ $bundlingProduct->end_date == null ? '' : $bundlingProduct->end_date->format('Y-m-d') }}" disabled>
 </div>
 <div class="col-md-12">
@@ -27,7 +27,7 @@
 
 <div class="col-md-12">
     <hr>
-    <h4>Free</h4>
+    <h4>{{ trans('bundling_product.free_item') }}</h4>
     <div class="table-responsive">
         <table class="table table-hover table-bordered table-sm">
             <thead>

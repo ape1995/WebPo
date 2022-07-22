@@ -2,11 +2,11 @@
     <table class="table table-sm table-hover table-bordered" id="bundlingProducts-table">
         <thead>
             <tr class="bg-info">
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Buy</th>
-            <th>Free Items</th>
-            <th>Action</th>
+            <th>{{ trans('bundling_product.start_date') }}</th>
+            <th>{{ trans('bundling_product.end_date') }}</th>
+            <th>{{ trans('bundling_product.buy') }}</th>
+            <th>{{ trans('bundling_product.free_item') }}</th>
+            <th>{{ trans('bundling_product.action') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -29,15 +29,21 @@
                 <td width="120">
                     {!! Form::open(['route' => ['bundlingProducts.destroy', $bundlingProduct->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
+                        @can('view bundling products')
                         <a href="{{ route('bundlingProducts.show', [$bundlingProduct->id]) }}"
                            class='btn btn-default btn-xs'>
                             <i class="far fa-eye"></i>
                         </a>
+                        @endcan
+                        @can('edit bundling products')
                         <a href="{{ route('bundlingProducts.edit', [$bundlingProduct->id]) }}"
                            class='btn btn-default btn-xs'>
                             <i class="far fa-edit"></i>
                         </a>
+                        @endcan
+                        @can('delete bundling products')
                         {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                        @endcan
                     </div>
                     {!! Form::close() !!}
                 </td>

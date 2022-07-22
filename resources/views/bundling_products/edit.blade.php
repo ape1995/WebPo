@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>Edit Bundling Product</h1>
+                    <h1>{{ trans('bundling_product.edit') }} {{ trans('bundling_product.title') }}</h1>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
 
                     <div class="col-md-12">
                         <div class="card card-body">
-                            <h5>Free Items</h5>
+                            <h5>{{ trans('bundling_product.free_item') }}</h5>
                             <button class="btn btn-primary text-light col-md-2 mb-2" id="add_product" type="button"  data-toggle="modal" data-target="#modalProduct">
                                 {{ trans('sales_order.add_product') }}
                             </button>
@@ -37,7 +37,7 @@
                                         @csrf
                                         <div class="modal-content">
                                             <div class="modal-header text-light" style="background-color: #c61325">
-                                                <h5 class="modal-title" id="exampleModalLongTitle">Free Item</h5>
+                                                <h5 class="modal-title" id="exampleModalLongTitle">{{ trans('bundling_product.free_item') }}</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -114,8 +114,8 @@
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('bundlingProducts.index') }}" class="btn btn-default">Cancel</a>
+                {!! Form::submit(trans('bundling_product.save'), ['class' => 'btn btn-primary']) !!}
+                <a href="{{ route('bundlingProducts.index') }}" class="btn btn-default">{{ trans('bundling_product.cancel') }}</a>
             </div>
 
             {!! Form::close() !!}

@@ -30,6 +30,10 @@ class BundlingGimmickController extends AppBaseController
      */
     public function index(Request $request)
     {
+        if (!\Auth::user()->can('browse bundling gimmicks')) {
+            abort(403);
+        }
+
         $bundlingGimmicks = BundlingGimmick::orderBy('id', 'DESC')->get();
         $maxId = BundlingGimmick::max('id');
 
@@ -44,6 +48,10 @@ class BundlingGimmickController extends AppBaseController
      */
     public function create()
     {
+        if (!\Auth::user()->can('create bundling gimmicks')) {
+            abort(403);
+        }
+
         return view('bundling_gimmicks.create');
     }
 
@@ -106,6 +114,10 @@ class BundlingGimmickController extends AppBaseController
      */
     public function show($id)
     {
+        if (!\Auth::user()->can('view bundling gimmicks')) {
+            abort(403);
+        }
+
         $bundlingGimmick = $this->bundlingGimmickRepository->find($id);
 
         if (empty($bundlingGimmick)) {
@@ -126,6 +138,10 @@ class BundlingGimmickController extends AppBaseController
      */
     public function edit($id)
     {
+        if (!\Auth::user()->can('edit bundling gimmicks')) {
+            abort(403);
+        }
+
         $bundlingGimmick = $this->bundlingGimmickRepository->find($id);
 
         if (empty($bundlingGimmick)) {
@@ -207,6 +223,10 @@ class BundlingGimmickController extends AppBaseController
      */
     public function destroy($id)
     {
+        if (!\Auth::user()->can('delete bundling gimmicks')) {
+            abort(403);
+        }
+
         $bundlingGimmick = $this->bundlingGimmickRepository->find($id);
 
         if (empty($bundlingGimmick)) {

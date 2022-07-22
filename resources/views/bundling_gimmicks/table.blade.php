@@ -2,13 +2,13 @@
     <table class="table table-hover table-bordered table-sm" id="bundlingGimmicks-table">
         <thead>
         <tr class="bg-info">
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Package Type</th>
-            <th>Nominal</th>
-            <th>Free Qty</th>
-            <th>Free Descr</th>
-            <th>Action</th>
+            <th>{{ trans('packet_gimmick.start_date') }}</th>
+            <th>{{ trans('packet_gimmick.end_date') }}</th>
+            <th>{{ trans('packet_gimmick.package_type') }}</th>
+            <th>{{ trans('packet_gimmick.nominal') }}</th>
+            <th>{{ trans('packet_gimmick.free_qty') }}</th>
+            <th>{{ trans('packet_gimmick.free_descr') }}</th>
+            <th>{{ trans('packet_gimmick.action') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -24,11 +24,15 @@
                     {!! Form::open(['route' => ['bundlingGimmicks.destroy', $bundlingGimmick->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
                         @if ($bundlingGimmick->id == $maxId)
-                            <a href="{{ route('bundlingGimmicks.edit', [$bundlingGimmick->id]) }}"
-                            class='btn btn-default btn-xs'>
-                                <i class="far fa-edit"></i>
-                            </a>
-                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                            @can('edit bundling gimmicks')
+                                <a href="{{ route('bundlingGimmicks.edit', [$bundlingGimmick->id]) }}"
+                                class='btn btn-default btn-xs'>
+                                    <i class="far fa-edit"></i>
+                                </a>
+                            @endcan
+                            @can('delete bundling gimmicks')
+                                {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                            @endcan
                         @endif
                     </div>
                     {!! Form::close() !!}

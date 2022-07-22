@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>Create Bundling Gimmick</h1>
+                    <h1>{{ trans('packet_gimmick.create') }} {{ trans('packet_gimmick.title') }}</h1>
                 </div>
             </div>
         </div>
@@ -28,8 +28,8 @@
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('bundlingGimmicks.index') }}" class="btn btn-default">Cancel</a>
+                {!! Form::submit(trans('packet_gimmick.save'), ['class' => 'btn btn-primary']) !!}
+                <a href="{{ route('bundlingGimmicks.index') }}" class="btn btn-default">{{ trans('packet_gimmick.cancel') }}</a>
             </div>
 
             {!! Form::close() !!}

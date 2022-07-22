@@ -106,7 +106,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <tbody>
                 @foreach($salesOrderDetails as $salesOrderDetail)
                     <tr>
-                        <td>{{ $salesOrderDetail->inventory_name.$salesOrderDetail->packet_code == null ? '' : $salesOrderDetail->packet_code.' ( ' .$salesOrderDetail->packet_code. ' ) ' }}</td>
+                        <td>{{ $salesOrderDetail->inventory_name }} {{ $salesOrderDetail->packet_code == null ? '' : $salesOrderDetail->packet_code.' ( ' .$salesOrderDetail->packet_code. ' ) ' }}</td>
                         <td class="money">{{ $salesOrderDetail->qty }}</td>
                         <td>{{ $salesOrderDetail->uom }}</td>
                         <td class="money">{{ number_format($salesOrderDetail->unit_price,2,',','.') }}</td>

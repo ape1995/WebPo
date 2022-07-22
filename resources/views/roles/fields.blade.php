@@ -247,12 +247,54 @@
         </div>
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header bg-danger text-center p-1"><h4>Packet Discount</h4></div>
+                <div class="card-header bg-danger text-center p-1"><h4>Bundling Gimmicks</h4></div>
                 <div class="card-body py-1 px-3">
                     <table width="100%">
                         @foreach ($permissions as $permission)
                             @php
-                                if(stripos($permission->name, 'packet discounts') !== FALSE){
+                                if(stripos($permission->name, 'bundling gimmicks') !== FALSE){
+                            @endphp
+                            <tr>
+                                <td width="10%"><input type="checkbox" name="permission[]" id="permission" value="{{ $permission->id }}"></td>
+                                <td>{{ $permission->name }}</td>
+                            </tr>
+                            @php
+                                }
+                            @endphp
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-danger text-center p-1"><h4>Bundling Products</h4></div>
+                <div class="card-body py-1 px-3">
+                    <table width="100%">
+                        @foreach ($permissions as $permission)
+                            @php
+                                if(stripos($permission->name, 'bundling products') !== FALSE){
+                            @endphp
+                            <tr>
+                                <td width="10%"><input type="checkbox" name="permission[]" id="permission" value="{{ $permission->id }}"></td>
+                                <td>{{ $permission->name }}</td>
+                            </tr>
+                            @php
+                                }
+                            @endphp
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-danger text-center p-1"><h4>Bundling Discount</h4></div>
+                <div class="card-body py-1 px-3">
+                    <table width="100%">
+                        @foreach ($permissions as $permission)
+                            @php
+                                if(stripos($permission->name, 'bundling discounts') !== FALSE){
                             @endphp
                             <tr>
                                 <td width="10%"><input type="checkbox" name="permission[]" id="permission" value="{{ $permission->id }}"></td>

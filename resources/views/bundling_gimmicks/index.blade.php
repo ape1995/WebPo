@@ -5,13 +5,15 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Bundling Gimmicks</h1>
+                    <h1>{{ trans('packet_gimmick.title') }}</h1>
                 </div>
                 <div class="col-sm-6">
+                    @can('create bundling gimmicks')
                     <a class="btn btn-primary float-right"
                        href="{{ route('bundlingGimmicks.create') }}">
-                        Add New
+                       {{ trans('packet_gimmick.create') }}
                     </a>
+                    @endcan
                 </div>
             </div>
         </div>

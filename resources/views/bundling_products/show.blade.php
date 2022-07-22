@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Bundling Product Details</h1>
+                    <h1>{{ trans('bundling_product.title') }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <a class="btn btn-default float-right"
                        href="{{ route('bundlingProducts.index') }}">
-                        Back
+                        {{ trans('bundling_product.back') }}
                     </a>
                 </div>
             </div>

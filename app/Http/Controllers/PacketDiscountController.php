@@ -35,7 +35,7 @@ class PacketDiscountController extends AppBaseController
      */
     public function index(Request $request)
     {
-        if (!\Auth::user()->can('browse packet discounts')) {
+        if (!\Auth::user()->can('browse bundling discounts')) {
             abort(403);
         }
 
@@ -110,7 +110,7 @@ class PacketDiscountController extends AppBaseController
      */
     public function create()
     {
-        if (!\Auth::user()->can('create packet discounts')) {
+        if (!\Auth::user()->can('create bundling discounts')) {
             abort(403);
         }
 
@@ -166,7 +166,7 @@ class PacketDiscountController extends AppBaseController
      */
     public function show($id)
     {
-        if (!\Auth::user()->can('view packet discounts')) {
+        if (!\Auth::user()->can('view bundling discounts')) {
             abort(403);
         }
 
@@ -190,7 +190,7 @@ class PacketDiscountController extends AppBaseController
      */
     public function edit($id)
     {
-        if (!\Auth::user()->can('edit packet discounts')) {
+        if (!\Auth::user()->can('edit bundling discounts')) {
             abort(403);
         }
 
@@ -252,7 +252,7 @@ class PacketDiscountController extends AppBaseController
      */
     public function destroy($id)
     {
-        if (!\Auth::user()->can('delete packet discounts')) {
+        if (!\Auth::user()->can('delete bundling discounts')) {
             abort(403);
         }
 
@@ -275,7 +275,7 @@ class PacketDiscountController extends AppBaseController
 
     public function release($id)
     {
-        if (!\Auth::user()->can('release packet discounts')) {
+        if (!\Auth::user()->can('release bundling discounts')) {
             abort(403);
         }
 

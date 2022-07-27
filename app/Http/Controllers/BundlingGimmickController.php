@@ -241,4 +241,15 @@ class BundlingGimmickController extends AppBaseController
 
         return redirect(route('bundlingGimmicks.index'));
     }
+
+    public function release($id)
+    {
+        $bundlingGimmick = BundlingGimmick::find($id);
+        $bundlingGimmick['status'] = 'Released';
+        $bundlingGimmick->save();
+
+        Flash::success('Bundling Gimmick released successfully.');
+
+        return redirect(route('bundlingGimmicks.index'));
+    }
 }

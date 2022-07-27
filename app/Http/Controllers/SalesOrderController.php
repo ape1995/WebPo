@@ -92,7 +92,19 @@ class SalesOrderController extends AppBaseController
                     return $salesOrder->customer->AcctName;
                 })
                 ->addColumn('order_type', function (SalesOrder $salesOrder) {
-                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
+                    if ($salesOrder->order_type == 'R') {
+                        return 'Regular';
+                    } else if ($salesOrder->order_type == 'D') {
+                        return 'Direct Selling';
+                    } else if ($salesOrder->order_type == 'G') {
+                        return 'Bundling Gimmick';
+                    } else if ($salesOrder->order_type == 'P') {
+                        return 'Bundling Product';
+                    } else if ($salesOrder->order_type == 'C') {
+                        return 'Bundling Discount';
+                    } else {
+                        return '';
+                    }
                 })
                 ->addColumn('created_name', function (SalesOrder $salesOrder) {
                     return $salesOrder->createdBy->name;
@@ -173,7 +185,19 @@ class SalesOrderController extends AppBaseController
                     return $salesOrder->customer->AcctName;
                 })
                 ->addColumn('order_type', function (SalesOrder $salesOrder) {
-                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
+                    if ($salesOrder->order_type == 'R') {
+                        return 'Regular';
+                    } else if ($salesOrder->order_type == 'D') {
+                        return 'Direct Selling';
+                    } else if ($salesOrder->order_type == 'G') {
+                        return 'Bundling Gimmick';
+                    } else if ($salesOrder->order_type == 'P') {
+                        return 'Bundling Product';
+                    } else if ($salesOrder->order_type == 'C') {
+                        return 'Bundling Discount';
+                    } else {
+                        return '';
+                    }
                 })
                 ->addColumn('created_name', function (SalesOrder $salesOrder) {
                     return $salesOrder->createdBy->name;
@@ -254,7 +278,19 @@ class SalesOrderController extends AppBaseController
                     return $salesOrder->customer->AcctName;
                 })
                 ->addColumn('order_type', function (SalesOrder $salesOrder) {
-                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
+                    if ($salesOrder->order_type == 'R') {
+                        return 'Regular';
+                    } else if ($salesOrder->order_type == 'D') {
+                        return 'Direct Selling';
+                    } else if ($salesOrder->order_type == 'G') {
+                        return 'Bundling Gimmick';
+                    } else if ($salesOrder->order_type == 'P') {
+                        return 'Bundling Product';
+                    } else if ($salesOrder->order_type == 'C') {
+                        return 'Bundling Discount';
+                    } else {
+                        return '';
+                    }
                 })
                 ->addColumn('created_name', function (SalesOrder $salesOrder) {
                     return $salesOrder->createdBy->name;
@@ -424,6 +460,7 @@ class SalesOrderController extends AppBaseController
             $detailData['qty'] = $data->qty;
             $detailData['uom'] = $data->uom;
             $detailData['unit_price'] = $data->unit_price;
+            $detailData['discount'] = $data->discount;
             $detailData['amount'] = $data->amount;
             $detailData['packet_code'] = $data->packet_code;
             $detailData['created_by'] = \Auth::user()->id;
@@ -908,12 +945,10 @@ class SalesOrderController extends AppBaseController
         return redirect(route('createOrder'));
     }
 
-    // public function resetOrderDetail($id)
-    // {
-    //     $salesOrder = SalesOrder::find($id);
-
-    //     $salesOrderDetail
-    // }
+    public function resetOrderDetail($id)
+    {
+        $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $id)->delete();
+    }
 
     public function printPdf($id)
     {
@@ -1419,7 +1454,19 @@ class SalesOrderController extends AppBaseController
                     return $salesOrder->customer->AcctName;
                 })
                 ->addColumn('order_type', function (SalesOrder $salesOrder) {
-                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
+                    if ($salesOrder->order_type == 'R') {
+                        return 'Regular';
+                    } else if ($salesOrder->order_type == 'D') {
+                        return 'Direct Selling';
+                    } else if ($salesOrder->order_type == 'G') {
+                        return 'Bundling Gimmick';
+                    } else if ($salesOrder->order_type == 'P') {
+                        return 'Bundling Product';
+                    } else if ($salesOrder->order_type == 'C') {
+                        return 'Bundling Discount';
+                    } else {
+                        return '';
+                    }
                 })
                 ->addColumn('created_name', function (SalesOrder $salesOrder) {
                     return $salesOrder->createdBy->name;
@@ -1490,7 +1537,19 @@ class SalesOrderController extends AppBaseController
                     return $salesOrder->customer->AcctName;
                 })
                 ->addColumn('order_type', function (SalesOrder $salesOrder) {
-                    return $salesOrder->order_type == 'R' ? 'Regular' : 'Direct Selling';
+                    if ($salesOrder->order_type == 'R') {
+                        return 'Regular';
+                    } else if ($salesOrder->order_type == 'D') {
+                        return 'Direct Selling';
+                    } else if ($salesOrder->order_type == 'G') {
+                        return 'Bundling Gimmick';
+                    } else if ($salesOrder->order_type == 'P') {
+                        return 'Bundling Product';
+                    } else if ($salesOrder->order_type == 'C') {
+                        return 'Bundling Discount';
+                    } else {
+                        return '';
+                    }
                 })
                 ->addColumn('created_name', function (SalesOrder $salesOrder) {
                     return $salesOrder->createdBy->name;

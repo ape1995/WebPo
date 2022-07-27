@@ -197,9 +197,9 @@
     </li>
 @endif
 
-@if(Gate::check('view report sales order') || Gate::check('view report sales order detail') || Gate::check('view report request 1') || Gate::check('view report customer')  || Gate::check('view report balance') || Gate::check('view report balance rekap'))
-    <li class="nav-item {{ Request::is('reportSalesOrder*') ? 'menu-open' : '' }} {{ Request::is('reportRequest1*') ? 'menu-open' : '' }} {{ Request::is('reportCustomer*') ? 'menu-open' : '' }} {{ Request::is('reportBalance*') ? 'menu-open' : '' }} {{ Request::is('rekapBalances*') ? 'menu-open' : '' }} {{ Request::is('reportSalesOrderPromoDetail') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}  {{ Request::is('reportRequest1*') ? 'active' : '' }}  {{ Request::is('reportCustomer*') ? 'active' : '' }} {{ Request::is('reportBalance*') ? 'active' : '' }} {{ Request::is('rekapBalances*') ? 'active' : '' }} {{ Request::is('reportSalesOrderPromoDetail') ? 'active' : '' }}">
+@if(Gate::check('view report sales order') || Gate::check('view report sales order detail') || Gate::check('view report request 1') || Gate::check('view report customer')  || Gate::check('view report balance') || Gate::check('view report balance rekap') || Gate::check('view report bundling gimmick') || Gate::check('view report bundling product') || Gate::check('view report bundling discount'))
+    <li class="nav-item {{ Request::is('reportSalesOrder*') ? 'menu-open' : '' }} {{ Request::is('reportRequest1*') ? 'menu-open' : '' }} {{ Request::is('reportCustomer*') ? 'menu-open' : '' }} {{ Request::is('reportBalance*') ? 'menu-open' : '' }} {{ Request::is('rekapBalances*') ? 'menu-open' : '' }} {{ Request::is('reportSalesOrderPromoDetail') ? 'menu-open' : '' }} {{ Request::is('reportBGimmick') ? 'menu-open' : '' }} {{ Request::is('reportBProduct') ? 'menu-open' : '' }} {{ Request::is('reportBDiscount') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('reportSalesOrder*') ? 'active' : '' }}  {{ Request::is('reportRequest1*') ? 'active' : '' }}  {{ Request::is('reportCustomer*') ? 'active' : '' }} {{ Request::is('reportBalance*') ? 'active' : '' }} {{ Request::is('rekapBalances*') ? 'active' : '' }} {{ Request::is('reportSalesOrderPromoDetail') ? 'active' : '' }} {{ Request::is('reportBGimmick') ? 'active' : '' }} {{ Request::is('reportBProduct') ? 'active' : '' }} {{ Request::is('reportBDiscount') ? 'active' : '' }}">
             <i class="nav-icon fas fa-book"></i>
             <p>
                 {{ trans('menu.report')}}
@@ -252,6 +252,30 @@
                     <a href="{{ route('reportSalesOrder.reportBalanceIndex') }}" class="nav-link {{ Request::is('reportBalance') ? 'active' : '' }}">
                         &nbsp;&nbsp;&nbsp;<i class="fas fa-clipboard-check nav-icon"></i>
                         <p>{{ trans('menu.report_balance')}}</p>
+                    </a>
+                </li>
+            @endcan
+            @can('view report bundling gimmick')
+                <li class="nav-item">
+                    <a href="{{ route('reportSalesOrder.reportBGimmickIndex') }}" class="nav-link {{ Request::is('reportBGimmick') ? 'active' : '' }}">
+                        &nbsp;&nbsp;&nbsp;<i class="fas fa-clipboard-check nav-icon"></i>
+                        <p>Bundling Gimmick</p>
+                    </a>
+                </li>
+            @endcan
+            @can('view report bundling product')
+                <li class="nav-item">
+                    <a href="{{ route('reportSalesOrder.reportBProductIndex') }}" class="nav-link {{ Request::is('reportBProduct') ? 'active' : '' }}">
+                        &nbsp;&nbsp;&nbsp;<i class="fas fa-clipboard-check nav-icon"></i>
+                        <p>Bundling Product</p>
+                    </a>
+                </li>
+            @endcan
+            @can('view report bundling discount')
+                <li class="nav-item">
+                    <a href="{{ route('reportSalesOrder.reportBDiscountIndex') }}" class="nav-link {{ Request::is('reportBDiscount') ? 'active' : '' }}">
+                        &nbsp;&nbsp;&nbsp;<i class="fas fa-clipboard-check nav-icon"></i>
+                        <p>Bundling Discount</p>
                     </a>
                 </li>
             @endcan

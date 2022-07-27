@@ -192,4 +192,15 @@ class BundlingProductController extends AppBaseController
 
         return redirect(route('bundlingProducts.index'));
     }
+
+    public function release($id)
+    {
+        $bundlingProduct = BundlingProduct::find($id);
+        $bundlingProduct['status'] = 'Released';
+        $bundlingProduct->save();
+
+        Flash::success('Bundling Product released successfully.');
+
+        return redirect(route('bundlingProducts.index'));
+    }
 }

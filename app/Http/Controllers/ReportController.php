@@ -11,6 +11,9 @@ use App\Models\PrePaymentD;
 use App\Models\User;
 use App\Models\SOOrder;
 use App\Models\CustomerBalance;
+use App\Models\BundlingGimmick;
+use App\Models\BundlingProduct;
+use App\Models\PacketDiscount;
 use App\Exports\ReportBalanceExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth;
@@ -397,4 +400,167 @@ class ReportController extends Controller
         return view('reports.balance_rekap', compact('customerBalances', 'reportName'));
 
     }
+
+    public function reportBGimmickIndex(){
+
+        if (!\Auth::user()->can('view report bundling gimmick')) {
+            abort(403);
+        }
+
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
+            $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
+        } else {
+            $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
+            $customers = Customer::whereRaw("(LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40')")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        }
+
+        return view('reports.bundling_gimmick', compact('customers'));
+
+    }
+
+    public function reportBGimmickView(Request $request){
+        
+        if (!\Auth::user()->can('view report bundling gimmick')) {
+            abort(403);
+        }
+        
+        $input = $request->all();
+        $date_1_selected = $input['date_1'];
+        // $date_2_selected = $input['date_2'];
+        $customer_id_selected = $input['customer_id'];
+        
+
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
+            $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
+        } else {
+            $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
+            $customers = Customer::whereRaw("(LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40')")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        }
+        
+        if($input['customer_id'] == 'All'){
+
+            $salesOrders = SalesOrder::where('order_type', 'G')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_1_selected])->get();
+
+        } else {
+
+            $salesOrders = SalesOrder::where('customer_id', $customer_id_selected)->where('order_type', 'G')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_1_selected])->get();
+
+        }
+
+        $gimmick = BundlingGimmick::whereRaw("(start_date <= '$date_1_selected' AND (end_date IS NULL OR end_date >= '$date_1_selected'))")->get()->first();
+
+    
+        // dd($gimmick);
+
+        return view('reports.bundling_gimmick', compact('gimmick', 'customers', 'date_1_selected', 'customer_id_selected', 'salesOrders'));
+
+    }
+
+    public function reportBProductIndex(){
+
+        if (!\Auth::user()->can('view report bundling gimmick')) {
+            abort(403);
+        }
+
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
+            $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
+        } else {
+            $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
+            $customers = Customer::whereRaw("(LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40')")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        }
+
+        return view('reports.bundling_product', compact('customers'));
+
+    }
+
+    public function reportBProductView(Request $request){
+
+        if (!\Auth::user()->can('view report bundling product')) {
+            abort(403);
+        }
+
+        $input = $request->all();
+        $date_1_selected = $input['date_1'];
+        $date_2_selected = $input['date_2'];
+        $customer_id_selected = $input['customer_id'];
+
+        
+
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
+            $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
+        } else {
+            $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
+            $customers = Customer::whereRaw("(LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40')")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        }
+        
+        if($input['customer_id'] == 'All'){
+
+            $salesOrders = SalesOrder::where('order_type', 'P')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])->get();
+
+        } else {
+
+            $salesOrders = SalesOrder::where('customer_id', $customer_id_selected)->where('order_type', 'P')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])->get();
+
+        }
+
+        // dd($gimmick);
+
+        return view('reports.bundling_product', compact(    'customers', 'date_2_selected', 'date_1_selected', 'customer_id_selected', 'salesOrders'));
+
+    }
+
+    public function reportBDiscountIndex(){
+
+        if (!\Auth::user()->can('view report bundling gimmick')) {
+            abort(403);
+        }
+
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
+            $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
+        } else {
+            $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
+            $customers = Customer::whereRaw("(LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40')")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        }
+
+        return view('reports.bundling_discount', compact('customers'));
+
+    }
+
+    public function reportBDiscountView(Request $request){
+
+        if (!\Auth::user()->can('view report bundling product')) {
+            abort(403);
+        }
+
+        $input = $request->all();
+        $date_1_selected = $input['date_1'];
+        $date_2_selected = $input['date_2'];
+        $customer_id_selected = $input['customer_id'];
+
+        
+
+        if(\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customers' ){
+            $customers = Customer::where('BAccountID', \Auth::user()->customer_id )->get();
+        } else {
+            $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
+            $customers = Customer::whereRaw("(LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40')")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
+        }
+        
+        if($input['customer_id'] == 'All'){
+
+            $salesOrders = SalesOrder::where('order_type', 'C')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])->get();
+
+        } else {
+
+            $salesOrders = SalesOrder::where('customer_id', $customer_id_selected)->where('order_type', 'C')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])->get();
+
+        }
+
+        // dd($gimmick);
+
+        return view('reports.bundling_discount', compact( 'customers', 'date_2_selected', 'date_1_selected', 'customer_id_selected', 'salesOrders'));
+
+    }
+
+    
 }

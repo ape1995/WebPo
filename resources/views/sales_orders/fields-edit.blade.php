@@ -36,7 +36,7 @@
                     {!! Form::label('customer_id', trans('sales_order.customer')) !!}
                 </div>
                 <div class="col-8">
-                    <select name="customer_id" id="customer_id" class="form-control select2js" disabled>
+                    <select name="customer_id" id="customer_id" class="form-control" readonly>
                         @foreach ($customers as $customer)
                             <option value="{{ $customer->BAccountID }}" {{ $customer->BAccountID == $salesOrder->customer_id ? 'selected' : '' }}>{{ $customer->AcctName }}</option>
                         @endforeach

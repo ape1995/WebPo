@@ -6,6 +6,7 @@
             <th>{{ trans('bundling_product.end_date') }}</th>
             <th>{{ trans('bundling_product.buy') }}</th>
             <th>{{ trans('bundling_product.free_item') }}</th>
+            <th>Status</th>
             <th>{{ trans('bundling_product.action') }}</th>
         </tr>
         </thead>
@@ -26,24 +27,27 @@
                         @endforeach
                     </ul>
                 </td>
+                <td>{{ $bundlingProduct->status }}</td>
                 <td width="120">
                     {!! Form::open(['route' => ['bundlingProducts.destroy', $bundlingProduct->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
-                        @can('view bundling products')
-                        <a href="{{ route('bundlingProducts.show', [$bundlingProduct->id]) }}"
-                           class='btn btn-default btn-xs'>
-                            <i class="far fa-eye"></i>
-                        </a>
-                        @endcan
-                        @can('edit bundling products')
-                        <a href="{{ route('bundlingProducts.edit', [$bundlingProduct->id]) }}"
-                           class='btn btn-default btn-xs'>
-                            <i class="far fa-edit"></i>
-                        </a>
-                        @endcan
-                        @can('delete bundling products')
-                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
-                        @endcan
+                        @if ($bundlingProduct->status == 'Draft')
+                            @can('release bundling products')
+                            <a href="{{ route('bundlingProducts.release', [$bundlingProduct->id]) }}"
+                                class='btn btn-success btn-xs' title="release"  onclick="return confirm('Are You Sure?')">
+                                <i class="fa fa-check"></i>
+                            </a>
+                            @endcan
+                            @can('edit bundling products')
+                            <a href="{{ route('bundlingProducts.edit', [$bundlingProduct->id]) }}"
+                                class='btn btn-default btn-xs'>
+                                <i class="far fa-edit"></i>
+                            </a>
+                            @endcan
+                            @can('delete bundling products')
+                            {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                            @endcan
+                        @endif
                     </div>
                     {!! Form::close() !!}
                 </td>

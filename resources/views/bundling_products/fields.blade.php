@@ -8,7 +8,7 @@
     <!-- End Date Field -->
     <div class="form-group col-sm-6">
         {!! Form::label('end_date', trans('bundling_product.end_date')) !!}
-        {!! Form::date('end_date', $bundlingProduct->end_date, ['class' => 'form-control','id'=>'end_date']) !!}
+        {!! Form::date('end_date', $bundlingProduct->end_date, ['class' => 'form-control','id'=>'end_date', 'required' => true]) !!}
     </div>
 
 <div class="col-md-12">

@@ -112,9 +112,11 @@ class SalesOrderDetailController extends AppBaseController
         // return response()->json(['success'=>$data]);
         
         $cekCart = SalesOrderDetail::where('packet_code', $data['packet_code'])->where('sales_order_id', $data['sales_order_id'])->get()->first();
-        //    return response()->json(['success' => $cekCart]);
+           
         if($cekCart == null){
 
+            // return response()->json(['success'=>'test']);
+            // return response()->json(['success'=>$packetDiscount]);
             $packetDiscount = PacketDiscount::where('packet_code', $data['packet_code'])->get()->first();
 
 
@@ -360,7 +362,7 @@ class SalesOrderDetailController extends AppBaseController
     }
 
     public function countOrderDetail($code, $date){
-
+        // return ('tes');
         $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $code)->get();
         $parameterVAT = ParameterVAT::whereRaw("start_date <= '$date' AND (end_date is null OR end_date >= '$date') ")->get()->first();
         

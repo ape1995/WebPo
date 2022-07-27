@@ -12,7 +12,7 @@
 <div class="form-group col-sm-6">
     {!! Form::label('end_date', trans('packet_gimmick.end_date')) !!}
     @if (isset($bundlingGimmick))
-        {!! Form::date('end_date', $bundlingGimmick->end_date, ['class' => 'form-control','id'=>'end_date']) !!}
+        {!! Form::date('end_date', $bundlingGimmick->end_date, ['class' => 'form-control','id'=>'end_date', 'required' => true]) !!}
     @else
         {!! Form::date('end_date', null, ['class' => 'form-control','id'=>'end_date']) !!}
     @endif

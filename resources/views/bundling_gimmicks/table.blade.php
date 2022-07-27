@@ -8,6 +8,7 @@
             <th>{{ trans('packet_gimmick.nominal') }}</th>
             <th>{{ trans('packet_gimmick.free_qty') }}</th>
             <th>{{ trans('packet_gimmick.free_descr') }}</th>
+            <th>Status</th>
             <th>{{ trans('packet_gimmick.action') }}</th>
         </tr>
         </thead>
@@ -20,10 +21,18 @@
                 <td>Rp. {{ number_format($bundlingGimmick->nominal,0,',','.') }}</td>
                 <td>{{ $bundlingGimmick->free_qty }} Pcs</td>
                 <td>{{ $bundlingGimmick->free_descr }}</td>
+                <td>{{ $bundlingGimmick->status }}</td>
                 <td width="120">
                     {!! Form::open(['route' => ['bundlingGimmicks.destroy', $bundlingGimmick->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
-                        @if ($bundlingGimmick->id == $maxId)
+                        {{-- @if ($bundlingGimmick->id == $maxId) --}}
+                        @if ($bundlingGimmick->status == 'Draft')
+                            @can('release bundling gimmicks')
+                                <a href="{{ route('bundlingGimmicks.release', [$bundlingGimmick->id]) }}"
+                                class='btn btn-success btn-xs' title="release" onclick="return confirm('Are You Sure?')">
+                                    <i class="fa fa-check"></i>
+                                </a>
+                            @endcan
                             @can('edit bundling gimmicks')
                                 <a href="{{ route('bundlingGimmicks.edit', [$bundlingGimmick->id]) }}"
                                 class='btn btn-default btn-xs'>
@@ -34,6 +43,8 @@
                                 {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
                             @endcan
                         @endif
+                            
+                        {{-- @endif --}}
                     </div>
                     {!! Form::close() !!}
                 </td>

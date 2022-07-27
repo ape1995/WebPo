@@ -405,7 +405,7 @@
             $('.money').mask("#,##0.00", {reverse: true});
 
             function getAllCounter(){
-                var url = "{{ url('api/countOrderDetail') }}" + '/' + order_id.val() + '/' + delivery_date.val();
+                var url = "{{ url('api/countOrderDetail') }}" + '/' + "{{ $salesOrder->id }}" + '/' + delivery_date.val();
                 // send data to your endpoint
                 $.ajax({
                     url: url,

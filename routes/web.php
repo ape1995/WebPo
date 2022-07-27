@@ -85,7 +85,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('printOrder/{code}',[SalesOrderController::class,'printPdf'])->name('salesOrders.printPdf');
     Route::get('createReOrder/{code}',[SalesOrderController::class,'reOrder'])->name('salesOrders.reOrder');
     Route::get('resetOrder',[SalesOrderController::class,'resetOrder'])->name('salesOrders.resetOrder');
-    Route::get('resetOrderDetail',[SalesOrderController::class,'resetOrderDetail'])->name('salesOrders.resetOrderDetail');
+    Route::get('resetOrderDetail/{code}',[SalesOrderController::class,'resetOrderDetail'])->name('salesOrders.resetOrderDetail');
     Route::get('createOrder', [SalesOrderController::class, 'create'])->name('createOrder');
     Route::resource('salesOrderDetails', SalesOrderDetailController::class);
     Route::get('dataTableSalesOrderDetail/{code}',[SalesOrderDetailController::class,'getData'])->name('salesOrder.dataDetail');
@@ -109,6 +109,12 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('reportBalance', [ReportController::class, 'reportBalanceIndex'])->name('reportSalesOrder.reportBalanceIndex');
     Route::post('reportBalance', [ReportController::class, 'reportBalanceView'])->name('reportSalesOrder.reportBalanceView');
     Route::get('rekapBalances', [ReportController::class, 'rekapBalances'])->name('rekapBalances');
+    Route::get('reportBGimmick', [ReportController::class, 'reportBGimmickIndex'])->name('reportSalesOrder.reportBGimmickIndex');
+    Route::post('reportBGimmick', [ReportController::class, 'reportBGimmickView'])->name('reportSalesOrder.reportBGimmickView');
+    Route::get('reportBProduct', [ReportController::class, 'reportBProductIndex'])->name('reportSalesOrder.reportBProductIndex');
+    Route::post('reportBProduct', [ReportController::class, 'reportBProductView'])->name('reportSalesOrder.reportBProductView');
+    Route::get('reportBDiscount', [ReportController::class, 'reportBDiscountIndex'])->name('reportSalesOrder.reportBDiscountIndex');
+    Route::post('reportBDiscount', [ReportController::class, 'reportBDiscountView'])->name('reportSalesOrder.reportBDiscountView');
     Route::resource('mailSettings', MailSettingController::class);
     Route::get('mailSettings-active/{code}',[MailSettingController::class,'active'])->name('mailSettings.active');
     Route::resource('parameterVATs', ParameterVATController::class);
@@ -141,6 +147,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('bundlingProductFrees-resetDetail/{code}',[BundlingProductFreeController::class,'resetDetail'])->name('bundlingProductFrees.resetDetail');
     
     Route::get('packetDiscounts-release/{code}', [PacketDiscountController::class, 'release'])->name('packetDiscounts.release');
+    Route::get('bundlingGimmicks-release/{code}', [BundlingGimmickController::class, 'release'])->name('bundlingGimmicks.release');
+    Route::get('bundlingProducts-release/{code}', [BundlingProductController::class, 'release'])->name('bundlingProducts.release');
     Route::get('dataTablePacketDiscounts',[PacketDiscountController::class,'dataTable'])->name('packetDiscounts.data');
     Route::resource('packetDiscountDetails', PacketDiscountDetailController::class);
     Route::get('packetDiscountDetails-carts/{user}',[PacketDiscountDetailController::class,'carts'])->name('packetDiscountDetails.cart');

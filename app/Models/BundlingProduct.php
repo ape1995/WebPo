@@ -18,14 +18,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class BundlingProduct extends Model
 {
-    use SoftDeletes;
 
     use HasFactory;
 
     public $table = 'bundling_products';
     
-
-    protected $dates = ['deleted_at'];
 
 
 
@@ -33,6 +30,7 @@ class BundlingProduct extends Model
         'start_date',
         'end_date',
         'product_code',
+        'product_name',
         'qty'
     ];
 

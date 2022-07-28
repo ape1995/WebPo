@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateBundlingProductFreeRequest;
 use App\Repositories\BundlingProductFreeRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use App\Models\Product;
 use App\Models\BundlingProduct;
 use App\Models\BundlingProductFree;
 use Flash;
@@ -58,6 +59,10 @@ class BundlingProductFreeController extends AppBaseController
     public function store(Request $request)
     {
         $input = $request->all();
+
+        
+        $product = Product::where('InventoryCD', $input['product_code'])->get()->first();
+        $input['product_name'] = $product->Descr;
         
         $packetDiscountDetail = BundlingProductFree::create($input);
 

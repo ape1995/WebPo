@@ -17,20 +17,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class BundlingProductFree extends Model
 {
-    use SoftDeletes;
-
+  
     use HasFactory;
 
     public $table = 'bundling_product_frees';
     
-
-    protected $dates = ['deleted_at'];
 
 
 
     public $fillable = [
         'bundling_product_id',
         'product_code',
+        'product_name',
         'qty',
         'user_id'
     ];

@@ -127,15 +127,15 @@
                                                     <td>{{$salesOrder->customer->AcctName}}</td>
                                                     <td>{{ $salesOrder->order_date->format('Y-m-d') }}</td>
                                                     <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
-                                                    <td>{{ $salesOrder->order_qty }}</td>
+                                                    <td>{{ $salesOrder->qty }}</td>
                                                     <td>{{ $salesOrder->order_amount }}</td>
-                                                    <td>{{ $salesOrder->order_tax }}</td>
+                                                    <td>{{ $salesOrder->tax }}</td>
                                                     <td>{{ $salesOrder->order_total }}</td>
                                                     @php
-                                                        $totalGimmick = $salesOrder->order_total / ($gimmick->nominal * $gimmick->free_qty);
+                                                        $totalGimmick = ( $salesOrder->order_total / $salesOrder->nominal * $salesOrder->free_qty);
                                                     @endphp
                                                     <td>{{ floor($totalGimmick) }}</td>
-                                                    <td>{{ $gimmick->free_descr }}</td>
+                                                    <td>{{ $salesOrder->free_descr }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

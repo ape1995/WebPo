@@ -45,7 +45,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                {{-- <div class="row mb-1">
+                                <div class="row mb-1">
                                     <div class="col-md-2">
                                         <label for="order_date">{{ trans('report.to') }}</label>
                                     </div>
@@ -56,7 +56,7 @@
                                             <input type="date" class="form-control" name="date_2" id="date_2" required>
                                         @endif
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div class="row mb-1">
                                     <div class="col-md-2">
                                         <label for="order_date">{{ trans('report.customer') }}</label>
@@ -111,29 +111,25 @@
                                                 <th>Order Date</th>
                                                 <th>Delivery Date</th>
                                                 <th>Product</th>
-                                                <th>Quantity</th>
-                                                <th>Amount</th>
+                                                <th>Qty Order</th>
                                                 <th>Qty Free</th>
                                                 <th>Free Product</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($salesOrders as $salesOrder)
-                                                {{-- @foreach ($salesOrder->detail as $detail) --}}
-                                                    <tr>
-                                                        <td>Bundling Product</td>
-                                                        <td>{{$salesOrder->order_nbr}}</td>
-                                                        <td>{{$salesOrder->customer->AcctCD}}</td>
-                                                        <td>{{$salesOrder->customer->AcctName}}</td>
-                                                        <td>{{ $salesOrder->order_date->format('Y-m-d') }}</td>
-                                                        <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
-                                                        <td>?</td>
-                                                        <td>{{ $salesOrder->order_qty }}</td>
-                                                        <td>{{ $salesOrder->order_amount }}</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                    </tr>
-                                                {{-- @endforeach --}}
+                                                <tr>
+                                                    <td>Bundling Product</td>
+                                                    <td>{{$salesOrder->order_nbr}}</td>
+                                                    <td>{{$salesOrder->customer->AcctCD}}</td>
+                                                    <td>{{$salesOrder->customer->AcctName}}</td>
+                                                    <td>{{ $salesOrder->order_date->format('Y-m-d') }}</td>
+                                                    <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
+                                                    <td>{{ $salesOrder->buy_descr }}</td>
+                                                    <td>{{ $salesOrder->qty }}</td>
+                                                    <td>{{ floor($salesOrder->qty / $salesOrder->qty_buy * $salesOrder->qty_free) }}</td>
+                                                    <td>{{ $salesOrder->free_descr }}</td>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>

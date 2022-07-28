@@ -73,6 +73,8 @@ class BundlingProductController extends AppBaseController
         $input = $request->all();
 
         $input['qty'] = $input['qty_total'];
+        $product = Product::where('InventoryCD', $input['product_code'])->get()->first();
+        $input['product_name'] = $product->Descr;
 
         $bundlingProduct = $this->bundlingProductRepository->create($input);
 
@@ -157,6 +159,8 @@ class BundlingProductController extends AppBaseController
         }
 
         $input['qty'] = $input['qty_total'];
+        $product = Product::where('InventoryCD', $input['product_code'])->get()->first();
+        $input['product_name'] = $product->Descr;
 
         $bundlingProduct = $this->bundlingProductRepository->update($input, $id);
 

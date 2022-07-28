@@ -534,16 +534,18 @@ class ReportController extends Controller
         } else {
 
             $salesOrders = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
-            ->leftJoin('bundling_gimmicks', function($join)
+            ->leftJoin('bundling_products', function($join)
             {
                 $join->on('sales_orders.delivery_date','>=','start_date');
                 $join->on('sales_orders.delivery_date','<=','end_date');
+                $join->on('sales_order_details.inventory_id','=','product_code');
             })
-            ->select('sales_orders.order_type', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', DB::raw('sum(sales_order_details.qty) as qty'), 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
-            ->where('sales_orders.order_type', 'G')
+            ->leftJoin('bundling_product_frees', 'bundling_product_frees.bundling_product_id', '=', 'bundling_products.id')
+            ->select('sales_orders.order_type', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', DB::raw('sum(sales_order_details.qty) as qty'), 'bundling_products.product_name as buy_descr', 'bundling_product_frees.product_name as free_descr', 'bundling_products.qty as qty_buy' , 'bundling_product_frees.qty as qty_free')
+            ->where('sales_orders.order_type', 'P')
             ->where('sales_orders.status', 'P')
             ->where('sales_orders.customer_id', $customer_id_selected)
-            ->groupBy('sales_orders.order_type', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
+            ->groupBy('sales_orders.order_type', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'bundling_products.product_name', 'bundling_product_frees.product_name', 'bundling_products.qty' , 'bundling_product_frees.qty')
             ->whereBetween('sales_orders.delivery_date', [$date_1_selected, $date_2_selected])
             ->get();
 

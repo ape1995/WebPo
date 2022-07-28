@@ -128,9 +128,9 @@
                                                     <td>{{ $salesOrder->order_date->format('Y-m-d') }}</td>
                                                     <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
                                                     <td>{{ $salesOrder->qty }}</td>
-                                                    <td>{{ $salesOrder->order_amount }}</td>
-                                                    <td>{{ $salesOrder->tax }}</td>
-                                                    <td>{{ $salesOrder->order_total }}</td>
+                                                    <td>{{ number_format($salesOrder->order_amount, 2) }}</td>
+                                                    <td>{{ number_format($salesOrder->tax,2) }}</td>
+                                                    <td>{{ number_format($salesOrder->order_total, 2) }}</td>
                                                     @php
                                                         $totalGimmick = ( $salesOrder->order_total / $salesOrder->nominal * $salesOrder->free_qty);
                                                     @endphp

@@ -53,8 +53,8 @@ class Cart extends Model
         'inventory_name' => 'string',
         'qty' => 'integer',
         'uom' => 'string',
-        'unit_price' => 'integer',
-        'amount' => 'integer',
+        'unit_price' => 'double',
+        'amount' => 'double',
         'created_by' => 'integer',
         'updated_by' => 'integer',
         'customer_id' => 'integer'

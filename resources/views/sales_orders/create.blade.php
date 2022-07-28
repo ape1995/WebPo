@@ -82,7 +82,7 @@
                                             {{-- <div class="col-3">
                                                 {!! Form::label('inventory_id', trans('sales_order.product')) !!}
                                             </div> --}}
-                                            <div class="col-12" style="">
+                                            <div class="col-12">
                                                 <select name="inventory_id" id="inventory_id" class="form-control select2js">
                                                     <option value="">Please Choose</option>
                                                     @foreach ($products as $product)
@@ -350,7 +350,7 @@
             add_promo.prop("disabled", true);
             $("#savePageButton").prop("disabled", true);
 
-            getAllCounter();
+            // getAllCounter();
 
             $('#mupload_product').on('submit', function(){
                 $('#upload_product').attr('disabled', true);
@@ -404,6 +404,19 @@
                     btn_upload_product.prop("disabled", true);
                     $("#savePageButton").prop("disabled", true);
 
+                    var url3 = "{{ url('api/get-promo-product-active') }}" + "/" + delivery_date.val() + "/" + "{{ \Auth::user()->id }}" + "/" + order_type.val();
+                    // send data to your endpoint
+                    $.ajax({
+                        url: url3,
+                        method: 'get',
+                        dataType: 'json',
+                        success: function(response) {
+                            // inventory_id.empty();
+                            inventory_id.html(response).change();
+                        }
+                    });
+
+
                     var url2 = "{{ url('api/get-promo-active') }}" + "/" + delivery_date.val() + "/" + "{{ \Auth::user()->id }}";
                     // send data to your endpoint
                     $.ajax({
@@ -444,6 +457,24 @@
                     div_promo.hide();
                     div_reguler.hide();
                 }
+
+                if (order_type.val() == 'P') {
+                    btn_upload_product.hide();
+                } else {
+                    btn_upload_product.show();
+                }
+
+                var url3 = "{{ url('api/get-promo-product-active') }}" + "/" + delivery_date.val() + "/" + "{{ \Auth::user()->id }}" + "/" + order_type.val();
+                    // send data to your endpoint
+                    $.ajax({
+                        url: url3,
+                        method: 'get',
+                        dataType: 'json',
+                        success: function(response) {
+                            // inventory_id.empty();
+                            inventory_id.html(response).change();
+                        }
+                    });
 
                 var url = "{{ url('resetOrder') }}";
                 $.ajax({

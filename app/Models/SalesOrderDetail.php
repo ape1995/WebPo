@@ -80,13 +80,13 @@ class SalesOrderDetail extends Model
 
     public function product()
     {
-        return $this->hasOne(Product::class, 'AcctCD', 'inventory_id');
+        return $this->hasOne(Product::class, 'InventoryCD', 'inventory_id');
     }
 
-    public function productFree()
-    {
-        return $this->hasOne(BundlingProduct::class, 'product_code', 'inventory_id')->whereRaw('');
-    }
+    // public function productFree()
+    // {
+    //     return $this->hasOne(BundlingProduct::class, 'product_code', 'inventory_id')->whereRaw('');
+    // }
 
     public function bundlingDiscount()
     {

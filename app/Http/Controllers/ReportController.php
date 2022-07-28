@@ -481,7 +481,7 @@ class ReportController extends Controller
 
         $input = $request->all();
         $date_1_selected = $input['date_1'];
-        $date_2_selected = $input['date_2'];
+        // $date_2_selected = $input['date_2'];
         $customer_id_selected = $input['customer_id'];
 
         
@@ -495,17 +495,19 @@ class ReportController extends Controller
         
         if($input['customer_id'] == 'All'){
 
-            $salesOrders = SalesOrder::where('order_type', 'P')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])->get();
+            $salesOrders = SalesOrder::where('order_type', 'P')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_1_selected])->get();
 
         } else {
 
-            $salesOrders = SalesOrder::where('customer_id', $customer_id_selected)->where('order_type', 'P')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])->get();
+            $salesOrders = SalesOrder::where('customer_id', $customer_id_selected)->where('order_type', 'P')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_1_selected])->get();
 
         }
 
-        // dd($gimmick);
+        
 
-        return view('reports.bundling_product', compact(    'customers', 'date_2_selected', 'date_1_selected', 'customer_id_selected', 'salesOrders'));
+        // dd($salesOrders);
+
+        return view('reports.bundling_product', compact('customers', 'date_1_selected', 'customer_id_selected', 'salesOrders'));
 
     }
 

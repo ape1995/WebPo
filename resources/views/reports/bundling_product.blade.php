@@ -45,7 +45,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="row mb-1">
+                                {{-- <div class="row mb-1">
                                     <div class="col-md-2">
                                         <label for="order_date">{{ trans('report.to') }}</label>
                                     </div>
@@ -56,7 +56,7 @@
                                             <input type="date" class="form-control" name="date_2" id="date_2" required>
                                         @endif
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="row mb-1">
                                     <div class="col-md-2">
                                         <label for="order_date">{{ trans('report.customer') }}</label>
@@ -119,7 +119,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($salesOrders as $salesOrder)
-                                                @foreach ($salesOrder->detail as $detail)
+                                                {{-- @foreach ($salesOrder->detail as $detail) --}}
                                                     <tr>
                                                         <td>Bundling Product</td>
                                                         <td>{{$salesOrder->order_nbr}}</td>
@@ -127,13 +127,13 @@
                                                         <td>{{$salesOrder->customer->AcctName}}</td>
                                                         <td>{{ $salesOrder->order_date->format('Y-m-d') }}</td>
                                                         <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
-                                                        <td>{{ $detail->product->Descr }}</td>
+                                                        <td>?</td>
                                                         <td>{{ $salesOrder->order_qty }}</td>
                                                         <td>{{ $salesOrder->order_amount }}</td>
                                                         <td>test</td>
                                                         <td>test</td>
                                                     </tr>
-                                                @endforeach
+                                                {{-- @endforeach --}}
                                             @endforeach
                                         </tbody>
                                     </table>

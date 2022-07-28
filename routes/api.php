@@ -33,4 +33,5 @@ Route::get('get-outlet-data/{code}', [App\Http\Controllers\EstimasiController::c
 Route::get('update-ds-status/{code}', [App\Http\Controllers\DsRuleController::class, 'updateStatus']);
 Route::resource('carts', App\Http\Controllers\API\CartAPIController::class);
 route::get('get-promo-active/{date}/{user}', [App\Http\Controllers\PacketDiscountController::class, 'getPromoActive']);
+route::get('get-promo-product-active/{date}/{user}/{type}', [App\Http\Controllers\BundlingProductController::class, 'getProductActive']);
 Route::get('get-promo-data/{code}',[App\Http\Controllers\PacketDiscountController::class, 'getPromoData']);

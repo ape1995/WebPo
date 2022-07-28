@@ -8,7 +8,9 @@ use App\Repositories\BundlingProductRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\BundlingProductFree;
+use App\Models\CustomerProduct;
 use App\Models\BundlingProduct;
 use Flash;
 use Response;
@@ -202,5 +204,37 @@ class BundlingProductController extends AppBaseController
         Flash::success('Bundling Product released successfully.');
 
         return redirect(route('bundlingProducts.index'));
+    }
+
+    public function getProductActive($date, $user, $type)
+    {
+        $user = User::find($user);
+
+        // dd($packetDiscounts);
+        if($type == 'P')
+        {
+            $bundlingProducts = BundlingProduct::whereRaw("start_date <= '$date' AND (end_date is null OR end_date >= '$date') ")->where('status', 'Released')->get();
+            $output = [];
+            $output[] = "<option value=''>- Choose -</option>";
+            foreach ($bundlingProducts as $item) {
+                $output[] = "<option value='$item->product_code'> ".$item->product->Descr." ( $item->product_code )</option>";
+            }
+
+            return $output;
+        } else {
+            $customerProducts = CustomerProduct::select('inventory_code')->where('customer_code',  $user->customer->AcctCD)->get()->pluck('inventory_code');
+        
+            $products = Product::whereRaw("LEFT(InventoryCD, 2) = 'FG' AND ItemStatus = 'AC'")->whereIn('InventoryCD', $customerProducts)->orderBy('InventoryCD', 'ASC')->get();
+        
+            $output = [];
+            $output[] = "<option value=''>- Choose -</option>";
+            foreach ($products as $item) {
+                $output[] = "<option value='$item->InventoryCD'> ".$item->Descr."</option>";
+            }
+
+            return $output;
+        }
+
+        
     }
 }

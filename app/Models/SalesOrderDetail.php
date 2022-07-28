@@ -58,8 +58,8 @@ class SalesOrderDetail extends Model
         'inventory_name' => 'string',
         'qty' => 'integer',
         'uom' => 'string',
-        'unit_price' => 'integer',
-        'amount' => 'integer',
+        'unit_price' => 'double',
+        'amount' => 'double',
         'created_by' => 'string',
         'updated_by' => 'string'
     ];

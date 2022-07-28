@@ -426,7 +426,7 @@ class ReportController extends Controller
         
         $input = $request->all();
         $date_1_selected = $input['date_1'];
-        // $date_2_selected = $input['date_2'];
+        $date_2_selected = $input['date_2'];
         $customer_id_selected = $input['customer_id'];
         
 
@@ -437,19 +437,26 @@ class ReportController extends Controller
             $customers = Customer::whereRaw("(LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40')")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         }
         
-        if($input['customer_id'] == 'All'){
+        // if($input['customer_id'] == 'All'){
 
-            $salesOrders = SalesOrder::where('order_type', 'G')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_1_selected])->get();
+        //     $salesOrders = SalesOrder::where('order_type', 'G')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])->get();
 
-        } else {
 
-            $salesOrders = SalesOrder::where('customer_id', $customer_id_selected)->where('order_type', 'G')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_1_selected])->get();
+        // } else {
 
-        }
+        //     $salesOrders = SalesOrder::where('customer_id', $customer_id_selected)->where('order_type', 'G')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])->get();
 
-        $gimmick = BundlingGimmick::whereRaw("(start_date <= '$date_1_selected' AND (end_date IS NULL OR end_date >= '$date_1_selected'))")->get()->first();
+        // }
 
-    
+        $salesOrders = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
+            ->select('sales_orders.order_type', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_order_details.inventory_id', 'sales_order_details.inventory_name', DB::raw('sum(sales_order_details.qty) as qty'))
+            ->get();
+
+        
+
+        // $gimmick = BundlingGimmick::whereRaw("(start_date <= '$date_1_selected' AND (end_date IS NULL OR end_date >= '$date_1_selected'))")->get()->first();
+
+        
         // dd($gimmick);
 
         return view('reports.bundling_gimmick', compact('gimmick', 'customers', 'date_1_selected', 'customer_id_selected', 'salesOrders'));

@@ -45,7 +45,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                {{-- <div class="row mb-1">
+                                <div class="row mb-1">
                                     <div class="col-md-2">
                                         <label for="order_date">{{ trans('report.to') }}</label>
                                     </div>
@@ -56,7 +56,7 @@
                                             <input type="date" class="form-control" name="date_2" id="date_2" required>
                                         @endif
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div class="row mb-1">
                                     <div class="col-md-2">
                                         <label for="order_date">{{ trans('report.customer') }}</label>

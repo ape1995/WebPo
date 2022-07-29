@@ -28,6 +28,7 @@ use App\Http\Controllers\PacketDiscountController;
 use App\Http\Controllers\PacketDiscountDetailController;
 use App\Http\Controllers\BundlingProductController;
 use App\Http\Controllers\BundlingProductFreeController;
+use App\Http\Controllers\productSchedulerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -145,7 +146,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('bundlingProductFrees-reset/{user}',[BundlingProductFreeController::class,'reset'])->name('bundlingProductFrees.reset');
     Route::get('bundlingProductFrees-detailData/{code}',[BundlingProductFreeController::class,'detailData'])->name('bundlingProductFrees.detailData');
     Route::get('bundlingProductFrees-resetDetail/{code}',[BundlingProductFreeController::class,'resetDetail'])->name('bundlingProductFrees.resetDetail');
-    
+    Route::resource('productSchedulers', productSchedulerController::class);
+
     Route::get('packetDiscounts-release/{code}', [PacketDiscountController::class, 'release'])->name('packetDiscounts.release');
     Route::get('bundlingGimmicks-release/{code}', [BundlingGimmickController::class, 'release'])->name('bundlingGimmicks.release');
     Route::get('bundlingProducts-release/{code}', [BundlingProductController::class, 'release'])->name('bundlingProducts.release');
@@ -162,3 +164,5 @@ Route::group(['middleware' => ['auth']], function(){
 Route::get('/send_notification', [SendEmailController::class, 'send']);
 
 Route::get('/send-notif-confirmShipmentNotInvoiced', [SendEmailController::class, 'sendNotifConfirmShipmentNotInvoiced']);
+
+Route::get('/run-product-scheduler', [CustomerProductController::class, 'runScheduler']);

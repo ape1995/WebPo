@@ -50,8 +50,8 @@
 @endif
 
 @if(Gate::check('browse bundling discounts') || Gate::check('browse bundling products') || Gate::check('browse bundling gimmicks') || Gate::check('setting direct selling rules') || Gate::check('browse parameter')  || Gate::check('browse adds')  || Gate::check('browse tax')  || Gate::check('browse customer products')  || Gate::check('browse min orders') || Gate::check('browse category minimum orders'))
-    <li class="nav-item {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }} {{ Request::is('customerProducts*') ? 'menu-open' : '' }} {{ Request::is('customerMinOrders*') ? 'menu-open' : '' }} {{ Request::is('categoryMinOrders*') ? 'menu-open' : '' }} {{ Request::is('dsRules*') ? 'menu-open' : '' }} {{ Request::is('bundlingGimmicks*') ? 'menu-open' : '' }} {{ Request::is('bundlingProducts*') ? 'menu-open' : '' }} {{ Request::is('packetDiscounts*') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }} {{ Request::is('customerProducts*') ? 'active' : '' }} {{ Request::is('customerMinOrders*') ? 'active' : '' }} {{ Request::is('categoryMinOrders*') ? 'active' : '' }} {{ Request::is('dsRules*') ? 'active' : '' }} {{ Request::is('bundlingGimmicks*') ? 'active' : '' }} {{ Request::is('bundlingProducts*') ? 'active' : '' }} {{ Request::is('packetDiscounts*') ? 'active' : '' }}">
+    <li class="nav-item {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }} {{ Request::is('customerProducts*') ? 'menu-open' : '' }} {{ Request::is('customerMinOrders*') ? 'menu-open' : '' }} {{ Request::is('categoryMinOrders*') ? 'menu-open' : '' }} {{ Request::is('dsRules*') ? 'menu-open' : '' }} {{ Request::is('bundlingGimmicks*') ? 'menu-open' : '' }} {{ Request::is('bundlingProducts*') ? 'menu-open' : '' }} {{ Request::is('packetDiscounts*') ? 'menu-open' : '' }} {{ Request::is('productSchedulers*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }} {{ Request::is('customerProducts*') ? 'active' : '' }} {{ Request::is('customerMinOrders*') ? 'active' : '' }} {{ Request::is('categoryMinOrders*') ? 'active' : '' }} {{ Request::is('dsRules*') ? 'active' : '' }} {{ Request::is('bundlingGimmicks*') ? 'active' : '' }} {{ Request::is('bundlingProducts*') ? 'active' : '' }} {{ Request::is('packetDiscounts*') ? 'active' : '' }} {{ Request::is('productSchedulers*') ? 'active' : '' }}">
             <i class="nav-icon fas fa-cogs"></i>
             <p>
             {{ trans('menu.configuration')}}
@@ -94,8 +94,16 @@
             @can('browse customer products')
             <li class="nav-item">
                 <a href="{{ route('customerProducts.index') }}" class="nav-link {{ Request::is('customerProducts*') ? 'active' : '' }}">
-                    &nbsp;&nbsp;&nbsp;<i class="fab fa-product-hunt nav-icon"></i>
+                    &nbsp;&nbsp;&nbsp;<i class="fa fa-archive nav-icon"></i>
                     <p>{{ trans('menu.customer_products') }}</p>
+                </a>
+            </li>
+            @endcan
+            @can('browse product schedulers')
+            <li class="nav-item">
+                <a href="{{ route('productSchedulers.index') }}" class="nav-link {{ Request::is('productSchedulers*') ? 'active' : '' }}">
+                    &nbsp;&nbsp;&nbsp;<i class="fa fa-calendar nav-icon"></i>
+                    <p>Product Schedulers</p>
                 </a>
             </li>
             @endcan

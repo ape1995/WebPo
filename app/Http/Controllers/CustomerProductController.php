@@ -12,6 +12,7 @@ use App\Models\Customer;
 use App\Models\User;
 use App\Models\CustomerProduct;
 use App\Models\Product;
+use App\Models\productScheduler;
 use Illuminate\Http\Request;
 use DataTables;
 use Flash;
@@ -292,5 +293,65 @@ class CustomerProductController extends AppBaseController
         
         return redirect()->route('customerProducts.index');
 
+    }
+
+    public function runScheduler()
+    {
+
+        // Get Data Schedule
+        $deleteSchedules = productScheduler::where('date', \Carbon\Carbon::now()->toDateTimeString())->where('action_type', 'Delete Item')->get();
+        $createSchedules = productScheduler::where('date', \Carbon\Carbon::now()->toDateTimeString())->where('action_type', 'Create Item')->get();
+
+        // Process Delete
+        foreach ($deleteSchedules as $deleteSchedule) {
+            // Delete
+            $customersByClasses = DB::connection('sqlsrv')->table('Customer')->where('Customer.CustomerClassID', $deleteSchedule->customer_class)
+                                ->join('BAccount', 'Customer.BAccountID', '=', 'BAccount.BAccountID')->get();
+            
+
+            foreach($customersByClasses as $customer){
+                // dd($customer);
+                $product = CustomerProduct::where('customer_code', $customer->AcctCD)->where('inventory_code', $deleteSchedule->inventory_code)->get()->first();
+                if($product != null){
+                    $product->delete();
+                }
+            }
+        }
+
+        // Process Create
+        foreach ($createSchedules as $createSchedule) {
+            // Create
+            $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
+
+            // dd($createdCustomer);
+
+            $customersByClasses = DB::connection('sqlsrv')->table('Customer')->where('Customer.CustomerClassID', $createSchedule->customer_class)
+                                ->join('BAccount', 'Customer.BAccountID', '=', 'BAccount.BAccountID')
+                                ->whereIn('Customer.BAccountID', $createdCustomer)->whereNotIn('AcctCD', ['MAIN'])->get();
+
+            foreach($customersByClasses as $customer){
+                
+                // Cek data sudah ada
+                $cekData = CustomerProduct::where('customer_code', $customer->AcctCD)->where('inventory_code', $createSchedule->inventory_code)->get()->first();
+
+                if($cekData == null){
+                    // Get Customer Class
+                    $cekCustomerClass = Customer::where('AcctCD', $customer->AcctCD)->get()->first();
+                    // dd($cekCustomerClass->customer2);
+                    $input['inventory_code'] = $createSchedule->inventory_code;
+                    $input['customer_code'] = $customer->AcctCD;
+                    $input['customer_class'] = $cekCustomerClass->customer2->CustomerClassID;
+                    // Store to DB
+                    $customerProduct = $this->customerProductRepository->create($input);
+                }
+
+            }
+        }
+
+        // Delete Schedule
+        // $deleteSchedules = productScheduler::where('date', \Carbon\Carbon::now()->toDateTimeString())->where('action_type', 'Delete Item')->delete();
+        // $createSchedules = productScheduler::where('date', \Carbon\Carbon::now()->toDateTimeString())->where('action_type', 'Create Item')->delete();
+
+        return "Successfull";
     }
 }

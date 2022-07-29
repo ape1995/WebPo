@@ -119,6 +119,7 @@
                                                 <th>Group</th>
                                                 <th>WAREHOUSE</th>
                                                 <th>Diskon Persen</th>
+                                                <th>Description</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -140,6 +141,7 @@
                                                     <td>{{ $salesOrder->customer->outlet->UsrRitNbr }}</td>
                                                     <td>WH03FG</td>
                                                     <td>{{ floor($detail->discount / ($detail->qty * $detail->unit_price) * 100) }}</td>
+                                                    <td></td>
                                                 @endforeach
                                             </tr>
                                             @endforeach

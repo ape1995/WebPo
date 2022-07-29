@@ -10,6 +10,8 @@ return [
     'nominal' => 'Nominal',
     'free_qty' => 'Free Qty',
     'free_descr' => 'Free Description',
+    'released_at' => 'Released At',
+    'created_at' => 'Created At',
     'action' => 'Action',
     'save' => 'Save',
     'cancel' => 'Cancel',

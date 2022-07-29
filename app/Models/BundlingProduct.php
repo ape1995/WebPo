@@ -31,7 +31,11 @@ class BundlingProduct extends Model
         'end_date',
         'product_code',
         'product_name',
-        'qty'
+        'qty',
+        'created_by',
+        'released_at',
+        'released_by',
+        'updated_by',
     ];
 
     /**

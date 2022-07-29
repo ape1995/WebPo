@@ -9,6 +9,7 @@ return [
     'start_date' => 'Start Date',
     'end_date' => 'End Date',
     'released_date' => 'Released Date',
+    'created_at' => 'Created Date',
     'discount' => 'Discount',
     'description' => 'Description',
     'action' => 'Action',

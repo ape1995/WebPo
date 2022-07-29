@@ -42,7 +42,10 @@ class PacketDiscount extends Model
         'status',
         'total',
         'discount',
-        'grand_total'
+        'grand_total',
+        'created_by',
+        'released_by',
+        'updated_by',
     ];
 
     /**

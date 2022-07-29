@@ -10,6 +10,8 @@ return [
     'nominal' => 'Nominal',
     'free_qty' => 'Gratis Qty',
     'free_descr' => 'Deskripsi',
+    'released_at' => 'Dirilis Pada',
+    'created_at' => 'Dibuat Pada',
     'action' => 'Aksi',
     'save' => 'Simpan',
     'cancel' => 'Batal',

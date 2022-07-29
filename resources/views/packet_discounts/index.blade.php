@@ -92,6 +92,9 @@
                                 data: 'status'      
                             }, 
                             {
+                                data: 'created_at'      
+                            }, 
+                            {
                                 data: 'released_date'      
                             }, 
                             {

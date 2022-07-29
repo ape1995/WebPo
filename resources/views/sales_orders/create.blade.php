@@ -465,16 +465,16 @@
                 }
 
                 var url3 = "{{ url('api/get-promo-product-active') }}" + "/" + delivery_date.val() + "/" + "{{ \Auth::user()->id }}" + "/" + order_type.val();
-                    // send data to your endpoint
-                    $.ajax({
-                        url: url3,
-                        method: 'get',
-                        dataType: 'json',
-                        success: function(response) {
-                            // inventory_id.empty();
-                            inventory_id.html(response).change();
-                        }
-                    });
+                // send data to your endpoint
+                $.ajax({
+                    url: url3,
+                    method: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        // inventory_id.empty();
+                        inventory_id.html(response).change();
+                    }
+                });
 
                 var url = "{{ url('resetOrder') }}";
                 $.ajax({

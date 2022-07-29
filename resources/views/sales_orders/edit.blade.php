@@ -333,20 +333,25 @@
                 qty.val('');
                 amount.val('');
                 let inventoryCode = inventory_id.val().replace(/^\s+|\s+$/gm,'');
-                var url = "{{ url('api/get-inventory-data') }}" + '/' + inventoryCode + '/' + customer_id.val() + '/' + delivery_date.val();
-                // send data to your endpoint
-                $.ajax({
-                    url: url,
-                    method: 'get',
-                    dataType: 'json',
-                    success: function(response) {
-                        // console.log(response);
-                        $('#data_show').show();
-                        unit_price.val(response['unit_price']);
-                        inventory_name.val(response['inventory_name']);
-                        uom.val(response['uom']);
-                    }
-                });
+                
+                if(inventoryCode != '')
+                {
+                    var url = "{{ url('api/get-inventory-data') }}" + '/' + inventoryCode + '/' + customer_id.val() + '/' + delivery_date.val();
+                    // send data to your endpoint
+                    $.ajax({
+                        url: url,
+                        method: 'get',
+                        dataType: 'json',
+                        success: function(response) {
+                            // console.log(response);
+                            $('#data_show').show();
+                            unit_price.val(response['unit_price']);
+                            inventory_name.val(response['inventory_name']);
+                            uom.val(response['uom']);
+                        }
+                    });
+                }
+                
             });
 
             promo_list.on('change', function() {
@@ -659,6 +664,18 @@
                     success: function(response) {
                         promo_list.empty();
                         promo_list.html(response)
+                    }
+                });
+
+                var url3 = "{{ url('api/get-promo-product-active') }}" + "/" + delivery_date.val() + "/" + "{{ \Auth::user()->id }}" + "/" + "{{ $salesOrder->order_type }}";
+                // send data to your endpoint
+                $.ajax({
+                    url: url3,
+                    method: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        // inventory_id.empty();
+                        inventory_id.html(response).change();
                     }
                 });
             }

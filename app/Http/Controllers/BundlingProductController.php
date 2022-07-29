@@ -75,17 +75,49 @@ class BundlingProductController extends AppBaseController
         $input['qty'] = $input['qty_total'];
         $product = Product::where('InventoryCD', $input['product_code'])->get()->first();
         $input['product_name'] = $product->Descr;
+        $input['created_by'] = \Auth::user()->id;
 
-        $bundlingProduct = $this->bundlingProductRepository->create($input);
+        $cekData = BundlingProduct::where('product_code', $input['product_code'])->latest()->first();
 
-        $bundlingProductFree = BundlingProductFree::where('user_id', \Auth::user()->id)->where('bundling_product_id', null)
-                                ->update([
-                                    'bundling_product_id' => $bundlingProduct->id]
-                                );
+        if($cekData == null){
 
-        Flash::success('Bundling Product saved successfully.');
+            $bundlingProduct = $this->bundlingProductRepository->create($input);
 
-        return redirect(route('bundlingProducts.index'));
+            $bundlingProductFree = BundlingProductFree::where('user_id', \Auth::user()->id)->where('bundling_product_id', null)
+                                    ->update([
+                                        'bundling_product_id' => $bundlingProduct->id]
+                                    );
+
+            Flash::success('Bundling Product saved successfully.');
+
+            return redirect(route('bundlingProducts.index'));
+
+        } else if ($input['start_date'] > $input['end_date']) {
+
+            Flash::error('start date must be older than end date!');
+
+            return redirect(route('bundlingProducts.create'))->withInput();
+
+        } else if ($cekData->end_date > $input['start_date']) {
+
+            Flash::error('You Cannot create promo for one product in the same period!');
+
+            return redirect(route('bundlingProducts.create'))->withInput();
+
+        } else {
+            $bundlingProduct = $this->bundlingProductRepository->create($input);
+
+            $bundlingProductFree = BundlingProductFree::where('user_id', \Auth::user()->id)->where('bundling_product_id', null)
+                                    ->update([
+                                        'bundling_product_id' => $bundlingProduct->id]
+                                    );
+
+            Flash::success('Bundling Product saved successfully.');
+
+            return redirect(route('bundlingProducts.index'));
+        }
+
+        
     }
 
     /**
@@ -161,12 +193,42 @@ class BundlingProductController extends AppBaseController
         $input['qty'] = $input['qty_total'];
         $product = Product::where('InventoryCD', $input['product_code'])->get()->first();
         $input['product_name'] = $product->Descr;
+        $input['updated_by'] = \Auth::user()->id;
 
-        $bundlingProduct = $this->bundlingProductRepository->update($input, $id);
+        $cekData = BundlingProduct::whereNotIn('id', [$id])->where('product_code', $input['product_code'])->latest()->first();
 
-        Flash::success('Bundling Product updated successfully.');
+        if($cekData == null){
 
-        return redirect(route('bundlingProducts.index'));
+            $bundlingProduct = $this->bundlingProductRepository->update($input, $id);
+
+            Flash::success('Bundling Product updated successfully.');
+
+            return redirect(route('bundlingProducts.index'));
+
+        } else if ($input['start_date'] > $input['end_date']) {
+
+            Flash::error('Start Date must be older than End Date.');
+
+            return redirect(route('bundlingProducts.edit', $id));
+
+        } else if ($cekData->end_date > $input['start_date']) {
+
+            Flash::error('You Cannot create promo for one product in the same period!');
+
+            return redirect(route('bundlingProducts.edit', $id));
+
+        } else {
+
+            $bundlingProduct = $this->bundlingProductRepository->update($input, $id);
+
+            Flash::success('Bundling Product updated successfully.');
+
+            return redirect(route('bundlingProducts.index'));
+            
+        }
+
+
+        
     }
 
     /**
@@ -203,6 +265,8 @@ class BundlingProductController extends AppBaseController
     {
         $bundlingProduct = BundlingProduct::find($id);
         $bundlingProduct['status'] = 'Released';
+        $bundlingProduct['released_at'] = \Carbon\Carbon::now()->toDateTimeString();
+        $bundlingProduct['released_by'] = \Auth::user()->id;
         $bundlingProduct->save();
 
         Flash::success('Bundling Product released successfully.');

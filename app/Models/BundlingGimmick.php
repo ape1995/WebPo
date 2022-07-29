@@ -32,7 +32,11 @@ class BundlingGimmick extends Model
         'package_type',
         'nominal',
         'free_qty',
-        'free_descr'
+        'free_descr',
+        'created_by',
+        'released_at',
+        'released_by',
+        'updated_by',
     ];
 
     /**

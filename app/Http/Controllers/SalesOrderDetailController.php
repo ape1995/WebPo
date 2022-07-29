@@ -97,7 +97,7 @@ class SalesOrderDetailController extends AppBaseController
             $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
             $salesOrder['discount'] = $salesOrderDetail->sum('discount');
             $salesOrder['tax'] = ($parameterVAT->value/100) * ( $salesOrder['order_amount'] - $salesOrder['discount'] );
-            $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
+            $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
             $salesOrder->save();
        
             return response()->json(['success'=>'Products added successfully.']);
@@ -144,7 +144,7 @@ class SalesOrderDetailController extends AppBaseController
             $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
             $salesOrder['discount'] = $salesOrderDetail->sum('discount');
             $salesOrder['tax'] = ($parameterVAT->value/100) * ( $salesOrder['order_amount'] - $salesOrder['discount'] );
-            $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
+            $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
             $salesOrder->save();
 
             
@@ -171,7 +171,7 @@ class SalesOrderDetailController extends AppBaseController
             $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
             $salesOrder['discount'] = $salesOrderDetail->sum('discount');
             $salesOrder['tax'] = ($parameterVAT->value/100) * ( $salesOrder['order_amount'] - $salesOrder['discount'] );
-            $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
+            $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
             $salesOrder->save();
 
             return response()->json(['success'=>'Cart added successfully.']);
@@ -253,7 +253,7 @@ class SalesOrderDetailController extends AppBaseController
         $salesOrder['order_amount'] = $salesOrderDetails->sum('amount');
         $salesOrder['discount'] = $salesOrderDetails->sum('discount');
         $salesOrder['tax'] = ($parameterVAT->value/100) * ($salesOrder['order_amount'] - $salesOrder['discount']);
-        $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
+        $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
         $salesOrder->save();
 
 
@@ -283,7 +283,7 @@ class SalesOrderDetailController extends AppBaseController
         $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
         $salesOrder['discount'] = $salesOrderDetail->sum('discount');
         $salesOrder['tax'] = ($parameterVAT->value/100) * ($salesOrder['order_amount'] - $salesOrder['discount']);
-        $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
+        $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
         $salesOrder->save();
 
      
@@ -305,7 +305,7 @@ class SalesOrderDetailController extends AppBaseController
         $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
         $salesOrder['discount'] = $salesOrderDetail->sum('discount');
         $salesOrder['tax'] = ($parameterVAT->value/100) * ($salesOrder['order_amount'] - $salesOrder['discount']);
-        $salesOrder['order_total'] = $salesOrder['order_amount'] - $salesOrder['discount'] + $salesOrder['tax'];
+        $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
         $salesOrder->save();
 
 
@@ -371,7 +371,7 @@ class SalesOrderDetailController extends AppBaseController
         $data['order_amount'] = $salesOrderDetail->sum('amount');
         $data['discount'] = $salesOrderDetail->sum('discount');
         $tax = ($parameterVAT->value/100) * ($data['order_amount'] - $data['discount']);
-        $total = $data['order_amount'] - $data['discount'] + $tax;
+        $total = $data['order_amount'] + $tax;
         $data['discount'] = number_format($data['discount'],2,',','.');
         $data['order_qty'] = number_format($data['order_qty'],0,',','.');
         $data['order_amount'] = number_format($data['order_amount'],2,',','.');

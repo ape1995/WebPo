@@ -11,6 +11,7 @@
                 <th>{{ trans('packet_discount.discount') }}</th>
                 <th>Grand Total</th>
                 <th>Status</th>
+                <th>{{ trans('packet_discount.created_at') }}</th>
                 <th>{{ trans('packet_discount.released_date') }}</th>
                 <th>{{ trans('packet_discount.action') }}</th>
             </tr>

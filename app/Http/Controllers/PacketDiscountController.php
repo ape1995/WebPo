@@ -72,6 +72,10 @@ class PacketDiscountController extends AppBaseController
                         return $packetDiscount->end_date->format('Y-m-d');
                     }
                 })
+                ->editColumn('created_at', function (PacketDiscount $packetDiscount) 
+                {
+                    return $packetDiscount->created_at->format('Y-m-d');
+                })
                 ->editColumn('released_date', function (PacketDiscount $packetDiscount) 
                 {
                     if ($packetDiscount->released_date == null) {
@@ -134,6 +138,7 @@ class PacketDiscountController extends AppBaseController
         $input['total'] = str_replace('.','',$input['total']);
         $input['discount'] = str_replace('.','',$input['discount']);
         $input['grand_total'] = str_replace('.','',$input['grand_total']);
+        $input['created_by'] = \Auth::user()->id;
 
 
         $packetDiscount = $this->packetDiscountRepository->create($input);
@@ -231,6 +236,7 @@ class PacketDiscountController extends AppBaseController
         $input['total'] = str_replace('.','',$input['total']);
         $input['discount'] = str_replace('.','',$input['discount']);
         $input['grand_total'] = str_replace('.','',$input['grand_total']);
+        $input['updated_by'] = \Auth::user()->id;
 
         $discountPercentage = $input['discount'] / $input['grand_total'] * 100;
 
@@ -282,6 +288,7 @@ class PacketDiscountController extends AppBaseController
         $packetDiscount = $this->packetDiscountRepository->find($id);
         $packetDiscount['status'] = 'Released';
         $packetDiscount['released_date'] = \Carbon\Carbon::now()->toDateTimeString();
+        $packetDiscount['released_by'] = \Auth::user()->id;
         $packetDiscount->save();
 
         Flash::success('Packet Discount released successfully.');

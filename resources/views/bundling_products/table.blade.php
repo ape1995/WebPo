@@ -7,6 +7,8 @@
             <th>{{ trans('bundling_product.buy') }}</th>
             <th>{{ trans('bundling_product.free_item') }}</th>
             <th>Status</th>
+            <th>{{ trans('bundling_product.created_at') }}</th>
+            <th>{{ trans('bundling_product.released_at') }}</th>
             <th>{{ trans('bundling_product.action') }}</th>
         </tr>
         </thead>
@@ -28,6 +30,8 @@
                     </ul>
                 </td>
                 <td>{{ $bundlingProduct->status }}</td>
+                <td>{{ $bundlingProduct->created_at->format('Y-m-d') }}</td>
+                <td>{{ $bundlingProduct->released_at == null ? '' : date('Y-m-d', strtotime($bundlingProduct->released_at)) }}</td>
                 <td width="120">
                     {!! Form::open(['route' => ['bundlingProducts.destroy', $bundlingProduct->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>

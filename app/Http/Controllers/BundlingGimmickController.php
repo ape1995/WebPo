@@ -70,6 +70,7 @@ class BundlingGimmickController extends AppBaseController
 
         $input['nominal'] = str_replace(',','',$input['nominal']);
         $input['nominal'] = str_replace('.','',$input['nominal']);
+        $input['created_by'] = \Auth::user()->id;
 
         $cekData = BundlingGimmick::latest()->first();
 
@@ -175,6 +176,7 @@ class BundlingGimmickController extends AppBaseController
         }
         $input['nominal'] = str_replace(',','',$input['nominal']);
         $input['nominal'] = str_replace('.','',$input['nominal']);
+        $input['updated_by'] = \Auth::user()->id;
 
         $cekData = BundlingGimmick::whereNotIn('id', [$id])->latest()->first();
         // dd($cekData);
@@ -246,6 +248,8 @@ class BundlingGimmickController extends AppBaseController
     {
         $bundlingGimmick = BundlingGimmick::find($id);
         $bundlingGimmick['status'] = 'Released';
+        $bundlingGimmick['released_at'] = \Carbon\Carbon::now()->toDateTimeString();
+        $bundlingGimmick['released_by'] = \Auth::user()->id;
         $bundlingGimmick->save();
 
         Flash::success('Bundling Gimmick released successfully.');

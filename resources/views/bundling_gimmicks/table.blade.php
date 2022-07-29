@@ -9,6 +9,8 @@
             <th>{{ trans('packet_gimmick.free_qty') }}</th>
             <th>{{ trans('packet_gimmick.free_descr') }}</th>
             <th>Status</th>
+            <th>{{ trans('packet_gimmick.created_at') }}</th>
+            <th>{{ trans('packet_gimmick.released_at') }}</th>
             <th>{{ trans('packet_gimmick.action') }}</th>
         </tr>
         </thead>
@@ -22,6 +24,8 @@
                 <td>{{ $bundlingGimmick->free_qty }} Pcs</td>
                 <td>{{ $bundlingGimmick->free_descr }}</td>
                 <td>{{ $bundlingGimmick->status }}</td>
+                <td>{{ $bundlingGimmick->created_at->format('Y-m-d') }}</td>
+                <td>{{ $bundlingGimmick->released_at == null ? '' : date('Y-m-d', strtotime($bundlingGimmick->released_at)) }}</td>
                 <td width="120">
                     {!! Form::open(['route' => ['bundlingGimmicks.destroy', $bundlingGimmick->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>

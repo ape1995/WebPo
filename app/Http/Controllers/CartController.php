@@ -295,7 +295,7 @@ class CartController extends AppBaseController
         $data['order_qty'] = $getCounter->sum('qty');
         $data['order_amount'] = $getCounter->sum('amount');
         $data['discount'] = $getCounter->sum('discount');
-        $tax = ($parameterVAT->value/100) * ($data['order_amount'] - $data['discount']);
+        $tax = ($parameterVAT->value/100) * ($data['order_amount']);
         $total = $data['order_amount'] + $tax;
         // dd($tax);
         $data['order_qty'] = number_format($data['order_qty'],0,',','.');

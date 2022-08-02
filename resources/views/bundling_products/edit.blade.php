@@ -182,7 +182,6 @@
                     $('#ajaxModel').modal('show');
                     $('#product_name').val(data.product_name);
                     $('#product_id').val(data.id);
-                    $('#product_code').val(data.product_code);
                     $('#quantity').val(data.qty);
                 })
             });

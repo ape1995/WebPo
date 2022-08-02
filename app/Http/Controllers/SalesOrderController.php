@@ -443,8 +443,8 @@ class SalesOrderController extends AppBaseController
         $input['order_qty'] = $carts->sum('qty');
         $input['order_amount'] = $carts->sum('amount');
         $input['discount'] = $carts->sum('discount');
-        $input['tax'] = ($parameterVAT->value/100) * ($input['order_amount'] - $input['discount']);
-        $input['order_total'] = $input['order_amount'] - $input['discount'] + $input['tax'];
+        $input['tax'] = ($parameterVAT->value/100) * ($input['order_amount']);
+        $input['order_total'] = $input['order_amount'] + $input['tax'];
 
 
         // Store To Sales Order DB

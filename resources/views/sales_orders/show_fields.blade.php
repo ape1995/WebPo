@@ -24,7 +24,7 @@
                         } else if ($salesOrder->order_type == 'D') {
                             $type = 'DIRECT SELLING';
                         } else if ($salesOrder->order_type == 'G') {
-                            $type = 'BUNDLING GIMMICK';
+                            $type = 'DIRECT SELLING';
                         } else if ($salesOrder->order_type == 'P') {
                             $type = 'BUNDLING PRODUCT';
                         } else {

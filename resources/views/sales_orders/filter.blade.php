@@ -119,7 +119,10 @@
                             },      
                             {
                                 data: 'order_amount'    
-                            },       
+                            },   
+                            {
+                                data: 'discount'    
+                            },      
                             {
                                 data: 'tax'      
                             },       

@@ -140,7 +140,22 @@
                                                     <tr>
                                                         <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
                                                         <td>{{ $salesOrder->order_nbr }}</td>
-                                                        <td>{{ $salesOrder->order_type == 'R' ? 'Reguler' : 'Direct Selling' }}</td>
+                                                        @php
+                                                            if ($salesOrder->order_type == 'R') {
+                                                                $orderType = 'Regular';
+                                                            } else if ($salesOrder->order_type == 'D') {
+                                                                $orderType = 'Direct Selling';
+                                                            } else if ($salesOrder->order_type == 'G') {
+                                                                $orderType = 'Bundling Gimmick';
+                                                            } else if ($salesOrder->order_type == 'P') {
+                                                                $orderType = 'Bundling Product';
+                                                            } else if ($salesOrder->order_type == 'C') {
+                                                                $orderType = 'Bundling Discount';
+                                                            } else {
+                                                                $orderType = '';
+                                                            }
+                                                        @endphp
+                                                        <td>{{ $orderType }}</td>
                                                         <td>{{ $salesOrder->customer->AcctName }} - {{ $salesOrder->customer->AcctCD }}</td>
                                                         <td>{{ $detail->inventory_id }}</td>
                                                         <td>{{ $detail->inventory_name }}</td>

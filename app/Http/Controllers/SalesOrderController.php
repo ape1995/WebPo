@@ -97,7 +97,7 @@ class SalesOrderController extends AppBaseController
                     } else if ($salesOrder->order_type == 'D') {
                         return 'Direct Selling';
                     } else if ($salesOrder->order_type == 'G') {
-                        return 'Direct Selling';
+                        return 'Bundling Gimmick';
                     } else if ($salesOrder->order_type == 'P') {
                         return 'Bundling Product';
                     } else if ($salesOrder->order_type == 'C') {
@@ -190,7 +190,7 @@ class SalesOrderController extends AppBaseController
                     } else if ($salesOrder->order_type == 'D') {
                         return 'Direct Selling';
                     } else if ($salesOrder->order_type == 'G') {
-                        return 'Direct Selling';
+                        return 'Bundling Gimmick';
                     } else if ($salesOrder->order_type == 'P') {
                         return 'Bundling Product';
                     } else if ($salesOrder->order_type == 'C') {
@@ -283,7 +283,7 @@ class SalesOrderController extends AppBaseController
                     } else if ($salesOrder->order_type == 'D') {
                         return 'Direct Selling';
                     } else if ($salesOrder->order_type == 'G') {
-                        return 'Direct Selling';
+                        return 'Bundling Gimmick';
                     } else if ($salesOrder->order_type == 'P') {
                         return 'Bundling Product';
                     } else if ($salesOrder->order_type == 'C') {

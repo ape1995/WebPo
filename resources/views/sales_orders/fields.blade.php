@@ -22,17 +22,17 @@
                         <select name="order_type" id="order_type" class="form-control select2js" required>
                             <option value="">- Choose -</option>
                             <option value="R" {{ $data['order_type'] == 'R' ? 'selected' : '' }}>REGULAR</option>
-                            <option value="G" {{ $data['order_type'] == 'G' ? 'selected' : '' }}>DIRECT SELLING</option>
-                            {{-- <option value="P" {{ $data['order_type'] == 'P' ? 'selected' : '' }}>BUNDLING PRODUCT</option>
-                            <option value="C" {{ $data['order_type'] == 'C' ? 'selected' : '' }}>BUNDLING DISCOUNT</option> --}}
+                            <option value="G" {{ $data['order_type'] == 'G' ? 'selected' : '' }}>BUNDLING GIMMICK</option>
+                            <option value="P" {{ $data['order_type'] == 'P' ? 'selected' : '' }}>BUNDLING PRODUCT</option>
+                            <option value="C" {{ $data['order_type'] == 'C' ? 'selected' : '' }}>BUNDLING DISCOUNT</option>
                         </select>
                     @else
                         <select name="order_type" id="order_type" class="form-control select2js" required>
                             <option value="">- Choose -</option>
                             <option value="R">REGULAR</option>
-                            <option value="G">DIRECT SELLING</option>
-                            {{-- <option value="P">BUNDLING PRODUCT</option>
-                            <option value="C">BUNDLING DISCOUNT</option> --}}
+                            <option value="G">BUNDLING GIMMICK</option>
+                            <option value="P">BUNDLING PRODUCT</option>
+                            <option value="C">BUNDLING DISCOUNT</option>
                         </select>
                     @endif
                 </div>

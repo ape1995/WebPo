@@ -131,14 +131,14 @@
                                                     <td>{{ $salesOrder->order_nbr_merge }}</td>
                                                     <td>{{ $salesOrder->customer->AcctCD }}</td>
                                                     <td>{{ $salesOrder->customer->AcctName }}</td>
-                                                    <td>{{ $salesOrder->customer->outlet->OutletID }}</td>
-                                                    <td>{{ $salesOrder->customer->outlet->OutletName }}</td>
-                                                    <td>{{ $salesOrder->customer->outlet->RitID }}</td>
+                                                    <td>{{ $salesOrder->customer->outlet == null ? '' : $salesOrder->customer->outlet->OutletID }}</td>
+                                                    <td>{{ $salesOrder->customer->outlet == null ? '' : $salesOrder->customer->outlet->OutletName }}</td>
+                                                    <td>{{ $salesOrder->customer->outlet == null ? '' : $salesOrder->customer->outlet->RitID }}</td>
                                                     <td>{{ $detail->inventory_id }}</td>
                                                     <td>{{ $detail->inventory_name }}</td>
                                                     <td>{{ $detail->qty }}</td>
                                                     <td>{{ $salesOrder->delivery_date->format('Y-m-d') }}</td>
-                                                    <td>{{ $salesOrder->customer->outlet->UsrRitNbr }}</td>
+                                                    <td>{{ $salesOrder->customer->outlet == null ? '' : $salesOrder->customer->outlet->UsrRitNbr }}</td>
                                                     <td>WH03FG</td>
                                                     <td>{{ floor($detail->discount / ($detail->qty * $detail->unit_price) * 100) }}</td>
                                                     <td></td>

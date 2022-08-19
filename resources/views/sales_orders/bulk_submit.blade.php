@@ -28,8 +28,17 @@
                         <form id="form_submit" action="javascript:void(0)" method="post">
                             <div class="card-header">
                                 @csrf
-                                {{ trans('sales_order.delivery_date') }}
-                                <input type="date" class="form-control col-3" name="date" id="date" min="{{ $minDeliveryDate }}">
+                                <div class="row">
+                                    <div class="col-md-4 text-left">
+                                        {{ trans('sales_order.delivery_date') }}
+                                        <input type="date" class="form-control" name="date" id="date" min="{{ $minDeliveryDate }}">
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-4 text-left">
+                                        Total
+                                        <input type="text" class="form-control h3 text-right" name="total_checked" id="total_checked" value="0" readonly>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 @include('sales_orders.table_submit')
@@ -62,6 +71,7 @@
             var permissionPrice = "{{ $permissionPrice }}";
             var date = $('#date');
             var submit = $('#submit');
+            var total_checked = $('#total_checked');
             var checkAll = $('#checkAll');
             submit.prop('disabled', true);
             
@@ -79,6 +89,37 @@
 
             $("#checkAll").click(function(){
                 $('input:checkbox').not(this).prop('checked', this.checked);
+            });
+
+            $("#dataTable").on('change',"input[type='checkbox']",function(e){
+                
+                var sum = 0;
+                
+                $('.checkbox1').each(function () {
+                    var id = 0;
+
+                    if (this.checked) {
+                        id = $(this).val();
+                    } else {
+                        total_checked.val(0);
+                    };
+
+                    if (id !== 0){
+                        var url = "{{ url('api/get-total-amount-by-id') }}" + "/" + id;
+                        $.ajax({
+                            url: url,
+                            method: 'get',
+                            dataType: 'json',
+                            success: function(response) {
+                                console.log(response);
+                                sum = sum + parseFloat(response.order_total);
+                                total_checked.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(sum));
+                            }
+                        });
+                    }
+
+                });
+
             });
 
             $('#form_submit').on('submit', function(){
@@ -183,10 +224,7 @@
                         }, 
                         {
                             data: 'order_nbr'                                    
-                        },                
-                        // {
-                        //     data: 'customer'      
-                        // },  
+                        },
                         {
                             data: 'order_date'
                         },      

@@ -18,11 +18,33 @@
                     
                     @if ($salesOrder->status == 'C')
                         <span class="text-danger rounded p-1">Canceled</span>
+                    @elseif ($salesOrder->status == 'B')
+                        <h4 class="text-danger bg-light rounded p-1">Order Rejected : {{ $salesOrder->rejected_reason }}</h4>
+                    @else
+
+                        @if ($salesOrder->order_type == 'G')
+                            @if ($freeGimmick != null)
+                                <h4 class="text-success bg-light rounded p-1">Free {{ $qtyGimmick }} pcs {{ $freeGimmick->free_descr }}</h4>
+                                @if ($salesOrder->status == 'S')
+                                    <small class="text-info">*Submit pesanan ini untuk mendapatkan free item.</small>
+                                @endif
+                            @endif
+                        @endif
+
+                        @if ($salesOrder->order_type == 'P')
+                            @if ($freeProduct != null || !empty($freeProduct))
+                                <h4 class="text-success bg-light rounded p-1">Free : <h4>
+                                    @foreach ($freeProduct as $item)
+                                        <h6>{{ $item->free_descr }} {{ floor($item->qty / $item->qty_buy * $item->qty_free) }} pcs</h6>
+                                    @endforeach
+                                @if ($salesOrder->status == 'S')
+                                    <small class="text-info">*Submit pesanan ini untuk mendapatkan free item.</small>
+                                @endif
+                            @endif
+                        @endif
+
                     @endif
 
-                    @if ($salesOrder->status == 'B')
-                        <h3 class="text-danger bg-light rounded p-1">Order Rejected : {{ $salesOrder->rejected_reason }}</h3>
-                    @endif
                 </div>
                 @if ($salesOrder->status == 'R' || $salesOrder->status == 'P' || $salesOrder->status == 'B' || $salesOrder->status == 'C')
                     <div class="text-right m-2">
@@ -34,9 +56,7 @@
                         @endcan
                     </div>
                 @endif
-                {{-- <div class="col-md-12 text-right mb-3">
-                    <span class="text-light bg-info rounded p-1">{{ $salesOrder->status }}</span>
-                </div> --}}
+
                 <div class="row mb-3">
                     @include('sales_orders.show_fields')
                 </div>
@@ -79,7 +99,7 @@
             </div>
 
             <div class="card-footer">
-                {{-- {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!} --}}
+
                 @if ($salesOrder->status == 'S')
                     @can('edit sales order')
                         <a href="{{ route('salesOrders.edit', [$salesOrder->id]) }}" class="btn btn-success p-1" onclick="return confirm('{{ trans('sales_order.question_edit') }}')">{{ trans('sales_order.btn_edit') }}</a>

@@ -16,6 +16,8 @@ use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\CategoryMinOrder;
 use App\Models\CustomerMinOrder;
+use App\Models\BundlingGimmick;
+use App\Models\BundlingProduct;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\SalesPrice;
@@ -37,6 +39,7 @@ use Response;
 use Auth;
 use DataTables;
 use PDF;
+use DB;
 
 class SalesOrderController extends AppBaseController
 {
@@ -500,14 +503,34 @@ class SalesOrderController extends AppBaseController
 
         $attachments = Attachment::where('sales_order_id', $id)->get();
 
-        // dd($parameter->parameter_hour, $parameterNow);
+        $freeGimmick = BundlingGimmick::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') AND status = 'Released'")->get()->first();
+        $qtyGimmick = 0;
+        if ($freeGimmick != null) {
+            $qtyGimmick = ceil($salesOrder->order_total / $freeGimmick->nominal * $freeGimmick->free_qty);
+        }
+
+        // $freeProduct = BundlingProduct::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') AND status = 'Released'")->get()->first();
+        $freeProduct = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
+        ->leftJoin('bundling_products', function($join)
+        {
+            $join->on('sales_orders.delivery_date','>=','start_date');
+            $join->on('sales_orders.delivery_date','<=','end_date');
+            $join->on('sales_order_details.inventory_id','=','product_code');
+        })
+        ->leftJoin('bundling_product_frees', 'bundling_product_frees.bundling_product_id', '=', 'bundling_products.id')
+        ->select(DB::raw('sum(sales_order_details.qty) as qty'), 'bundling_products.product_name as buy_descr', 'bundling_product_frees.product_name as free_descr', 'bundling_products.qty as qty_buy' , 'bundling_product_frees.qty as qty_free')
+        ->where('sales_orders.id', $id)
+        ->groupBy('bundling_products.product_name', 'bundling_product_frees.product_name', 'bundling_products.qty' , 'bundling_product_frees.qty')
+        ->get();
+
+        // dd($freeProduct);
 
         if (empty($salesOrder)) {
 
             return redirect(route('salesOrders.index'))->with('error', 'Order not found');
         }
 
-        return view('sales_orders.show', compact('salesOrder', 'salesOrderDetails', 'customers', 'parameter', 'parameterNow', 'attachments'));
+        return view('sales_orders.show', compact('freeProduct', 'freeGimmick', 'qtyGimmick', 'salesOrder', 'salesOrderDetails', 'customers', 'parameter', 'parameterNow', 'attachments'));
     }
 
     /**
@@ -1114,7 +1137,7 @@ class SalesOrderController extends AppBaseController
                     foreach($submitOrders as $order) {
                         $this->processSubmitBulk($order->id);
                     }
-                    return response()->json(['success'=>'Order Submitted successfully.']);
+                    return response()->json(['success'=>'Order Submitted successfully. Total Order Rp. '.$input['total_checked']]);
                 } else {
                     $minusOrder = $customerMinOrder->minimum_order - $totalOrderToday;
                     // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
@@ -1162,7 +1185,7 @@ class SalesOrderController extends AppBaseController
                             foreach($submitOrders as $order) {
                                 $this->processSubmitBulk($order->id);
                             }
-                            return response()->json(['success'=>'Order Submitted successfully.']);
+                            return response()->json(['success'=>'Order Submitted successfully. Total Order Rp. '.$input['total_checked']]);
                         } else {
                             $minusOrder = $categoryMinOrder->minimum_order - $totalOrderToday;
                             // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
@@ -1205,7 +1228,7 @@ class SalesOrderController extends AppBaseController
                         foreach($submitOrders as $order) {
                             $this->processSubmitBulk($order->id);
                         }
-                        return response()->json(['success'=>'Order Submitted successfully.']);
+                        return response()->json(['success'=>'Order Submitted successfully. Total Order Rp. '.$input['total_checked']]);
                     } else {
                         $minusOrder = $customerMinOrder->minimum_order - $totalOrderToday;
                         // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
@@ -1253,7 +1276,7 @@ class SalesOrderController extends AppBaseController
                                 foreach($submitOrders as $order) {
                                     $this->processSubmitBulk($order->id);
                                 }
-                                return response()->json(['success'=>'Order Submitted successfully.']);
+                                return response()->json(['success'=>'Order Submitted successfully. Total Order Rp. '.$input['total_checked']]);
                             } else {
                                 $minusOrder = $categoryMinOrder->minimum_order - $totalOrderToday;
                                 // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
@@ -1310,7 +1333,7 @@ class SalesOrderController extends AppBaseController
                             }
                             // return redirect(route('salesOrders.bulkSubmitIndex'))->with('success', 'Order Submitted Sucessfully.');
                         
-                            return response()->json(['success'=>'Order Submitted successfully.']);
+                            return response()->json(['success'=>'Order Submitted successfully. Total Order Rp. '.$input['total_checked']]);
                         } else {
                             $minusOrder = $customerMinOrder->minimum_order - $totalOrderToday;
                             // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($customerMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
@@ -1360,7 +1383,7 @@ class SalesOrderController extends AppBaseController
                                     }
                                     // return redirect(route('salesOrders.bulkSubmitIndex'))->with('success', 'Order Submitted Sucessfully.');
                                     
-                                    return response()->json(['success'=>'Order Submitted successfully.']);
+                                    return response()->json(['success'=>'Order Submitted successfully. Total Order Rp. '.$input['total_checked']]);
                                 } else {
                                     $minusOrder = $categoryMinOrder->minimum_order - $totalOrderToday;
                                     // return redirect(route('salesOrders.bulkSubmitIndex'))->with("error", "Maaf Order anda belum mencapai minimum order. Minimum order anda adalah Rp. ".number_format($categoryMinOrder->minimum_order)." (kurang Rp. ".number_format($minusOrder).")");
@@ -1447,8 +1470,11 @@ class SalesOrderController extends AppBaseController
             
 
             return DataTables::of($datas)
-                ->addColumn('checkbox', function (SalesOrder $salesOrder) {
-                    return "<input type='checkbox' class='checkbox1' id='checkbox1' name='id[]' value='".$salesOrder->id."'>";
+                // ->addColumn('checkbox', function (SalesOrder $salesOrder) {
+                //     return "<input type='checkbox' class='checkbox1' id='checkbox1' name='id[]' value='".$salesOrder->id."'>";
+                // })
+                ->addColumn('checkbox',function ($data){
+                    return view('sales_orders.checkbox')->with('salesOrder',$data)->render();
                 })
                 ->addColumn('customer', function (SalesOrder $salesOrder) {
                     return $salesOrder->customer->AcctName;
@@ -1637,6 +1663,15 @@ class SalesOrderController extends AppBaseController
 
         return response()->json(['success' => 'Merge Successfull!']);
                         
+    }
+
+    public function getAmountById($id)
+    {
+
+        $salesOrder = SalesOrder::select('order_total')->find($id);
+        
+        return $salesOrder;
+
     }
 
 }

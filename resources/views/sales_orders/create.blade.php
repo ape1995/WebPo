@@ -671,14 +671,6 @@
                 ]
             });
 
-            // $('#createNewCart').click(function () {
-            //     $('#saveBtn').val("create-book");
-            //     $('#book_id').val('');
-            //     $('#bookForm').trigger("reset");
-            //     $('#modelHeading').html("Create New Book");
-            //     $('#ajaxModel').modal('show');
-            // });
-
             $('body').on('click', '.editBook', function () {
                 var productId = $(this).data('id');
                 $.get("{{ route('carts.index') }}" +'/' + productId +'/edit', function (data) {

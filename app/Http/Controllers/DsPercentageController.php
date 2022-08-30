@@ -115,7 +115,7 @@ class DsPercentageController extends AppBaseController
         if($input['start_date'] > $input['end_date'] && $input['end_date'] != null) {
 
             $returnData = array(
-                'message' => 'End Date harus lebih dari Start Date!',
+                'message' => trans('messages.validation1'),
             );
     
             return response()->json($returnData, 403);
@@ -129,7 +129,7 @@ class DsPercentageController extends AppBaseController
         } else if($cekLatestData->end_date == null) {
             
             $returnData = array(
-                'message' => 'Silahkan isi terlebih dahulu tanggal akhir condition sebelumnya!',
+                'message' => trans('messages.validation2'),
             );
     
             return response()->json($returnData, 403);
@@ -137,7 +137,7 @@ class DsPercentageController extends AppBaseController
         } else if($cekLatestData->end_date >= $input['start_date']) {
 
             $returnData = array(
-                'message' => 'Start Date harus lebih dari End date Kondisi sebelumnya!',
+                'message' => trans('messages.validation3'),
             );
     
             return response()->json($returnData, 403);
@@ -221,7 +221,7 @@ class DsPercentageController extends AppBaseController
         if($input['start_date'] > $input['end_date'] && $input['end_date'] != null) {
 
             $returnData = array(
-                'message' => 'End Date harus lebih dari Start Date!',
+                'message' => trans('messages.validation1'),
             );
     
             return response()->json($returnData, 403);
@@ -235,7 +235,7 @@ class DsPercentageController extends AppBaseController
         } else if($cekLatestData->end_date >= $input['start_date']) {
 
             $returnData = array(
-                'message' => 'Start Date harus lebih dari End date Kondisi sebelumnya!',
+                'message' => trans('messages.validation3'),
             );
     
             return response()->json($returnData, 403);

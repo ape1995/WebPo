@@ -134,7 +134,7 @@
                                                     @php
                                                         $totalGimmick = ( $salesOrder->order_total / $salesOrder->nominal * $salesOrder->free_qty);
                                                     @endphp
-                                                    <td>{{ round($totalGimmick) }}</td>
+                                                    <td>{{ floor($totalGimmick) }}</td>
                                                     <td>{{ $salesOrder->free_descr }}</td>
                                                 </tr>
                                             @endforeach

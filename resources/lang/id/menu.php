@@ -13,7 +13,7 @@ return [
     'customer_products' => 'Produk Pelanggan',
     'customer_min_orders' => 'Min Order Pelanggan',
     'category_min_orders' => 'Min Order Kategori',
-    'ds_rules' => 'Aturan DS',
+    'ds_rules' => 'Aturan Paket Gimik',
     'bundling_gimmicks' => 'Paket Gimik',
     'bundling_products' => 'Paket Produk',
     'bundling_discount' => 'Paket Diskon',

@@ -64,9 +64,7 @@
     <script>
     $(document).ready(function() {
         $('#bundlingProducts-table').DataTable({
-            // columnDefs: [
-            //     { orderable: false, targets: 4 }
-            // ],
+            order: [[0, 'desc']],
         });
     });
     </script>

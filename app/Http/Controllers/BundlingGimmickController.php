@@ -76,7 +76,7 @@ class BundlingGimmickController extends AppBaseController
 
         if ($input['end_date'] != null) {
             if ($input['end_date'] < $input['start_date']) {
-                return redirect(route('bundlingGimmicks.create'))->with('error', 'End date must be newest from Start date!');
+                return redirect(route('bundlingGimmicks.create'))->with('error', trans('messages.validation1'));
             }
         }
 
@@ -88,12 +88,12 @@ class BundlingGimmickController extends AppBaseController
 
         } else if ($cekData->end_date == null) {
 
-            Flash::error('Let fill the end date of the latest data before you create new one!');
+            Flash::error(trans('messages.validation2'));
             return redirect(route('bundlingGimmicks.index'));
 
         } else if ($input['start_date'] <= $cekData->end_date) {
             
-            return redirect(route('bundlingGimmicks.create'))->with('error', 'Start date cannot be less than end date from latest data!');
+            return redirect(route('bundlingGimmicks.create'))->with('error', trans('messages.validation3'));
 
         } else {
 
@@ -182,7 +182,7 @@ class BundlingGimmickController extends AppBaseController
         // dd($cekData);
         if ($input['end_date'] != null) {
             if ($input['end_date'] < $input['start_date']) {
-                return redirect(route('bundlingGimmicks.edit', $id))->with('error', 'End date must be newest from Start date!');
+                return redirect(route('bundlingGimmicks.edit', $id))->with('error', trans('messages.validation1'));
             }
         }
 
@@ -194,12 +194,12 @@ class BundlingGimmickController extends AppBaseController
 
         } else if ($cekData->end_date == null) {
 
-            Flash::error('Let fill the end date of the latest data before you create new one!');
+            Flash::error(trans('messages.validation2'));
             return redirect(route('bundlingGimmicks.index'));
 
         } else if ($input['start_date'] <= $cekData->end_date) {
             
-            return redirect(route('bundlingGimmicks.edit', $id))->with('error', 'Start date cannot be less than end date from latest data!');
+            return redirect(route('bundlingGimmicks.edit', $id))->with('error', trans('messages.validation3'));
 
         } else {
 

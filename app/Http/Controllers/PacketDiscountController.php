@@ -148,15 +148,6 @@ class PacketDiscountController extends AppBaseController
                                     'packet_discount_id' => $packetDiscount->id]
                                 );
 
-        // $discountPercentage = $input['discount'] / $input['grand_total'] * 100;                                
-        // foreach($packetDiscount->detail as $detail){
-        //     $detailData = PacketDiscountDetail::find($detail->id);
-        //     $detailData['discount_percentage'] = $discountPercentage;
-        //     $detailData['discount_amount'] = $detail->total_amount * $discountPercentage / 100;
-        //     $detailData['amount'] = $detail->total_amount - $detailData['discount_amount'];
-        //     $detailData->save();
-        // }
-
         Flash::success('Packet Discount saved successfully.');
 
         return redirect(route('packetDiscounts.index'));
@@ -349,7 +340,7 @@ class PacketDiscountController extends AppBaseController
         $rbpClass = $cekCustomerClass->location->CPriceClassID;
         // dd($rbpClass);
 
-        $packetDiscounts = PacketDiscount::whereRaw("start_date <= '$date' AND (end_date is null OR end_date >= '$date') ")->where('status', 'Released')->get();
+        $packetDiscounts = PacketDiscount::whereRaw("(start_date <= '$date' AND (end_date is null OR end_date >= '$date') ) AND rbp_class = '$rbpClass'")->where('status', 'Released')->get();
         // dd($packetDiscounts);
 
         $output = [];

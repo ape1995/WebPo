@@ -65,7 +65,7 @@ class CustomerMinOrderController extends AppBaseController
 
         if($input['end_date'] != null || $input['end_date'] != ''){
             if($input['start_date'] > $input['end_date']){
-                return redirect(route('customerMinOrders.create'))->withInput()->with('error', 'start date must be older than end date.');
+                return redirect(route('customerMinOrders.create'))->withInput()->with('error', trans('messages.validation1'));
             }
         }
 
@@ -78,13 +78,13 @@ class CustomerMinOrderController extends AppBaseController
 
             if($cekData->end_date == null){
     
-                Flash::error('Please fill end date before input new value.');
+                Flash::error(trans('messages.validation2'));
     
                 return redirect(route('customerMinOrders.index'));
     
             } else if($cekData->end_date >= $input['start_date']) {
     
-                return redirect(route('customerMinOrders.create'))->withInput()->with('error', 'Start date must be newest from the last end date.');
+                return redirect(route('customerMinOrders.create'))->withInput()->with('error', trans('messages.validation3'));
     
             } else {
     
@@ -150,7 +150,7 @@ class CustomerMinOrderController extends AppBaseController
         
         if($cekCustomerActive !== null){
             
-            Flash::error('Delete the newest data first');
+            Flash::error(trans('messages.validation4'));
 
             return redirect(route('customerMinOrders.index'));
 
@@ -179,7 +179,7 @@ class CustomerMinOrderController extends AppBaseController
 
         if($input['end_date'] != null || $input['end_date'] != ''){
             if($input['start_date'] > $input['end_date']){
-                return redirect(route('customerMinOrders.edit', $id))->with('error', 'start date must be older than end date.');
+                return redirect(route('customerMinOrders.edit', $id))->with('error', trans('messages.validation1'));
             }
         }
 
@@ -195,7 +195,7 @@ class CustomerMinOrderController extends AppBaseController
         if($cekData != null){
             if($input['start_date'] <= $cekData->end_date){
 
-                return redirect(route('customerMinOrders.edit', $id))->with('error', 'Start date must be newest from end date last data, please setting last data first');
+                return redirect(route('customerMinOrders.edit', $id))->with('error', trans('messages.validation3'));
             
             } else {
                 $customerMinOrder = $this->customerMinOrderRepository->update($input, $id);

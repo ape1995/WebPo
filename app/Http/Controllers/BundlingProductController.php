@@ -94,13 +94,13 @@ class BundlingProductController extends AppBaseController
 
         } else if ($input['start_date'] > $input['end_date']) {
 
-            Flash::error('start date must be older than end date!');
+            Flash::error(trans('messages.validation1'));
 
             return redirect(route('bundlingProducts.create'))->withInput();
 
         } else if ($cekData->end_date > $input['start_date']) {
 
-            Flash::error('You Cannot create promo for one product in the same period!');
+            Flash::error(trans('messages.validation5'));
 
             return redirect(route('bundlingProducts.create'))->withInput();
 
@@ -207,13 +207,13 @@ class BundlingProductController extends AppBaseController
 
         } else if ($input['start_date'] > $input['end_date']) {
 
-            Flash::error('Start Date must be older than End Date.');
+            Flash::error(trans('messages.validation1'));
 
             return redirect(route('bundlingProducts.edit', $id));
 
         } else if ($cekData->end_date > $input['start_date']) {
 
-            Flash::error('You Cannot create promo for one product in the same period!');
+            Flash::error(trans('messages.validation5'));
 
             return redirect(route('bundlingProducts.edit', $id));
 

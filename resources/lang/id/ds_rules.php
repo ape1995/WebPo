@@ -2,7 +2,7 @@
 
 return [
 
-    'title' => 'Pengaturan Direct Selling',
+    'title' => 'Pengaturan Paket Gimik',
     'rule_name' => 'Nama Aturan',
     'active' => 'Aktif',
     'add_condition' => 'Tambah Kondisi',

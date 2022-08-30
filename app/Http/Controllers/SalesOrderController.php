@@ -506,7 +506,7 @@ class SalesOrderController extends AppBaseController
         $freeGimmick = BundlingGimmick::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') AND status = 'Released'")->get()->first();
         $qtyGimmick = 0;
         if ($freeGimmick != null) {
-            $qtyGimmick = ceil($salesOrder->order_total / $freeGimmick->nominal * $freeGimmick->free_qty);
+            $qtyGimmick = floor($salesOrder->order_total / $freeGimmick->nominal * $freeGimmick->free_qty);
         }
 
         // $freeProduct = BundlingProduct::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') AND status = 'Released'")->get()->first();
@@ -1517,7 +1517,7 @@ class SalesOrderController extends AppBaseController
                     //change over here
                     return number_format($salesOrder->order_qty, 0, ',', '.');
                 })
-                ->editColumn('dkiscount', function (SalesOrder $salesOrder) 
+                ->editColumn('discount', function (SalesOrder $salesOrder) 
                 {
                     //change over here
                     return number_format($salesOrder->discount, 2, ',', '.');

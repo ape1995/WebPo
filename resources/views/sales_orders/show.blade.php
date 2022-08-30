@@ -23,7 +23,7 @@
                     @else
 
                         @if ($salesOrder->order_type == 'G')
-                            @if ($freeGimmick != null)
+                            @if ($freeGimmick != null && $qtyGimmick > 0)
                                 <h4 class="text-success bg-light rounded p-1">Free {{ $qtyGimmick }} pcs {{ $freeGimmick->free_descr }}</h4>
                                 @if ($salesOrder->status == 'S')
                                     <small class="text-info">*Submit pesanan ini untuk mendapatkan free item.</small>
@@ -33,12 +33,23 @@
 
                         @if ($salesOrder->order_type == 'P')
                             @if ($freeProduct != null || !empty($freeProduct))
-                                <h4 class="text-success bg-light rounded p-1">Free : <h4>
-                                    @foreach ($freeProduct as $item)
-                                        <h6>{{ $item->free_descr }} {{ floor($item->qty / $item->qty_buy * $item->qty_free) }} pcs</h6>
-                                    @endforeach
+                                {{-- <h4 class="text-success bg-light rounded p-1">Free : <h4> --}}
+                                @php
+                                    $count = 0;
+                                @endphp
+                                @foreach ($freeProduct as $item)
+                                    @php
+                                        $freeQty = floor($item->qty / $item->qty_buy * $item->qty_free);
+                                        $count+=$freeQty
+                                    @endphp
+                                    @if ($freeQty > 0)                          
+                                        <h6>Free {{ $item->free_descr }} {{ $freeQty }} pcs</h6>
+                                    @endif
+                                @endforeach
                                 @if ($salesOrder->status == 'S')
-                                    <small class="text-info">*Submit pesanan ini untuk mendapatkan free item.</small>
+                                    @if ($count > 0)
+                                        <small class="text-info">*Submit pesanan ini untuk mendapatkan free item.</small>
+                                    @endif
                                 @endif
                             @endif
                         @endif

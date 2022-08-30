@@ -75,10 +75,10 @@
                                     @foreach ($adds as $index => $add)
                                       <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
                                         <img src="{{ asset('uploads/adds/'.$add->image) }}" alt="{{ $add->name }}" width="100%" height="100%">
-                                        <div class="carousel-caption d-none d-md-block first rounded-lg">
+                                        {{-- <div class="carousel-caption d-none d-md-block first rounded-lg">
                                           <h5>{{ $add->name }}</h5>
                                           <p>{{ $add->description }}</p>
-                                        </div>
+                                        </div> --}}
                                       </div>
                                     @endforeach
                                   </div>

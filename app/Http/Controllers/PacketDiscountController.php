@@ -54,11 +54,11 @@ class PacketDiscountController extends AppBaseController
             return DataTables::of($datas)
                 ->editColumn('total', function (PacketDiscount $packetDiscount) 
                 {
-                    return number_format($packetDiscount->total,0,',','.');
+                    return number_format($packetDiscount->total,2,',','.');
                 })
                 ->editColumn('discount', function (PacketDiscount $packetDiscount) 
                 {
-                    return number_format($packetDiscount->discount,0,',','.');
+                    return number_format($packetDiscount->discount,2,',','.');
                 })
                 ->editColumn('start_date', function (PacketDiscount $packetDiscount) 
                 {
@@ -86,7 +86,7 @@ class PacketDiscountController extends AppBaseController
                 })
                 ->editColumn('grand_total', function (PacketDiscount $packetDiscount) 
                 {
-                    return number_format($packetDiscount->grand_total,0,',','.');
+                    return number_format($packetDiscount->grand_total,2,',','.');
                 })
                 ->editColumn('status', function (PacketDiscount $packetDiscount) 
                 {
@@ -136,8 +136,11 @@ class PacketDiscountController extends AppBaseController
         
         $input['status'] = 'Hold';
         $input['total'] = str_replace('.','',$input['total']);
+        $input['total'] = str_replace(',','.',$input['total']);
         $input['discount'] = str_replace('.','',$input['discount']);
+        $input['discount'] = str_replace(',','.',$input['discount']);
         $input['grand_total'] = str_replace('.','',$input['grand_total']);
+        $input['grand_total'] = str_replace(',','.',$input['grand_total']);
         $input['created_by'] = \Auth::user()->id;
 
 
@@ -225,8 +228,11 @@ class PacketDiscountController extends AppBaseController
         $input = $request->all();
         $input['status'] = 'Hold';
         $input['total'] = str_replace('.','',$input['total']);
+        $input['total'] = str_replace(',','.',$input['total']);
         $input['discount'] = str_replace('.','',$input['discount']);
+        $input['discount'] = str_replace(',','.',$input['discount']);
         $input['grand_total'] = str_replace('.','',$input['grand_total']);
+        $input['grand_total'] = str_replace(',','.',$input['grand_total']);
         $input['updated_by'] = \Auth::user()->id;
 
         $discountPercentage = $input['discount'] / $input['grand_total'] * 100;

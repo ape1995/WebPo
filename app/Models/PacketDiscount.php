@@ -62,9 +62,9 @@ class PacketDiscount extends Model
         'released_date' => 'date',
         'description' => 'string',
         'status' => 'string',
-        'total' => 'integer',
-        'discount' => 'integer',
-        'grand_total' => 'integer'
+        'total' => 'decimal:4',
+        'discount' => 'decimal:4',
+        'grand_total' => 'decimal:4'
     ];
 
     /**

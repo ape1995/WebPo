@@ -205,9 +205,9 @@ class PacketDiscountDetailController extends AppBaseController
         $data['discount'] = $getCounter->sum('total_amount') - $getCounter->sum('amount');
         $data['grand_total'] = $getCounter->sum('amount');
 
-        $data['total_amount'] = number_format($data['total_amount'],0,',','.');
-        $data['discount'] = number_format($data['discount'],0,',','.');
-        $data['grand_total'] = number_format($data['grand_total'],0,',','.');
+        $data['total_amount'] = number_format($data['total_amount'],2,',','.');
+        $data['discount'] = number_format($data['discount'],2,',','.');
+        $data['grand_total'] = number_format($data['grand_total'],2,',','.');
 
         return $data;
     }
@@ -220,9 +220,9 @@ class PacketDiscountDetailController extends AppBaseController
         $data['discount'] = $getCounter->sum('total_amount') - $getCounter->sum('amount');
         $data['grand_total'] = $getCounter->sum('amount');
 
-        $data['total_amount'] = number_format($data['total_amount'],0,',','.');
-        $data['discount'] = number_format($data['discount'],0,',','.');
-        $data['grand_total'] = number_format($data['grand_total'],0,',','.');
+        $data['total_amount'] = number_format($data['total_amount'],2,',','.');
+        $data['discount'] = number_format($data['discount'],2,',','.');
+        $data['grand_total'] = number_format($data['grand_total'],2,',','.');
 
         return $data;
     }
@@ -236,19 +236,19 @@ class PacketDiscountDetailController extends AppBaseController
             return DataTables::of($datas)
                 ->editColumn('unit_price', function (PacketDiscountDetail $packetDiscount) 
                 {
-                    return number_format($packetDiscount->unit_price,0,',','.');
+                    return number_format($packetDiscount->unit_price,2,',','.');
                 })
                 ->editColumn('total_amount', function (PacketDiscountDetail $packetDiscount) 
                 {
-                    return number_format($packetDiscount->total_amount,0,',','.');
+                    return number_format($packetDiscount->total_amount,2,',','.');
                 })
                 ->editColumn('discount_percentage', function (PacketDiscountDetail $packetDiscount) 
                 {
-                    return number_format($packetDiscount->discount_amount,0).' ('.number_format($packetDiscount->discount_percentage,0).' %)';
+                    return number_format($packetDiscount->discount_amount,2).' ('.number_format($packetDiscount->discount_percentage,0).' %)';
                 })
                 ->editColumn('amount', function (PacketDiscountDetail $packetDiscount) 
                 {
-                    return number_format($packetDiscount->amount,0,',','.');
+                    return number_format($packetDiscount->amount,2,',','.');
                 })
                 ->addIndexColumn()
                 ->addColumn('action',function ($row){
@@ -279,19 +279,19 @@ class PacketDiscountDetailController extends AppBaseController
             return DataTables::of($datas)
                 ->editColumn('unit_price', function (PacketDiscountDetail $packetDiscount) 
                 {
-                    return number_format($packetDiscount->unit_price,0,',','.');
+                    return number_format($packetDiscount->unit_price,2,',','.');
                 })
                 ->editColumn('total_amount', function (PacketDiscountDetail $packetDiscount) 
                 {
-                    return number_format($packetDiscount->total_amount,0,',','.');
+                    return number_format($packetDiscount->total_amount,2,',','.');
                 })
                 ->editColumn('discount_percentage', function (PacketDiscountDetail $packetDiscount) 
                 {
-                    return number_format($packetDiscount->discount_amount,0).' ('.number_format($packetDiscount->discount_percentage,0).' %)';
+                    return number_format($packetDiscount->discount_amount,2).' ('.number_format($packetDiscount->discount_percentage,0).' %)';
                 })
                 ->editColumn('amount', function (PacketDiscountDetail $packetDiscount) 
                 {
-                    return number_format($packetDiscount->amount,0,',','.');
+                    return number_format($packetDiscount->amount,2,',','.');
                 })
                 ->addIndexColumn()
                 ->addColumn('action',function ($row){

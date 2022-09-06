@@ -5,6 +5,7 @@
         <option value="">-Choose-</option>
         <option value="DR" {{ $categoryMinOrder->category == 'DR' ? 'selected' : '' }}>Distributor - DR</option>
         <option value="DK" {{ $categoryMinOrder->category == 'DK' ? 'selected' : '' }}>Agen - DK</option>
+        <option value="INSTI" {{ $categoryMinOrder->category == 'INSTI' ? 'selected' : '' }}>Institusi - INSTI</option>
     </select>
 </div>
 

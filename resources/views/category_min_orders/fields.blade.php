@@ -5,6 +5,7 @@
         <option value="">-Choose-</option>
         <option value="DR">Distributor - DR</option>
         <option value="DK">Agen - DK</option>
+        <option value="INSTI">Institusi - INSTI</option>
     </select>
 </div>
 

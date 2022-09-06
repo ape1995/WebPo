@@ -49,7 +49,7 @@ class Customer extends Model
 
     public function category()
     {
-        return $this->hasOne(CSAnswer::class, 'RefNoteID', 'NoteID');
+        return $this->hasOne(CSAnswer::class, 'RefNoteID', 'NoteID')->where('AttributeID', 'CATEGORY');
     }
 
 }

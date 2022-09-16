@@ -72,5 +72,10 @@ class Cart extends Model
         'uom' => 'required'
     ];
 
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'InventoryCD', 'inventory_id');
+    }
+
     
 }

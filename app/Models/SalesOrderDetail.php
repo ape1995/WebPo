@@ -44,6 +44,8 @@ class SalesOrderDetail extends Model
         'unit_price',
         'discount',
         'amount',
+        'cbp_price',
+        'cbp_total',
         'created_by',
         'updated_by'
     ];

@@ -132,7 +132,7 @@
                                                     <td>{{ number_format($salesOrder->tax,2) }}</td>
                                                     <td>{{ number_format($salesOrder->order_total, 2) }}</td>
                                                     @php
-                                                        $totalGimmick = ( $salesOrder->order_total / $salesOrder->nominal * $salesOrder->free_qty);
+                                                        $totalGimmick = ( $salesOrder->cbp_grand_total / $salesOrder->nominal * $salesOrder->free_qty);
                                                     @endphp
                                                     <td>{{ floor($totalGimmick) }}</td>
                                                     <td>{{ $salesOrder->free_descr }}</td>

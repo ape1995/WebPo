@@ -77,7 +77,15 @@ class SalesOrderDetailController extends AppBaseController
             return response()->json(['error'=>'Product already listed on carts.'], 403);
 
         } else {
+            // Find SO Header
+            $salesOrder = SalesOrder::find($data['sales_order_id']);
+            // Find Product
+            $product = Product::where('InventoryCD', $data['inventory_id'])->get()->first();
 
+            // Get CBP Price 
+            $cbpPrice = SalesPrice::whereRaw("CustPriceClassID = 'RBP00' AND InventoryID = '$product->InventoryID' AND EffectiveDate <= '$salesOrder->delivery_date' AND (ExpirationDate IS NULL OR ExpirationDate >= '$salesOrder->delivery_date')")->get()->first();
+
+            // Save to Detail
             SalesOrderDetail::create([
                         'sales_order_id' => $request->sales_order_id,
                         'inventory_id' => $request->inventory_id,
@@ -87,17 +95,24 @@ class SalesOrderDetailController extends AppBaseController
                         'unit_price' => $data['unit_price'],
                         'amount' => $data['amount'],
                         'created_by' => \Auth::user()->id,
+                        'cbp_price' => $cbpPrice->SalesPrice,
+                        'cbp_total' => $cbpPrice->SalesPrice * $request->qty,
                     ]); 
              
             $salesOrderDetail = SalesOrderDetail::where('sales_order_id', $request->sales_order_id)->get();
         
-            $salesOrder = SalesOrder::find($request->sales_order_id);
+            
             $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
             $salesOrder['order_qty'] = $salesOrderDetail->sum('qty');
             $salesOrder['order_amount'] = $salesOrderDetail->sum('amount');
             $salesOrder['discount'] = $salesOrderDetail->sum('discount');
             $salesOrder['tax'] = ($parameterVAT->value/100) * ( $salesOrder['order_amount'] );
             $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
+
+            // Resum CBP
+            $salesOrder['cbp_total'] = $salesOrderDetail->sum('cbp_total');
+            $salesOrder['cbp_tax'] = ($parameterVAT->value/100) * ( $salesOrder['cbp_total'] );
+            $salesOrder['cbp_grand_total'] = $salesOrder['cbp_total'] + $salesOrder['cbp_tax'];
             $salesOrder->save();
        
             return response()->json(['success'=>'Products added successfully.']);
@@ -232,28 +247,47 @@ class SalesOrderDetailController extends AppBaseController
      */
     public function update($id, UpdateSalesOrderDetailRequest $request)
     {
+        // Get SO Header
+        $salesOrderDetailData = SalesOrderDetail::find($id);
+
+        $salesOrderID = $salesOrderDetailData->sales_order_id;
+
+        
+        $salesOrder = SalesOrder::find($salesOrderID);
+
+        // Find Product
+        $product = Product::where('InventoryCD', $salesOrderDetailData->inventory_id)->get()->first();
+
+        // Get CBP Price 
+        $cbpPrice = SalesPrice::whereRaw("CustPriceClassID = 'RBP00' AND InventoryID = '".$product->InventoryID."' AND EffectiveDate <= '$salesOrder->delivery_date' AND (ExpirationDate IS NULL OR ExpirationDate >= '$salesOrder->delivery_date')")->get()->first();
+
+
+
         $data = $request->all();
         $data['qty'] = str_replace('.','',$data['qty']);
         $data['unit_price'] = str_replace('.','',$data['unit_price']);
         $data['unit_price'] = str_replace(',','.',$data['unit_price']);
         $data['amount'] = str_replace('.','',$data['amount']);
         $data['amount'] = str_replace(',','.',$data['amount']);
+        $data['cbp_price'] = $cbpPrice->SalesPrice;
+        $data['cbp_total'] = $cbpPrice->SalesPrice * $data['qty'];
 
         $salesOrderDetail = $this->salesOrderDetailRepository->update($data, $id);
 
-        $salesOrderDetailData = SalesOrderDetail::find($id);
-
-        $salesOrderID = $salesOrderDetailData->sales_order_id;
-
+        
         $salesOrderDetails = SalesOrderDetail::where('sales_order_id', $salesOrderID)->get();
         
-        $salesOrder = SalesOrder::find($salesOrderID);
         $parameterVAT = ParameterVAT::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date is null OR end_date >= '$salesOrder->delivery_date') ")->get()->first();
         $salesOrder['order_qty'] = $salesOrderDetails->sum('qty');
         $salesOrder['order_amount'] = $salesOrderDetails->sum('amount');
         $salesOrder['discount'] = $salesOrderDetails->sum('discount');
         $salesOrder['tax'] = ($parameterVAT->value/100) * ($salesOrder['order_amount']);
         $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
+
+        // Resum CBP
+        $salesOrder['cbp_total'] = $salesOrderDetails->sum('cbp_total');
+        $salesOrder['cbp_tax'] = ($parameterVAT->value/100) * ( $salesOrder['cbp_total'] );
+        $salesOrder['cbp_grand_total'] = $salesOrder['cbp_total'] + $salesOrder['cbp_tax'];
         $salesOrder->save();
 
 
@@ -284,6 +318,11 @@ class SalesOrderDetailController extends AppBaseController
         $salesOrder['discount'] = $salesOrderDetail->sum('discount');
         $salesOrder['tax'] = ($parameterVAT->value/100) * ($salesOrder['order_amount']);
         $salesOrder['order_total'] = $salesOrder['order_amount'] + $salesOrder['tax'];
+
+        // Resum CBP
+        $salesOrder['cbp_total'] = $salesOrderDetail->sum('cbp_total');
+        $salesOrder['cbp_tax'] = ($parameterVAT->value/100) * ( $salesOrder['cbp_total'] );
+        $salesOrder['cbp_grand_total'] = $salesOrder['cbp_total'] + $salesOrder['cbp_tax'];
         $salesOrder->save();
 
      

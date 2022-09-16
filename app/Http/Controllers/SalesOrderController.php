@@ -453,7 +453,8 @@ class SalesOrderController extends AppBaseController
         // Store To Sales Order DB
         $salesOrder = $this->salesOrderRepository->create($input);
 
-        // Get All Carts Item
+        // For Total CBP
+        $totalCbp = 0;
 
         // Resave all carts item into sales order detail
         foreach($carts as $data){
@@ -467,9 +468,23 @@ class SalesOrderController extends AppBaseController
             $detailData['amount'] = $data->amount;
             $detailData['packet_code'] = $data->packet_code;
             $detailData['created_by'] = \Auth::user()->id;
+            // Get CBP Price 
+            $cbpPrice = SalesPrice::whereRaw("CustPriceClassID = 'RBP00' AND InventoryID = '".$data->product->InventoryID."' AND EffectiveDate <= '$deliveryDate' AND (ExpirationDate IS NULL OR ExpirationDate >= '$deliveryDate')")->get()->first();
+            $detailData['cbp_price'] = $cbpPrice->SalesPrice;
+            $detailData['cbp_total'] = $cbpPrice->SalesPrice * $data->qty;
+
+            $totalCbp+=$detailData['cbp_total'];
 
             $salesOrderDetail = SalesOrderDetail::create($detailData);
         }
+
+        // Update cbp total , cbp tax and cbp grand total
+        $cbpUpdate = SalesOrder::find($salesOrder->id);
+        $cbpUpdate['cbp_total'] = $totalCbp;
+        $cbpUpdate['cbp_tax'] = ($parameterVAT->value/100) * ($totalCbp);
+        $cbpUpdate['cbp_grand_total'] = $cbpUpdate['cbp_total'] + $cbpUpdate['cbp_tax'];
+        $cbpUpdate->save();
+        
 
         // Delete All Carts from customer
         Cart::where('customer_id', $request->customer_id)->delete();
@@ -506,7 +521,7 @@ class SalesOrderController extends AppBaseController
         $freeGimmick = BundlingGimmick::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') AND status = 'Released'")->get()->first();
         $qtyGimmick = 0;
         if ($freeGimmick != null) {
-            $qtyGimmick = floor($salesOrder->order_total / $freeGimmick->nominal * $freeGimmick->free_qty);
+            $qtyGimmick = floor($salesOrder->cbp_grand_total / $freeGimmick->nominal * $freeGimmick->free_qty);
         }
 
         // $freeProduct = BundlingProduct::whereRaw("start_date <= '$salesOrder->delivery_date' AND (end_date IS NULL OR end_date >= '$salesOrder->delivery_date') AND status = 'Released'")->get()->first();

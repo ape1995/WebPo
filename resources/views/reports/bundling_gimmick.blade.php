@@ -124,6 +124,8 @@
                                                 <th>Amount RBP</th>
                                                 <th>Tax RBP</th>
                                                 <th>Total Amount RBP</th>
+                                                <th>Amount CBP</th>
+                                                <th>Tax CBP</th>
                                                 <th>Total Amount CBP</th>
                                                 <th>Price Gimmick Each</th>
                                                 <th>Qty Gimmick</th>
@@ -143,7 +145,9 @@
                                                     <td>{{ number_format($salesOrder->order_amount, 2) }}</td>
                                                     <td>{{ number_format($salesOrder->tax,2) }}</td>
                                                     <td>{{ number_format($salesOrder->order_total, 2) }}</td>
-                                                    <td>{{ number_format(round($salesOrder->cbp_grand_total), 2) }}</td>
+                                                    <td>{{ number_format($salesOrder->cbp_total, 2) }}</td>
+                                                    <td>{{ number_format($salesOrder->cbp_tax, 2) }}</td>
+                                                    <td>{{ number_format($salesOrder->cbp_grand_total, 2) }}</td>
                                                     <td>{{ number_format($salesOrder->nominal, 2) }}</td>
                                                     @php
                                                         $totalGimmick = ( $salesOrder->cbp_grand_total / $salesOrder->nominal * $salesOrder->free_qty);

@@ -84,9 +84,19 @@
                                         <label for="status">{{ trans('report.status') }}</label>
                                     </div>
                                     <div class="col-md-2"> 
-                                        <select name="status" id="status" class="form-control select2js" required>
-                                            <option value="P">Processed</option>
-                                        </select>
+                                        @if (isset($status_selected))
+                                            <select name="status" id="status" class="form-control select2js" required>
+                                                <option value="S" {{ $status_selected == 'S' ? 'selected' : '' }}>Draft</option>
+                                                <option value="R" {{ $status_selected == 'R' ? 'selected' : '' }}>Submitted</option>
+                                                <option value="P" {{ $status_selected == 'P' ? 'selected' : '' }}>Processed</option>
+                                            </select>
+                                        @else
+                                            <select name="status" id="status" class="form-control select2js" required>
+                                                <option value="S">Draft</option>
+                                                <option value="R">Submitted</option>
+                                                <option value="P">Processed</option>
+                                            </select>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row mt-3">
@@ -111,9 +121,11 @@
                                                 <th>Order Date</th>
                                                 <th>Delivery Date</th>
                                                 <th>Quantity</th>
-                                                <th>Amount</th>
-                                                <th>Tax</th>
-                                                <th>Total Amount</th>
+                                                <th>Amount RBP</th>
+                                                <th>Tax RBP</th>
+                                                <th>Total Amount RBP</th>
+                                                <th>Total Amount CBP</th>
+                                                <th>Price Gimmick Each</th>
                                                 <th>Qty Gimmick</th>
                                                 <th>Description</th>
                                             </tr>
@@ -131,6 +143,8 @@
                                                     <td>{{ number_format($salesOrder->order_amount, 2) }}</td>
                                                     <td>{{ number_format($salesOrder->tax,2) }}</td>
                                                     <td>{{ number_format($salesOrder->order_total, 2) }}</td>
+                                                    <td>{{ number_format(round($salesOrder->cbp_grand_total), 2) }}</td>
+                                                    <td>{{ number_format($salesOrder->nominal, 2) }}</td>
                                                     @php
                                                         $totalGimmick = ( $salesOrder->cbp_grand_total / $salesOrder->nominal * $salesOrder->free_qty);
                                                     @endphp

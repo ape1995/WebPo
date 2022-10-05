@@ -437,40 +437,78 @@ class ReportController extends Controller
             $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
             $customers = Customer::whereRaw("(LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40')")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         }
-        
-        if($input['customer_id'] == 'All'){
 
-            $salesOrders = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
-            ->leftJoin('bundling_gimmicks', function($join)
-            {
-                $join->on('sales_orders.delivery_date','>=','start_date');
-                $join->on('sales_orders.delivery_date','<=','end_date');
-            })
-            ->select('sales_orders.order_type', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', DB::raw('sum(sales_order_details.qty) as qty'), 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
-            ->where('sales_orders.order_type', 'G')
-            ->where('sales_orders.status', $status_selected)
-            ->groupBy('sales_orders.order_type', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
-            ->whereBetween('sales_orders.delivery_date', [$date_1_selected, $date_2_selected])
-            ->get();
+        if($input['status'] == 'All'){
 
+            if($input['customer_id'] == 'All'){
+    
+                $salesOrders = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
+                ->leftJoin('bundling_gimmicks', function($join)
+                {
+                    $join->on('sales_orders.delivery_date','>=','start_date');
+                    $join->on('sales_orders.delivery_date','<=','end_date');
+                })
+                ->select('sales_orders.order_type', 'sales_orders.status', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', DB::raw('sum(sales_order_details.qty) as qty'), 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
+                ->where('sales_orders.order_type', 'G')
+                ->groupBy('sales_orders.order_type', 'sales_orders.status', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
+                ->whereBetween('sales_orders.delivery_date', [$date_1_selected, $date_2_selected])
+                ->get();
+    
+    
+            } else {
+    
+                $salesOrders = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
+                ->leftJoin('bundling_gimmicks', function($join)
+                {
+                    $join->on('sales_orders.delivery_date','>=','start_date');
+                    $join->on('sales_orders.delivery_date','<=','end_date');
+                })
+                ->select('sales_orders.order_type', 'sales_orders.status', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', DB::raw('sum(sales_order_details.qty) as qty'), 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
+                ->where('sales_orders.order_type', 'G')
+                ->where('sales_orders.customer_id', $customer_id_selected)
+                ->groupBy('sales_orders.order_type', 'sales_orders.status', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
+                ->whereBetween('sales_orders.delivery_date', [$date_1_selected, $date_2_selected])
+                ->get();
+    
+            }
 
         } else {
 
-            $salesOrders = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
-            ->leftJoin('bundling_gimmicks', function($join)
-            {
-                $join->on('sales_orders.delivery_date','>=','start_date');
-                $join->on('sales_orders.delivery_date','<=','end_date');
-            })
-            ->select('sales_orders.order_type', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', DB::raw('sum(sales_order_details.qty) as qty'), 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
-            ->where('sales_orders.order_type', 'G')
-            ->where('sales_orders.status', $status_selected)
-            ->where('sales_orders.customer_id', $customer_id_selected)
-            ->groupBy('sales_orders.order_type', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
-            ->whereBetween('sales_orders.delivery_date', [$date_1_selected, $date_2_selected])
-            ->get();
-
+            if($input['customer_id'] == 'All'){
+    
+                $salesOrders = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
+                ->leftJoin('bundling_gimmicks', function($join)
+                {
+                    $join->on('sales_orders.delivery_date','>=','start_date');
+                    $join->on('sales_orders.delivery_date','<=','end_date');
+                })
+                ->select('sales_orders.order_type', 'sales_orders.status', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', DB::raw('sum(sales_order_details.qty) as qty'), 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
+                ->where('sales_orders.order_type', 'G')
+                ->where('sales_orders.status', $status_selected)
+                ->groupBy('sales_orders.order_type', 'sales_orders.status', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
+                ->whereBetween('sales_orders.delivery_date', [$date_1_selected, $date_2_selected])
+                ->get();
+    
+    
+            } else {
+    
+                $salesOrders = SalesOrder::leftJoin('sales_order_details', 'sales_order_details.sales_order_id', '=', 'sales_orders.id')
+                ->leftJoin('bundling_gimmicks', function($join)
+                {
+                    $join->on('sales_orders.delivery_date','>=','start_date');
+                    $join->on('sales_orders.delivery_date','<=','end_date');
+                })
+                ->select('sales_orders.order_type', 'sales_orders.status', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', DB::raw('sum(sales_order_details.qty) as qty'), 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
+                ->where('sales_orders.order_type', 'G')
+                ->where('sales_orders.status', $status_selected)
+                ->where('sales_orders.customer_id', $customer_id_selected)
+                ->groupBy('sales_orders.order_type', 'sales_orders.status', 'sales_orders.order_nbr', 'sales_orders.customer_id', 'sales_orders.order_date', 'sales_orders.delivery_date', 'sales_orders.order_amount', 'sales_orders.tax', 'sales_orders.order_total', 'sales_orders.cbp_total', 'sales_orders.cbp_tax', 'sales_orders.cbp_grand_total', 'bundling_gimmicks.nominal', 'bundling_gimmicks.free_qty', 'bundling_gimmicks.free_descr')
+                ->whereBetween('sales_orders.delivery_date', [$date_1_selected, $date_2_selected])
+                ->get();
+    
+            }
         }
+        
 
         // dd($salesOrders);
 

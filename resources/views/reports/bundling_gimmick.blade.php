@@ -86,12 +86,14 @@
                                     <div class="col-md-2"> 
                                         @if (isset($status_selected))
                                             <select name="status" id="status" class="form-control select2js" required>
+                                                <option value="All" {{ $status_selected == 'All' ? 'selected' : '' }}>All</option>
                                                 <option value="S" {{ $status_selected == 'S' ? 'selected' : '' }}>Draft</option>
                                                 <option value="R" {{ $status_selected == 'R' ? 'selected' : '' }}>Submitted</option>
                                                 <option value="P" {{ $status_selected == 'P' ? 'selected' : '' }}>Processed</option>
                                             </select>
                                         @else
                                             <select name="status" id="status" class="form-control select2js" required>
+                                                <option value="All">All</option>
                                                 <option value="S">Draft</option>
                                                 <option value="R">Submitted</option>
                                                 <option value="P">Processed</option>
@@ -114,6 +116,7 @@
                                     <table class="table table-hover table-sm" id="sales-order-table">
                                         <thead>
                                             <tr>
+                                                <th>Status</th>
                                                 <th>Order Type</th>
                                                 <th>Order Nbr</th>
                                                 <th>Customer ID</th>
@@ -135,6 +138,19 @@
                                         <tbody>
                                             @foreach ($salesOrders as $salesOrder)
                                                 <tr>
+                                                    @php
+                                                        if($salesOrder->status == 'S'){
+                                                            $statusOrder = 'Draft';
+                                                        } else if ($salesOrder->status == 'R') {
+                                                            $statusOrder = 'Submitted';
+                                                        } else if($salesOrder->status == 'P'){
+                                                            $statusOrder = 'Processed';
+                                                        } else {
+                                                            $statusOrder = 'Canceled';
+                                                        }
+                                                        
+                                                    @endphp
+                                                    <td>{{ $statusOrder }}</td>
                                                     <td>Bundling Gimmick</td>
                                                     <td>{{$salesOrder->order_nbr}}</td>
                                                     <td>{{$salesOrder->customer->AcctCD}}</td>

@@ -62,20 +62,28 @@
                                         <label for="order_date">{{ trans('report.customer') }}</label>
                                     </div>
                                     <div class="col-md-5">
-                                        @if (isset($customer_id_selelcted))
+                                        @if (\Auth::user()->role == 'Customers' || \Auth::user()->role == 'Staff Customer')
                                             <select name="customer_id" id="customer_id" class="form-control select2js" required>
-                                                <option value="All">All Customers</option>
-                                                @foreach ($customers as $customer)
-                                                    <option value="{{ $customer->BAccountID }}" {{ $customer->BAccountID == $customer_id_selelcted ? 'selected' : '' }}>{{ $customer->AcctName }} - {{ $customer->AcctCD }}</option>
-                                                @endforeach
-                                            </select>
-                                        @else
-                                            <select name="customer_id" id="customer_id" class="form-control select2js" required>
-                                                <option value="All">All Customers</option>
                                                 @foreach ($customers as $customer)
                                                     <option value="{{ $customer->BAccountID }}">{{ $customer->AcctName }} - {{ $customer->AcctCD }}</option>
                                                 @endforeach
                                             </select>
+                                        @else
+                                            @if (isset($customer_id_selelcted))
+                                                <select name="customer_id" id="customer_id" class="form-control select2js" required>
+                                                    <option value="All">All Customers</option>
+                                                    @foreach ($customers as $customer)
+                                                        <option value="{{ $customer->BAccountID }}" {{ $customer->BAccountID == $customer_id_selelcted ? 'selected' : '' }}>{{ $customer->AcctName }} - {{ $customer->AcctCD }}</option>
+                                                    @endforeach
+                                                </select>
+                                            @else
+                                                <select name="customer_id" id="customer_id" class="form-control select2js" required>
+                                                    <option value="All">All Customers</option>
+                                                    @foreach ($customers as $customer)
+                                                        <option value="{{ $customer->BAccountID }}">{{ $customer->AcctName }} - {{ $customer->AcctCD }}</option>
+                                                    @endforeach
+                                                </select>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>

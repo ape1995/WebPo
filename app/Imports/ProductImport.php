@@ -48,6 +48,11 @@ class ProductImport implements ToCollection, WithHeadingRow
 
         foreach ($rows as $index => $row) 
         { 
+
+            if($row['quantity'] < 0){
+                $errors[] = 'error';
+                return $errors;
+            }
             
             $kode_produk = $row['kode_produk'];
             

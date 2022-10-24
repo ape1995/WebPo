@@ -36,3 +36,6 @@ Route::resource('carts', App\Http\Controllers\API\CartAPIController::class);
 route::get('get-promo-active/{date}/{user}', [App\Http\Controllers\PacketDiscountController::class, 'getPromoActive']);
 route::get('get-promo-product-active/{date}/{user}/{type}', [App\Http\Controllers\BundlingProductController::class, 'getProductActive']);
 Route::get('get-promo-data/{code}',[App\Http\Controllers\PacketDiscountController::class, 'getPromoData']);
+Route::get('get-first-order-data/{customercode}',[App\Http\Controllers\CustomerFirstOrderController::class, 'getFirstOrder']);
+Route::get('get-promo-hold-duration/{code}', [App\Http\Controllers\PromoHoldDurationController::class, 'getDataByCode']);
+Route::get('validate-order-type/{code}/{user}/{deliverydate}', [App\Http\Controllers\CustomerFirstOrderController::class, 'validateOrderType']);

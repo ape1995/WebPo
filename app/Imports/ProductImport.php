@@ -50,7 +50,7 @@ class ProductImport implements ToCollection, WithHeadingRow
         { 
 
             if($row['quantity'] < 0){
-                $errors[] = 'error';
+                $errors[] = 'Quantity tidak boleh kurang dari 0';
                 return $errors;
             }
             
@@ -61,7 +61,7 @@ class ProductImport implements ToCollection, WithHeadingRow
             $cek_produk = CustomerProduct::where('customer_code',  \Auth::user()->customer->AcctCD)->where('inventory_code', $kode_produk)->get()->first();
             $errors = [];
             if($cek_produk == null){
-                $errors[] = 'error';
+                $errors[] = 'Anda tidak memiliki akses untuk produk tertentu!';
                 return $errors;
             }
 

@@ -28,6 +28,7 @@ use App\Models\ParameterVAT;
 use App\Models\SalesOrderDetail;
 use App\Models\Attachment;
 use App\Models\SOOrder;
+use App\Models\CustomerFirstOrder;
 use App\Models\DsRule;
 use App\Models\DsPercentage;
 use App\Http\Controllers\AppBaseController;
@@ -912,11 +913,24 @@ class SalesOrderController extends AppBaseController
             return redirect(route('salesOrders.index'))->with('error', 'Order Not Found');
         }
 
+        $cekData = CustomerFirstOrder::where('customer_code', $salesOrder->customer->AcctCD)->get()->first();
+
+        if ($cekData == null) {
+            CustomerFirstOrder::create([
+                'customer_code' => $salesOrder->customer->AcctCD,
+                'first_order_number' => $salesOrder->order_nbr,
+                'first_order_date' => $salesOrder->delivery_date,
+                'created_by' => \Auth::user()->id
+            ]);
+        }
+
         $salesOrder = SalesOrder::find($id);
         $salesOrder['status'] = 'P';
         $salesOrder['processed_by'] = \Auth::user()->id;
         $salesOrder['processed_at'] = Carbon::now()->toDateTimeString();
         $salesOrder->save();
+
+
 
         return redirect(route('salesOrders.show', $id))->with('success', 'Order Submitted Sucessfully.');
     }

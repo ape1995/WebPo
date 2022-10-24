@@ -61,10 +61,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
       display: none;
     }
     .table {
-      font-size: 14px !important;
+      font-size: 12px !important;
     }
     .card {
-      font-size: 14px !important;
+      font-size: 13px !important;
+    }
+    .nav-link {
+      font-size: 13px !important;
     }
   </style>
 </head>

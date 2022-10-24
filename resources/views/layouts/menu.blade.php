@@ -50,8 +50,8 @@
 @endif
 
 @if(Gate::check('browse bundling discounts') || Gate::check('browse bundling products') || Gate::check('browse bundling gimmicks') || Gate::check('setting direct selling rules') || Gate::check('browse parameter')  || Gate::check('browse adds')  || Gate::check('browse tax')  || Gate::check('browse customer products')  || Gate::check('browse min orders') || Gate::check('browse category minimum orders'))
-    <li class="nav-item {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }} {{ Request::is('customerProducts*') ? 'menu-open' : '' }} {{ Request::is('customerMinOrders*') ? 'menu-open' : '' }} {{ Request::is('categoryMinOrders*') ? 'menu-open' : '' }} {{ Request::is('dsRules*') ? 'menu-open' : '' }} {{ Request::is('bundlingGimmicks*') ? 'menu-open' : '' }} {{ Request::is('bundlingProducts*') ? 'menu-open' : '' }} {{ Request::is('packetDiscounts*') ? 'menu-open' : '' }} {{ Request::is('productSchedulers*') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }} {{ Request::is('customerProducts*') ? 'active' : '' }} {{ Request::is('customerMinOrders*') ? 'active' : '' }} {{ Request::is('categoryMinOrders*') ? 'active' : '' }} {{ Request::is('dsRules*') ? 'active' : '' }} {{ Request::is('bundlingGimmicks*') ? 'active' : '' }} {{ Request::is('bundlingProducts*') ? 'active' : '' }} {{ Request::is('packetDiscounts*') ? 'active' : '' }} {{ Request::is('productSchedulers*') ? 'active' : '' }}">
+    <li class="nav-item {{ Request::is('parameters*') ? 'menu-open' : '' }} {{ Request::is('parameterVATs*') ? 'menu-open' : '' }} {{ Request::is('mailSettings*') ? 'menu-open' : '' }}  {{ Request::is('adds*') ? 'menu-open' : '' }} {{ Request::is('customerProducts*') ? 'menu-open' : '' }} {{ Request::is('customerMinOrders*') ? 'menu-open' : '' }} {{ Request::is('categoryMinOrders*') ? 'menu-open' : '' }} {{ Request::is('dsRules*') ? 'menu-open' : '' }} {{ Request::is('bundlingGimmicks*') ? 'menu-open' : '' }} {{ Request::is('bundlingProducts*') ? 'menu-open' : '' }} {{ Request::is('packetDiscounts*') ? 'menu-open' : '' }} {{ Request::is('productSchedulers*') ? 'menu-open' : '' }} {{ Request::is('customerFirstOrders*') ? 'menu-open' : '' }} {{ Request::is('promoHoldDurations*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('parameters*') ? 'active' : '' }} {{ Request::is('parameterVATs*') ? 'active' : '' }} {{ Request::is('mailSettings*') ? 'active' : '' }}  {{ Request::is('adds*') ? 'active' : '' }} {{ Request::is('customerProducts*') ? 'active' : '' }} {{ Request::is('customerMinOrders*') ? 'active' : '' }} {{ Request::is('categoryMinOrders*') ? 'active' : '' }} {{ Request::is('dsRules*') ? 'active' : '' }} {{ Request::is('bundlingGimmicks*') ? 'active' : '' }} {{ Request::is('bundlingProducts*') ? 'active' : '' }} {{ Request::is('packetDiscounts*') ? 'active' : '' }} {{ Request::is('productSchedulers*') ? 'active' : '' }} {{ Request::is('customerFirstOrders*') ? 'active' : '' }} {{ Request::is('promoHoldDurations*') ? 'active' : '' }}">
             <i class="nav-icon fas fa-cogs"></i>
             <p>
             {{ trans('menu.configuration')}}
@@ -152,6 +152,22 @@
                 <a href="{{ route('packetDiscounts.index') }}" class="nav-link {{ Request::is('packetDiscounts*') ? 'active' : '' }}">
                     &nbsp;&nbsp;&nbsp;<i class="fas fa-list nav-icon"></i>
                     <p>{{ trans('menu.bundling_discount') }}</p>
+                </a>
+            </li>
+            @endcan
+            @can('browse customer first orders')
+            <li class="nav-item">
+                <a href="{{ route('customerFirstOrders.index') }}" class="nav-link {{ Request::is('customerFirstOrders*') ? 'active' : '' }}">
+                   &nbsp;&nbsp;&nbsp;<i class="fas fa-file nav-icon"></i>
+                    <p>Customer First Orders</p>
+                </a>
+            </li>
+            @endcan
+            @can('browse promo hold durations')
+            <li class="nav-item">
+                <a href="{{ route('promoHoldDurations.index') }}" class="nav-link {{ Request::is('promoHoldDurations*') ? 'active' : '' }}">
+                    &nbsp;&nbsp;&nbsp;<i class="fas fa-clock nav-icon"></i>
+                    <p>Promo Hold Durations</p>
                 </a>
             </li>
             @endcan

@@ -29,6 +29,8 @@ use App\Http\Controllers\PacketDiscountDetailController;
 use App\Http\Controllers\BundlingProductController;
 use App\Http\Controllers\BundlingProductFreeController;
 use App\Http\Controllers\productSchedulerController;
+use App\Http\Controllers\CustomerFirstOrderController;
+use App\Http\Controllers\PromoHoldDurationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -157,6 +159,10 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('packetDiscountDetails-reset/{user}',[PacketDiscountDetailController::class,'reset'])->name('packetDiscountDetails.reset');
     Route::get('packetDiscountDetails-detailData/{code}',[PacketDiscountDetailController::class,'detailData'])->name('packetDiscountDetails.detailData');
     Route::get('packetDiscountDetails-resetDetail/{code}',[PacketDiscountDetailController::class,'resetDetail'])->name('packetDiscountDetails.resetDetail');
+
+    Route::resource('customerFirstOrders', CustomerFirstOrderController::class);
+    Route::get('customerFirstOrderLoadData', [CustomerFirstOrderController::class, 'loadData'])->name('customerFirstOrders.loadData');
+    Route::resource('promoHoldDurations', PromoHoldDurationController::class);
     
 });
 

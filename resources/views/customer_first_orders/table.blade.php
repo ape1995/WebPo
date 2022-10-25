@@ -11,9 +11,15 @@
         <tbody>
         @foreach($customerFirstOrders as $customerFirstOrder)
             <tr>
+                @php
+                    $date1 = new DateTime($customerFirstOrder->first_order_date);
+                    $date2 = new DateTime(now());
+                    $interval = $date1->diff($date2);
+                    $days = $interval->format('%a');
+                @endphp
                 <td>{{ $customerFirstOrder->customer_code }} - {{ $customerFirstOrder->customer->AcctName }}</td>
                 <td>{{ $customerFirstOrder->first_order_number }}</td>
-                <td>{{ $customerFirstOrder->first_order_date->format('Y-m-d') }}</td>
+                <td>{{ $customerFirstOrder->first_order_date->format('Y-m-d') }} (  {{$days}} days )</td>
                 <td width="120">
                     {!! Form::open(['route' => ['customerFirstOrders.destroy', $customerFirstOrder->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>

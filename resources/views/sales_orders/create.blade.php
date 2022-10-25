@@ -387,7 +387,54 @@
             });
 
             delivery_date.on('change', function() {
+                if (order_type.val() != '' || order_type.val() != null){
+                    if (order_type.val() == 'R'){
+                        validateOrder()
+                    } else {
+                        var url = "{{ url('api/get-promo-hold-duration') }}" + "/" + order_type.val();
+                        // send data to your endpoint
+                        $.ajax({
+                            url: url,
+                            method: 'get',
+                            dataType: 'json',
+                            success: function(response) {
+                                // inventory_id.empty();
+                                if (response == 1) {
+                                    // IF Delivery Date Is Null
+                                    if(delivery_date.val() == null || delivery_date.val() == ''){
+                                        swal("Gagal!", "Mohon Isi Tanggal Pengiriman Terlebih Dahulu!", "error");
+                                        order_type.val('').change();
+                                        validateOrder();
+                                    } else {
+                                        var url2 = "{{ url('api/validate-order-type') }}" + "/" + order_type.val() + "/" + "{{ \Auth::user()->id }}" + "/" + delivery_date.val();
+                                        // send data to your endpoint
+                                        $.ajax({
+                                            url: url2,
+                                            method: 'get',
+                                            dataType: 'json',
+                                            success: function(response2) {
+                                                console.log(response2);
+                                                if (response2 == 1) {
+                                                    validateOrder();
+                                                } else {
+                                                    swal("Gagal!", "Anda belum memiliki hak untuk promo ini!", "error");
+                                                    order_type.val('').change();
+                                                    validateOrder();
+                                                }
+                                            }
+                                        });
+                                    }
+                                    
+                                } else {
+                                    validateOrder();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
 
+            function validateOrder(){
                 var url2 = "{{ url('resetOrder') }}";
                 $.ajax({
                     url: url2,
@@ -442,8 +489,7 @@
                     });
 
                 }
-                
-            });
+            }
 
             order_type.on('change', function() {
 
@@ -486,14 +532,11 @@
                                 }
                                 
                             } else {
-                                swal("Gagal!", "Anda belum memiliki hak untuk promo ini!", "error");
+                                loadFromType();
                             }
                         }
                     });
                 }
-
-
-                
 
             });
 

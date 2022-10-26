@@ -226,10 +226,16 @@ class CustomerFirstOrderController extends AppBaseController
 
         $user = User::find($userid);
         $custFirstOrder = CustomerFirstOrder::where('customer_code', $user->customer->AcctCD)->get()->first();
-        $promoDuration = PromoHoldDuration::where('packet_type', $value)->get()->first();
+        $promoDuration = PromoHoldDuration::whereRaw("packet_type = '$value' AND start_date <= '$deliveryDate' AND (end_date IS NULL OR end_date >= '$deliveryDate')")->get()->first();
 
+        // if firts order not found, reject the order
         if ($custFirstOrder == null) {
             return 0;
+        }
+
+        // if duration promo not found allow the order
+        if ($promoDuration == null) {
+            return 1;
         }
         
         $date1 = new DateTime($custFirstOrder->first_order_date);
@@ -243,6 +249,11 @@ class CustomerFirstOrderController extends AppBaseController
         } else {
             return 0;
         }
+
+        /*
+            1 = Allow
+            2 = Reject
+        */
 
     }
 }

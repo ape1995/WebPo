@@ -413,7 +413,7 @@
                                             method: 'get',
                                             dataType: 'json',
                                             success: function(response2) {
-                                                console.log(response2);
+                                                // console.log(response2);
                                                 if (response2 == 1) {
                                                     validateOrder();
                                                 } else {
@@ -519,7 +519,7 @@
                                         method: 'get',
                                         dataType: 'json',
                                         success: function(response2) {
-                                            console.log(response2);
+                                            // console.log(response2);
                                             if (response2 == 1) {
                                                 loadFromType();
                                             } else {
@@ -799,7 +799,7 @@
                     type: "POST",
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
+                        // console.log(data);
                         $('#data_show').hide();
                         qty.val('');
                         amount.val('');
@@ -808,7 +808,7 @@
                         getAllCounter();
                     },
                     error: function (data) {
-                        console.log(data);
+                        // console.log(data);
                         alert('Produk sudah ada dalam list');
                     }
                 });
@@ -830,7 +830,7 @@
                     type: "POST",
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
+                        // console.log(data);
                         hidden_promo.hide();
                         promo_list.select2().select2('val','');
                         qty_promo.val('');

@@ -922,6 +922,12 @@ class SalesOrderController extends AppBaseController
                 'first_order_date' => $salesOrder->delivery_date,
                 'created_by' => \Auth::user()->id
             ]);
+        } else {
+            if ($salesOrder->delivery_date < $cekData->first_order_date) {
+                $cekData['first_order_number'] = $salesOrder->order_nbr;
+                $cekData['first_order_date'] = $salesOrder->delivery_date;
+                $cekData->save();
+            }
         }
 
         $salesOrder = SalesOrder::find($id);

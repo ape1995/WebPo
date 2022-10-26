@@ -25,6 +25,8 @@ class PromoHoldDuration extends Model
     public $fillable = [
         'packet_type',
         'duration_in_day',
+        'start_date',
+        'end_date',
         'created_by',
         'updated_by'
     ];

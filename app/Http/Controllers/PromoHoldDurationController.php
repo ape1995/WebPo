@@ -61,11 +61,11 @@ class PromoHoldDurationController extends AppBaseController
 
         $cekData = PromoHoldDuration::where('packet_type', $input['packet_type'])->get()->first();
 
-        if ($cekData != null) {
-            Flash::error('Durasi '.$input['packet_type'].' Sudah dibuat.');
+        // if ($cekData != null) {
+        //     Flash::error('Durasi '.$input['packet_type'].' Sudah dibuat.');
 
-            return redirect(route('promoHoldDurations.create'))->withInput();
-        }
+        //     return redirect(route('promoHoldDurations.create'))->withInput();
+        // }
 
         $promoHoldDuration = $this->promoHoldDurationRepository->create($input);
 

@@ -187,7 +187,7 @@ class CustomerFirstOrderController extends AppBaseController
 
         foreach($customers as $customer){
             // Get Last Order Data for customer
-            $salesOrder = SalesOrder::where('status', 'P')->where('customer_id', $customer->BAccountID)->get()->first();
+            $salesOrder = SalesOrder::where('status', 'P')->where('customer_id', $customer->BAccountID)->orderBy('delivery_date', 'ASC')->orderBy('processed_at', 'ASC')->get()->first();
 
             // Cek Null
             if ($salesOrder != null) {

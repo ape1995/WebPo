@@ -61,13 +61,29 @@ class PromoHoldDurationController extends AppBaseController
 
         $cekData = PromoHoldDuration::where('packet_type', $input['packet_type'])->get()->first();
 
-        // if ($cekData != null) {
-        //     Flash::error('Durasi '.$input['packet_type'].' Sudah dibuat.');
+        if ($cekData == null) {
 
-        //     return redirect(route('promoHoldDurations.create'))->withInput();
-        // }
+            $promoHoldDuration = $this->promoHoldDurationRepository->create($input);
 
-        $promoHoldDuration = $this->promoHoldDurationRepository->create($input);
+        } else if($cekData->end_date == null) {
+
+            Flash::error('Tanggal akhir Durasi '.$input['packet_type'].' pada data terakhir, tidak boleh null.');
+
+            return redirect(route('promoHoldDurations.create'))->withInput();
+
+        } else if($input['start_date'] <= $cekData->end_date){
+
+            Flash::error('Tanggal awal harus lebih besar dari tanggal akhir Durasi '.$input['packet_type'].' terakhir');
+
+            return redirect(route('promoHoldDurations.create'))->withInput();
+
+        } else {
+
+            $promoHoldDuration = $this->promoHoldDurationRepository->create($input);
+
+        }
+
+        // $promoHoldDuration = $this->promoHoldDurationRepository->create($input);
 
         Flash::success('Promo Hold Duration saved successfully.');
 
@@ -105,8 +121,17 @@ class PromoHoldDurationController extends AppBaseController
     {
         $promoHoldDuration = $this->promoHoldDurationRepository->find($id);
 
+        
         if (empty($promoHoldDuration)) {
             Flash::error('Promo Hold Duration not found');
+            
+            return redirect(route('promoHoldDurations.index'));
+        }
+        
+        $cekData = PromoHoldDuration::where('packet_type', $promoHoldDuration->packet_type)->where('start_date', '>' , $promoHoldDuration->start_date)->orderBy('start_date', 'desc')->get()->first();
+
+        if($cekData != null) {
+            Flash::error('Akses dilarang, sudah ada data terbaru!');
 
             return redirect(route('promoHoldDurations.index'));
         }
@@ -126,13 +151,37 @@ class PromoHoldDurationController extends AppBaseController
     {
         $promoHoldDuration = $this->promoHoldDurationRepository->find($id);
 
+        $input = $request->all();
+
         if (empty($promoHoldDuration)) {
             Flash::error('Promo Hold Duration not found');
 
             return redirect(route('promoHoldDurations.index'));
         }
 
-        $promoHoldDuration = $this->promoHoldDurationRepository->update($request->all(), $id);
+        $cekData = PromoHoldDuration::where('packet_type', $input['packet_type'])->where('end_date', $input['start_date'])->whereNotIn('id', [$id])->orderBy('start_date', 'desc')->get()->first();
+
+        if ($cekData == null) {
+
+            $promoHoldDuration = $this->promoHoldDurationRepository->update($input, $id);
+
+        } else if($cekData->end_date == null) {
+
+            Flash::error('Tanggal akhir Durasi '.$input['packet_type'].' terakhir tidak boleh null.');
+
+            return redirect(route('promoHoldDurations.edit', $id));
+
+        } else if($input['start_date'] <= $cekData->end_date){
+
+            Flash::error('Tanggal awal harus lebih besar dari tanggal akhir Durasi '.$input['packet_type'].' terakhir');
+
+            return redirect(route('promoHoldDurations.edit', $id));
+
+        } else {
+
+            $promoHoldDuration = $this->promoHoldDurationRepository->update($input, $id);
+            
+        }
 
         Flash::success('Promo Hold Duration updated successfully.');
 

@@ -128,7 +128,7 @@ class PromoHoldDurationController extends AppBaseController
             return redirect(route('promoHoldDurations.index'));
         }
         
-        $cekData = PromoHoldDuration::where('packet_type', $promoHoldDuration->packet_type)->whereNotIn('id', [$id])->orderBy('start_date', 'desc')->get()->first();
+        $cekData = PromoHoldDuration::where('packet_type', $promoHoldDuration->packet_type)->where('start_date', '>' , $promoHoldDuration->start_date)->orderBy('start_date', 'desc')->get()->first();
 
         if($cekData != null) {
             Flash::error('Akses dilarang, sudah ada data terbaru!');

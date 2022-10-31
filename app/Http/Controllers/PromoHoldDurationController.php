@@ -59,7 +59,7 @@ class PromoHoldDurationController extends AppBaseController
 
         $input['created_by'] = \Auth::user()->id;
 
-        $cekData = PromoHoldDuration::where('packet_type', $input['packet_type'])->get()->first();
+        $cekData = PromoHoldDuration::where('packet_type', $input['packet_type'])->orderBy('start_date', 'DESC')->get()->first();
 
         if ($cekData == null) {
 
@@ -128,7 +128,7 @@ class PromoHoldDurationController extends AppBaseController
             return redirect(route('promoHoldDurations.index'));
         }
         
-        $cekData = PromoHoldDuration::where('packet_type', $promoHoldDuration->packet_type)->where('start_date', '>' , $promoHoldDuration->start_date)->orderBy('start_date', 'desc')->get()->first();
+        $cekData = PromoHoldDuration::where('packet_type', $promoHoldDuration->packet_type)->whereNotIn('id', [$id])->orderBy('start_date', 'desc')->get()->first();
 
         if($cekData != null) {
             Flash::error('Akses dilarang, sudah ada data terbaru!');
@@ -159,7 +159,7 @@ class PromoHoldDurationController extends AppBaseController
             return redirect(route('promoHoldDurations.index'));
         }
 
-        $cekData = PromoHoldDuration::where('packet_type', $input['packet_type'])->where('end_date', $input['start_date'])->whereNotIn('id', [$id])->orderBy('start_date', 'desc')->get()->first();
+        $cekData = PromoHoldDuration::where('packet_type', $input['packet_type'])->whereNotIn('id', [$id])->orderBy('start_date', 'desc')->get()->first();
 
         if ($cekData == null) {
 

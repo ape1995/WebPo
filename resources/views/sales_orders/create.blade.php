@@ -571,6 +571,31 @@
                     }
                 });
 
+
+                var url2 = "{{ url('api/get-promo-active') }}" + "/" + delivery_date.val() + "/" + "{{ \Auth::user()->id }}";
+                // send data to your endpoint
+                $.ajax({
+                    url: url2,
+                    method: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        promo_list.empty();
+                        promo_list.html(response)
+                    }
+                });
+
+                var url = "{{ url('carts-reCountDetailProduct') }}" + "/" + delivery_date.val();
+                // send data to your endpoint
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        table.draw();
+                        getAllCounter();
+                    }
+                });
+
                 var url = "{{ url('resetOrder') }}";
                 $.ajax({
                     url: url,

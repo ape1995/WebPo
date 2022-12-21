@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dt-example table-type="html" table-class="display nowrap" order="2">
+
+<css lib="datatables buttons"/>
+<js lib="jquery datatables buttons jszip pdfmake vfsfonts buttons-html5 buttons-print">
+<![CDATA[
+
+$(document).ready(function() {
+	$('#example').DataTable( {
+		dom: 'Bfrtip',
+		buttons: [
+			'copy', 'csv', 'excel', 'pdf', 'print'
+		]
+	} );
+} );
+
+]]>
+</js>
+
+<title lib="Buttons">File export</title>
+
+<info><![CDATA[
+
+Exporting data from a table can often be a key part of a complex application. The Buttons extension for DataTables provides three plug-ins that provide overlapping functionality for data export:
+
+* HTML5 export buttons - makes use of HTML5 APIs to create files client-side
+* Print button
+
+Both sets of buttons provide:
+
+* Copy to clipboard
+* Save as Excel (XLSX)
+* Save as CSV
+* Save as PDF
+* Display a print view
+
+Buttons provides button types that will alias HTML5 buttons. These are: `b-button copy`, `b-button csv`, `b-button excel`, `b-button pdf`.
+
+This example shows those four button types, plus `b-button print`, being used with all required dependencies being loaded.
+
+]]></info>
+
+</dt-example>
+

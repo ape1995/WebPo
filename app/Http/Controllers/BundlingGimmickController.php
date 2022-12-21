@@ -256,4 +256,15 @@ class BundlingGimmickController extends AppBaseController
 
         return redirect(route('bundlingGimmicks.index'));
     }
+
+    public function getGimmickACtive($code,$date)
+    {
+        $bundlingGimmick = BundlingGimmick::whereRaw("start_date <= '$date' AND (end_date IS NULL OR end_date >= '$date') AND status = 'Released'")->get()->first();
+
+        if ($bundlingGimmick == null) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
 }

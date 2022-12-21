@@ -32,7 +32,7 @@
     {!! Form::time('parameter_hour', null, ['class' => 'form-control','id'=>'parameter_hour']) !!}
 </div>
 
-@push('page_scripts')
+{{-- @push('page_scripts')
     <script type="text/javascript">
         $(function(){
             $('#parameter_hour').timepicker({
@@ -46,7 +46,7 @@
             })
         });
     </script>
-@endpush
+@endpush --}}
 
 {{-- <!-- Parameter Number Field -->
 <div class="form-group col-sm-6">

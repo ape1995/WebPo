@@ -39,3 +39,4 @@ Route::get('get-promo-data/{code}',[App\Http\Controllers\PacketDiscountControlle
 Route::get('get-first-order-data/{customercode}',[App\Http\Controllers\CustomerFirstOrderController::class, 'getFirstOrder']);
 Route::get('get-promo-hold-duration/{code}', [App\Http\Controllers\PromoHoldDurationController::class, 'getDataByCode']);
 Route::get('validate-order-type/{code}/{user}/{deliverydate}', [App\Http\Controllers\CustomerFirstOrderController::class, 'validateOrderType']);
+Route::get('get-gimmick-active/{code}/{deliverydate}', [App\Http\Controllers\BundlingGimmickController::class, 'getGimmickACtive']);

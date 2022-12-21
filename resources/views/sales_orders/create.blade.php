@@ -416,6 +416,7 @@
                                                 // console.log(response2);
                                                 if (response2 == 1) {
                                                     validateOrder();
+                                                    loadFromType();
                                                 } else {
                                                     swal("Gagal!", "Anda belum memiliki hak untuk promo ini!", "error");
                                                     order_type.val('').change();
@@ -545,7 +546,31 @@
                 if (order_type.val() == 'C') {
                     div_promo.show();
                     div_reguler.hide();
-                } else if (order_type.val() == 'R' || order_type.val() == 'G' || order_type.val() == 'P' || order_type.val() == 'D') {
+                } else if(order_type.val() == 'G') {
+                    var urlCek = "{{ url('api/get-gimmick-active') }}" + "/" + order_type.val() + "/" + delivery_date.val();
+                    // send data to your endpoint
+                    $.ajax({
+                        url: urlCek,
+                        method: 'get',
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response == true) {
+                                div_reguler.show();
+                                div_promo.hide();
+                            } else {
+                                swal("Gagal!", "Tidak Ada Promo Gimmick Untuk Tanggal Tersebut!", "error");
+                                order_type.val('').change();
+                                div_promo.hide();
+                                div_reguler.hide();
+                            }
+                        },
+                        error: function(response){
+                            div_promo.hide();
+                            div_reguler.hide();
+                        }
+                    });
+
+                } else if (order_type.val() == 'R' || order_type.val() == 'P' || order_type.val() == 'D') {
                     div_reguler.show();
                     div_promo.hide();
                 } else {

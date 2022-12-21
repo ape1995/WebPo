@@ -31,7 +31,7 @@
     {!! Form::label('parameter_hour', trans('parameter.parameter_hour')) !!}
     {!! Form::time('parameter_hour', null, ['class' => 'form-control','id'=>'parameter_hour']) !!}
 </div>
-
+{{-- 
 @push('page_scripts')
     <script type="text/javascript">
         $(function(){
@@ -46,7 +46,7 @@
             })
         });
     </script>
-@endpush
+@endpush --}}
 
 {{-- <!-- Parameter Number Field -->
 <div class="form-group col-sm-6">

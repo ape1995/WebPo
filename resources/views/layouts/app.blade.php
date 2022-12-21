@@ -28,17 +28,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{ asset('lte/dist/css/adminlte.min.css') }}">
 
   {{-- Datatables --}}
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}"/>
   {{-- Datatables --}}
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.dataTables.css') }}">
   {{-- Select2 --}}
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" />
-  <link rel="stylesheet" type="text/css" href="https://select2.github.io/select2-bootstrap-theme/css/select2-bootstrap.css">
-  {{-- Timepicker --}}
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/select2/dist/css/select2.min.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/select2-bootstrap/dist/select2-bootstrap.min.css') }}">
   
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+  <link rel="stylesheet" href="{{ asset('assets/sweetalerts2/dist/sweetalert2.min.css') }}">
   
   @yield('css')
   <style>
@@ -106,26 +103,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+
+{{-- Sweet Alerts --}}
+<script src="{{ asset('assets/sweetalerts2/dist/sweetalert2.all.min.js') }}"></script>
+
 <!-- Bootstrap 4 -->
 <script src="{{ asset('lte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('lte/dist/js/adminlte.min.js') }}"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{ asset('assets/js/validate/jquery.validate.js') }}"></script>
+
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 
 {{-- Datatables --}}
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="{{ asset('assets/js/dataTables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/js/dataTables/dataTables.dataTables.min.js') }}"></script>
 
 {{-- select2 --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+<script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
+
 {{-- Masking --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
-{{-- time picker --}}
-<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>  
+<script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
 
 <script>
     $.fn.select2.defaults.set("theme", "bootstrap");

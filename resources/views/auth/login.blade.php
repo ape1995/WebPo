@@ -20,7 +20,7 @@
 			<div class="row justify-content-center">
 				<div class="col-md-12 col-lg-10">
 					<div class="wrap d-md-flex">
-						<div class="img p-3" style="background-image: url('/assets/images/yamazaki-myroti.png')">
+						<div class="img p-3" style="background-image: url('assets/images/yamazaki-myroti.png')">
 			        </div>
 					<div class="login-wrap p-4 p-md-5">
 						<div class="container my-1">

@@ -283,7 +283,7 @@
                 <li class="nav-item">
                     <a href="{{ route('reportSalesOrder.reportBGimmickIndex') }}" class="nav-link {{ Request::is('reportBGimmick') ? 'active' : '' }}">
                         &nbsp;&nbsp;&nbsp;<i class="fas fa-clipboard-check nav-icon"></i>
-                        <p>Bundling Gimmick</p>
+                        <p>{{ trans('menu.report')}} {{ trans('menu.bundling_gimmicks')}}</p>
                     </a>
                 </li>
             @endcan
@@ -291,7 +291,7 @@
                 <li class="nav-item">
                     <a href="{{ route('reportSalesOrder.reportBProductIndex') }}" class="nav-link {{ Request::is('reportBProduct') ? 'active' : '' }}">
                         &nbsp;&nbsp;&nbsp;<i class="fas fa-clipboard-check nav-icon"></i>
-                        <p>Bundling Product</p>
+                        <p>{{ trans('menu.report')}} {{ trans('menu.bundling_products')}}</p>
                     </a>
                 </li>
             @endcan
@@ -299,7 +299,7 @@
                 <li class="nav-item">
                     <a href="{{ route('reportSalesOrder.reportBDiscountIndex') }}" class="nav-link {{ Request::is('reportBDiscount') ? 'active' : '' }}">
                         &nbsp;&nbsp;&nbsp;<i class="fas fa-clipboard-check nav-icon"></i>
-                        <p>Bundling Discount</p>
+                        <p>{{ trans('menu.report')}} {{ trans('menu.bundling_discount')}}</p>
                     </a>
                 </li>
             @endcan

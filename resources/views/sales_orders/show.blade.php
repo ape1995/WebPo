@@ -23,6 +23,9 @@
                     @else
 
                         @if ($salesOrder->order_type == 'G')
+                            @if ($freeGimmick != null && $qtyGimmick < 1)
+                                <h5 class="text-warning bg-light rounded p-1 mb-3">Total order belum memenuhi syarat untuk mendapatkan {{ $freeGimmick->free_descr }}</h5>
+                            @endif
                             @if ($freeGimmick != null && $qtyGimmick > 0)
                                 <h4 class="text-success bg-light rounded p-1">Free {{ $qtyGimmick }} pcs {{ $freeGimmick->free_descr }}</h4>
                                 @if ($salesOrder->status == 'S')

@@ -94,16 +94,16 @@
                                     <div class="col-md-2"> 
                                         @if (isset($status_selected))
                                             <select name="status" id="status" class="form-control select2js" required>
-                                                <option value="All" {{ $status_selected == 'All' ? 'selected' : '' }}>All</option>
-                                                <option value="S" {{ $status_selected == 'S' ? 'selected' : '' }}>Draft</option>
-                                                <option value="R" {{ $status_selected == 'R' ? 'selected' : '' }}>Submitted</option>
+                                                {{-- <option value="All" {{ $status_selected == 'All' ? 'selected' : '' }}>All</option> --}}
+                                                {{-- <option value="S" {{ $status_selected == 'S' ? 'selected' : '' }}>Draft</option> --}}
+                                                {{-- <option value="R" {{ $status_selected == 'R' ? 'selected' : '' }}>Submitted</option> --}}
                                                 <option value="P" {{ $status_selected == 'P' ? 'selected' : '' }}>Processed</option>
                                             </select>
                                         @else
                                             <select name="status" id="status" class="form-control select2js" required>
-                                                <option value="All">All</option>
-                                                <option value="S">Draft</option>
-                                                <option value="R">Submitted</option>
+                                                {{-- <option value="All">All</option> --}}
+                                                {{-- <option value="S">Draft</option> --}}
+                                                {{-- <option value="R">Submitted</option> --}}
                                                 <option value="P">Processed</option>
                                             </select>
                                         @endif

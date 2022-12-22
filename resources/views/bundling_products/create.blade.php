@@ -65,7 +65,7 @@
                                                             {!! Form::label('qty', trans('sales_order.qty')) !!}
                                                         </div>
                                                         <div class="col-5">
-                                                            <input pattern="\d*" type="number" class="form-control" name="qty" id="qty" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                                            <input pattern="\d*" type="number" class="form-control" name="qty" id="qty" step="1" onKeyPress="if(this.value.length==5) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -97,7 +97,7 @@
                                  
                                                 <label class="col-sm-4 control-label">{{ trans('sales_order.qty') }}</label>
                                                 <div class="col-sm-12">
-                                                    <input pattern="\d*" type="number" class="form-control" name="quantity" id="quantity" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                                    <input pattern="\d*" type="number" class="form-control" name="quantity" id="quantity" step="1" onKeyPress="if(this.value.length==5) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                                                 </div>
                                   
                                                 <div class="col-md-12 text-right">
@@ -193,8 +193,8 @@
                 e.preventDefault();
                 // console.log('test');
                 // $(this).html('Save');
-                if($('#qty').val() > 9999){
-                    return alert('maksimum kuantitas adalah 9999');
+                if($('#qty').val() > 99999){
+                    return alert('maksimum kuantitas adalah 99999');
                 }
                 $.ajax({
                     data: {
@@ -222,8 +222,8 @@
             $('#updateBtn').click(function (e) {
                 e.preventDefault();
                 // $(this).html('Save');
-                if($('#quantity').val() > 9999){
-                    return alert('maksimum kuantitas adalah 9999');
+                if($('#quantity').val() > 99999){
+                    return alert('maksimum kuantitas adalah 99999');
                 }
                 $.ajax({
                     data: {

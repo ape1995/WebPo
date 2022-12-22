@@ -135,6 +135,7 @@
                                                 <th>Customer Name</th>
                                                 <th>Order Qty</th>
                                                 <th>Order Amount</th>
+                                                <th>Discount</th>
                                                 <th>Tax</th>
                                                 <th>Total</th>
                                                 <th>Status</th>
@@ -151,6 +152,7 @@
                                                     <td>{{ $salesOrder->customer->AcctName }}</td>
                                                     <td>{{ $salesOrder->order_qty }}</td>
                                                     <td>{{ $salesOrder->order_amount }}</td>
+                                                    <td>{{ $salesOrder->discount }}</td>
                                                     <td>{{ $salesOrder->tax }}</td>
                                                     <td>{{ $salesOrder->order_total }}</td>
                                                     <td>{{ $salesOrder->status }}</td>

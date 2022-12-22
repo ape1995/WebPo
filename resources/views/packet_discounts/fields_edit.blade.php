@@ -99,7 +99,7 @@
                                             {!! Form::label('qty', trans('sales_order.qty')) !!}
                                         </div>
                                         <div class="col-3">
-                                            <input pattern="\d*" type="number" class="form-control" name="qty" id="qty" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                            <input pattern="\d*" type="number" class="form-control" name="qty" id="qty" step="1" onKeyPress="if(this.value.length==5) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                                         </div>
                                     </div>
                                 </div>
@@ -121,7 +121,7 @@
                                             {!! Form::label('discount_percentage', trans('sales_order.discount_percentage')) !!}
                                         </div>
                                         <div class="col-6">
-                                            <input pattern="\d*" type="number" class="form-control" name="discount_percentage" id="discount_percentage" max="100" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                            <input pattern="\d*" type="number" class="form-control" name="discount_percentage" id="discount_percentage" max="100" step="1" onKeyPress="if(this.value.length==5) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                                         </div>
                                     </div>
                                 </div>
@@ -170,7 +170,7 @@
              
                             <label class="col-sm-4 control-label">{{ trans('sales_order.qty') }}</label>
                             <div class="col-sm-12">
-                                <input pattern="\d*" type="number" class="form-control" name="quantity" id="quantity" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                <input pattern="\d*" type="number" class="form-control" name="quantity" id="quantity" step="1" onKeyPress="if(this.value.length==5) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                             </div>
         
                             <div class="form-group">
@@ -182,7 +182,7 @@
 
                             <label class="col-sm-4 control-label">{{ trans('sales_order.discount_percentage') }}</label>
                             <div class="col-sm-12">
-                                <input pattern="\d*" type="number" class="form-control" name="discount_percentage_edit" id="discount_percentage_edit" step="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                                <input pattern="\d*" type="number" class="form-control" name="discount_percentage_edit" id="discount_percentage_edit" step="1" onKeyPress="if(this.value.length==5) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                             </div>
         
                             <div class="form-group">
@@ -492,8 +492,8 @@
             $('#saveBtn').click(function (e) {
                 e.preventDefault();
                 // $(this).html('Save');
-                if($('#qty').val() > 99){
-                    return alert('maksimum kuantitas adalah 99');
+                if($('#qty').val() > 99999){
+                    return alert('maksimum kuantitas adalah 99999');
                 }
                 $.ajax({
                     data: {
@@ -528,8 +528,8 @@
             $('#updateBtn').click(function (e) {
                 e.preventDefault();
                 // $(this).html('Save');
-                if($('#quantity').val() > 99){
-                    return alert('maksimum kuantitas adalah 99');
+                if($('#quantity').val() > 99999){
+                    return alert('maksimum kuantitas adalah 99999');
                 }
                 $.ajax({
                     data: {

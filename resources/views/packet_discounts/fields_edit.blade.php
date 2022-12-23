@@ -330,9 +330,16 @@
 
             
             $("#qty").on('keyup keydown change click', function() {
+                // Count Amount
                 let eachprice = unit_price.val().replace('.','').replace(',','.');
                 var total = eachprice * qty.val();
                 amount.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(total));
+
+                // Count Total Amount
+                let eachprice2 = unit_price.val().replace('.','').replace(',','.');
+                var total = eachprice2 * qty.val();
+                var totalAfDisc = total - (total * discount_percentage.val() / 100);
+                total_amount.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalAfDisc));
 
                 if(qty.val() == null || qty.val() == 0){
                     save.attr("disabled", true);
@@ -342,16 +349,29 @@
             });
 
             $("#discount_percentage").on('keyup keydown change click', function() {
+                // Count Amount
                 let eachprice = unit_price.val().replace('.','').replace(',','.');
                 var total = eachprice * qty.val();
+                amount.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(total));
+
+                // Count Total Amount
+                let eachprice2 = unit_price.val().replace('.','').replace(',','.');
+                var total = eachprice2 * qty.val();
                 var totalAfDisc = total - (total * discount_percentage.val() / 100);
                 total_amount.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalAfDisc));
             });
 
             $("#quantity").on('keyup keydown change click', function(event) {
+                // Count Amount
                 let unitPrice = $("#unit_price_edit").val().replace('.','').replace(',','.');
                 var totalPrice = unitPrice * $("#quantity").val();
                 $("#amount_edit").val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalPrice));
+
+                // Count Total Amount
+                let unitPrice2 = $("#unit_price_edit").val().replace('.','').replace(',','.');
+                var totalPrice = unitPrice2 * $("#quantity").val();
+                var totalAfDisc2 = totalPrice - (totalPrice * discount_percentage_edit.val() / 100);
+                total_amount_edit.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalAfDisc2));
 
                 if($("#quantity").val() == null || $("#quantity").val() == 0){
                     save.attr("disabled", true);
@@ -361,8 +381,14 @@
             });
 
             $("#discount_percentage_edit").on('keyup keydown change click', function() {
+                // Count Amount
                 let unitPrice = $("#unit_price_edit").val().replace('.','').replace(',','.');
                 var totalPrice = unitPrice * $("#quantity").val();
+                $("#amount_edit").val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalPrice));
+
+                // Count Total Amount
+                let unitPrice2 = $("#unit_price_edit").val().replace('.','').replace(',','.');
+                var totalPrice = unitPrice2 * $("#quantity").val();
                 var totalAfDisc2 = totalPrice - (totalPrice * discount_percentage_edit.val() / 100);
                 total_amount_edit.val(Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalAfDisc2));
             });
@@ -482,9 +508,9 @@
                     $('#product_id').val(data.id);
                     $('#product_code').val(data.inventory_code);
                     $('#unit_price_edit').val(data.unit_price);
-                    $('#amount_edit').val(data.total_amount);
                     $('#discount_percentage_edit').val(data.discount_percentage);
                     $('#amount_edit').val(data.amount);
+                    $('#total_amount_edit').val(data.total_amount);
                     $('#quantity').val(data.qty);
                 })
             });

@@ -387,6 +387,9 @@
             });
 
             delivery_date.on('change', function() {
+                // Send delivery date to date_file
+                $('#date_file').val(delivery_date.val());
+
                 if (order_type.val() != '' || order_type.val() != null){
                     if (order_type.val() == 'R'){
                         validateOrder()

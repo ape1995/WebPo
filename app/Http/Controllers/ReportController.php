@@ -636,14 +636,28 @@ class ReportController extends Controller
             $createdCustomer = User::select('customer_id')->distinct()->get()->pluck('customer_id');
             $customers = Customer::whereRaw("(LEFT(AcctCD,2) = '60' OR LEFT(AcctCD,2) = '40')")->where('Type', 'CU')->where('Status', 'A')->whereIn('BAccountID', $createdCustomer)->get();
         }
+
+        $soOrder = SOOrder::select('OrderNbr')->whereYear('RequestDate', date('Y', strtotime($input['date_2'])))->whereMonth('RequestDate', date('m', strtotime($input['date_2'])))->pluck('OrderNbr')->toArray();
+
         
         if($input['customer_id'] == 'All'){
 
-            $salesOrders = SalesOrder::where('order_type', 'C')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])->get();
+            $salesOrders = SalesOrder::where('order_type', 'C')
+                        ->where('status', 'P')
+                        ->whereNotIn('order_nbr', $soOrder)
+                        ->whereNotIn('order_nbr_merge', $soOrder)
+                        ->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])
+                        ->get();
 
         } else {
 
-            $salesOrders = SalesOrder::where('customer_id', $customer_id_selected)->where('order_type', 'C')->where('status', 'P')->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])->get();
+            $salesOrders = SalesOrder::where('customer_id', $customer_id_selected)
+                        ->where('order_type', 'C')
+                        ->where('status', 'P')
+                        ->whereNotIn('order_nbr', $soOrder)
+                        ->whereNotIn('order_nbr_merge', $soOrder)
+                        ->whereBetween('delivery_date', [$date_1_selected, $date_2_selected])
+                        ->get();
 
         }
 

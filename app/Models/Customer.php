@@ -52,4 +52,9 @@ class Customer extends Model
         return $this->hasOne(CSAnswer::class, 'RefNoteID', 'NoteID')->where('AttributeID', 'CATEGORY');
     }
 
+    public function delivery()
+    {
+        return $this->hasOne(CSAnswer::class, 'RefNoteID', 'NoteID')->where('AttributeID', 'DELIVERY');
+    }
+
 }

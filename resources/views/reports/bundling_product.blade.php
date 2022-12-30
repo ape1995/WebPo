@@ -114,6 +114,7 @@
                                                 <th>Qty Order</th>
                                                 <th>Qty Free</th>
                                                 <th>Free Product</th>
+                                                <th>Type Delivery</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -129,6 +130,7 @@
                                                     <td>{{ $salesOrder->qty }}</td>
                                                     <td>{{ floor($salesOrder->qty / $salesOrder->qty_buy * $salesOrder->qty_free) }}</td>
                                                     <td>{{ $salesOrder->free_descr }}</td>
+                                                    <td>{{ $salesOrder->customer->delivery->Value }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

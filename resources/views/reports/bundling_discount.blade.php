@@ -120,6 +120,7 @@
                                                 <th>WAREHOUSE</th>
                                                 <th>Diskon Persen</th>
                                                 <th>Description</th>
+                                                <th>Type Delivery</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -142,6 +143,7 @@
                                                     <td>WH03FG</td>
                                                     <td>{{ floor($detail->discount / ($detail->qty * $detail->unit_price) * 100) }}</td>
                                                     <td></td>
+                                                    <td>{{ $salesOrder->customer->delivery->Value }}</td>
                                                 @endforeach
                                             </tr>
                                             @endforeach

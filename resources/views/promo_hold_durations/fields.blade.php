@@ -22,9 +22,9 @@
 <div class="form-group col-2">
     {!! Form::label('duration_in_day', trans('promo_hold_duration.duration_in_day') ) !!}
     @if (isset($promoHoldDuration))
-        <input value="{{ $promoHoldDuration->duration_in_day }}" type="number" name="duration_in_day" id="duration_in_day" class="form-control" min="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" required>
+        <input value="{{ $promoHoldDuration->duration_in_day }}" type="number" name="duration_in_day" id="duration_in_day" class="form-control" min="0" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" required>
     @else
-        <input type="number" name="duration_in_day" id="duration_in_day" class="form-control" min="1" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" required>
+        <input type="number" name="duration_in_day" id="duration_in_day" class="form-control" min="0" onKeyPress="if(this.value.length==4) return false;" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" required>
     @endif
 
 </div>

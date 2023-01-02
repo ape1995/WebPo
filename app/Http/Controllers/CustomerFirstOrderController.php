@@ -230,19 +230,24 @@ class CustomerFirstOrderController extends AppBaseController
 
         // if firts order not found, reject the order
         if ($custFirstOrder == null) {
-            return 0;
+            $orderDate = $deliveryDate;
+        } else {
+            $orderDate = $custFirstOrder->first_order_date;
         }
+
+        // dd($orderDate);
 
         // if duration promo not found allow the order
         if ($promoDuration == null) {
             return 1;
         }
         
-        $date1 = new DateTime($custFirstOrder->first_order_date);
+        $date1 = new DateTime($orderDate);
         $date2 = new DateTime($deliveryDate);
 
         $interval = $date1->diff($date2);
         $days = $interval->format('%a');
+
 
         if($days >= $promoDuration->duration_in_day){
             return 1;
